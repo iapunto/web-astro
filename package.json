@@ -32,7 +32,6 @@
     "@types/node": "^22.10.1",
     "@types/react": "^18.3.14",
     "@types/react-dom": "^18.3.2",
-    "@types/react-phone-number-input": "^3.1.37",
     "autoprefixer": "^10.4.20",
     "lodash-es": "^4.17.21",
     "postcss": "^8.4.49",

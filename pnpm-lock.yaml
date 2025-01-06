@@ -72,9 +72,6 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.2
         version: 18.3.2
-      '@types/react-phone-number-input':
-        specifier: ^3.1.37
-        version: 3.1.37(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
@@ -989,10 +986,6 @@ packages:
 
   '@types/react-dom@18.3.2':
     resolution: {integrity: sha512-Fqp+rcvem9wEnGr3RY8dYNvSQ8PoLqjZ9HLgaPUOjJJD120uDyOxOjc/39M4Kddp9JQCxpGQbnhVQF0C0ncYVg==}
-
-  '@types/react-phone-number-input@3.1.37':
-    resolution: {integrity: sha512-N5/4VjptmOJWs4g5keMxjAuc8yQFr0fM+OSYfT8h0IQVm5kUiLAGNg+TGHy21Xzb1DB/PhDkiWnKcIREgr5VWA==}
-    deprecated: This is a stub types definition. react-phone-number-input provides its own type definitions, so you do not need this installed.
 
   '@types/react-transition-group@4.4.12':
     resolution: {integrity: sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==}
@@ -3667,13 +3660,6 @@ snapshots:
   '@types/react-dom@18.3.2':
     dependencies:
       '@types/react': 18.3.14
-
-  '@types/react-phone-number-input@3.1.37(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
-    dependencies:
-      react-phone-number-input: 3.4.10(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-    transitivePeerDependencies:
-      - react
-      - react-dom
 
   '@types/react-transition-group@4.4.12(@types/react@18.3.14)':
     dependencies:

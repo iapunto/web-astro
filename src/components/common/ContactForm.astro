@@ -9,8 +9,7 @@ const { onSubmit } = Astro.props;
 ---
 
 <form id="contactForm" class="bg-white p-8 rounded-lg shadow-md">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-    <div>
+    <div class="mb-4">
       <label for="nombre" class="block text-gray-700 font-medium mb-2"
         >Nombre *</label
       >
@@ -23,7 +22,7 @@ const { onSubmit } = Astro.props;
         required
       />
     </div>
-    <div>
+    <div class="mb-4">
       <label for="email" class="block text-gray-700 font-medium mb-2"
         >Email *</label
       >
@@ -36,7 +35,6 @@ const { onSubmit } = Astro.props;
         required
       />
     </div>
-  </div>
   <div class="mb-4">
     <label for="empresa" class="block text-gray-700 font-medium mb-2"
       >Empresa (opcional)</label
