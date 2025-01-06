@@ -1,0 +1,37 @@
+---
+import chatbot from "../../../assets/images/chatbot.svg";
+import webDevelopment from "../../../assets/images/web-development.svg";
+import campaignsLocal from "../../../assets/images/campaigns-local.svg";
+import ServiceCard from "../../common/ServiceCard.astro";
+---
+
+<section class="py-20 bg-gray-100">
+  <div class="container w-4/5 py-20 mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <ServiceCard
+        image={chatbot}
+        altText="Chatbots Inteligentes"
+        title="Chatbots inteligentes"
+        description="Automatiza tu atención al cliente, genera leads y aumenta la satisfacción."
+        linkHref="#"
+        ctaText="Crea tu chatbot"
+      />
+      <ServiceCard
+        image={webDevelopment}
+        altText="Páginas Web Profesionales"
+        title="Páginas web profesionales"
+        description="Creamos sitios web a medida que convierten visitantes en clientes."
+        linkHref="#"
+        ctaText="Diseña tu web"
+      />
+      <ServiceCard
+        image={campaignsLocal}
+        altText="Campañas efectivas"
+        title="Campañas efectivas"
+        description="Alcanza a tu público objetivo y aumenta tus ventas con publicidad."
+        linkHref="#"
+        ctaText="Impulsa tus campañas"
+      />
+    </div>
+  </div>
+</section>

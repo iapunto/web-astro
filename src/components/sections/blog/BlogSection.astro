@@ -1,0 +1,75 @@
+---
+import { blogPosts } from "../../../lib/constants/blogPosts";
+import BlogCard from "./BlogCard.astro";
+---
+
+<section class="py-20 bg-gradient-to-b from-gray-50 to-white">
+  <div class="container w-4/5 py-16 mx-auto px-4">
+    <div class="flex items-center pb-16 justify-between mb-12">
+      <div class="flex items-center gap-4">
+        <h2 class="text-2xl font-bold text-gray-900">Ideas 360</h2>
+        <div class="flex items-center h-8">
+          <!-- Contenedor para centrar verticalmente -->
+          <span class="text-gray-300 text-3xl font-light leading-none mx-1"
+            >|</span
+          >
+        </div>
+        <div class="flex items-center h-8">
+          <a href="/" class="hover:text-[#D91A60]">
+            Noticias e ideas de marketing y desarrollo web
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="swiper blog-swiper">
+      <div class="swiper-wrapper">
+        {
+          blogPosts.map((post) => (
+            <div class="swiper-slide">
+              <BlogCard post={post} />
+            </div>
+          ))
+        }
+      </div>
+      <div class="swiper-pagination mt-8"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </div>
+  <div class="h-16"></div>
+</section>
+
+<script>
+  import Swiper from "swiper";
+  import { Navigation, Pagination } from "swiper/modules";
+  import "swiper/css";
+  import "swiper/css/navigation"; // navigation
+  import "swiper/css/pagination"; // pagination
+  const blogSwiper = new Swiper(".blog-swiper", {
+    modules: [Navigation, Pagination],
+    slidesPerView: 3,
+    slidesPerGroup: 1,
+    spaceBetween: 30,
+    loop: true,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  });
+</script>
+
+<style>
+  :root {
+    --swiper-pagination-color: var(--primary-accent);
+    --swiper-pagination-bullet-size: 10px;
+    --swiper-pagination-bullet-inactive-color: #7e8083;
+  }
+  .swiper-pagination {
+    margin-bottom: -0.5rem !important;
+    padding-top: 3rem !important;
+  }
+</style>

@@ -1,0 +1,42 @@
+---
+import heroImage from "../../../assets/images/hero-image.svg";
+import ButtonPrimary from "../../common/ButtonPrimary.astro";
+---
+
+<section class="py-2 bg-[#fcfcfc] relative overflow-hidden">
+  <div
+    class="container w-4/5 mx-auto grid grid-cols-1 lg:grid-cols-2 items-center"
+  >
+    {/* Columna izquierda - Contenido */}
+    <div class="space-y-6">
+      <span class="text-xl font-light text-gray-600 uppercase tracking-wider">
+        Impulsando el futuro digital
+      </span>
+
+      <h1 class="text-5xl font-bold text-gray-900 leading-tight">
+        Transforma tu negocio con <br />la inteligencia artificial
+      </h1>
+
+      <p
+        class="text-xl text-gray-400 font-light tracking-wider leading-8 pb-12 max-w-lg"
+      >
+        Creamos soluciones de marketing digital con IA que generan resultados.
+        Aumenta tus ventas, conecta con tu audiencia y lleva tu negocio al
+        siguiente nivel.
+      </p>
+
+      <div>
+        <ButtonPrimary text="Conoce los Servicios" href="/services" />
+      </div>
+    </div>
+
+    {/* Columna derecha - Imagen */}
+    <div class="relative">
+      <img
+        src={heroImage.src}
+        alt="Digital Marketing Strategy"
+        class="max-w-[780px] h-auto"
+      />
+    </div>
+  </div>
+</section>

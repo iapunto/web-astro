@@ -1,0 +1,12 @@
+---
+// ButtonSecondary.astro
+const { href, text, type = "button", classes = "" } = Astro.props;
+---
+
+<a 
+  href={href ? href : undefined} 
+  class={`border-[#E51F52] text-[#E51F52] border-solid border px-10 py-3 rounded-full hover:bg-[#E51F52] hover:text-white transition-colors duration-300 ${classes}`} 
+  type={type}
+>
+  {text}
+</a>

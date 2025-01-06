@@ -1,0 +1,22 @@
+---
+import { Image } from "astro:assets";
+import ButtonPrimary from "./ButtonPrimary.astro";
+
+const { image, alt, title, description, link, ctaText } = Astro.props;
+---
+
+<div
+  class="group relative bg-white backdrop-blur-sm p-8 rounded-3xl hover:transform hover:scale-105 transition-all duration-300 overflow-hidden"
+>
+  <div class="transition-opacity duration-300 group-hover:opacity-50">
+    <Image src={image} alt={alt} class="w-48 h-48 mx-auto mb-6" />
+    <h3 class="text-xl font-bold">{title}</h3>
+  </div>
+
+  <div
+    class="absolute inset-0 bg-black/50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6"
+  >
+    <p class="text-white text-center mb-4">{description}</p>
+    <ButtonPrimary text={ctaText} href={link} />
+  </div>
+</div>

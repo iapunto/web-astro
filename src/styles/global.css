@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-accent: #e51f52;
+  --secondary-accent: #007bff;
+  --textos: #878c9c;
+  --titulos: #27282d;
+  --menu: #27282d; /* Color del texto del menú, asegúrate de que tenga buen contraste con el fondo */
+  --blanco: #ffffff;
+  --body-background: #fcfcfc;
+}
+
+body {
+  font-family: "Roboto", Arial, Helvetica, sans-serif, "DejaVu Sans",
+    "Liberation Sans";
+  background-color: var(--body-background);
+  color: var(--textos);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--titulos);
+}
+
+.bg-primary {
+  background-color: var(--primary-accent);
+}
+
+.text-primary {
+  color: var(--primary-accent);
+}
+
+.navbar {
+  padding-bottom: 30px;
+  padding-top: 30px;
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(230, 230, 230);
+  border-width: 1px;
+  border-style: solid;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: hidden;
+  backdrop-filter: blur(8px);
+  z-index: 50;
+}
+
+.navbar.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  animation: slideDown 0.35s ease-out;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.6);
+  border-color: rgb(199, 199, 199);
+  border-width: 1px;
+  border-style: solid;
+  border-right-style: hidden;
+  border-left-style: hidden;
+}
+
+.topbar {
+  font-size: 13px;
+  font-weight: 400;
+  text-transform: uppercase;
+  background-color: var(--body-background);
+}
+
+/* Estilos específicos para los enlaces del componente NavLink */
+.navbar-link li a {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 5px !important;
+  text-transform: uppercase !important;
+  transition: color 0.3s ease;
+}
+
+@layer utilities {
+  .hover\:text-secondary:hover {
+    color: var(--secondary-accent);
+  }
+}
+
+/* Estilos para el botón "Agenda una Reunión" */
+li.agenda button {
+  letter-spacing: normal;
+  color: var(--blanco);
+}
+
+.navbar-link:hover {
+  color: var(--primary-accent);
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

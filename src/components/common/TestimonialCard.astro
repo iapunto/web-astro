@@ -1,0 +1,83 @@
+---
+import type { Testimonial } from "../../lib/types/testimonials";
+
+interface Props {
+  testimonial: Testimonial;
+}
+
+const { testimonial } = Astro.props;
+---
+
+<div class="testimonial-card-container">
+  {/* Contenedor principal */}
+  <figure class="max-w-screen-md mx-auto">
+    <svg
+      class="h-12 mx-auto mb-3 text-gray-400 dark:text-gray-600"
+      viewBox="0 0 24 27"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z"
+        fill="currentColor"></path>
+    </svg>
+    <blockquote>
+      <p class="text-2xl font-medium text-gray-900 dark:text-white">
+        "{testimonial.quote}"
+      </p>
+    </blockquote>
+    <figcaption class="flex items-center justify-center mt-6 space-x-3">
+      {
+        testimonial.image && (
+          <img
+            class="w-12 h-12 rounded-full"
+            src={testimonial.image}
+            alt={testimonial.author}
+          />
+        )
+      }
+      <div
+        class="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700"
+      >
+        <div class="pr-3 font-medium text-gray-900 dark:text-white">
+          {testimonial.author}
+        </div>
+        {
+          testimonial.position && (
+            <div class="pl-3 text-sm font-light text-gray-500 dark:text-gray-400">
+              {testimonial.position}
+            </div>
+          )
+        }
+      </div>
+    </figcaption>
+  </figure>
+</div>
+
+<style lang="scss">
+  .testimonial-card-container {
+    background-color: #f0f0f5; /* Color de fondo */
+    padding: 2.5rem; /* Espaciado interno */
+    border-radius: 1rem; /* Bordes redondeados */
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -1px rgb(0 0 0 / 0.06); /* Sombra suave */
+    margin: 1rem; /* Margen externo */
+    transition: transform 0.2s ease-in-out; /* Transición suave para el hover */
+
+    &:hover {
+      transform: scale(1.02); /* Escala ligeramente al pasar el ratón */
+      box-shadow:
+        0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -2px rgb(0 0 0 / 0.05); /* Sombra más pronunciada al pasar el ratón */
+    }
+  }
+
+  /* Estilos para modo oscuro (opcional) */
+  :global(.dark) .testimonial-card-container {
+    background-color: #1f2937; /* Color de fondo oscuro */
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.5),
+      0 2px 4px -1px rgb(0 0 0 / 0.4);
+  }
+</style>

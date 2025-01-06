@@ -12,6 +12,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+pnpm-error.log*
+pnpm-lock.yaml
 
 # environment variables
 .env
@@ -22,3 +24,16 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# VSCode settings folder
+.vscode/
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# CSpell
+cspell.json
+.cspell/

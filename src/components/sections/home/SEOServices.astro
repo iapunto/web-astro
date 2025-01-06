@@ -1,0 +1,198 @@
+---
+// Importar los íconos necesarios (asumiendo que están en la carpeta assets)
+import targetIcon from "../assets/target-icon.svg";
+import mapIcon from "../assets/map-icon.svg";
+import linkIcon from "../assets/link-icon.svg";
+import adIcon from "../assets/ad-icon.svg";
+import websiteIcon from "../assets/website-icon.svg";
+import emailIcon from "../assets/email-icon.svg";
+import ButtonPrimary from "../../common/ButtonPrimary.astro";
+import ButtonSecondary from "../../common/ButtonSecondary.astro";
+---
+
+<section class="py-24">
+  <div class="container w-4/5 mx-auto">
+    <!-- Encabezado -->
+    <div class="text-center mb-20">
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        Explora Todas Nuestras Soluciones
+      </h2>
+      <p class="text-gray-600 text-lg max-w-3xl mx-auto">
+        Descubre un abanico completo de soluciones digitales impulsadas por IA,
+        diseñadas para impulsar tu crecimiento en línea. Desde la automatización
+        de procesos hasta el desarrollo web y las campañas publicitarias
+        inteligentes, te ofrecemos las herramientas que necesitas para alcanzar
+        tus objetivos.
+      </p>
+    </div>
+
+    <!-- Grid de servicios -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+      <!-- Servicio 1 -->
+      <div class="group">
+        <div class="mb-6 w-16 h-16">
+          <img
+            src="{targetIcon}"
+            alt="Local Search Strategy"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-4 uppercase">
+          Chatbots Inteligentes
+        </h3>
+        <p class="text-gray-600 leading-relaxed">
+          Automatiza la atención al cliente 24/7, genera leads y mejora la
+          satisfacción con chatbots personalizados e IA.
+        </p>
+      </div>
+
+      <!-- Servicio 2 -->
+      <div class="group">
+        <div class="mb-6 w-16 h-16">
+          <img
+            src="{mapIcon}"
+            alt="Map Search Optimization"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-xl font-bold uppercase text-gray-900 mb-4">
+          Diseño y Desarrollo Web
+        </h3>
+        <p class="text-gray-600 leading-relaxed">
+          Creamos sitios web profesionales a medida, enfocados en la conversión
+          y optimizados para UX/UI.
+        </p>
+      </div>
+
+      <!-- Servicio 3 -->
+      <div class="group">
+        <div class="mb-6 w-16 h-16">
+          <img
+            src="{linkIcon}"
+            alt="Link Building & Content"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-xl font-bold uppercase text-gray-900 mb-4">
+          Publicidad Online con IA
+        </h3>
+        <p class="text-gray-600 leading-relaxed">
+          Maximiza tu ROI con campañas publicitarias inteligentes en Google Ads
+          y redes sociales, impulsadas por IA.
+        </p>
+      </div>
+
+      <!-- Servicio 4 -->
+      <div class="group">
+        <div class="mb-6 w-16 h-16">
+          <img
+            src="{adIcon}"
+            alt="Paid Search Advertising"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-xl font-bold uppercase text-gray-900 mb-4">
+          Posicionamiento SEO
+        </h3>
+        <p class="text-gray-600 leading-relaxed">
+          Aumenta tu visibilidad orgánica en Google con estrategias SEO On-Page,
+          Off-Page y SEO Local.
+        </p>
+      </div>
+
+      <!-- Servicio 5 -->
+      <div class="group">
+        <div class="mb-6 w-16 h-16">
+          <img
+            src="{websiteIcon}"
+            alt="Custom Website Design"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-xl font-bold uppercase text-gray-900 mb-4">
+          Marketing de Contenidos
+        </h3>
+        <p class="text-gray-600 leading-relaxed">
+          Creamos contenido optimizado para SEO que atrae a tu audiencia y
+          posiciona tu marca. Usamos IA.
+        </p>
+      </div>
+
+      <!-- Servicio 6 -->
+      <div class="group">
+        <div class="mb-6 w-16 h-16">
+          <img
+            src="{emailIcon}"
+            alt="Email Campaign Design"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-xl font-bold uppercase text-gray-900 mb-4">
+          Desarrollo de Apps Móviles
+        </h3>
+        <p class="text-gray-600 leading-relaxed">
+          Desarrollamos apps móviles nativas e híbridas para iOS y Android con
+          diseño UI/UX intuitivo.
+        </p>
+      </div>
+
+      <!-- Servicio 7 -->
+      <div class="group">
+        <div class="mb-6 w-16 h-16">
+          <img
+            src="{adIcon}"
+            alt="Paid Search Advertising"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-xl font-bold uppercase text-gray-900 mb-4">Odoo ERP</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Implementamos y personalizamos Odoo ERP para optimizar la gestión
+          integral de tu empresa.
+        </p>
+      </div>
+
+      <!-- Servicio 8 -->
+      <div class="group">
+        <div class="mb-6 w-16 h-16">
+          <img
+            src="{websiteIcon}"
+            alt="Custom Website Design"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-xl font-bold uppercase text-gray-900 mb-4">
+          Optimización y Conversión
+        </h3>
+        <p class="text-gray-600 leading-relaxed">
+          Optimizamos tu sitio web para mejorar el rendimiento, la usabilidad y
+          aumentar las conversiones.
+        </p>
+      </div>
+
+      <!-- Servicio 9 -->
+      <div class="group">
+        <div class="mb-6 w-16 h-16">
+          <img
+            src="{emailIcon}"
+            alt="Email Campaign Design"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <h3 class="text-xl font-bold uppercase text-gray-900 mb-4">
+          Automatización inteligente
+        </h3>
+        <p class="text-gray-600 leading-relaxed">
+          Automatizamos flujos de trabajo integrando tus aplicaciones y sistemas
+          para aumentar la eficiencia.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="flex flex-col md:flex-row justify-center gap-6 mt-16">
+    <ButtonPrimary text="Agenda una Reunión Gratuita" href="/" />
+    <ButtonSecondary text="Solicita una Cotización" href="/" />
+  </div>
+</section>

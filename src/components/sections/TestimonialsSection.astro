@@ -1,0 +1,116 @@
+---
+import { testimonials, companyLogos } from "../../lib/constants/testimonials";
+import TestimonialCard from "../common/TestimonialCard.astro";
+import CompanyLogo from "../common/CompanyLogo.astro";
+---
+
+<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+<section class="py-20 bg-gradient-to-b from-gray to-gray-50">
+  <!-- Logos Carousel -->
+  <div class="container w-4/5 py-16 mx-auto px-4 pt-16 mb-16">
+    <div class="mb-16">
+      <div class="swiper-logos swiper">
+        <div class="swiper-wrapper items-center">
+          {companyLogos.map((logo) => <CompanyLogo logo={logo} />)}
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonials Carousel -->
+    <div class="swiper-testimonials swiper max-w-3xl mx-auto">
+      <div class="swiper-wrapper">
+        {
+          testimonials.map((testimonial) => (
+            <div class="swiper-slide">
+              <TestimonialCard testimonial={testimonial} />
+            </div>
+          ))
+        }
+      </div>
+      <div class="swiper-pagination mt-8"></div>
+    </div>
+  </div>
+</section>
+<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+
+<script>
+  import Swiper from "swiper";
+  import { Autoplay, Pagination } from "swiper/modules";
+  import "swiper/css";
+  import "swiper/css/pagination";
+
+  // Inicializar carrusel de logos
+  const logosSwiper = new Swiper(".swiper-logos", {
+    modules: [Autoplay],
+    slidesPerView: 6,
+    slidesPerGroup: 1,
+    spaceBetween: 30,
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    breakpoints: {
+      640: {
+        slidesPerView: 3,
+      },
+      768: {
+        slidesPerView: 4,
+      },
+      1024: {
+        slidesPerView: 6,
+      },
+    },
+  });
+
+  // Inicializar carrusel de testimonios
+  const testimonialsSwiper = new Swiper(".swiper-testimonials", {
+    modules: [Pagination, Autoplay],
+    slidesPerView: 1,
+    slidesPerGroup: 1,
+    grid: {
+      rows: 1,
+    },
+    spaceBetween: 30,
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+  });
+</script>
+
+<style>
+  :root {
+    --swiper-pagination-color: var(--primary-accent);
+    --swiper-pagination-bullet-size: 10px;
+    --swiper-pagination-bullet-inactive-color: #7e8083;
+  }
+
+  .swiper-logos .swiper-slide {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+
+  .swiper-logos .swiper-slide:hover {
+    opacity: 1;
+  }
+
+  .swiper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .swiper-pagination {
+    margin-bottom: 1rem !important; /* Ajusta este valor según necesites */
+  }
+</style>

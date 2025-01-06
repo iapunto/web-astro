@@ -1,0 +1,72 @@
+---
+import Logo from '../Logo.astro';
+import NavLink from './NavLink.astro';
+import DropdownMenu from './DropdownMenu.astro';
+
+const servicesMenuData = [
+  {
+    title: 'WEB DEVELOPMENT',
+    links: [
+      { href: '/blog/', text: 'Content Marketing', description: 'Creación de contenido para blogs' },
+      { href: '/web/', text: 'Web Design', description: 'Diseño y desarrollo web' },
+      { href: '/mobile/', text: 'Mobile Marketing', description: 'Desarrollo de apps móviles' },
+    ],
+  },
+  {
+    title: 'ONLINE MARKETING',
+    links: [
+      { href: '/seo/', text: 'SEO', description: 'Posicionamiento en buscadores' },
+      { href: '/social/', text: 'Social Media', description: 'Marketing en redes sociales' },
+      { href: '/email/', text: 'Email Marketing', description: 'Campañas de correo efectivas' },
+    ],
+  },
+  {
+    title: 'SALES OPTIMIZATION',
+    links: [
+      { href: '/conversion/', text: 'CRO', description: 'Optimización de conversión' },
+      { href: '/analytics/', text: 'Analytics', description: 'Análisis de presencia online' },
+      { href: '/affiliate/', text: 'Affiliate', description: 'Gestión de afiliados' },
+    ],
+  },
+];
+---
+
+<nav id="navbar" class="navbar bg-white py-4 relative top-0 z-50 transition-all duration-300">
+  <div class="container w-4/5 mx-auto px-4 flex justify-between items-center">
+    <Logo />
+    <ul class="flex space-x-6 items-center">
+      <li class="navbar-link"><NavLink href="/about" text="LA AGENCIA" /></li>
+      <li class="navbar-link"><DropdownMenu buttonText="SERVICIOS" data={servicesMenuData} /></li>
+      <li class="navbar-link"><NavLink href="/blog" text="IDEAS 360"/></li>
+      <li class="navbar-link"><NavLink href="/contact" text="CONTACTO"/></li>
+      <li class="agenda">
+        <button class="bg-[#E51F52] text-white px-4 py-2 rounded hover:bg-[#c71a48]">Agenda una Reunión</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<script>
+  import { throttle } from "lodash-es";
+
+  const navbar = document.getElementById('navbar');
+  const topbar = document.getElementById('topbar');
+  const topbarHeight = topbar?.offsetHeight || 0;
+
+  const handleScroll = throttle(() => {
+    const currentScrollPos = window.scrollY;
+
+    // Maneja el topbar
+    if (topbar) {
+      if (currentScrollPos > topbarHeight) {
+        topbar.style.transform = `translateY(-${topbarHeight}px)`;
+        navbar?.classList.add("fixed", "top-0", "left-0", "right-0", "shadow-md");
+      } else {
+        topbar.style.transform = "translateY(0)";
+        navbar?.classList.remove("fixed", "top-0", "left-0", "right-0", "shadow-md");
+      }
+    }
+  }, 100);
+
+  window.addEventListener('scroll', handleScroll);
+</script>

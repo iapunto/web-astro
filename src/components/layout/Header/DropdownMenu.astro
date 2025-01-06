@@ -1,0 +1,65 @@
+---
+const { buttonText, data, href } = Astro.props;
+const active = Astro.url.pathname === href;
+---
+
+<button
+  id="services-menu-button"
+  class={`tracking-widest uppercase text-[15px] hover:text-primary transition-colors duration-300 ${active ? "text-primary font-bold" : ""}`}
+  >{buttonText}</button
+>
+<div
+  id="services-menu"
+  class="hidden absolute right-0 bg-white shadow-md p-6 grid grid-cols-4 gap-6 z-50 w-[1080px] mt-2"
+>
+  {
+    data.map((column) => (
+      <div>
+        <h3 class="font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+          {column.title}
+        </h3>
+        <div class="space-y-4">
+          {column.links.map((link) => (
+            <div>
+              <a
+                href={link.href}
+                class="font-bold text-gray-800 hover:text-[#E51F52]"
+              >
+                {link.text}
+              </a>
+              <p class="text-sm text-gray-500">{link.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+  <div class="bg-gray-100 p-4 rounded col-span-1">
+    <h3 class="text-xl font-bold text-[#E51F52] mb-2">
+      Full Service Digital Creative Agency
+    </h3>
+    <p class="text-gray-600">
+      We have a strategy, experience and a proven track record in increasing
+      leads for our clients
+    </p>
+  </div>
+</div>
+
+<script>
+  const servicesMenuButton = document.getElementById("services-menu-button");
+  const servicesMenu = document.getElementById("services-menu");
+
+  servicesMenuButton.addEventListener("click", () => {
+    servicesMenu.classList.toggle("hidden");
+  });
+
+  // Cerrar el menú si se hace clic fuera de él
+  document.addEventListener("click", (event) => {
+    if (
+      !servicesMenuButton.contains(event.target) &&
+      !servicesMenu.contains(event.target)
+    ) {
+      servicesMenu.classList.add("hidden");
+    }
+  });
+</script>

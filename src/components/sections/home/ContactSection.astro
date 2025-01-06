@@ -1,0 +1,65 @@
+---
+import ContactForm from "../../common/ContactForm.astro";
+import type { ContactFormData } from "../../../lib/types/contact";
+---
+
+<section id="contacto" class="py-16 bg-gray-100">
+  <div class="container mx-auto px-4">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-5xl font-bold text-center mb-8 text-gray-900">
+        Contáctanos
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <ContactForm
+            onSubmit={(data: ContactFormData) => {
+              console.log("Datos recibidos en el componente padre:", data);
+              // Aquí podrías agregar lógica adicional, como enviar los datos a un servicio de análisis
+            }}
+          />
+        </div>
+        <div>
+          <div class="p-8">
+            <p class="text-gray-700 mb-4">
+              Puedes contactarnos a través de los siguientes medios:
+            </p>
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+              +57 (316) 376-9935
+            </h1>
+            <div class="mb-4 text-xl">
+              <p
+                class="font-medium pb-4 text-gray-500 hover:text-[#E51F52] hover:underline"
+              >
+                <a href="mailto:hola@iapunto.com">hola@iapunto.com</a>
+              </p>
+              <p
+                class="font-medium pb-4 text-gray-500 hover:text-[#E51F52] hover:underline"
+              >
+                <a href="mailto:ventas@iapunto.com">ventas@iapunto.com</a>
+              </p>
+              <p
+                class="font-medium pb-4 text-gray-500 hover:text-[#E51F52] hover:underline"
+              >
+                <a href="mailto:desarrollo@iapunto.com"
+                  >desarrollo@iapunto.com</a
+                >
+              </p>
+              <p
+                class="font-medium text-gray-500 hover:text-[#E51F52] hover:underline"
+              >
+                <a href="mailto:legales@iapunto.com">legales@iapunto.com</a>
+              </p>
+              {/* Correo electrónico */}
+            </div>
+            <div>
+              <p class="text-gray-700">Horario de atención:</p>
+              <p class="text-gray-700">Lunes a Viernes de 8am a 5pm</p>
+            </div>
+            {/* Puedes agregar más información, como un mapa incrustado */}
+            {/* Ejemplo con un enlace a Google Maps */}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
