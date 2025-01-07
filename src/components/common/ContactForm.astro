@@ -72,7 +72,7 @@ const { onSubmit } = Astro.props;
         id="telefono"
         name="telefono"
         class="w-full px-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="###-###-####"
+        placeholder="+##-###-###-####"
       />
     </div>
   </div>
@@ -96,59 +96,56 @@ const { onSubmit } = Astro.props;
 </form>
 
 <script define:vars={{ onSubmit: onSubmit?.toString() }}>
-  const form = document.getElementById("contactForm");
-  const onSubmit = window.onSubmit
-    ? eval("(" + window.onSubmit + ")")
-    : undefined;
+  const form = document.getElementById('contactForm');
+  const formMessage = document.getElementById('form-message');
+  const onSubmit = window.onSubmit ? eval('('+window.onSubmit+')') : undefined;
 
-  if (form) {
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+  if (form && formMessage) {
+      form.addEventListener('submit', async (event) => {
+          event.preventDefault();
 
-      const nombreInput = document.getElementById("nombre") as HTMLInputElement;
-      const emailInput = document.getElementById("email") as HTMLInputElement;
-      const telefonoInput = document.getElementById(
-        "telefono"
-      ) as HTMLInputElement;
-      const empresaInput = document.getElementById(
-        "empresa"
-      ) as HTMLInputElement;
-      const mensajeInput = document.getElementById(
-        "mensaje"
-      ) as HTMLTextAreaElement;
+          formMessage.classList.add('hidden'); // Ocultar mensajes anteriores
+          formMessage.textContent = ''; // Limpiar mensajes anteriores
 
-      const data: ContactFormData = {
-        name: nombreInput.value,
-        email: emailInput.value,
-        phone: telefonoInput.value,
-        company: empresaInput.value,
-        message: mensajeInput.value,
-      };
+          const nombreInput = document.getElementById('nombre') as HTMLInputElement;
+          const emailInput = document.getElementById('email') as HTMLInputElement;
+          const telefonoInput = document.getElementById('telefono') as HTMLInputElement;
+          const empresaInput = document.getElementById('empresa') as HTMLInputElement;
+          const mensajeInput = document.getElementById('mensaje') as HTMLTextAreaElement;
 
-      try {
-        const response = await fetch("/api/send-email", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+          const data: ContactFormData = {
+              name: nombreInput.value,
+              email: emailInput.value,
+              phone: telefonoInput.value,
+              company: empresaInput.value,
+              message: mensajeInput.value,
+          };
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Error al enviar el correo");
-        }
+          try {
+              const response = await fetch('/api/send-email', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+              });
 
-        alert("Mensaje enviado correctamente");
-        form.reset();
-      } catch (error) {
-        console.error(error);
-        alert(
-          error.message ||
-            "Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde."
-        );
-      }
-    });
+              if (!response.ok) {
+                  const errorData = await response.json();
+                  throw new Error(errorData.error || 'Error al enviar el correo');
+              }
+
+              formMessage.classList.remove('hidden');
+              formMessage.classList.add('text-green-500');
+              formMessage.textContent = 'Mensaje enviado correctamente';
+              form.reset(); // Limpiar el formulario después del envío exitoso
+          } catch (error: any) {
+              console.error("Error al enviar el formulario:", error);
+              formMessage.classList.remove('hidden');
+              formMessage.classList.add('text-red-500');
+              formMessage.textContent = error.message || 'Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.';
+          }
+      });
   }
 
   delete window.onSubmit;
