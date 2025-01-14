@@ -99,6 +99,17 @@ li.agenda button {
   color: var(--primary-accent);
 }
 
+input[type="tel"] {
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.PhoneInput--focus > .PhoneInputInput input[type="tel"] {
+  background-color: transparent !important;
+  border: 0 !important;
+}
+
 @keyframes slideDown {
   from {
     transform: translateY(-100%);

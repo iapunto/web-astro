@@ -1,5 +1,5 @@
 ---
-import ContactForm from "../../common/ContactForm.astro";
+import ContactForm from "../../common/ContactForm";
 import type { ContactFormData } from "../../../lib/types/contact";
 ---
 
@@ -11,12 +11,7 @@ import type { ContactFormData } from "../../../lib/types/contact";
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <ContactForm
-            onSubmit={(data: ContactFormData) => {
-              console.log("Datos recibidos en el componente padre:", data);
-              // Aquí podrías agregar lógica adicional, como enviar los datos a un servicio de análisis
-            }}
-          />
+          <ContactForm client:load />
         </div>
         <div>
           <div class="p-8">
@@ -63,3 +58,5 @@ import type { ContactFormData } from "../../../lib/types/contact";
     </div>
   </div>
 </section>
+
+<style></style>
