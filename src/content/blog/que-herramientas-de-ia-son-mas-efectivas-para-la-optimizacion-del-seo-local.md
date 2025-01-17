@@ -1,14 +1,13 @@
 ---
 title: "¿Qué herramientas de IA son más efectivas para la optimización del SEO local?"
-date: 2024-10-27
-description: "Aprende sobre las herramientas de IA más efectivas para la optimización del SEO local y cómo pueden ayudar a mejorar la visibilidad de tu negocio en los resultados de búsqueda. Descubre cómo la IA puede ayudar a personalizar la experiencia del cliente y atraer a más clientes cercanos."
+pubDate: "Oct 27 2024"
+description: "Con IA, optimiza tu SEO local, aumenta la visibilidad, personaliza la experiencia y atrae clientes cercanos a tu negocio."
+cover: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-2.png"
 author:
   name: "Sergio Rondón"
   description: "CEO de IA Punto"
   image: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
 category: "SEO y Marketing Digital"
-image: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-2.png"
-slug: "que-herramientas-de-ia-son-mas-efectivas-para-la-optimizacion-del-seo-local"
 ---
 
 La optimización del SEO local puede beneficiarse enormemente de diversas herramientas de inteligencia artificial (IA) que facilitan la gestión, el análisis y la mejora de la presencia online.

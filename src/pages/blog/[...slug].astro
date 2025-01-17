@@ -1,11 +1,13 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import FormattedDate from "../../components/common/FormattedDate.astro";
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection("blog");
   return blogEntries.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
   }));
 }
@@ -15,15 +17,15 @@ type Props = {
 };
 
 const { entry } = Astro.props as Props;
-const { Content } = await entry.render();
+console.log(entry.data.cover);
+const { Content } = await render(entry);
 ---
 
 <Layout
   pageTitle={entry.data.title}
   description={entry.data.description}
-  keywords={entry.data.tags}
-  image={entry.data.image}
-  canonicalURL={`/blog/${entry.slug}`}
+  image={entry.data.cover}
+  canonicalURL={`/blog/${entry.id}`}
   noindex={entry.data.noindex}
   frontmatter={entry.data}
 >
@@ -32,7 +34,7 @@ const { Content } = await entry.render();
   >
     <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
       <article
-        class="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
+        class="blog-content mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
       >
         <header class="mb-4 lg:mb-6 not-format">
           <address class="flex items-center mb-6 not-italic">
@@ -45,19 +47,14 @@ const { Content } = await entry.render();
                 alt={entry.data.author.name}
               />
               <div>
-                <a
-                  href="#"
-                  rel="author"
-                  class="text-xl font-bold text-gray-900 dark:text-white"
-                  >{entry.data.author.name}</a
-                >
+                <p class="text-xl font-bold text-gray-900 dark:text-white">
+                  {entry.data.author.name}
+                </p>
                 <p class="text-base text-gray-500 dark:text-gray-400">
                   {entry.data.author.description}
                 </p>
                 <p class="text-base text-gray-500 dark:text-gray-400">
-                  <time datetime="2022-02-08" title="February 8th, 2022"
-                    >Feb. 8, 2022</time
-                  >
+                  <FormattedDate date={entry.data.pubDate} />
                 </p>
               </div>
             </div>

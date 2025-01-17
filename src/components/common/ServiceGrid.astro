@@ -1,25 +1,27 @@
 ---
-import Link from './Link.astro';
-import type { Services } from '../../lib/constants/services';
+import Link from "./Link.astro";
+import type { Services } from "../../lib/constants/services";
 
-interface Props extends Services {};
+interface Props extends Services {}
 
 const { title, description, icon, alt, link, ctaText } = Astro.props;
 ---
 
 <div class="group">
-    <div class="mb-6 w-16 h-16">
-        <img src={icon} alt={alt} class="w-full h-full object-contain" />
-    </div>
-    <h3 class="text-xl font-bold text-gray-900 mb-4 uppercase">
-        {title}
-    </h3>
-    <p class="text-gray-600 leading-relaxed">
-        {description}
-    </p>
-    {link && (
-        <div class="mt-4">
-            <Link href={link} ctaText={ctaText} />
-        </div>
-    )}
+  <div class="mb-6 w-16 h-16">
+    <img src={icon} alt={alt} class="w-full h-full object-contain" />
+  </div>
+  <h3 class="text-xl font-bold text-gray-900 mb-4 uppercase">
+    {title}
+  </h3>
+  <p class="text-gray-600 leading-relaxed">
+    {description}
+  </p>
+  {
+    link && (
+      <div class="mt-4">
+        <Link href={link} ctaText={ctaText} />
+      </div>
+    )
+  }
 </div>

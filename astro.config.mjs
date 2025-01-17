@@ -4,7 +4,8 @@ import tailwind from "@astrojs/tailwind";
 import icon from "astro-icon";
 import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
-import node from "@astrojs/node";
+import sitemap from "@astrojs/sitemap";
+import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,15 +16,20 @@ export default defineConfig({
       include: ["**/react/*"],
     }),
     mdx(),
+    sitemap(),
   ],
 
-  adapter: node({
-    mode: "standalone",
-  }),
+  output: "server",
+  adapter: vercel(),
 
   markdown: {
     shikiConfig: {
       theme: "one-dark-pro",
     },
+  },
+
+  image: {
+    remotePatterns: [{ protocol: "https" }],
+    domains: ["unsplash.com"],
   },
 });

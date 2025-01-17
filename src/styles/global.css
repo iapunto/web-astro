@@ -25,7 +25,131 @@ h3,
 h4,
 h5,
 h6 {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+h1,
+h2 {
   color: var(--titulos);
+}
+
+h3,
+h4,
+h5,
+h6 {
+  color: var(--titulos);
+}
+
+h2 {
+  font-size: 2rem;
+  margin-top: 1.5rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+  margin-top: 1.25rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+  margin-top: 0.75rem;
+}
+
+h6 {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+h2 + p,
+h3 + p,
+h4 + p,
+h5 + p,
+h6 + p {
+  margin-top: 1rem;
+}
+
+/* Estilos para encabezados DENTRO del contenido del blog */
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.blog-content h2 {
+  font-size: 2rem;
+  margin-top: 1.5rem;
+}
+
+/* ... estilos específicos para cada encabezado */
+
+/* Estilos para párrafos DENTRO del contenido del blog */
+.blog-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+.blog-content h2 + p,
+.blog-content h3 + p,
+.blog-content h4 + p,
+.blog-content h5 + p,
+.blog-content h6 + p {
+  margin-top: 1rem;
+}
+
+/* Estilos para listas DENTRO del contenido del blog */
+.blog-content ul,
+.blog-content ol {
+  list-style-type: decimal;
+  margin-bottom: 1rem;
+  padding-left: 20px;
+}
+
+.blog-content li {
+  list-style-type: disc;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.blog-content ul li::marker {
+  font-size: 2rem;
+  color: var(--primary-accent);
+}
+
+/* Estilos para enlaces DENTRO del contenido del blog */
+.blog-content a {
+  color: var(
+    --titulos
+  ); /* Un azul más oscuro (ajusta el color a tu preferencia) */
+  text-decoration: underline; /* Subrayado constante */
+  font-weight: 300; /* Letra delgada (ajusta el valor según tu fuente) */
+  transition:
+    color 0.3s ease,
+    font-weight 0.3s ease; /* Transición suave para el hover */
+}
+
+.blog-content a:hover {
+  color: var(--primary-accent); /* Un azul aún más oscuro al hacer hover */
+  font-weight: 600; /* Negrita al hacer hover */
+}
+
+/*Estilos para las imagenes dentro del blog*/
+.blog-content img {
+  max-width: 100%;
+  height: auto;
+  display: block; /* Para evitar espacios extra debajo de la imagen */
+  margin: 1rem auto; /* Centrar la imagen horizontalmente */
 }
 
 .bg-primary {
