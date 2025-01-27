@@ -8,16 +8,13 @@ export async function getStaticPaths() {
   const blogEntries = await getCollection("blog");
   return blogEntries.map((entry) => ({
     params: { slug: entry.id },
-    props: { entry },
+    props: entry,
   }));
 }
 
-type Props = {
-  entry: CollectionEntry<"blog">;
-};
+type Props = CollectionEntry<"blog">;
 
-const { entry } = Astro.props as Props;
-console.log(entry.data.cover);
+const entry = Astro.props;
 const { Content } = await render(entry);
 ---
 
@@ -26,7 +23,7 @@ const { Content } = await render(entry);
   description={entry.data.description}
   image={entry.data.cover}
   canonicalURL={`/blog/${entry.id}`}
-  noindex={entry.data.noindex}
+  noindex="noindex"
   frontmatter={entry.data}
 >
   <main

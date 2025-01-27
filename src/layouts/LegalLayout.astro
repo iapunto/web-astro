@@ -1,0 +1,167 @@
+---
+import "../styles/global.css";
+import TopBar from "../components/layout/Header/TopBar.astro";
+import Navbar from "../components/layout/Header/Navbar.astro";
+import Footer from "../components/layout/Footer.astro";
+
+const siteName = "IA Punto"; // Nombre del sitio (se puede definir en un archivo de configuración)
+const {
+  pageTitle,
+  description,
+  keywords,
+  image,
+  content,
+  canonicalURL,
+  noindex,
+} = Astro.props; // Título específico para la página principal
+
+// URL base de tu sitio (¡IMPORTANTE! Configúrala)
+const siteURL = "http://localhost:4321";
+
+// URL canónica completa
+const canonical = canonicalURL
+  ? `${siteURL}${canonicalURL}`
+  : Astro.url.toString();
+
+// Meta robots
+const robots = noindex ? "noindex, nofollow" : "index, follow";
+
+// Genera la tabla de contenido dinámicamente
+const headings = content.match(/<h[2-6].*?>(.*?)<\/h[2-6]>/g) || [];
+const toc = headings.map((heading) => {
+  const id =
+    heading.match(/id="([^"]*)"/)?.[1] ||
+    heading
+      .replace(/<[^>]*>/g, "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+  return {
+    text: heading.replace(/<[^>]*>/g, ""),
+    id: id,
+  };
+});
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{siteName} | {pageTitle}</title>
+    <meta name="description" content={description} />
+    {keywords && <meta name="keywords" content={keywords.join(", ")} />}
+    {/* Condición para evitar errores si no hay keywords */}
+    {/* Open Graph (para redes sociales) */}
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta
+      property="og:image"
+      content={image
+        ? `${siteURL}${image}`
+        : `${siteURL}/images/default-image.jpg`}
+    />
+    {/* Imagen por defecto */}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    {/* o "article" para entradas de blog */}
+
+    {/* Twitter Card */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta
+      name="twitter:image"
+      content={image
+        ? `${siteURL}${image}`
+        : `${siteURL}/images/default-image.jpg`}
+    />
+
+    {/* Canonical URL (¡IMPORTANTE!) */}
+    <link rel="canonical" href={canonical} />
+
+    {/* Meta robots (¡IMPORTANTE!) */}
+    <meta name="robots" content={robots} />
+
+    {/* Otros metadatos importantes */}
+    <meta name="author" content="IA Punto Soluciones Tecnológicas" />
+    <meta name="language" content="es" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <TopBar />
+    <Navbar />
+    <div class="legal-page">
+      <aside class="sidebar">
+        <h2>Tabla de Contenido</h2>
+        <ul>
+          {
+            toc.map((item) => (
+              <li>
+                <a href={`#${item.id}`}>{item.text}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+      <main class="content">
+        <Fragment set:html={content} />
+      </main>
+    </div>
+    <Footer />
+  </body>
+  <style></style>
+</html>
+
+<style>
+  .legal-page {
+    display: grid;
+    grid-template-columns: 250px 1fr; /* Sidebar y contenido */
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .sidebar {
+    border-right: 1px solid #ccc;
+    padding-right: 1rem;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .sidebar a {
+    display: block;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    color: #333;
+  }
+
+  .content h2,
+  .content h3,
+  .content h4,
+  .content h5,
+  .content h6 {
+    scroll-margin-top: 2rem; /* Evita que el encabezado quede oculto por la barra de navegación */
+  }
+
+  @media (max-width: 768px) {
+    .legal-page {
+      grid-template-columns: 1fr; /* Apila el sidebar y el contenido en pantallas pequeñas */
+    }
+    .sidebar {
+      border-right: none;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+</style>

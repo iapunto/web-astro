@@ -1,0 +1,42 @@
+---
+import LegalLayout from "../../../layouts/LegalLayout.astro"; // Importa la plantilla que creamos
+
+const content = `
+    <h2>Aviso Legal de IA Punto</h2>
+
+    <h3>1. Titularidad del Sitio:</h3>
+    <p>El sitio web IAPunto.com es propiedad de IA Punto Agencia de Marketing Digital, con NIT 700230447-4 y domicilio en Calle 44A #54-94, Barrio El Campín, Barrancabermeja, Santander – Colombia.</p>
+
+    <h3>2. Uso del Sitio:</h3>
+    <p>El acceso y uso de este sitio web están sujetos a las leyes y regulaciones de Colombia y a los siguientes términos y condiciones. Al utilizar este sitio, aceptas cumplir con estos términos.</p>
+    
+    <h3>3. Propiedad Intelectual:</h3>
+    <p>Todo el contenido de este sitio, incluyendo textos, imágenes, gráficos y logotipos, es propiedad de IA Punto y está protegido por derechos de propiedad intelectual.</p>
+
+    <h3>4. Enlaces a Terceros:</h3>
+    <p>Este sitio puede contener enlaces a sitios de terceros. IA Punto no se hace responsable del contenido ni de las prácticas de privacidad de estos sitios.</p>
+
+    <h3>5. Información Legal:</h3>
+    <p>Razón Social: IA Punto Agencia de Marketing Digital<br>
+    NIT: 700230447-4<br>
+    Domicilio: Calle 44A #54-94, Barrio El Campín, Barrancabermeja, Santander – Colombia<br>
+    Teléfono: +57 (316) 376 9935</p>
+
+    <h3>6. Limitación de Responsabilidad:</h3>
+    <p>IA Punto no garantiza la exactitud o integridad del contenido del sitio. La utilización de la información es bajo tu propio riesgo.</p>
+
+    <h3>7. Modificaciones:</h3>
+    <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Las modificaciones serán efectivas al publicarse en el sitio.</p>
+
+    <h3>8. Legislación Aplicable:</h3>
+    <p>Este aviso legal se rige por las leyes de Colombia, y cualquier disputa estará sujeta a la jurisdicción de los tribunales colombianos.</p>
+    <p>Fecha de la última actualización: 17 de Diciembre de 2023</p>
+
+    <h3>Contacto:</h3>
+    <p>Correo Electrónico: legales@iapunto.com</p>
+`;
+
+console.log("Se carga la página Aviso Legal");
+---
+
+<LegalLayout title="Aviso Legal" content={content} />
