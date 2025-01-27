@@ -74,12 +74,14 @@ const servicesMenuData = [
   <div class="container w-4/5 mx-auto px-4 flex justify-between items-center">
     <Logo />
     <ul class="flex space-x-6 items-center">
-      <li class="navbar-link"><NavLink href="/about" text="LA AGENCIA" /></li>
+      <li class="navbar-link">
+        <NavLink href="/acerca-de" text="LA AGENCIA" />
+      </li>
       <li class="navbar-link">
         <DropdownMenu buttonText="SERVICIOS" data={servicesMenuData} />
       </li>
       <li class="navbar-link"><NavLink href="/blog" text="IDEAS 360" /></li>
-      <li class="navbar-link"><NavLink href="/contact" text="CONTACTO" /></li>
+      <li class="navbar-link"><NavLink href="/contacto" text="CONTACTO" /></li>
       <li class="agenda">
         <button
           class="bg-[#E51F52] text-white px-4 py-2 rounded hover:bg-[#c71a48]"

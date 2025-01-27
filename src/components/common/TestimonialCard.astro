@@ -1,4 +1,5 @@
 ---
+import { Picture } from "astro:assets";
 import type { Testimonial } from "../../lib/types/testimonials";
 
 interface Props {
@@ -29,10 +30,12 @@ const { testimonial } = Astro.props;
     <figcaption class="flex items-center justify-center mt-6 space-x-3">
       {
         testimonial.image && (
-          <img
+          <Picture
             class="w-12 h-12 rounded-full"
             src={testimonial.image}
             alt={testimonial.author}
+            width={120}
+            height={120}
           />
         )
       }
