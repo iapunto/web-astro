@@ -1,9 +1,39 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "include": [
+    ".astro/types.d.ts",
+    "**/*",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "astro.config.ts",
+    "src/**/*.astro"
+  ],
+  "exclude": ["dist", "node_modules"],
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@content/*": ["./src/content/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@lib/*": ["./src/lib/*"]
+    },
+    "target": "esnext",
+    "module": "Node16",
+    "moduleResolution": "node16", // o "nodenext"
     "strictNullChecks": true,
-    "allowJs": true
+    "allowJs": true,
+    "checkJs": false,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
   }
 }

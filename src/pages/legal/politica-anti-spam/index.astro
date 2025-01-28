@@ -1,0 +1,36 @@
+---
+import LegalLayout from "../../../layouts/LegalLayout.astro";
+import { linkifyIAPunto } from "../../../lib/utils/linkifyIAPunto.ts";
+
+const contentText = `
+    <h2>Política Anti-Spam de IA Punto Agencia de Marketing Digital</h2>
+
+    <h3 id="compromiso-con-la-no-practica-de-spam">1. Compromiso con la No Práctica de Spam:</h3>
+    <p>IA Punto está firmemente comprometida con la no práctica de spam y se adhiere a las leyes y regulaciones pertinentes en materia de correo electrónico y comunicaciones electrónicas.</p>
+
+    <h3 id="obtencion-de-consentimiento">2. Obtención de Consentimiento:</h3>
+    <p>Antes de enviar cualquier comunicación por correo electrónico, IA Punto obtiene el consentimiento expreso de los destinatarios. Nos aseguramos de que los usuarios estén informados y hayan dado su aprobación para recibir comunicaciones de nuestra parte.</p>
+
+    <h3 id="contenido-relevante-y-valioso">3. Contenido Relevante y Valioso:</h3>
+    <p>Las comunicaciones por correo electrónico de IA Punto se centran en proporcionar contenido relevante y valioso para los destinatarios. Nos esforzamos por ofrecer información que sea de interés y beneficio para quienes reciben nuestros mensajes.</p>
+
+    <h3 id="opciones-de-cancelacion-de-suscripcion">4. Opciones de Cancelación de Suscripción:</h3>
+    <p>Todos los correos electrónicos enviados por IA Punto incluyen un enlace claro y accesible para cancelar la suscripción. Respetamos la privacidad de los usuarios y facilitamos la opción de dejar de recibir nuestras comunicaciones en cualquier momento.</p>
+
+    <h3 id="respeto-a-la-privacidad">5. Respeto a la Privacidad:</h3>
+    <p>IA Punto respeta la privacidad de los datos de los usuarios y se compromete a proteger la información personal proporcionada. No compartimos ni vendemos datos de contacto a terceros sin el consentimiento expreso de los usuarios.</p>
+
+    <h3 id="cumplimiento-de-normativas-legales">6. Cumplimiento de Normativas Legales:</h3>
+    <p>IA Punto cumple con las leyes y regulaciones locales e internacionales relacionadas con el envío de correos electrónicos, incluyendo el Acta CAN-SPAM en Estados Unidos y la legislación de la Unión Europea sobre protección de datos (GDPR).</p>
+
+    <h3 id="denuncias-de-spam">7. Denuncias de Spam:</h3>
+    <p>Agradecemos cualquier retroalimentación relacionada con prácticas de spam. Si consideras que has recibido correos electrónicos no solicitados de IA Punto, contáctanos a través de <a href="mailto:legales@iapunto.com">legales@iapunto.com</a> para que podamos abordar y resolver la situación.</p>
+
+    <h3 id="actualizaciones-de-la-politica">8. Actualizaciones de la Política:</h3>
+    <p>IA Punto se reserva el derecho de actualizar y modificar esta política en cualquier momento. Las actualizaciones serán efectivas a partir de su publicación en nuestro sitio web.</p>
+`;
+
+const linkedContent = linkifyIAPunto(contentText);
+---
+
+<LegalLayout title="Política Anti-Spam" content={linkedContent} />

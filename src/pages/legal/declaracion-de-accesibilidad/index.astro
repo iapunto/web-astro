@@ -1,0 +1,44 @@
+---
+import LegalLayout from "../../../layouts/LegalLayout.astro";
+import { linkifyIAPunto } from "../../../lib/utils/linkifyIAPunto.ts";
+
+const contentText = `
+    <h2>Declaración de Accesibilidad de IA Punto Agencia de Marketing Digital</h2>
+
+    <p>En IA Punto, nos esforzamos por proporcionar una experiencia digital accesible y amigable para todos los visitantes de nuestro sitio web. Nuestra misión es garantizar que las personas con discapacidades puedan acceder, navegar y disfrutar plenamente de los contenidos y servicios que ofrecemos en línea.</p>
+
+    <h3>Compromiso con la Accesibilidad:</h3>
+
+    <h4 id="estandares-de-cumplimiento">Estándares de Cumplimiento:</h4>
+    <p>Nos comprometemos a cumplir con los estándares de accesibilidad digital, siguiendo las pautas de la Iniciativa de Accesibilidad del Contenido Web (WCAG) en su versión 2.1 en nivel AA.</p>
+
+    <h4 id="evaluacion-continua">Evaluación Continua:</h4>
+    <p>Realizamos evaluaciones regulares de accesibilidad para identificar áreas de mejora y tomar medidas correctivas. Trabajamos en colaboración con expertos en accesibilidad para garantizar la eficacia de nuestras iniciativas.</p>
+
+    <h4 id="diseno-inclusivo">Diseño Inclusivo:</h4>
+    <p>Nuestro enfoque de diseño considera la diversidad de usuarios, incluyendo aquellos con discapacidades. Buscamos crear interfaces intuitivas y flexibles que se adapten a diversas necesidades y preferencias.</p>
+
+    <h4 id="herramientas-de-accesibilidad">Herramientas de Accesibilidad:</h4>
+    <p>Proporcionamos herramientas y funcionalidades que permiten a los usuarios personalizar la experiencia según sus requisitos. Esto incluye opciones de ajuste de tamaño de texto, contrastes y otras preferencias.</p>
+
+    <h3>Contenidos Accesibles:</h3>
+
+    <h4 id="texto-alternativo">Texto Alternativo:</h4>
+    <p>Utilizamos descripciones claras y concisas en el texto alternativo de las imágenes para garantizar que la información visual también esté disponible para usuarios con discapacidades visuales.</p>
+
+    <h4 id="navegacion-intuitiva">Navegación Intuitiva:</h4>
+    <p>Mantenemos una estructura de navegación clara y lógica en todo el sitio web para facilitar la orientación y el acceso a la información.</p>
+
+    <h4 id="compatibilidad-con-tecnologias-de-asistencia">Compatibilidad con Tecnologías de Asistencia:</h4>
+    <p>Nos esforzamos por garantizar la compatibilidad con tecnologías de asistencia, como lectores de pantalla, para que los usuarios con discapacidades puedan acceder y entender completamente el contenido.</p>
+
+    <h3>Comentarios y Mejoras:</h3>
+    <p>Valoramos los comentarios de nuestros usuarios y la comunidad en general. Si encuentras alguna dificultad o tienes sugerencias para mejorar la accesibilidad de nuestro sitio web, no dudes en comunicarte con nosotros a través de <a href="mailto:accesibilidad@iapunto.com">accesibilidad@iapunto.com</a>.</p>
+
+    <p>Esta declaración de accesibilidad se revisa periódicamente y se actualiza conforme realizamos mejoras continuas para hacer que nuestro sitio web sea más accesible para todos.</p>
+`;
+
+const linkedContent = linkifyIAPunto(contentText);
+---
+
+<LegalLayout title="Declaración de Accesibilidad" content={linkedContent} />

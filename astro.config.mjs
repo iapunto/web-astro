@@ -9,6 +9,7 @@ import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "http://localhost:4321",
   integrations: [
     tailwind(),
     icon(),

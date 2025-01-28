@@ -1,0 +1,41 @@
+---
+import LegalLayout from "../../../layouts/LegalLayout.astro";
+import { linkifyIAPunto } from "../../../lib/utils/linkifyIAPunto.ts";
+
+const contentText = `
+    <h2>Política de Privacidad de IA Punto</h2>
+
+    <p>Fecha de Entrada en Vigencia: 17 de diciembre de 2023</p>
+
+    <h3 id="recopilacion-de-informacion">1. Recopilación de Información:</h3>
+    <p>IA Punto recopila información personal de sus usuarios con el propósito de brindar servicios de marketing digital personalizados. La información recopilada incluye datos como nombre, correo electrónico, número de teléfono, detalles empresariales y financieros relevantes.</p>
+
+    <h3 id="uso-de-la-informacion">2. Uso de la Información:</h3>
+    <p>La información recopilada se utiliza para mejorar nuestros servicios, personalizar la experiencia del usuario y facilitar la facturación y comunicación efectiva. No compartiremos tu información con terceros sin tu consentimiento expreso.</p>
+
+    <h3 id="cookies">3. Cookies:</h3>
+    <p>Este sitio utiliza cookies para mejorar la navegación y personalizar contenidos. Puedes gestionar las preferencias de cookies a través de la configuración de tu navegador. Para obtener más información sobre el uso de cookies, visita nuestra página de <a href="/legal/uso-de-cookies">Uso de Cookies</a>.</p>
+
+    <h3 id="seguridad-de-la-informacion">4. Seguridad de la Información:</h3>
+    <p>IA Punto se compromete a proteger la información personal de sus usuarios mediante medidas de seguridad adecuadas para prevenir accesos no autorizados.</p>
+
+    <h3 id="ley-aplicable">5. Ley Aplicable:</h3>
+    <p>Esta política se rige por la Ley colombiana de Protección de Datos Personales (Ley 1581 de 2012) y el Decreto Reglamentario 1377 de 2013.</p>
+
+    <h3 id="derechos-del-titular">6. Derechos del Titular:</h3>
+    <p>Los titulares tienen derecho a conocer, actualizar y rectificar sus datos, así como a revocar la autorización otorgada. Para ejercer estos derechos, contacta con nosotros a través de <a href="mailto:legales@iapunto.com">legales@iapunto.com</a>.</p>
+
+    <h3 id="finalidad-de-la-informacion">7. Finalidad de la Información:</h3>
+    <p>La información recopilada se utilizará para fines de marketing digital, facturación y comunicación relacionada con los servicios prestados por IA Punto.</p>
+
+    <h3 id="cambios-en-la-politica">8. Cambios en la Política:</h3>
+    <p>Nos reservamos el derecho de actualizar y modificar esta política de privacidad. Las modificaciones entrarán en vigencia a partir de su publicación en el sitio.</p>
+
+    <h3 id="contacto">9. Contacto:</h3>
+    <p>Correo Electrónico: <a href="mailto:legales@iapunto.com">legales@iapunto.com</a></p>
+`;
+
+const linkedContent = linkifyIAPunto(contentText);
+---
+
+<LegalLayout title="Política de Privacidad" content={linkedContent} />

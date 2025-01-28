@@ -6,15 +6,18 @@ import FormattedDate from "../../components/common/FormattedDate.astro";
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection("blog");
-  return blogEntries.map((entry) => ({
+  console.log("blogEntries: ", blogEntries);
+  const paths = blogEntries.map((entry) => ({
     params: { slug: entry.id },
     props: entry,
   }));
+  console.log("paths: ", paths);
+  return paths;
 }
 
-type Props = CollectionEntry<"blog">;
+type Props = { entry: CollectionEntry<"blog"> };
 
-const entry = Astro.props;
+const { entry } = Astro.props as Props;
 const { Content } = await render(entry);
 ---
 

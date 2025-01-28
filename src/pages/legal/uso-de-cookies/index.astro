@@ -1,0 +1,43 @@
+---
+import LegalLayout from "../../../layouts/LegalLayout.astro";
+import { linkifyIAPunto } from "../../../lib/utils/linkifyIAPunto.ts";
+
+const contentText = `
+    <h2>Uso de Cookies en IA Punto</h2>
+
+    <p>Fecha de Entrada en Vigencia: 17 de diciembre de 2023</p>
+
+    <h3 id="informacion-general">1. Información General:</h3>
+    <p>IA Punto utiliza cookies y tecnologías similares en su sitio web para mejorar la experiencia del usuario y proporcionar servicios personalizados. Al utilizar nuestro sitio, aceptas el uso de cookies de acuerdo con esta política.</p>
+
+    <h3 id="que-son-las-cookies">2. ¿Qué son las Cookies?</h3>
+    <p>Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. Se utilizan para recordar preferencias, analizar el rendimiento del sitio y ofrecer contenido personalizado.</p>
+
+    <h3 id="tipos-de-cookies-utilizadas">3. Tipos de Cookies Utilizadas:</h3>
+    <ul>
+        <li><b>Cookies de Sesión:</b> Estas cookies son temporales y se eliminan al cerrar el navegador. Se utilizan para mantener la sesión del usuario y garantizar el funcionamiento correcto del sitio.</li>
+        <li><b>Cookies Persistentes:</b> Permanecen en el dispositivo después de cerrar el navegador y se activan cada vez que visitas el sitio. Ayudan a recordar preferencias y mejorar la experiencia del usuario.</li>
+        <li><b>Cookies de Terceros:</b> Utilizamos cookies de terceros, como Google Analytics, Facebook Píxel, Instagram y TikTok, para recopilar información sobre el comportamiento del usuario y mejorar nuestros servicios de marketing.</li>
+    </ul>
+
+    <h3 id="herramientas-de-analitica">4. Herramientas de Analítica:</h3>
+    <ul>
+        <li><b>Google Analytics:</b> Recopila datos sobre la interacción del usuario con el sitio web para mejorar la experiencia y el rendimiento.</li>
+        <li><b>Facebook Píxel:</b> Permite el seguimiento de las acciones de los usuarios después de hacer clic en un anuncio de Facebook, con el fin de medir la eficacia de la publicidad.</li>
+    <li><b>Cookies Propias:</b> Utilizamos cookies propias para rastrear el uso del sitio web y personalizar la experiencia del usuario.</li>
+    </ul>
+
+    <h3 id="gestion-de-cookies">5. Gestión de Cookies:</h3>
+    <p>Puedes gestionar las preferencias de cookies a través de la configuración de tu navegador. Ten en cuenta que la desactivación de ciertas cookies puede afectar la funcionalidad del sitio.</p>
+
+    <h3 id="cambios-en-la-politica">6. Cambios en la Política:</h3>
+    <p>Nos reservamos el derecho de actualizar y modificar esta política de cookies. Las modificaciones entrarán en vigencia a partir de su publicación en el sitio.</p>
+
+    <h3 id="contacto">7. Contacto:</h3>
+    <p>Correo Electrónico: legales@iapunto.com</p>
+`;
+
+const linkedContent = linkifyIAPunto(contentText);
+---
+
+<LegalLayout title="Uso de Cookies" content={linkedContent} />

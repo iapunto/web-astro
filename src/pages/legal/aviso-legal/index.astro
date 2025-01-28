@@ -5,7 +5,7 @@ const content = `
     <h2>Aviso Legal de IA Punto</h2>
 
     <h3>1. Titularidad del Sitio:</h3>
-    <p>El sitio web IAPunto.com es propiedad de IA Punto Agencia de Marketing Digital, con NIT 700230447-4 y domicilio en Calle 44A #54-94, Barrio El Campín, Barrancabermeja, Santander – Colombia.</p>
+    <p>El sitio web <a class="text-primary-600 dark:text-primary-500 text-hover-red dark:text-hover-primary-500" href="https://iapunto.com">IAPunto.com</a> es propiedad de IA Punto Agencia de Marketing Digital, con NIT 700230447-4 y domicilio en Calle 44A #54-94, Barrio El Campín, Barrancabermeja, Santander – Colombia.</p>
 
     <h3>2. Uso del Sitio:</h3>
     <p>El acceso y uso de este sitio web están sujetos a las leyes y regulaciones de Colombia y a los siguientes términos y condiciones. Al utilizar este sitio, aceptas cumplir con estos términos.</p>
@@ -39,4 +39,4 @@ const content = `
 console.log("Se carga la página Aviso Legal");
 ---
 
-<LegalLayout title="Aviso Legal" content={content} />
+<LegalLayout pageTitle="Aviso Legal" content={content} />

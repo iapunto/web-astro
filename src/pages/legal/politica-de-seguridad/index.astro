@@ -1,0 +1,46 @@
+---
+import LegalLayout from "../../../layouts/LegalLayout.astro";
+import { linkifyIAPunto } from "../../../lib/utils/linkifyIAPunto.ts";
+
+const contentText = `
+    <h2>Política de Seguridad de IA Punto Agencia de Marketing Digital</h2>
+
+    <p>En IA Punto, nos tomamos muy en serio la seguridad de la información y nos esforzamos por garantizar la confidencialidad, integridad y disponibilidad de los datos que manejamos. Esta política establece los principios y procedimientos que seguimos para proteger la seguridad de nuestros clientes y usuarios.</p>
+
+    <h3 id="almacenamiento-seguro">1. Almacenamiento Seguro:</h3>
+    <p>Todos los datos se almacenan de forma segura utilizando medidas de cifrado y protección avanzada contra amenazas.</p>
+
+    <h3 id="acceso-restringido">2. Acceso Restringido:</h3>
+    <p>El acceso a la información está restringido solo a personal autorizado. Se implementan medidas de autenticación robustas para garantizar la identidad de los usuarios.</p>
+
+    <h3 id="proteccion-contra-malware">3. Protección contra Malware:</h3>
+    <p>Utilizamos soluciones actualizadas de protección contra malware y virus para prevenir infecciones y salvaguardar la integridad de nuestros sistemas.</p>
+
+    <h3 id="actualizaciones-y-parches">4. Actualizaciones y Parches:</h3>
+    <p>Mantenemos nuestros sistemas actualizados con los últimos parches de seguridad y actualizaciones de software para abordar posibles vulnerabilidades.</p>
+
+    <h3 id="monitoreo-continuo">5. Monitoreo Continuo:</h3>
+    <p>Realizamos monitoreo continuo de actividades sospechosas y aplicamos medidas proactivas para detectar y mitigar posibles amenazas de seguridad.</p>
+
+    <h3 id="respaldo-de-datos">6. Respaldo de Datos:</h3>
+    <p>Implementamos políticas de respaldo periódico para garantizar la disponibilidad y la recuperación rápida en caso de pérdida de datos.</p>
+
+    <h3 id="educacion-y-concienciacion">7. Educación y Concienciación:</h3>
+    <p>Proporcionamos capacitación constante al personal sobre las mejores prácticas de seguridad, fomentando una cultura de seguridad informática en toda la organización.</p>
+
+    <h3 id="cumplimiento-normativo">8. Cumplimiento Normativo:</h3>
+    <p>Cumplimos con todas las leyes y regulaciones de privacidad y seguridad de la información aplicables en el entorno digital.</p>
+
+    <h3 id="colaboracion-segura">9. Colaboración Segura:</h3>
+    <p>Al trabajar con terceros, nos aseguramos de que cumplan con los estándares de seguridad y privacidad que mantenemos en IA Punto.</p>
+
+    <h3 id="respuesta-ante-incidentes">10. Respuesta ante Incidentes:</h3>
+    <p>Contamos con un plan de respuesta ante incidentes para abordar de manera rápida y eficiente cualquier amenaza a la seguridad.</p>
+
+    <p>Esta política se revisa periódicamente y se actualiza según sea necesario para abordar los cambios en el entorno de seguridad digital.</p>
+`;
+
+const linkedContent = linkifyIAPunto(contentText);
+---
+
+<LegalLayout title="Política de Seguridad" content={linkedContent} />

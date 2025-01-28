@@ -1,0 +1,36 @@
+---
+import LegalLayout from "../../../layouts/LegalLayout.astro";
+import { linkifyIAPunto } from "../../../lib/utils/linkifyIAPunto.ts";
+
+const contentText = `
+    <h2>Política de Devoluciones y Reembolsos de IA Punto Agencia de Marketing Digital</h2>
+
+    <h3 id="satisfaccion-del-cliente">1. Satisfacción del Cliente:</h3>
+    <p>En IA Punto nos esforzamos por brindar servicios de alta calidad que cumplan con las expectativas de nuestros clientes. La satisfacción del cliente es nuestra principal prioridad.</p>
+
+    <h3 id="servicios-no-reembolsables">2. Servicios No Reembolsables:</h3>
+    <p>Entendemos que cada proyecto es único, y los servicios de marketing digital, consultoría y estrategia son personalizados para cada cliente. Por lo tanto, los servicios prestados por IA Punto, incluidos los saldos en plataformas publicitarias de terceros, son no reembolsables.</p>
+
+    <h3 id="pagos-a-plataformas-publicitarias">3. Pagos a Plataformas Publicitarias:</h3>
+    <p>IA Punto actúa como intermediario en la gestión de campañas publicitarias en plataformas como Meta Business, Google Ads y otras. Los pagos realizados a estas plataformas no son reembolsables según sus propias políticas y términos de servicio.</p>
+
+    <h3 id="cancelacion-de-servicios">4. Cancelación de Servicios:</h3>
+    <p>En caso de cancelación de servicios contratados con IA Punto, se aplicarán cargos por trabajo realizado hasta la fecha de cancelación. El cliente será informado sobre los detalles específicos de estos cargos.</p>
+
+    <h3 id="cambios-y-ajustes">5. Cambios y Ajustes:</h3>
+    <p>Estamos comprometidos a realizar ajustes y cambios según las necesidades del cliente. Si surge algún problema, trabajaremos en conjunto para encontrar soluciones alternativas que satisfagan ambas partes.</p>
+
+    <h3 id="contacto-y-soporte">6. Contacto y Soporte:</h3>
+    <p>Para consultas relacionadas con la política de devoluciones y reembolsos, puedes comunicarte con nosotros a través del correo electrónico legales@iapunto.com. Estamos aquí para brindarte el mejor servicio posible.</p>
+
+    <h3 id="actualizaciones-de-la-politica">7. Actualizaciones de la Política:</h3>
+    <p>IA Punto se reserva el derecho de actualizar y modificar esta política en cualquier momento. Las actualizaciones serán efectivas a partir de su publicación en nuestro sitio web.</p>
+`;
+
+const linkedContent = linkifyIAPunto(contentText);
+---
+
+<LegalLayout
+  title="Política de Devoluciones y Reembolsos"
+  content={linkedContent}
+/>
