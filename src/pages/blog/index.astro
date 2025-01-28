@@ -70,7 +70,7 @@ const blogEntries = (await getCollection("blog")).sort(
                 </span>
               </div>
               <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <a href={`/blog/${entry.id}`}>{entry.data.title}</a>
+                <a href={`/blog/${entry.data.slug}`}>{entry.data.title}</a>
               </h2>
               <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
                 {entry.data.description}
@@ -89,7 +89,7 @@ const blogEntries = (await getCollection("blog")).sort(
                   </span>
                 </div>
                 <a
-                  href={`/blog/${entry.id}`}
+                  href={`/blog/${entry.data.slug}`}
                   class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
                 >
                   Leer más...

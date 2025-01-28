@@ -1,5 +1,6 @@
 ---
 title: "¿Cuáles son los beneficios de utilizar IA para personalizar la experiencia del cliente en la búsqueda local?"
+slug: "beneficios-ia-personalizar-experiencia-cliente-local"
 pubDate: "Oct 27 2024"
 description: "Personaliza la experiencia del cliente en la búsqueda local con IA. Mejora la conversión, la lealtad y crea perfiles de cliente personalizados analizando datos."
 cover: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png"

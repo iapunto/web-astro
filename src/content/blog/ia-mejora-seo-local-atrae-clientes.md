@@ -1,5 +1,6 @@
 ---
 title: "Como la IA mejora el SEO local: Atrae Clientes Cercanos con inteligencia artificial"
+slug: "ia-mejora-seo-local-atrae-clientes"
 pubDate: "Oct 27 2024"
 description: "Mejora tu SEO local y atrae más clientes cercanos con IA. Descubre cómo la inteligencia artificial ayuda a tu negocio a destacar."
 cover: "https://pixabay.com/es/photos/seo-mejoramiento-3007488"

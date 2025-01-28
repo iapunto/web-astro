@@ -1,5 +1,6 @@
 ---
 title: "La Inteligencia Artificial en las Empresas: Tendencias y Desafíos"
+slug: "inteligencia-artificial-empresas-tendencias-desafios"
 pubDate: "Dec 27 2023"
 description: "IA: impulsa la productividad, eficiencia y competitividad de tu empresa. IA Punto te ayuda a implementar una infraestructura de IA personalizada."
 cover: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png"

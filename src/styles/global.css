@@ -108,6 +108,11 @@ h6 + p {
   margin-top: 1rem;
 }
 
+.blog-content .author p {
+  margin-bottom: -0.1rem;
+  margin-left: 1rem;
+  line-height: 1.6;
+}
 /* Estilos para listas DENTRO del contenido del blog */
 .blog-content ul,
 .blog-content ol {

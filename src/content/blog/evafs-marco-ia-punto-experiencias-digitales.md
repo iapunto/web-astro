@@ -1,5 +1,6 @@
 ---
 title: "EVAFS: El Marco de IA Punto para Experiencias Digitales Excepcionales"
+slug: "evafs-marco-ia-punto-experiencias-digitales"
 pubDate: "Octubre 27, 2024"
 description: "Con IA, el marco EVAFS de IA Punto transforma las experiencias digitales, atrayendo y fidelizando clientes para impulsar el crecimiento."
 cover: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png"
@@ -25,10 +26,6 @@ tags:
     "atención al cliente",
   ]
 ---
-
-# EVAFS: El Marco de IA Punto para Experiencias Digitales Excepcionales
-
-## Introducción
 
 En **IA Punto**, creemos que la creación de experiencias digitales exitosas va más allá de una simple transacción. Se trata de construir relaciones duraderas con los clientes, comprendiendo sus necesidades y superando sus expectativas en cada interacción. Con este objetivo en mente, hemos desarrollado **EVAFS**, un marco de trabajo integral que guía nuestras estrategias y nos permite crear experiencias digitales verdaderamente excepcionales. En este artículo, exploraremos en detalle cada una de las fases de EVAFS y cómo aplicamos este enfoque para impulsar el crecimiento de nuestros clientes.
 

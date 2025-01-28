@@ -1,5 +1,6 @@
 ---
 title: "¿Qué herramientas de IA son más efectivas para la optimización del SEO local?"
+slug: "herramientas-ia-efectivas-seo-local"
 pubDate: "Oct 27 2024"
 description: "Con IA, optimiza tu SEO local, aumenta la visibilidad, personaliza la experiencia y atrae clientes cercanos a tu negocio."
 cover: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-2.png"

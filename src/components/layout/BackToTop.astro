@@ -1,0 +1,49 @@
+---
+
+---
+
+<button
+  id="myBtn"
+  title="Ir arriba"
+  class="fixed bottom-5 right-5 bg-[#E51F52] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg z-50 hidden"
+  client:load
+>
+  <svg
+    class="w-6 h-6 text-white dark:text-white"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="m5 15 7-7 7 7"></path>
+  </svg>
+</button>
+
+<script>
+  let mybutton = document.getElementById("myBtn");
+
+  window.onscroll = function () {
+    if (
+      document.body.scrollTop > 20 ||
+      document.documentElement.scrollTop > 20
+    ) {
+      mybutton.classList.remove("hidden");
+    } else {
+      mybutton.classList.add("hidden");
+    }
+  };
+
+  mybutton.onclick = function () {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+</script>
