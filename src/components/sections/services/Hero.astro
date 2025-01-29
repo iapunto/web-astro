@@ -4,7 +4,7 @@ const {
   title,
   description,
   image,
-  bgColor = "#bcbcbc", // Color de fondo por defecto: gris claro
+  bgColor = "#fcfcfc", // Color de fondo por defecto: gris claro
   textColor = "#000000", // Color de texto por defecto: negro
 } = Astro.props;
 ---
@@ -13,23 +13,22 @@ const {
   class="relative h-screen flex items-center justify-center"
   style={{ backgroundColor: bgColor }}
 >
-  <div class="absolute inset-0">
-    <Image
-      src={image}
-      alt={title}
-      class="object-cover w-full h-full"
-      width={600}
-      height={400}
-    />
-    <div class="absolute inset-0 bg-black opacity-50"></div>
-    {/* Capa oscura para mejor legibilidad del texto */}
-  </div>
-
-  <div class="relative z-10 text-center px-6">
-    <h1 class="text-5xl font-bold mb-4" style={{ color: textColor }}>
+  <div class="relative z-10 text-center px-6 flex flex-col items-center">
+    {/* Centra vertical y horizontalmente */}
+    <div class="mb-4 flex flex-col items-center">
+      {/* Espacio entre la imagen y el título */}
+      <Image
+        src={image}
+        alt={title}
+        class="object-contain w-full h-auto"
+        width={350}
+        height={350}
+      />
+    </div>
+    <h1 class={`text-5xl font-bold mb-4 ${textColor}`}>
       {title}
     </h1>
-    <p class="text-2xl mb-8" style={{ color: textColor }}>
+    <p class={`text-2xl mb-8 w-[700px] ${textColor}`}>
       {description}
     </p>
     {/* Puedes añadir un botón u otros elementos aquí */}

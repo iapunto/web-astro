@@ -1,0 +1,50 @@
+---
+import { Image } from "astro:assets";
+const {
+  description,
+  image,
+  features = [], // Array de características del servicio
+  benefits = [], // Array de beneficios del servicio
+} = Astro.props;
+---
+
+<section class="py-16 bg-gray-100">
+  {/* Ajusta los estilos según tu preferencia */}
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Imagen del servicio */}
+      <div class="md:order-2">
+        {/* La imagen se muestra a la derecha en pantallas medianas */}
+        <Image
+          src={image}
+          alt="Imagen del servicio"
+          class="rounded-lg shadow-md object-cover h-full"
+        />
+      </div>
+
+      {/* Información del servicio */}
+      <div class="md:order-1">
+        {/* La información se muestra a la izquierda en pantallas medianas */}
+        <div class="prose lg:prose-xl max-w-prose mb-6">
+          <p>{description}</p>
+        </div>
+
+        {/* Características del servicio */}
+        <div class="mb-6">
+          <h3 class="text-2xl font-semibold mb-2">Características</h3>
+          <ul class="list-disc pl-6 text-gray-700">
+            {features.map((feature: any) => <li id={feature}>{feature}</li>)}
+          </ul>
+        </div>
+
+        {/* Beneficios del servicio */}
+        <div>
+          <h3 class="text-2xl font-semibold mb-2">Beneficios</h3>
+          <ul class="list-disc pl-6 text-gray-700">
+            {benefits.map((benefit: any) => <li id={benefit}>{benefit}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

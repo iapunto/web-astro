@@ -98,6 +98,44 @@ const servicesMenuData = [
   const navbar = document.getElementById("navbar");
   const topbar = document.getElementById("topbar");
   const topbarHeight = topbar?.offsetHeight || 0;
+  const servicesMenuButton = document.getElementById("services-menu-button");
+  const servicesMenu = document.getElementById("services-menu");
+
+  // Función para mostrar el menú
+  function showServicesMenu() {
+    servicesMenu.classList.remove("hidden");
+  }
+
+  // Función para ocultar el menú
+  function hideServicesMenu() {
+    servicesMenu.classList.add("hidden");
+  }
+
+  // Evento hover para mostrar el menú
+  servicesMenuButton.addEventListener("mouseenter", showServicesMenu);
+
+  // Evento mouseleave para ocultar el menú (si el cursor sale del botón o del menú)
+  // servicesMenuButton.addEventListener("mouseleave", hideServicesMenu);
+  servicesMenu.addEventListener("mouseleave", hideServicesMenu);
+
+  // Evento click para redirigir al index de servicios (previene el toggle si se hace click)
+  servicesMenuButton.addEventListener("click", (event) => {
+    // Verifica si el click fue dentro del menu desplegable
+    if (!servicesMenu.contains(event.target)) {
+      window.location.href = "/servicios"; // Reemplaza con la URL correcta a tu índice de servicios
+      event.preventDefault(); // Evita que se active el toggle
+    }
+  });
+
+  // Cerrar el menú si se hace clic fuera de él (mantener esta funcionalidad)
+  document.addEventListener("click", (event) => {
+    if (
+      !servicesMenuButton.contains(event.target) &&
+      !servicesMenu.contains(event.target)
+    ) {
+      hideServicesMenu();
+    }
+  });
 
   const handleScroll = throttle(() => {
     const currentScrollPos = window.scrollY;
