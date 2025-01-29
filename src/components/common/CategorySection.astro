@@ -30,7 +30,12 @@ const { title, subtitle, description, image, alt, link, ctaText, reverse } =
         >
           {description}
         </p>
-        <ButtonPrimary text={ctaText} href={link} />
+        {/* Condición para mostrar el botón */}
+        {
+          link && link.length > 0 && (
+            <ButtonPrimary text={ctaText} href={link} />
+          )
+        }
       </div>
       <div class="w-full md:w-1/2">
         <Image

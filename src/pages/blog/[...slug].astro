@@ -5,9 +5,11 @@ import { render } from "astro:content";
 
 export const prerender = true;
 
+const blogEntries = await getCollection("blog");
+
 export async function getStaticPaths() {
-  const blogEntries = await getCollection("blog");
-  return blogEntries.map((entry: any) => ({
+  const currentPost = await getCollection("blog");
+  return currentPost.map((entry: any) => ({
     params: { slug: entry.id },
     props: {
       post: entry,
@@ -28,6 +30,19 @@ export async function getStaticPaths() {
 const { post, pageTitle, description, keywords, image, author, pubDate } =
   Astro.props;
 const { Content } = await render(post);
+
+// Ordena los posts por fecha (el mismo orden que en el índice del blog)
+const sortedPosts = [...blogEntries].sort(
+  (a, b) =>
+    new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+
+// Encuentra el índice del post actual en el array ordenado
+const currentIndex = sortedPosts.findIndex((entry) => entry.id === post.id);
+
+// Obtiene los IDs de los posts anterior y siguiente (maneja los casos de límites)
+const prevPostId = sortedPosts[currentIndex - 1]?.id || null;
+const nextPostId = sortedPosts[currentIndex + 1]?.id || null;
 ---
 
 <BlogLayout
@@ -38,12 +53,59 @@ const { Content } = await render(post);
   author={author}
   pubDate={pubDate}
   post={post}
-  Pasa
-  el
-  post
-  al
-  layout
 >
   <Content />
   {/* Renderiza el contenido del post */}
+
+  <div class="flex justify-between mt-8">
+    {
+      prevPostId && (
+        <a
+          href={`/blog/${prevPostId}`}
+          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-1 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <svg
+            class="w-5 h-5 inline-block mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          Anterior
+        </a>
+      )
+    }
+    <div></div>
+    {
+      nextPostId && (
+        <a
+          href={`/blog/${nextPostId}`}
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          Siguiente
+          <svg
+            class="w-5 h-5 inline-block ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </a>
+      )
+    }
+  </div>
 </BlogLayout>
