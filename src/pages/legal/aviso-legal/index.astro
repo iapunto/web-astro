@@ -1,5 +1,6 @@
 ---
-import LegalLayout from "../../../layouts/LegalLayout.astro"; // Importa la plantilla que creamos
+import LegalLayout from "../../../layouts/LegalLayout.astro";
+import { linkifyIAPunto } from "../../../lib/utils/linkifyIAPunto.ts";
 
 const content = `
     <h2>Aviso Legal de IA Punto</h2>
@@ -33,10 +34,10 @@ const content = `
     <p>Fecha de la última actualización: 17 de Diciembre de 2023</p>
 
     <h3>Contacto:</h3>
-    <p>Correo Electrónico: legales@iapunto.com</p>
+    <p>Correo Electrónico: <a class="text-primary-600 dark:text-primary-500 text-hover-red dark:text-hover-primary-500" href="mailto:legales@iapunto.com">legales@iapunto.com</a></p>
 `;
 
-console.log("Se carga la página Aviso Legal");
+const linkedContent = linkifyIAPunto(content);
 ---
 
-<LegalLayout pageTitle="Aviso Legal" content={content} />
+<LegalLayout pageTitle="Aviso Legal" content={linkedContent} />

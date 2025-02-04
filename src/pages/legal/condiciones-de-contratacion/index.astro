@@ -1,5 +1,6 @@
 ---
 import LegalLayout from "../../../layouts/LegalLayout.astro";
+import { linkifyIAPunto } from "../../../lib/utils/linkifyIAPunto.ts";
 
 const contentText = `
     <h2>Condiciones de Contratación – IA Punto Agencia de Marketing Digital</h2>
@@ -46,6 +47,8 @@ const contentText = `
     Correo Electrónico: legales@iapunto.com<br>
     Teléfono: +57 (316) 376 9935</p>
 `;
+
+const linkedContent = linkifyIAPunto(contentText);
 ---
 
-<LegalLayout title="Condiciones de Contratación" content={contentText} />
+<LegalLayout pageTitle="Condiciones de Contratación" content={linkedContent} />

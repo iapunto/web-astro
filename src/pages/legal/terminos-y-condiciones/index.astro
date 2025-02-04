@@ -1,10 +1,8 @@
 ---
 import LegalLayout from "../../../layouts/LegalLayout.astro";
----
+import { linkifyIAPunto } from "../../../lib/utils/linkifyIAPunto.ts";
 
-<LegalLayout
-  title="Términos y Condiciones"
-  content={`
+const contentText = `
     <h2>Términos y Condiciones de Uso de IA Punto</h2>
 
     <p>Fecha de Entrada en Vigencia: 17 de Diciembre de 2023</p>
@@ -47,5 +45,9 @@ import LegalLayout from "../../../layouts/LegalLayout.astro";
 
     <h3 id="contacto">13. Contacto:</h3>
     <p>Si tienes preguntas o inquietudes sobre estos términos y condiciones y para consultas relacionadas con el uso de nuestras imágenes, iconos y diseños propios, puedes comunicarte con nosotros a través del correo electrónico: legales@iapunto.com.</p>
-`}
-/>
+`;
+
+const linkedContent = linkifyIAPunto(contentText);
+---
+
+<LegalLayout pageTitle="Términos y Condiciones" content={linkedContent} />
