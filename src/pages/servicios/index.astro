@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Hero from "../../components/sections/services/Hero.astro";
-import ServiceCard from "@/components/common/ServiceCard.astro";
+import ServicesCard from "../../components/common/ServicesCard.astro";
 import { services } from "../../lib/constants/services";
 import heroImage from "../../assets/images/hero-image.svg";
 ---
@@ -12,13 +12,13 @@ import heroImage from "../../assets/images/hero-image.svg";
     description="Impulsa tu crecimiento con nuestras soluciones integrales de marketing y tecnología, diseñadas para llevar tu negocio al siguiente nivel"
     image={heroImage}
   />
-  <section>
-    <div class="container mx-auto py-4 mt-[100px]">
+  <section class="bg-gray-100 mx-auto py-4 px-4">
+    <div class="container mx-auto py-4 my-[100px] px-4">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         {
           services.map((services) => (
-            <ServiceCard
-              image={services.icon}
+            <ServicesCard
+              icon={services.icon}
               altText={services.alt}
               title={services.title}
               description={services.description}
