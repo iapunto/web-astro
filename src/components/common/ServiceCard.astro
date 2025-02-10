@@ -9,9 +9,18 @@ const { icon, altText, title, description, linkHref, ctaText } = Astro.props;
   <div
     class="mb-16 transform group-hover:-translate-y-1 transition-transform duration-300"
   >
-    <img src={icon.src} alt={altText} class="w-56 h-56" />
+    <a href={linkHref}>
+      <img src={icon.src} alt={altText} class="w-56 h-56" />
+    </a>
   </div>
-  <h3 class="text-xl uppercase font-bold text-gray-800 mb-4">{title}</h3>
+  <a href={linkHref}>
+    <h3
+      class="text-xl text-gray-800 hover:text-[#E51F52] uppercase font-bold mb-4"
+    >
+      {title}
+    </h3>
+  </a>
+
   <p class="text-gray-600 mb-6 leading-relaxed">{description}</p>
   <a
     href={linkHref}

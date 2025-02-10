@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import ButtonPrimary from "./ButtonPrimary.astro";
 
-const { image, alt, title, description, link, ctaText } = Astro.props;
+const { image, alt, title, description } = Astro.props;
 ---
 
 <div
@@ -17,6 +17,5 @@ const { image, alt, title, description, link, ctaText } = Astro.props;
     class="absolute inset-0 bg-black/80 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6"
   >
     <p class="text-white text-center mb-4">{description}</p>
-    <ButtonPrimary text={ctaText} href={link} />
   </div>
 </div>
