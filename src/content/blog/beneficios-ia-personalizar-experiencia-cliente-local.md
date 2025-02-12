@@ -9,6 +9,7 @@ author:
   description: "CEO de IA Punto"
   image: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
 category: "SEO y Marketing Digital"
+tags: ["IA", "Google My Business", "SEO", "Marketing"]
 ---
 
 Utilizar inteligencia artificial (IA) para personalizar la experiencia del cliente en la búsqueda local conlleva múltiples beneficios que pueden marcar la diferencia para los profesionales de marketing y propietarios de pequeñas empresas.
