@@ -6,7 +6,7 @@ import Footer from "@components/layout/Footer.astro";
 import BackToTop from "@components/layout/BackToTop.astro";
 import FormattedDate from "@components/common/FormattedDate.astro";
 import { getCollection } from "astro:content";
-import { Image } from "astro:assets";
+import { CldImage } from "astro-cloudinary";
 
 const { pageTitle, description, keywords, image, author, pubDate, post } =
   Astro.props; // Añade 'post' a las props
@@ -59,20 +59,19 @@ const relatedPosts = getRelatedPosts(post);
         <article
           class="blog-content mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
         >
-          <Image
-            class="mr-6 w-16 h-16 rounded-full"
+          <CldImage
+            class="mr-6 mb-4 w-16 h-16 rounded-[10px]"
             src={image}
-            width={560}
+            width={660}
             height={560}
             alt={pageTitle}
             header
-            class="mb-4 lg:mb-6 not-format"
           />
           <address class="author flex items-center mb-6 not-italic">
             <div
               class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white"
             >
-              <Image
+              <CldImage
                 class="mr-6 w-16 h-16 rounded-full"
                 src={author.image}
                 width={48}
@@ -119,7 +118,7 @@ const relatedPosts = getRelatedPosts(post);
               {relatedPosts.map((related) => (
                 <article class="max-w-xs">
                   <a href={`/blog/${related.id}`}>
-                    <Image
+                    <CldImage
                       src={related.data.cover}
                       class="mb-5 rounded-lg"
                       alt="Image 1"

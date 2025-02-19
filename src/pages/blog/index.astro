@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import FormattedDate from "../../components/common/FormattedDate.astro";
+import { CldImage } from "astro-cloudinary";
 import { Image } from "astro:assets";
 
 const blogEntries = (await getCollection("blog")).sort(
@@ -52,12 +53,15 @@ const currentPosts = blogEntries.slice(startIndex, endIndex);
             <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
               <div class="w-full mb-5">
                 {entry.data.cover && (
-                  <Image
+                  <CldImage
                     src={entry.data.cover}
-                    alt="Imagen de portada del artículo"
+                    alt={entry.data.title}
                     width={600}
                     height={400}
                     class="w-full h-auto object-cover rounded-lg"
+                    loading="lazy"
+                    decoding="async"
+                    sizes="(min-width: 768px) 600px, 100vw"
                   />
                 )}
               </div>
@@ -85,7 +89,7 @@ const currentPosts = blogEntries.slice(startIndex, endIndex);
               </p>
               <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-4">
-                  <Image
+                  <CldImage
                     class="w-7 h-7 rounded-full"
                     src={entry.data.author.image}
                     alt="avatar"

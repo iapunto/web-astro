@@ -1,15 +1,23 @@
 ---
-title: "¿Cuáles son los beneficios de utilizar IA para personalizar la experiencia del cliente en la búsqueda local?"
+title: "Beneficios de Usar IA para Personalizar la Experiencia del Cliente en Búsqueda Local"
 slug: "beneficios-ia-personalizar-experiencia-cliente-local"
 pubDate: "Oct 27 2024"
-description: "Personaliza la experiencia del cliente en la búsqueda local con IA. Mejora la conversión, la lealtad y crea perfiles de cliente personalizados analizando datos."
-cover: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png"
+description: "Descubre cómo la IA mejora la experiencia del cliente en búsquedas locales: mayor conversión, lealtad y segmentación precisa."
+cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921299/evaf6_c1vo2d.jpg"
 author:
   name: "Sergio Rondón"
   description: "CEO de IA Punto"
-  image: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
+  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png"
 category: "SEO y Marketing Digital"
-tags: ["IA", "Google My Business", "SEO", "Marketing"]
+tags:
+  [
+    "Inteligencia Artificial",
+    "SEO Local",
+    "Personalización",
+    "Google My Business",
+    "Marketing Digital",
+    "Experiencia del Cliente",
+  ]
 ---
 
 Utilizar inteligencia artificial (IA) para personalizar la experiencia del cliente en la búsqueda local conlleva múltiples beneficios que pueden marcar la diferencia para los profesionales de marketing y propietarios de pequeñas empresas.
@@ -56,8 +64,8 @@ La utilización de inteligencia artificial para personalizar la experiencia del 
 
 ## Referencias
 
-1. [Cómo la IA está revolucionando la gestión de reseñas de clientes para negocios locales](https://www.linkedin.com/pulse/transformando-la-experiencia-del-cliente-con-artificial-lopez-eltle/) 
+1. [Cómo la IA está revolucionando la gestión de reseñas de clientes para negocios locales](https://www.linkedin.com/pulse/transformando-la-experiencia-del-cliente-con-artificial-lopez-eltle/)
 
-2. [Cómo la IA está transformando el comercio minorista]( https://es.linkedin.com/pulse/c%C3%B3mo-la-ia-est%C3%A1-transformando-el-comercio-minorista-damiani-x14ff) 
+2. [Cómo la IA está transformando el comercio minorista](https://es.linkedin.com/pulse/c%C3%B3mo-la-ia-est%C3%A1-transformando-el-comercio-minorista-damiani-x14ff)
 
-3. [Cómo usar la IA para mejorar la experiencia del cliente: 7 secretos que debes conocer](https://www.bitrix24.co/articles/como-usar-la-ia-para-mejorar-la-experiencia-del-cliente-7-secretos-que-debes-conocer.php) 
+3. [Cómo usar la IA para mejorar la experiencia del cliente: 7 secretos que debes conocer](https://www.bitrix24.co/articles/como-usar-la-ia-para-mejorar-la-experiencia-del-cliente-7-secretos-que-debes-conocer.php)
