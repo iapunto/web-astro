@@ -6,6 +6,9 @@ import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
+import remarkGfm from "remark-gfm";
+import remarkToc from "remark-toc";
+import { max } from "lodash-es";
 
 // https://astro.build/config
 export default defineConfig({
@@ -25,6 +28,11 @@ export default defineConfig({
 
   markdown: {
     shikiConfig: {
+      sintaxHighlight: "prism",
+      remarkPlugins: [
+        remarkGfm,
+        [remarkToc, { heading: "structure", ordered: true, maxDepth: 4 }],
+      ],
       theme: "one-dark-pro",
     },
   },
