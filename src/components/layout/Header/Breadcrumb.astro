@@ -1,0 +1,77 @@
+---
+// src/components/Breadcrumb.astro
+
+// Obtener la ruta actual
+const currentPath = Astro.url.pathname;
+
+// Props recibidas desde el layout
+const { pageTitle } = Astro.props;
+
+// Función para generar el breadcrumb
+const getBreadcrumb = (path) => {
+  const segments = path.split("/").filter((segment) => segment.length > 0);
+  const breadcrumb = [];
+
+  if (segments.length === 0) return breadcrumb; // No hay breadcrumb para la página principal
+
+  let url = "/";
+  for (let i = 0; i < segments.length - 1; i++) {
+    const segment = segments[i];
+    url += segment + "/";
+    breadcrumb.push({
+      name:
+        segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " "), // Formatear el nombre
+      url: url,
+    });
+  }
+
+  // Agregar el pageTitle como el último elemento
+  if (pageTitle) {
+    breadcrumb.push({
+      name: pageTitle,
+      url: null, // El último elemento no es un enlace
+    });
+  }
+
+  return breadcrumb;
+};
+
+const breadcrumb = getBreadcrumb(currentPath);
+---
+
+{
+  breadcrumb.length > 0 ? (
+    <nav class="bg-gray-100 py-2 px-4">
+      <div class="container w-4/5 mx-auto flex items-center space-x-2 text-sm">
+        <a href="/" class="text-gray-900 font-bold hover:text-[#E51F52]">
+          Home
+        </a>
+        {breadcrumb.map((item, index) => (
+          <span key={item.url || item.name} class="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+            {item.url ? (
+              <a href={item.url} class="text-gray-600 hover:text-gray-800">
+                {item.name}
+              </a>
+            ) : (
+              <span class="text-gray-600">{item.name}</span>
+            )}
+          </span>
+        ))}
+      </div>
+    </nav>
+  ) : null
+}

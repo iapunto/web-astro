@@ -4,6 +4,7 @@ import NavBar from "@components/layout/Header/Navbar.astro";
 import TopBar from "@components/layout/Header/TopBar.astro";
 import Footer from "@components/layout/Footer.astro";
 import BackToTop from "@components/layout/BackToTop.astro";
+import Breadcrumb from "@components/layout/Header/Breadcrumb.astro";
 import FormattedDate from "@components/common/FormattedDate.astro";
 import { getCollection } from "astro:content";
 import { CldImage } from "astro-cloudinary";
@@ -52,6 +53,7 @@ const relatedPosts = getRelatedPosts(post);
   <body>
     <TopBar />
     <NavBar />
+    <Breadcrumb pageTitle={pageTitle} />
     <main
       class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased"
     >
