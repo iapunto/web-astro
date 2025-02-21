@@ -1,12 +1,37 @@
 ---
 import { Image } from "astro:assets";
+import { effect } from "astro:schema";
 const {
   title,
   description,
-  image,
+  publicId,
   bgColor = "#fcfcfc", // Color de fondo por defecto: gris claro
   textColor = "#000000", // Color de texto por defecto: negro
+  effect,
 } = Astro.props;
+
+const cloudName = "dkb9jfet8";
+
+// Generar la URL de la imagen de Cloudinary
+const generateCloudinaryUrl = (publicId: any, effect: any) => {
+  if (!publicId) return null; // Si no se proporciona un publicId, no hay imagen
+
+  // se carga la URL
+  let url = `https://res.cloudinary.com/${cloudName}/image/upload/`;
+
+  // Agregar efectos si están definidos
+  if (effect) url += `e_${effect},`;
+
+  // Agregar dimensiones y recorte
+  url += "w_450,h_450,c_fill/";
+
+  // Agregar el Public ID
+  url += `${publicId}.jpg`;
+
+  return url;
+};
+
+const imageUrl = generateCloudinaryUrl(publicId, effect);
 ---
 
 <section
@@ -17,12 +42,13 @@ const {
     {/* Centra vertical y horizontalmente */}
     <div class="mb-4 flex flex-col items-center">
       {/* Espacio entre la imagen y el título */}
-      <Image
-        src={image}
+      <img
+        src={imageUrl}
         alt={title}
         class="object-contain w-full h-auto"
-        width={350}
-        height={350}
+        width={450}
+        height={450}
+        sizes="100vw"
       />
     </div>
     <h1 class={`text-5xl font-bold mb-4 ${textColor}`}>
