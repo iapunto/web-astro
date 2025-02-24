@@ -27,6 +27,7 @@
     "dotenv": "^16.4.7",
     "flagpack": "^1.0.5",
     "flowbite": "^2.5.2",
+    "path-to-regexp": "^8.2.0",
     "pnpm": "^10.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
