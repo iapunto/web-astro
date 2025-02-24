@@ -40,6 +40,8 @@ export default defineConfig({
   image: {
     service: passthroughImageService(),
     remotePatterns: [{ protocol: "https" }],
-    domains: ["unsplash.com"],
+  },
+  experimental: {
+    responsiveImages: true,
   },
 });

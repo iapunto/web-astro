@@ -1,0 +1,72 @@
+### Prompt de Instrucciones para Crear Artículos Especializados
+
+**Instrucción General:**
+Escribe un artículo extenso y dinámico (mínimo 1200 palabras) sobre **[TEMA]**, enfocado en estrategias de marketing, ya sea utilizando inteligencia artificial (IA), técnicas tradicionales o una combinación de ambas. El artículo debe ser atractivo, optimizado para SEO, incluir citas con enlaces verificables, sugerir imágenes relevantes y promocionar implícitamente los servicios de IA Punto, una agencia especializada en transformar negocios mediante soluciones digitales innovadoras.
+
+---
+
+**Estructura del Artículo:**
+
+1. **Introducción (150-200 palabras):**
+
+   - Comienza con una introducción impactante que capture la atención del lector.
+   - Presenta brevemente el tema central: **[TEMA]**.
+   - Explica la importancia de **[TEMA]** en el contexto del marketing moderno, ya sea utilizando IA, estrategias tradicionales o una mezcla de ambos.
+   - Menciona que este artículo se centrará en cómo aplicar estas estrategias específicamente en **[TEMA]**.
+   - Introduce conceptos clave como EVAFS (si es relevante al tema) o herramientas innovadoras que pueden mejorar las estrategias de marketing.
+
+2. **Sección 1: La Importancia de [TEMA] en Marketing (300-400 palabras):**
+
+   - Habla sobre el papel de **[TEMA]** en el marketing actual.
+   - Proporciona ejemplos específicos de cómo **[TEMA]** ha transformado las campañas de marketing.
+   - Cita estudios o artículos relevantes sobre el impacto de **[TEMA]** en el marketing. Asegúrate de incluir enlaces a las fuentes.
+   - Relaciona esto con los servicios de IA Punto, destacando su experiencia en áreas relacionadas (por ejemplo, automatización inteligente, diseño web, SEO, etc.).
+
+3. **Sección 2: Aplicación Práctica de [TEMA] en Marketing (400-500 palabras):**
+
+   - Explora en detalle cómo **[TEMA]** puede utilizarse en estrategias de marketing.
+   - Da ejemplos prácticos y casos de éxito relacionados con **[TEMA]**.
+   - Integra EVAFS en la discusión si es relevante, explicando cómo este marco puede optimizar las estrategias de marketing en **[TEMA]**.
+   - Cita el artículo principal de EVAFS y proporciona un enlace si aplica.
+   - Sugiere imágenes relevantes para ilustrar los puntos clave (por ejemplo, gráficos de datos, capturas de pantalla de herramientas, infografías, etc.).
+
+4. **Sección 3: Optimización SEO y Link Building en [TEMA] (200-300 palabras):**
+
+   - Explica cómo **[TEMA]** puede ayudar a optimizar el contenido para SEO.
+   - Describe estrategias de link building utilizando herramientas o técnicas relacionadas con **[TEMA]**.
+   - Menciona los servicios de SEO y optimización web de IA Punto como una solución integral para mejorar la visibilidad en línea.
+
+5. **Sección 4: Promoción Implícita de IA Punto (100-200 palabras):**
+
+   - Destaca cómo IA Punto puede ayudar a las empresas a implementar estrategias de marketing basadas en **[TEMA]**.
+   - Resalta uno o varios servicios relevantes de IA Punto (por ejemplo, Social Media Marketing, Chatbot de WhatsApp, Automatización Inteligente, Diseño Web, etc.).
+   - Usa frases como "Con más de 18 años de experiencia y más de 600 casos exitosos, IA Punto es tu socio estratégico para navegar el mundo digital con confianza".
+   - Incluye un llamado a la acción sutil al final de esta sección, invitando a los lectores a contactar a IA Punto para obtener más información.
+
+6. **Conclusión (100-150 palabras):**
+   - Resume los puntos clave del artículo.
+   - Refuerza la importancia de adoptar **[TEMA]** en las estrategias de marketing para mantenerse competitivo.
+   - Termina con una frase inspiradora que invite a la acción, como "El futuro del marketing está aquí. ¿Estás listo para aprovecharlo?"
+
+---
+
+**Requisitos Adicionales:**
+
+- **Citas y Enlaces:** Incluye al menos 3-5 citas relevantes con enlaces a fuentes confiables.
+- **Imágenes Sugeridas:** Describe al menos 3 imágenes que podrían acompañar el artículo (por ejemplo, gráficos de rendimiento, capturas de herramientas, infografías).
+- **SEO:** Usa palabras clave relacionadas con **[TEMA]** y los servicios de IA Punto de manera natural en todo el texto.
+- **Tono:** Mantén un tono profesional pero accesible, evitando tecnicismos excesivos.
+- **Promoción Implícita:** Asegúrate de que la mención de IA Punto sea orgánica y no invasiva.
+
+---
+
+**Marcador de Posición para el Tema:**
+Reemplaza **[TEMA]** con el tema específico del artículo (por ejemplo, "Marketing en Facebook", "SEO Tradicional", "Estrategias de Contenido", "Automatización de Procesos", etc.).
+
+---
+
+**Ejemplo de Título:**
+"Revolutionizing Facebook Marketing with AI: Strategies, Tools, and Expert Insights"
+
+Otro Ejemplo:
+"Mastering Traditional SEO Techniques: A Step-by-Step Guide for Modern Marketers"

@@ -42,13 +42,15 @@ const imageUrl = generateCloudinaryUrl(publicId, effect);
     {/* Centra vertical y horizontalmente */}
     <div class="mb-4 flex flex-col items-center">
       {/* Espacio entre la imagen y el título */}
-      <img
+      <Image
         src={imageUrl}
         alt={title}
-        class="object-contain w-full h-auto"
+        class="object-contain w-full h-auto aspect-3/2 responsive"
         width={450}
         height={450}
         sizes="100vw"
+        loading="lazy"
+        layout="responsive"
       />
     </div>
     <h1 class={`text-5xl font-bold mb-4 ${textColor}`}>

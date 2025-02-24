@@ -1,7 +1,5 @@
 ---
 import Hero from "@/components/sections/services/Hero.astro";
-import Chatbots from "@/assets/images/chatbot.svg";
-import ChatbotConcept from "@/assets/images/chatbot-concept.png";
 import DefaultLayout from "../../../layouts/DefaultLayout.astro";
 import { Image } from "astro:assets";
 ---
@@ -10,7 +8,7 @@ import { Image } from "astro:assets";
   <Hero
     title="Chatbots Inteligentes que Hablan por Ti"
     description="Automatiza tu atención al cliente, genera leads y dispara la satisfacción con chatbots personalizados que ¡sí que saben conversar!"
-    image={Chatbots}
+    publicId="chatbot_yfkpci"
     alt="Imagen de portada"
   />
   <section>
@@ -151,11 +149,12 @@ import { Image } from "astro:assets";
             </div>
           </div>
           <Image
-            src={ChatbotConcept}
+            src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/chatbot-concept_ravyht.png"
             alt="Product screenshot"
             class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
             width={2432}
             height={1442}
+            loading="lazy"
           />
         </div>
       </div>
