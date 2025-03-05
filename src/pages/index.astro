@@ -9,11 +9,11 @@ import ServiceCategories from "../components/sections/home/ServiceCategories.ast
 import TestimonialsSection from "../components/sections/TestimonialsSection.astro";
 import BlogSection from "../components/sections/blog/BlogSection.astro";
 import ContactSection from "../components/sections/home/ContactSection.astro";
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+import Logo from "https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg";
 ---
 
-<Layout pageTitle="Bienvenidos">
+<Layout pageTitle="Bienvenidos" , image={Logo} , description="">
   <Hero />
   <FeaturedServices />
   <HeroSEO />
