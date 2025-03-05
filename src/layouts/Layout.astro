@@ -5,12 +5,18 @@ import Navbar from "../components/layout/Header/Navbar.astro";
 import Footer from "../components/layout/Footer.astro";
 import BackToTop from "@/components/layout/BackToTop.astro";
 
-const { pageTitle, description, image } = Astro.props;
+const { pageTitle, description, image, keywords, robots } = Astro.props;
 ---
 
 <html lang="es">
   <head>
-    <BaseHead pageTitle={pageTitle} description={description} image={image} />
+    <BaseHead
+      pageTitle={pageTitle}
+      description={description}
+      image={image}
+      keywords={keywords}
+      robots={robots}
+    />
   </head>
   <body>
     <TopBar />

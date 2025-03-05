@@ -1,0 +1,76 @@
+
+
+¡Claro! Aquí tienes recomendaciones técnicas clave para SEO, enfocadas en meta descripciones, keywords y cómo establecer una palabra clave objetivo (focus keyword):
+
+---
+
+### **1. Longitud óptima de la meta descripción**
+- **Rango recomendado**: 150–160 caracteres** (incluyendo espacios y signos).  
+  - Google suele truncarlas después de este rango.  
+  - **Ejemplo**:  
+    *"Aprende técnicas avanzadas de SEO en 2024: Guía completa con ejemplos prácticos. Optimiza tu sitio web y mejora tu posicionamiento."*  
+- **Tips**:  
+  - Incluye la **palabra clave objetivo** de forma natural.  
+  - Sé claro y atractivo para aumentar el CTR (índice de clics).  
+  - Evita duplicar meta descripciones en páginas diferentes.
+
+---
+
+### **2. Cantidad de palabras clave (keywords)**
+- **Enfoque moderno**: **Calidad > Cantidad**.  
+  - **1–2 palabras clave principales** por página/post (focus keyword).  
+  - **3–5 keywords secundarias** relacionadas (incluyendo variaciones o sinónimos).  
+  - Evita el *keyword stuffing*: La densidad ideal es del **1–2%** (ej: 5–10 keywords en un texto de 500 palabras).  
+- **Ejemplo**:  
+  - Focus keyword: *"zapatos deportivos para correr"*  
+  - Secundarias: *"mejores zapatillas running 2024"*, *"calzado deportivo ligero"*, *"zapatos para maratón"*.  
+
+---
+
+### **3. Cómo establecer una palabra clave objetivo (focus keyword)**
+- **Pasos clave**:  
+  1. **Investiga**: Usa herramientas como Google Keyword Planner, Ahrefs o SEMrush para encontrar términos con volumen de búsqueda alto y dificultad moderada.  
+  2. **Ubicación estratégica**:  
+     - **Título de la página/post** (primeros 60 caracteres).  
+     - **Meta descripción**.  
+     - **URL amigable** (ej: `tutienda.com/zapatos-deportivos`).  
+     - **H1** (encabezado principal).  
+     - En los primeros 100–150 palabras del contenido.  
+  3. **Usa variaciones**: Incluye términos relacionados (LSI keywords) para mejorar el contexto.  
+     - Ej: Si tu focus keyword es *"recetas veganas"*, usa *"comida saludable sin carne"*, *"platos vegetarianos fáciles"*.  
+
+---
+
+### **4. Longitud del contenido**
+- **Mínimo recomendado**: 300–500 palabras** (para temas simples).  
+- **Temas competitivos**: 1,000–2,000 palabras** (estudios de caso, guías detalladas).  
+- **Importante**: Prioriza la **profundidad y utilidad** sobre la extensión.  
+
+---
+
+### **5. Recomendaciones técnicas adicionales**
+- **Estructura del contenido**:  
+  - Usa encabezados **H2 y H3** para organizar secciones.  
+  - Incluye listas, tablas o imágenes para mejorar la legibilidad.  
+- **Optimización técnica**:  
+  - **Velocidad de carga**: Menos de 3 segundos (usa Google PageSpeed Insights).  
+  - **Mobile-first**: Asegura un diseño responsive.  
+  - **Schema Markup**: Implementa microdatos para destacar en resultados enriquecidos.  
+  - **Imagenes**: Nombres descriptivos (ej: `zapatos-deportivos-nike.jpg`) y `alt-text` con keywords.  
+- **Enlaces internos**: Conecta páginas relevantes con anchor text natural (ej: *"como mencionamos en nuestra guía de SEO técnico"*).  
+
+---
+
+### **6. Monitoreo y ajustes**
+- Usa **Google Search Console** para identificar errores técnicos y oportunidades.  
+- Actualiza contenido antiguo con nueva información y keywords emergentes.  
+- Analiza métricas como **CTR, tiempo en página y tasa de rebote** para mejorar iterativamente.  
+
+---
+
+### **Ejemplo práctico**  
+**Focus keyword**: *"mejores cámaras mirrorless 2024"*  
+- **Título**: *"Las 10 mejores cámaras mirrorless en 2024: Guía de compra profesional"*  
+- **Meta descripción**: *"Descubre las cámaras mirrorless más vendidas de 2024. Comparativa de precios, características técnicas y opiniones de expertos. ¡Elige la ideal para ti!"*  
+- **H1**: *"Guía definitiva: Las mejores cámaras mirrorless de 2024"*  
+- **Contenido**: Incluye H2 como *"Comparativa de precios"*, *"Marcas recomendadas"* y *"Cómo elegir tu cámara"*.

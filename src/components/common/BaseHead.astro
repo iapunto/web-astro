@@ -6,22 +6,24 @@ interface Props {
   description: string;
   image?: string;
   robots?: string;
-  noindex?: string;
+  noindex?: false;
   keywords?: string[];
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
 const {
   pageTitle,
   description,
-  image = "/assets/images/seo-post1.jpg",
+  image = "https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg",
   noindex,
   keywords,
 } = Astro.props;
 
 // Meta robots
-const robots = noindex ? "noindex, nofollow" : "index, follow";
+const robots = noindex
+  ? "noindex, nofollow, noarchive"
+  : "index, follow, max-snippet:-1, max-image-preview:large";
 ---
 
 {/* Global Metadata */}
@@ -73,3 +75,28 @@ const robots = noindex ? "noindex, nofollow" : "index, follow";
 
 {/* Meta robots (¡IMPORTANTE!) */}
 <meta name="robots" content={robots} />
+
+<!-- Schema Markup (JSON-LD para SEO estructurado) -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "IA Punto",
+    "url": "https://www.iapunto.com/",
+    "logo": "https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg",
+    "description": "Soluciones de Inteligencia Artificial para optimizar procesos empresariales: marketing digital, automatización, desarrollo web y consultoría estratégica.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Krr 16D #2-14",
+      "addressLocality": "Bucaramanga",
+      "addressRegion": "Santander",
+      "postalCode": "680001",
+      "addressCountry": "CO"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+57-316-376-9935",
+      "contactType": "Ventas y Soporte técnico"
+    }
+  }
+</script>

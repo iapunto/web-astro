@@ -11,9 +11,20 @@ import BlogSection from "../components/sections/blog/BlogSection.astro";
 import ContactSection from "../components/sections/home/ContactSection.astro";
 
 import Logo from "https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg";
+
+const title = "Soluciones de Inteligencia Artificial para Empresas";
+const description =
+  "Transforma tu negocio con Inteligencia Artificial. Marketing digital, desarrollo web, automatización y consultoría estratégica. Soluciones innovadoras para empresas en la era digital.";
+const keywords =
+  "Inteligencia Artificial para empresas, automatización de procesos, desarrollo web con IA, consultoría digital, marketing con IA, Odoo ERP";
 ---
 
-<Layout pageTitle="Bienvenidos" , image={Logo} , description="">
+<Layout
+  pageTitle={title}
+  image={Logo}
+  description={description}
+  keywords={keywords}
+>
   <Hero />
   <FeaturedServices />
   <HeroSEO />
