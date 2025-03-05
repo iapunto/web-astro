@@ -8,11 +8,10 @@ import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
-import { max } from "lodash-es";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "http://localhost:4321",
+  site: "https://iapunto.com",
   integrations: [
     tailwind(),
     icon(),
@@ -28,13 +27,12 @@ export default defineConfig({
 
   markdown: {
     shikiConfig: {
-      sintaxHighlight: "prism",
-      remarkPlugins: [
-        remarkGfm,
-        [remarkToc, { heading: "structure", ordered: true, maxDepth: 4 }],
-      ],
       theme: "one-dark-pro",
     },
+    remarkPlugins: [
+      remarkGfm,
+      [remarkToc, { heading: "structure", ordered: true, maxDepth: 4 }],
+    ],
   },
 
   image: {

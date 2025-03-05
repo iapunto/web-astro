@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# images
+images_articulos/
+
 # generated types
 .astro/
 
