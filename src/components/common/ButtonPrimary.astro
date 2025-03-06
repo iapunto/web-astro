@@ -1,9 +1,11 @@
 ---
 const {
+  id,
   href,
   text,
   type = "button",
   classes = "",
+  onClick = null,
   target = null,
   rel = null,
 } = Astro.props;
@@ -23,6 +25,8 @@ const isLink = !!href; // Verifica si se proporciona un href
     </a>
   ) : (
     <button
+      id={id}
+      onclick={onClick}
       type={type}
       class={`bg-[#E51F52] text-white px-10 py-3 rounded-full hover:bg-[#c71a48] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#E51F52] focus:ring-opacity-50 inline-flex items-center justify-center ${classes}`}
     >

@@ -1,9 +1,9 @@
 ---
 import ServiceGrid from "../../common/ServiceGrid.astro";
-import { services } from "../../../lib/constants/services"
+import { services } from "../../../lib/constants/services";
 import ButtonPrimary from "../../common/ButtonPrimary.astro";
 import ButtonSecondary from "../../common/ButtonSecondary.astro";
-
+import MeetingModal from "@/components/common/MeetingModal.astro";
 ---
 
 <section class="py-24">
@@ -24,15 +24,42 @@ import ButtonSecondary from "../../common/ButtonSecondary.astro";
 
     <!-- Grid de servicios -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-      {services.map((services) => (
-        <ServiceGrid {...services} />
-    ))}
-      
-  </div>
+      {services.map((services) => <ServiceGrid {...services} />)}
+    </div>
 
-  <!-- Botones -->
-  <div class="flex flex-col md:flex-row justify-center gap-6 mt-16">
-    <ButtonPrimary text="Agenda una Reunión Gratuita" href="/" />
-    <ButtonSecondary text="Solicita una Cotización" href="/" />
+    <!-- Botones -->
+    <div class="flex flex-col md:flex-row justify-center gap-6 mt-16">
+      <ButtonPrimary id="open-modal" text="Agenda una Reunión Gratuita" />
+      <ButtonSecondary text="Solicita una Cotización" href="/" />
+    </div>
   </div>
 </section>
+<MeetingModal />
+
+<script>
+  // Obtener referencias al botón y al modal
+  const openModalButton = document.getElementById("open-modal");
+  const modal = document.getElementById("meeting-modal");
+  const closeButton = document.querySelector("#meeting-modal .close");
+
+  // Función para abrir el modal
+  openModalButton.addEventListener("click", () => {
+    if (modal) {
+      modal.classList.remove("hidden");
+    }
+  });
+
+  // Función para cerrar el modal
+  closeButton.addEventListener("click", () => {
+    if (modal) {
+      modal.classList.add("hidden");
+    }
+  });
+
+  // Cerrar el modal si se hace clic fuera de él
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.classList.add("hidden");
+    }
+  });
+</script>
