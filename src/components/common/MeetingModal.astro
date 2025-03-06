@@ -1,0 +1,84 @@
+---
+// src/components/MeetingModal.astro
+
+const calendlyURL = "https://calendly.com/iapunto/45min";
+
+// Función para abrir el modal
+export function openModal() {
+  const modal = document.getElementById("meeting-modal");
+  if (modal) {
+    modal.classList.remove("hidden");
+  }
+}
+---
+
+<!-- Modal -->
+<div id="meeting-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Agendar Reunión</h2>
+    <!-- Contenedor para el iframe de Calendly -->
+    <div class="calendly-container">
+      <iframe
+        src={calendlyURL}
+        width="100%"
+        height="600px"
+        title="Calendly Scheduling"></iframe>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Estilos del modal */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal.hidden {
+    display: none;
+  }
+
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 1200px;
+    position: relative;
+  }
+
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .calendly-container {
+    margin-top: 20px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+</style>
+
+<script>
+  // Cerrar el modal al hacer clic en la "X"
+  const closeButton = document.querySelector(".close");
+  closeButton.addEventListener("click", () => {
+    const modal = document.getElementById("meeting-modal");
+    if (modal) {
+      modal.classList.add("hidden");
+    }
+  });
+</script>

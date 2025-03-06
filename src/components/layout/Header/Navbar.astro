@@ -2,6 +2,7 @@
 import Logo from "../Logo.astro";
 import NavLink from "./NavLink.astro";
 import DropdownMenu from "./DropdownMenu.astro";
+import MeetingModal from "../../common/MeetingModal.astro";
 
 const servicesMenuData = [
   {
@@ -84,6 +85,7 @@ const servicesMenuData = [
       <li class="navbar-link"><NavLink href="/contacto" text="CONTACTO" /></li>
       <li class="agenda">
         <button
+          id="open-modal-btn"
           class="bg-[#E51F52] text-white px-4 py-2 rounded hover:bg-[#c71a48]"
           >Agenda una Reunión</button
         >
@@ -91,6 +93,7 @@ const servicesMenuData = [
     </ul>
   </div>
 </nav>
+<MeetingModal />
 
 <script>
   import { throttle } from "lodash-es";
@@ -165,4 +168,30 @@ const servicesMenuData = [
   }, 100);
 
   window.addEventListener("scroll", handleScroll);
+
+  // Obtener referencias al botón y al modal
+  const openModalButton = document.getElementById("open-modal-btn");
+  const modal = document.getElementById("meeting-modal");
+  const closeButton = document.querySelector("#meeting-modal .close");
+
+  // Función para abrir el modal
+  openModalButton.addEventListener("click", () => {
+    if (modal) {
+      modal.classList.remove("hidden");
+    }
+  });
+
+  // Función para cerrar el modal
+  closeButton.addEventListener("click", () => {
+    if (modal) {
+      modal.classList.add("hidden");
+    }
+  });
+
+  // Cerrar el modal si se hace clic fuera de él
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.classList.add("hidden");
+    }
+  });
 </script>
