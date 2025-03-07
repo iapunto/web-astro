@@ -10,7 +10,7 @@ const { icon, altText, title, description, linkHref, ctaText } = Astro.props;
     class="mb-16 transform group-hover:-translate-y-1 transition-transform duration-300"
   >
     <a href={linkHref}>
-      <img src={icon.src} alt={altText} class="w-56 h-56" />
+      <Image src={icon} alt={altText} class="w-56 h-56" />
     </a>
   </div>
   <a href={linkHref}>
