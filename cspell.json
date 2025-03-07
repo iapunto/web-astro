@@ -21,5 +21,6 @@
         "UAHFs"
     ],
     "ignoreWords": [],
-    "import": []
+    "import": [],
+    "language": "en,es-ES"
 }
