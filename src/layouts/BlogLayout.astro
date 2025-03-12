@@ -8,6 +8,7 @@ import Breadcrumb from "@components/layout/Header/Breadcrumb.astro";
 import FormattedDate from "@components/common/FormattedDate.astro";
 import { getCollection } from "astro:content";
 import { CldImage } from "astro-cloudinary";
+import Analytics from "@vercel/analytics/astro";
 
 const { pageTitle, description, keywords, image, author, pubDate, post } =
   Astro.props; // Añade 'post' a las props
@@ -149,5 +150,6 @@ const relatedPosts = getRelatedPosts(post);
     }
     <Footer />
     <BackToTop />
+    <Analytics />
   </body>
 </html>

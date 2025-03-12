@@ -5,6 +5,7 @@ import Navbar from "../components/layout/Header/Navbar.astro";
 import Footer from "../components/layout/Footer.astro";
 import BackToTop from "@/components/layout/BackToTop.astro";
 import WhatsAppButton from "@/components/layout/WhatsAppButton.astro";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   pageTitle: string;
@@ -44,12 +45,13 @@ const keywords = [
     <slot />
     <Footer />
     <BackToTop />
-    <WhatsAppButton />>
+    <WhatsAppButton />
 
     <script
       is:inline
       src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
     ></script>
+    <Analytics />
   </body>
 </html>
 
