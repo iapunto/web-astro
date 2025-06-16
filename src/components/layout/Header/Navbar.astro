@@ -1,197 +1,97 @@
 ---
+// src/components/layout/Header/Navbar.astro
 import Logo from "../Logo.astro";
 import NavLink from "./NavLink.astro";
 import DropdownMenu from "./DropdownMenu.astro";
 import MeetingModal from "../../common/MeetingModal.astro";
-
-const servicesMenuData = [
-  {
-    title: "DESARROLLO DIGITAL",
-    links: [
-      {
-        href: "/servicios/diseno-desarrollo-web",
-        text: "Desarrollo Web",
-        description: "Diseño y desarrollo web",
-      },
-      {
-        href: "/servicios/desarrollo-apps-moviles",
-        text: "Desarrollo Móvil",
-        description: "Desarrollo de apps móviles",
-      },
-      {
-        href: "/servicios/automatizacion-inteligente",
-        text: "Automatización Inteligente",
-        description: "Automatización de flujos",
-      },
-    ],
-  },
-  {
-    title: "MARKETING DIGITAL",
-    links: [
-      {
-        href: "/servicios/posicionamiento-seo",
-        text: "SEO",
-        description: "Posicionamiento en buscadores",
-      },
-      {
-        href: "/servicios/publicidad-online-ia",
-        text: "Publicidad Online con IA",
-        description: "Publicidad online impulsada con IA",
-      },
-      {
-        href: "/servicios/marketing-de-contenidos",
-        text: "Marketing de Contenidos",
-        description: "Marketing de contenidos con IA",
-      },
-    ],
-  },
-  {
-    title: "OPTIMIZACIÓN Y GESTIÓN",
-    links: [
-      {
-        href: "/servicios/optimizacion-conversion",
-        text: "CRO",
-        description: "Optimización de conversiones",
-      },
-      {
-        href: "/servicios/chatbots-inteligentes",
-        text: "Chatbots Inteligentes",
-        description: "Chatbots que responden con IA",
-      },
-      {
-        href: "/servicios/odoo-erp",
-        text: "Odoo ERP",
-        description: "Implementación de Odoo",
-      },
-    ],
-  },
-];
+import { servicesMenuData } from "../../../lib/constants/services";
 ---
 
 <nav
   id="navbar"
   class="navbar bg-white py-4 relative top-0 z-50 transition-all duration-300"
 >
-  <div class="container w-4/5 mx-auto px-4 flex justify-between items-center">
+  <div class="container mx-auto px-4 flex justify-between items-center">
+    <!-- Logo -->
     <Logo />
-    <ul class="flex space-x-6 items-center">
-      <li class="navbar-link">
-        <NavLink href="/acerca-de" text="LA AGENCIA" />
-      </li>
-      <li class="navbar-link">
-        <DropdownMenu buttonText="SERVICIOS" data={servicesMenuData} />
-      </li>
-      <li class="navbar-link"><NavLink href="/blog" text="IDEAS 360" /></li>
-      <li class="navbar-link"><NavLink href="/contacto" text="CONTACTO" /></li>
-      <li class="agenda">
+
+    <!-- Menú de navegación (desktop) -->
+    <ul class="hidden md:flex space-x-6 items-center">
+      <li><NavLink href="/acerca-de" text="LA AGENCIA" /></li>
+      <li><DropdownMenu buttonText="SERVICIOS" data={servicesMenuData} /></li>
+      <li><NavLink href="/blog" text="IDEAS 360" /></li>
+      <li><NavLink href="/contacto" text="CONTACTO" /></li>
+      <li>
         <button
           id="open-modal-btn"
-          class="bg-[#E51F52] text-white px-4 py-2 rounded hover:bg-[#c71a48]"
-          >Agenda una Reunión</button
+          class="bg-primary text-white px-4 py-2 rounded hover:bg-secondary"
+          onclick="openModal()"
         >
+          Agenda una Reunión
+        </button>
+      </li>
+    </ul>
+
+    <!-- Botón del menú móvil -->
+    <button
+      id="menu-toggle"
+      class="md:hidden text-gray-700 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+      aria-label="Menú móvil"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Menú desplegable móvil -->
+  <div id="mobile-menu" class="hidden md:hidden">
+    <ul class="flex flex-col space-y-4 p-4 bg-white shadow-md">
+      <li><NavLink href="/acerca-de" text="LA AGENCIA" /></li>
+      <li><DropdownMenu buttonText="SERVICIOS" data={servicesMenuData} /></li>
+      <li><NavLink href="/blog" text="IDEAS 360" /></li>
+      <li><NavLink href="/contacto" text="CONTACTO" /></li>
+      <li>
+        <button
+          id="open-modal-btn-mobile"
+          class="bg-primary text-white px-4 py-2 rounded w-full hover:bg-secondary"
+          onclick="openModal()"
+        >
+          Agenda una Reunión
+        </button>
       </li>
     </ul>
   </div>
 </nav>
+
 <MeetingModal />
 
 <script>
-  import { throttle } from "lodash-es";
+  // Funcionalidad para el menú móvil
+  const menuToggle = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
 
-  const navbar = document.getElementById("navbar");
-  const topbar = document.getElementById("topbar");
-  const topbarHeight = topbar?.offsetHeight || 0;
-  const servicesMenuButton = document.getElementById("services-menu-button");
-  const servicesMenu = document.getElementById("services-menu");
-
-  // Función para mostrar el menú
-  function showServicesMenu() {
-    servicesMenu.classList.remove("hidden");
-  }
-
-  // Función para ocultar el menú
-  function hideServicesMenu() {
-    servicesMenu.classList.add("hidden");
-  }
-
-  // Evento hover para mostrar el menú
-  servicesMenuButton.addEventListener("mouseenter", showServicesMenu);
-
-  // Evento mouseleave para ocultar el menú (si el cursor sale del botón o del menú)
-  // servicesMenuButton.addEventListener("mouseleave", hideServicesMenu);
-  servicesMenu.addEventListener("mouseleave", hideServicesMenu);
-
-  // Evento click para redirigir al index de servicios (previene el toggle si se hace click)
-  servicesMenuButton.addEventListener("click", (event) => {
-    // Verifica si el click fue dentro del menu desplegable
-    if (!servicesMenu.contains(event.target)) {
-      window.location.href = "/servicios"; // Reemplaza con la URL correcta a tu índice de servicios
-      event.preventDefault(); // Evita que se active el toggle
-    }
+  menuToggle.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
   });
 
-  // Cerrar el menú si se hace clic fuera de él (mantener esta funcionalidad)
+  // Cerrar el menú si se hace clic fuera de él
   document.addEventListener("click", (event) => {
     if (
-      !servicesMenuButton.contains(event.target) &&
-      !servicesMenu.contains(event.target)
+      !menuToggle.contains(event.target) &&
+      !mobileMenu.contains(event.target)
     ) {
-      hideServicesMenu();
-    }
-  });
-
-  const handleScroll = throttle(() => {
-    const currentScrollPos = window.scrollY;
-
-    // Maneja el topbar
-    if (topbar) {
-      if (currentScrollPos > topbarHeight) {
-        topbar.style.transform = `translateY(-${topbarHeight}px)`;
-        navbar?.classList.add(
-          "fixed",
-          "top-0",
-          "left-0",
-          "right-0",
-          "shadow-md"
-        );
-      } else {
-        topbar.style.transform = "translateY(0)";
-        navbar?.classList.remove(
-          "fixed",
-          "top-0",
-          "left-0",
-          "right-0",
-          "shadow-md"
-        );
-      }
-    }
-  }, 100);
-
-  window.addEventListener("scroll", handleScroll);
-
-  // Obtener referencias al botón y al modal
-  const openModalButton = document.getElementById("open-modal-btn");
-  const modal = document.getElementById("meeting-modal");
-  const closeButton = document.querySelector("#meeting-modal .close");
-
-  // Función para abrir el modal
-  openModalButton.addEventListener("click", () => {
-    if (modal) {
-      modal.classList.remove("hidden");
-    }
-  });
-
-  // Función para cerrar el modal
-  closeButton.addEventListener("click", () => {
-    if (modal) {
-      modal.classList.add("hidden");
-    }
-  });
-
-  // Cerrar el modal si se hace clic fuera de él
-  window.addEventListener("click", (event) => {
-    if (event.target === modal) {
-      modal.classList.add("hidden");
+      mobileMenu.classList.add("hidden");
     }
   });
 </script>

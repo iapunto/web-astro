@@ -1,0 +1,26 @@
+---
+// src/components/common/SchemaMarkup.astro
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "IA Punto",
+  url: "https://www.iapunto.com/",
+  logo: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg",
+  description:
+    "Soluciones de Inteligencia Artificial para optimizar procesos empresariales: marketing digital, automatización, desarrollo web y consultoría estratégica.",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Krr 16D #2-14",
+    addressLocality: "Bucaramanga",
+    addressRegion: "Santander",
+    postalCode: "680001",
+    addressCountry: "CO",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+57-316-376-9935",
+    contactType: "Ventas y Soporte técnico",
+  },
+};
+---
+<script type="application/ld+json">{JSON.stringify(schema)}</script>

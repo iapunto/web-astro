@@ -1,7 +1,6 @@
 ---
-// src/components/MeetingModal.astro
-
-const calendlyURL = "https://calendly.com/iapunto/45min";
+// src/components/common/MeetingModal.astro
+const calendlyURL = process.env.CALENDY_URL;
 
 // Función para abrir el modal
 export function openModal() {
@@ -79,6 +78,14 @@ export function openModal() {
   closeButton.addEventListener("click", () => {
     const modal = document.getElementById("meeting-modal");
     if (modal) {
+      modal.classList.add("hidden");
+    }
+  });
+
+  // Cerrar el modal si se hace clic fuera de él
+  window.addEventListener("click", (event) => {
+    const modal = document.getElementById("meeting-modal");
+    if (event.target === modal) {
       modal.classList.add("hidden");
     }
   });

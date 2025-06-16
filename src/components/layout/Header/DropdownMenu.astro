@@ -1,29 +1,33 @@
 ---
-const { buttonText, data, href } = Astro.props;
-const active = Astro.url.pathname === href;
+// src/components/layout/Header/DropdownMenu.astro
+const { buttonText, data } = Astro.props;
 ---
 
 <button
   id="services-menu-button"
-  class={`tracking-widest uppercase text-[15px] hover:text-primary transition-colors duration-300 ${active ? "text-primary font-bold" : ""}`}
-  >{buttonText}</button
+  class="tracking-widest uppercase text-[15px] hover:text-primary transition-colors duration-300 relative"
+  aria-haspopup="true"
+  aria-expanded="false"
 >
+  {buttonText}
+</button>
+
 <div
   id="services-menu"
   class="hidden absolute right-0 bg-white shadow-md p-6 grid grid-cols-4 gap-6 z-50 w-[1080px] mt-2"
 >
   {
-    data.map((column) => (
+    data.map((category) => (
       <div>
         <h3 class="font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
-          {column.title}
+          {category.title}
         </h3>
         <div class="space-y-4">
-          {column.links.map((link) => (
+          {category.links.map((link) => (
             <div>
               <a
                 href={link.href}
-                class="font-bold text-gray-800 hover:text-[#E51F52]"
+                class="font-bold text-gray-800 hover:text-primary"
               >
                 {link.text}
               </a>
@@ -35,12 +39,12 @@ const active = Astro.url.pathname === href;
     ))
   }
   <div class="bg-gray-100 p-4 rounded col-span-1">
-    <h3 class="text-xl font-bold text-[#E51F52] mb-2">
+    <h3 class="text-xl font-bold text-primary mb-2">
       IA Punto: Crecimiento impulsado por IA
     </h3>
     <p class="text-gray-600">
       Contamos con la estrategia, la experiencia y un historial de éxito
-      comprobado en la generación de leads y el crecimiento de negocios.
+      comprobado.
     </p>
   </div>
 </div>
@@ -51,6 +55,10 @@ const active = Astro.url.pathname === href;
 
   servicesMenuButton.addEventListener("click", () => {
     servicesMenu.classList.toggle("hidden");
+    servicesMenuButton.setAttribute(
+      "aria-expanded",
+      servicesMenu.classList.contains("hidden") ? "false" : "true"
+    );
   });
 
   // Cerrar el menú si se hace clic fuera de él
@@ -60,6 +68,7 @@ const active = Astro.url.pathname === href;
       !servicesMenu.contains(event.target)
     ) {
       servicesMenu.classList.add("hidden");
+      servicesMenuButton.setAttribute("aria-expanded", "false");
     }
   });
 </script>

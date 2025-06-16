@@ -1,44 +1,75 @@
 // @ts-check
-import { defineConfig, passthroughImageService } from "astro/config";
-import tailwind from "@astrojs/tailwind";
-import icon from "astro-icon";
+import { defineConfig, envField } from "astro/config";
 import react from "@astrojs/react";
-import mdx from "@astrojs/mdx";
+import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/vercel";
-import remarkGfm from "remark-gfm";
-import remarkToc from "remark-toc";
+import vercel from "@astrojs/node";
+import cloudinary from "astro-cloudinary";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://iapunto.com",
+  // Dominio principal (adaptado para entornos de producción/desarrollo)
+  site: process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000",
+
   integrations: [
     tailwind(),
-    icon(),
     react({
       include: ["**/react/*"],
     }),
-    mdx(),
     sitemap(),
+    cloudinary({
+      cloudName: process.env.PUBLIC_CLOUDINARY_CLOUD_NAME,
+      apiKey: process.env.PUBLIC_CLOUDINARY_API_KEY,
+      apiSecret: process.env.CLOUDINARY_API_SECRET,
+      cloudinaryUrl: process.env.CLOUDINARY_URL,
+    }),
   ],
-
   output: "server",
-  adapter: vercel(),
-
-  markdown: {
-    shikiConfig: {
-      theme: "one-dark-pro",
-    },
-    remarkPlugins: [
-      remarkGfm,
-      [remarkToc, { heading: "structure", ordered: true, maxDepth: 4 }],
-    ],
-  },
+  adapter: node({
+    mode: "standalone",
+  }),
 
   image: {
-    service: passthroughImageService(),
-    remotePatterns: [{ protocol: "https" }],
+    service: cloudinary(),
+    domains: ["res.cloudinary.com"],
   },
+
+  // Alias de rutas para imports limpios
+  vite: {
+    resolve: {
+      alias: {
+        "@": new URL("./src", import.meta.url).pathname,
+        "@components": new URL("./src/components", import.meta.url).pathname,
+        "@services": new URL("./src/services", import.meta.url).pathname,
+      },
+    },
+  },
+
+  // Seguridad: Headers CSP para prevención de XSS [[4]]
+  security: {
+    checkOrigin: true,
+  },
+
+  // Variables de entorno públicas (ej: URL de Strapi) [[5]][[6]]
+  env: {
+    schema: {
+      STRAPI_API_URL: envField.string({
+        context: "client",
+        access: "public",
+        default: process.env.STRAPI_API_URL || "http://localhost:1337",
+        optional: false,
+      }),
+      SITE_NAME: {
+        type: "string",
+        context: "client",
+        access: "public",
+        default: process.env.SITE_NAME,
+      },
+    },
+  },
+
   experimental: {
     responsiveImages: true,
   },

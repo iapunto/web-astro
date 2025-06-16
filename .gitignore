@@ -20,6 +20,7 @@ pnpm-error.log*
 # environment variables
 .env
 .env.production
+PostgreSQL.md
 
 # macOS-specific files
 .DS_Store

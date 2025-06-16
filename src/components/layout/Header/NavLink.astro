@@ -1,10 +1,14 @@
 ---
+// src/components/layout/Header/NavLink.astro
 const { href, text } = Astro.props;
 const active = Astro.url.pathname === href;
 ---
 
 <a
   href={href}
-  class={`tracking-widest uppercase text-[15px] hover:text-primary transition-colors duration-300 ${active ? "text-primary font-bold" : ""}`}
-  >{text}</a
+  class={`tracking-widest uppercase text-[15px] hover:text-primary transition-colors duration-300 ${
+    active ? "text-primary font-bold" : ""
+  }`}
 >
+  {text}
+</a>

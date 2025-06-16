@@ -1,29 +1,49 @@
-// src/data/services.ts
-import chatbotIcon from "../../assets/icons/chatbot.png";
-import webDesignIcon from "../../assets/icons/web-design.png";
-import advertisingIcon from "../../assets/icons/ads.png";
-import seoIcon from "../../assets/icons/seo.png";
-import contentIcon from "../../assets/icons/content.png";
-import appDevIcon from "../../assets/icons/app-dev.png";
-import odooIcon from "../../assets/icons/odoo.png";
-import optimizationIcon from "../../assets/icons/optimization.png";
-import automationIcon from "../../assets/icons/automation.png";
-
-export interface Services {
+// src/lib/constants/services.ts
+export interface Service {
   title: string;
   description: string;
-  icon: string;
+  icon: string; // URL de Cloudinary o ruta local
   alt: string;
   link: string;
   ctaText: string;
 }
 
-export const services: Services[] = [
+export interface ServiceCategory {
+  title: string;
+  links: Array<{
+    href: string;
+    text: string;
+    description: string;
+  }>;
+}
+
+// Íconos cargados desde Cloudinary
+const ICONS = {
+  chatbot:
+    "https://res.cloudinary.com/your-cloud-name/image/upload/chatbot-icon.png",
+  webDesign:
+    "https://res.cloudinary.com/your-cloud-name/image/upload/web-design-icon.png",
+  advertising:
+    "https://res.cloudinary.com/your-cloud-name/image/upload/advertising-icon.png",
+  seo: "https://res.cloudinary.com/your-cloud-name/image/upload/seo-icon.png",
+  content:
+    "https://res.cloudinary.com/your-cloud-name/image/upload/content-icon.png",
+  appDev:
+    "https://res.cloudinary.com/your-cloud-name/image/upload/app-dev-icon.png",
+  odoo: "https://res.cloudinary.com/your-cloud-name/image/upload/odoo-icon.png",
+  optimization:
+    "https://res.cloudinary.com/your-cloud-name/image/upload/optimization-icon.png",
+  automation:
+    "https://res.cloudinary.com/your-cloud-name/image/upload/automation-icon.png",
+};
+
+// Datos de los servicios
+export const services: Service[] = [
   {
     title: "Chatbots Inteligentes",
     description:
       "Automatiza la atención al cliente 24/7, genera leads y mejora la satisfacción con chatbots personalizados e IA.",
-    icon: "/assets/icons/chatbot.png",
+    icon: ICONS.chatbot,
     alt: "Icono de Chatbots Inteligentes",
     link: "/servicios/chatbots-inteligentes",
     ctaText: "Saber más",
@@ -32,7 +52,7 @@ export const services: Services[] = [
     title: "Diseño y Desarrollo Web",
     description:
       "Creamos sitios web profesionales a medida, enfocados en la conversión y optimizados para UX/UI.",
-    icon: "/assets/icons/web-design.png",
+    icon: ICONS.webDesign,
     alt: "Icono de Diseño y Desarrollo Web",
     link: "/servicios/diseno-desarrollo-web",
     ctaText: "Ver proyectos",
@@ -41,7 +61,7 @@ export const services: Services[] = [
     title: "Publicidad Online con IA",
     description:
       "Maximiza tu ROI con campañas publicitarias inteligentes en Google Ads y redes sociales, impulsadas por IA.",
-    icon: "/assets/icons/ads.png",
+    icon: ICONS.advertising,
     alt: "Icono de Publicidad Online con IA",
     link: "/servicios/publicidad-online-ia",
     ctaText: "Impulsa tu negocio",
@@ -50,7 +70,7 @@ export const services: Services[] = [
     title: "Posicionamiento SEO",
     description:
       "Aumenta tu visibilidad orgánica en Google con estrategias SEO On-Page y Off-Page.",
-    icon: "/assets/icons/seo.png",
+    icon: ICONS.seo,
     alt: "Icono de Posicionamiento SEO",
     link: "/servicios/posicionamiento-seo",
     ctaText: "Mejora tu ranking",
@@ -59,7 +79,7 @@ export const services: Services[] = [
     title: "Marketing de Contenidos",
     description:
       "Creamos contenido optimizado para SEO que atrae a tu audiencia y posiciona tu marca. Usamos IA.",
-    icon: "/assets/icons/content.png",
+    icon: ICONS.content,
     alt: "Icono de Marketing de Contenidos",
     link: "/servicios/marketing-de-contenidos",
     ctaText: "Atrae más clientes",
@@ -68,7 +88,7 @@ export const services: Services[] = [
     title: "Desarrollo de Apps Móviles",
     description:
       "Desarrollamos apps móviles nativas e híbridas para iOS y Android con diseño UI/UX intuitivo.",
-    icon: "/assets/icons/app-dev.png",
+    icon: ICONS.appDev,
     alt: "Icono de Desarrollo de Apps Móviles",
     link: "/servicios/desarrollo-apps-moviles",
     ctaText: "Desarrolla tu app",
@@ -77,7 +97,7 @@ export const services: Services[] = [
     title: "Odoo ERP",
     description:
       "Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa.",
-    icon: "/assets/icons/odoo.png",
+    icon: ICONS.odoo,
     alt: "Icono de Odoo ERP",
     link: "/servicios/odoo-erp",
     ctaText: "Optimiza tu gestión",
@@ -86,7 +106,7 @@ export const services: Services[] = [
     title: "Optimización y Conversión",
     description:
       "Optimizamos tu sitio web para mejorar el rendimiento, la usabilidad y aumentar las conversiones.",
-    icon: "/assets/icons/optimization.png",
+    icon: ICONS.optimization,
     alt: "Icono de Optimización y Conversión",
     link: "/servicios/optimizacion-conversion",
     ctaText: "Aumenta tus ventas",
@@ -95,9 +115,73 @@ export const services: Services[] = [
     title: "Automatización Inteligente",
     description:
       "Automatizamos flujos de trabajo integrando tus aplicaciones y sistemas para aumentar la eficiencia.",
-    icon: "/assets/icons/automation.png",
+    icon: ICONS.automation,
     alt: "Icono de Automatización Inteligente",
     link: "/servicios/automatizacion-inteligente",
     ctaText: "Automatiza tu empresa",
+  },
+];
+
+// Menú de categorías de servicios
+export const servicesMenuData: ServiceCategory[] = [
+  {
+    title: "DESARROLLO DIGITAL",
+    links: [
+      {
+        href: "/servicios/diseno-desarrollo-web",
+        text: "Desarrollo Web",
+        description: "Diseño y desarrollo web",
+      },
+      {
+        href: "/servicios/desarrollo-apps-moviles",
+        text: "Desarrollo Móvil",
+        description: "Desarrollo de apps móviles",
+      },
+      {
+        href: "/servicios/automatizacion-inteligente",
+        text: "Automatización Inteligente",
+        description: "Automatización de flujos",
+      },
+    ],
+  },
+  {
+    title: "MARKETING DIGITAL",
+    links: [
+      {
+        href: "/servicios/posicionamiento-seo",
+        text: "SEO",
+        description: "Posicionamiento en buscadores",
+      },
+      {
+        href: "/servicios/publicidad-online-ia",
+        text: "Publicidad Online con IA",
+        description: "Publicidad online impulsada con IA",
+      },
+      {
+        href: "/servicios/marketing-de-contenidos",
+        text: "Marketing de Contenidos",
+        description: "Marketing de contenidos con IA",
+      },
+    ],
+  },
+  {
+    title: "OPTIMIZACIÓN Y GESTIÓN",
+    links: [
+      {
+        href: "/servicios/optimizacion-conversion",
+        text: "CRO",
+        description: "Optimización de conversiones",
+      },
+      {
+        href: "/servicios/chatbots-inteligentes",
+        text: "Chatbots Inteligentes",
+        description: "Chatbots que responden con IA",
+      },
+      {
+        href: "/servicios/odoo-erp",
+        text: "Odoo ERP",
+        description: "Implementación de Odoo",
+      },
+    ],
   },
 ];
