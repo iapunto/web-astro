@@ -1,8 +1,8 @@
 ---
-import CategorySection from "../../common/CategorySection.astro";
-import desarrolloDigital from "../../../assets/images/desarrollo-digital.svg";
-import marketingDigital from "../../../assets/images/marketing-digital.svg";
-import optimizacion from "../../../assets/images/optimizacion.svg";
+import CategorySection from '../../common/CategorySection.astro';
+import desarrolloDigital from '../../../assets/images/desarrollo-digital.svg';
+import marketingDigital from '../../../assets/images/marketing-digital.svg';
+import optimizacion from '../../../assets/images/optimizacion.svg';
 
 interface Category {
   title: string;
@@ -16,34 +16,34 @@ interface Category {
 
 const categories: Category[] = [
   {
-    title: "Soluciones tecnológicas a medida para tu negocio",
-    subtitle: "DESARROLLO DIGITAL",
+    title: 'Soluciones tecnológicas a medida para tu negocio',
+    subtitle: 'DESARROLLO DIGITAL',
     description:
-      "Desarrollamos soluciones web y móviles que transforman tu visión en realidad. Desde sitios web corporativos hasta aplicaciones empresariales complejas con Odoo ERP.",
+      'Desarrollamos soluciones web y móviles que transforman tu visión en realidad. Desde sitios web corporativos hasta aplicaciones empresariales complejas con Odoo ERP.',
     image: desarrolloDigital,
-    alt: "Desarrollo Digital",
-    link: "/servicios",
-    ctaText: "Explorar soluciones",
+    alt: 'Desarrollo Digital',
+    link: '/servicios',
+    ctaText: 'Explorar soluciones',
   },
   {
-    title: "Haz crecer tu presencia online",
-    subtitle: "MARKETING DIGITAL",
+    title: 'Haz crecer tu presencia online',
+    subtitle: 'MARKETING DIGITAL',
     description:
-      "Potenciamos tu visibilidad online con estrategias de SEO, campañas publicitarias efectivas y contenido que conecta con tu audiencia.",
+      'Potenciamos tu visibilidad online con estrategias de SEO, campañas publicitarias efectivas y contenido que conecta con tu audiencia.',
     image: marketingDigital,
-    alt: "Marketing Digital Illustration",
-    link: "/servicios",
-    ctaText: "Descubre estrategias",
+    alt: 'Marketing Digital Illustration',
+    link: '/servicios',
+    ctaText: 'Descubre estrategias',
   },
   {
-    title: "Mejora continua y eficiencia",
-    subtitle: "OPTIMIZACIÓN Y AUTOMATIZACIÓN",
+    title: 'Mejora continua y eficiencia',
+    subtitle: 'OPTIMIZACIÓN Y AUTOMATIZACIÓN',
     description:
-      "Optimizamos el rendimiento de tu presencia digital y automatizamos procesos para mejorar la experiencia de usuario y la eficiencia operativa.",
+      'Optimizamos el rendimiento de tu presencia digital y automatizamos procesos para mejorar la experiencia de usuario y la eficiencia operativa.',
     image: optimizacion,
-    alt: "Optimización Illustration",
-    link: "/servicios",
-    ctaText: "Optimiza tu negocio",
+    alt: 'Optimización Illustration',
+    link: '/servicios',
+    ctaText: 'Optimiza tu negocio',
   },
 ];
 ---
@@ -52,7 +52,7 @@ const categories: Category[] = [
   categories.map((category, index) => (
     <CategorySection
       {...category}
-      bg={index % 2 === 1 ? "gray" : undefined}
+      bg={index % 2 === 1 ? 'gray' : undefined}
       reverse={index % 2 === 1}
       key={index}
     />

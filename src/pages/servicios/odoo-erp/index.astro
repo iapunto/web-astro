@@ -1,16 +1,17 @@
 ---
-import Hero from "@/components/sections/services/Hero.astro";
-import Chatbots from "@/assets/images/chatbot.svg";
-import DefaultLayout from "../../../layouts/DefaultLayout.astro";
-import { Image } from "astro:assets";
+import Hero from '../../../components/sections/services/Hero.astro';
+import { Image } from 'astro:assets';
+import DefaultLayout from '../../../layouts/DefaultLayout.astro';
+import odooImage from '/public/icons/odoo.png';
+
 ---
 
-<DefaultLayout pageTitle="Chatbots Inteligentes">
+<DefaultLayout pageTitle="Odoo ERP">
   <Hero
-    title="Chatbots Inteligentes que Hablan por Ti"
-    description="Automatiza tu atención al cliente, genera leads y dispara la satisfacción con chatbots personalizados que ¡sí que saben conversar!"
-    image={Chatbots}
-    alt="Imagen de portada"
+    title="Odoo ERP"
+    description="Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa."
+    image={odooImage}
+    alt="Icono de Odoo ERP"
   />
   <section>
     <div class="overflow-hidden bg-white py-24 sm:py-32">
@@ -149,12 +150,12 @@ import { Image } from "astro:assets";
               </dl>
             </div>
           </div>
-          <Image
-            src="https://tailwindui.com/plus/img/component-images/dark-project-app-screenshot.png"
-            alt="Product screenshot"
+          <img
+            src="YOUR_CLOUDINARY_URL_FOR_ODOO_IMAGE"
+            alt="Odoo ERP - Interfaz de Usuario"
             class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
-            width={2432}
-            height={1442}
+            width="2432"
+            height="1442"
           />
         </div>
       </div>

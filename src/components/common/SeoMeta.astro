@@ -1,5 +1,5 @@
 ---
-import "../../styles/global.css";
+import '../../styles/global.css';
 
 // src/components/common/SeoMeta.astro
 interface Props {
@@ -12,16 +12,16 @@ interface Props {
 }
 
 const {
-  pageTitle = "Soluciones Innovadoras en Inteligencia Artificial",
-  description = "Descubre soluciones innovadoras en inteligencia artificial con IA Punto.",
-  image = "https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg",
+  pageTitle = 'Soluciones Innovadoras en Inteligencia Artificial',
+  description = 'Descubre soluciones innovadoras en inteligencia artificial con IA Punto.',
+  image = 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg',
   noindex,
   keywords,
 } = Astro.props;
 
 const robots = noindex
-  ? "noindex, nofollow, noarchive"
-  : "index, follow, max-snippet:-1, max-image-preview:large";
+  ? 'noindex, nofollow, noarchive'
+  : 'index, follow, max-snippet:-1, max-image-preview:large';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 ---
@@ -33,7 +33,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 <meta name="title" content={pageTitle} />
 <meta name="description" content={description} />
 {/* Condición para evitar errores si no hay keywords */}
-{keywords && <meta name="keywords" content={keywords.join(", ")} />}
+{keywords && <meta name="keywords" content={keywords.join(', ')} />}
 
 <meta name="author" content="IA Punto" />
 

@@ -1,22 +1,23 @@
 ---
-title: "Beneficios de Usar IA para Personalizar la Experiencia del Cliente en Búsqueda Local"
-slug: "beneficios-ia-personalizar-experiencia-cliente-local"
-pubDate: "Oct 27 2024"
-description: "Descubre cómo la IA mejora la experiencia del cliente en búsquedas locales: mayor conversión, lealtad y segmentación precisa."
-cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921299/evaf6_c1vo2d.jpg"
+title: 'Beneficios de Usar IA para Personalizar la Experiencia del Cliente en Búsqueda Local'
+slug: 'beneficios-ia-personalizar-experiencia-cliente-local'
+pubDate: 'Oct 27 2024'
+description: 'Descubre cómo la IA mejora la experiencia del cliente en búsquedas locales: mayor conversión, lealtad y segmentación precisa.'
+cover: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921299/evaf6_c1vo2d.jpg'
+coverAlt: 'Beneficios de IA para personalizar experiencia del cliente'
 author:
-  name: "Sergio Rondón"
-  description: "CEO de IA Punto"
-  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png"
-category: "SEO y Marketing Digital"
+  name: 'Sergio Rondón'
+  description: 'CEO de IA Punto'
+  image: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png'
+category: 'SEO y Marketing Digital'
 tags:
   [
-    "Inteligencia Artificial",
-    "SEO Local",
-    "Personalización",
-    "Google My Business",
-    "Marketing Digital",
-    "Experiencia del Cliente",
+    'Inteligencia Artificial',
+    'SEO Local',
+    'Personalización',
+    'Google My Business',
+    'Marketing Digital',
+    'Experiencia del Cliente',
   ]
 ---
 

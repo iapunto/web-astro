@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+
+export interface Props {
+  testimonial: {
+    id: number;
+    quote: string;
+    author: string;
+    image: string;
+    position: string;
+    company: string;
+  };
+}
+const { testimonial } = Astro.props;
+---
+
+<figure
+  class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center h-full"
+>
+  <img
+    src={testimonial.image}
+    alt={testimonial.author}
+    class="w-20 h-20 mb-4 rounded-full object-cover"
+    loading="lazy"
+    width="80"
+    height="80"
+  />
+  <blockquote class="text-lg italic text-gray-700 mb-4">
+    “{testimonial.quote}”
+  </blockquote>
+  <figcaption class="text-gray-900 font-semibold">
+    {testimonial.author}
+  </figcaption>
+  <div class="text-gray-500 text-sm">
+    {testimonial.position} - {testimonial.company}
+  </div>
+</figure>

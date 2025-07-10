@@ -1,15 +1,15 @@
 ---
-import "../styles/global.css";
-import BaseHead from "../components/common/BaseHead.astro";
-import TopBar from "../components/layout/Header/TopBar.astro";
-import Navbar from "../components/layout/Header/Navbar.astro";
-import Footer from "../components/layout/Footer.astro";
+import '../styles/global.css';
+import BaseHead from '../components/common/BaseHead.astro';
+import TopBar from '../components/layout/Header/TopBar.astro';
+import Navbar from '../components/layout/Header/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
 
-const siteName = "IA Punto"; // Nombre del sitio (se puede definir en un archivo de configuración)
+const siteName = 'IA Punto'; // Nombre del sitio (se puede definir en un archivo de configuración)
 const { pageTitle, description, content, canonicalURL, noindex } = Astro.props; // Título específico para la página principal
 
 // URL base de tu sitio (¡IMPORTANTE! Configúrala)
-const siteURL = "http://localhost:4321";
+const siteURL = 'http://localhost:4321';
 
 // URL canónica completa
 const canonical = canonicalURL
@@ -17,7 +17,7 @@ const canonical = canonicalURL
   : Astro.url.toString();
 
 // Meta robots
-const robots = noindex ? "noindex, nofollow" : "index, follow";
+const robots = noindex ? 'noindex, nofollow' : 'index, follow';
 
 // Genera la tabla de contenido dinámicamente
 const headings = content.match(/<h[2-6].*?>(.*?)<\/h[2-6]>/g) || [];
@@ -25,12 +25,12 @@ const toc = headings.map((heading) => {
   const id =
     heading.match(/id="([^"]*)"/)?.[1] ||
     heading
-      .replace(/<[^>]*>/g, "")
+      .replace(/<[^>]*>/g, '')
       .trim()
       .toLowerCase()
-      .replace(/\s+/g, "-");
+      .replace(/\s+/g, '-');
   return {
-    text: heading.replace(/<[^>]*>/g, ""),
+    text: heading.replace(/<[^>]*>/g, ''),
     id: id,
   };
 });

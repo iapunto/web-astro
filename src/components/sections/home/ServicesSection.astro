@@ -1,39 +1,47 @@
 ---
-import HoverServiceCard from "../../common/HoverServiceCard.astro";
+import ServiceCard from '../../common/ServiceCard.astro';
 // Importar los íconos/imágenes que necesites para los servicios
-import heroSeo from "../../../assets/images/hero-seo.svg";
-import organicSeo from "../../../assets/images/organic-seo.svg";
-import campaignsLocal from "../../../assets/images/campaigns-local.svg";
-import seoOffPage from "../../../assets/images/seo-off-page.svg";
+import heroSeo from '../../../assets/images/hero-seo.svg';
+import organicSeo from '../../../assets/images/organic-seo.svg';
+import campaignsLocal from '../../../assets/images/campaigns-local.svg';
+import seoOffPage from '../../../assets/images/seo-off-page.svg';
 
 const services = [
   {
-    image: heroSeo,
-    alt: "Analisis SEO",
-    title: "Análisis SEO",
+    icon: heroSeo,
+    altText: 'Analisis SEO',
+    title: 'Análisis SEO',
     description:
-      "Analizamos tu sitio web para identificar oportunidades de mejora en el posicionamiento en buscadores.",
+      'Analizamos tu sitio web para identificar oportunidades de mejora en el posicionamiento en buscadores.',
+    linkHref: '#',
+    ctaText: 'Ver más',
   },
   {
-    image: organicSeo,
-    alt: "SEO On Page",
-    title: "SEO On-page",
+    icon: organicSeo,
+    altText: 'SEO On Page',
+    title: 'SEO On-page',
     description:
-      "Optimizamos los elementos internos de tu sitio web para mejorar su relevancia para los motores de búsqueda.",
+      'Optimizamos los elementos internos de tu sitio web para mejorar su relevancia para los motores de búsqueda.',
+    linkHref: '#',
+    ctaText: 'Ver más',
   },
   {
-    image: seoOffPage,
-    alt: "SEO Off Page",
-    title: "SEO Off-page",
+    icon: seoOffPage,
+    altText: 'SEO Off Page',
+    title: 'SEO Off-page',
     description:
-      "Creamos una estrategia de linkbuilding para aumentar la autoridad de tu dominio y mejorar tu posicionamiento.",
+      'Creamos una estrategia de linkbuilding para aumentar la autoridad de tu dominio y mejorar tu posicionamiento.',
+    linkHref: '#',
+    ctaText: 'Ver más',
   },
   {
-    image: campaignsLocal,
-    alt: "SEO Local",
-    title: "SEO Local",
+    icon: campaignsLocal,
+    altText: 'SEO Local',
+    title: 'SEO Local',
     description:
-      "Optimizamos tu presencia online para destacar en búsquedas geográficas y atraer clientes locales.",
+      'Optimizamos tu presencia online para destacar en búsquedas geográficas y atraer clientes locales.',
+    linkHref: '#',
+    ctaText: 'Ver más',
   },
 ];
 ---
@@ -49,7 +57,7 @@ const services = [
     </h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {services.map((service) => <HoverServiceCard {...service} />)}
+      {services.map((service) => <ServiceCard {...service} />)}
     </div>
   </div>
 
@@ -63,7 +71,7 @@ const services = [
 
     .services-section::before,
     .services-section::after {
-      content: "";
+      content: '';
       position: absolute;
       left: -5%;
       right: -5%;

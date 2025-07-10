@@ -27,23 +27,23 @@
 </button>
 
 <script>
-  let mybutton = document.getElementById("myBtn");
+  let mybutton = document.getElementById('myBtn');
 
   window.onscroll = function () {
     if (
       document.body.scrollTop > 20 ||
       document.documentElement.scrollTop > 20
     ) {
-      mybutton.classList.remove("hidden");
+      mybutton.classList.remove('hidden');
     } else {
-      mybutton.classList.add("hidden");
+      mybutton.classList.add('hidden');
     }
   };
 
   mybutton.onclick = function () {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
 </script>

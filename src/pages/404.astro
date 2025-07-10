@@ -1,20 +1,20 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { Image } from "astro:assets";
-import notFoundImage from "../assets/404.svg"; // Importa una imagen SVG
-import ButtonPrimary from "../components/common/ButtonPrimary.astro";
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import notFoundImage from '../assets/404.svg'; // Importa una imagen SVG
+import ButtonPrimary from '../components/common/ButtonPrimary.astro';
 ---
 
 <Layout title="Página no encontrada">
   <section>
     <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
       <div class="mx-auto max-w-screen-sm text-center">
-        <Image
+        <img
           class="max-w-lg justify-self-center pb-8"
-          src={notFoundImage}
+          src={notFoundImage.src}
           alt="Página no encontrada"
-          width={600}
-          height={600}
+          width="600"
+          height="600"
         />
         <h1
           class="mb-4 text-3xl tracking-tight font-bold text-gray-700 md:text-4xl dark:text-white py-4"

@@ -1,0 +1,30 @@
+---
+export interface Props {
+  pageTitle: string;
+  description: string;
+  image?: string;
+  keywords?: string[] | string;
+  robots?: string;
+}
+const { pageTitle, description, image, keywords, robots } = Astro.props;
+const keywordsContent = Array.isArray(keywords)
+  ? keywords.join(', ')
+  : keywords;
+---
+
+<title>{pageTitle}</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content={description} />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<!-- #if keywordsContent -->
+<meta name="keywords" content={keywordsContent} />
+<!-- /if -->
+<!-- #if image -->
+<meta property="og:image" content={image} />
+<!-- /if -->
+<!-- #if robots -->
+<meta name="robots" content={robots} />
+<!-- /if -->

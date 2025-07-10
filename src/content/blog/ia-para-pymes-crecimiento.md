@@ -1,21 +1,22 @@
 ---
-title: "Cómo la Inteligencia Artificial Impulsa el Crecimiento de las PYMES en 2025"
-slug: "inteligencia-artificial-impulsa-crecimiento-pymes-2025"
-pubDate: "Oct 27 2024"
-description: "Descubre cómo la IA está transformando las PYMES: Mejora la eficiencia, aumenta ventas y optimiza procesos."
-cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921298/1img_rznvhn.jpg"
+title: 'Cómo la Inteligencia Artificial Impulsa el Crecimiento de las PYMES en 2025'
+slug: 'inteligencia-artificial-impulsa-crecimiento-pymes-2025'
+pubDate: 'Oct 27 2024'
+description: 'Descubre cómo la IA está transformando las PYMES: Mejora la eficiencia, aumenta ventas y optimiza procesos.'
+cover: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921298/1img_rznvhn.jpg'
+coverAlt: 'IA para PYMES y Crecimiento'
 author:
-  name: "Marilyn Cardozo"
-  description: "Experta Desarrollo y Transformación Digital."
-  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739923879/marilyn_s2mi4a.png"
-category: "Negocios y Tecnología"
+  name: 'Marilyn Cardozo'
+  description: 'Experta Desarrollo y Transformación Digital.'
+  image: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739923879/marilyn_s2mi4a.png'
+category: 'Negocios y Tecnología'
 tags:
   [
-    "Inteligencia Artificial",
-    "Transformación Digital",
-    "PYMES",
-    "Eficiencia Empresarial",
-    "Innovación Tecnológica",
+    'Inteligencia Artificial',
+    'Transformación Digital',
+    'PYMES',
+    'Eficiencia Empresarial',
+    'Innovación Tecnológica',
   ]
 ---
 

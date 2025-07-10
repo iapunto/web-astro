@@ -1,9 +1,9 @@
 ---
-import { getCollection } from "astro:content";
-import { CldImage } from "astro-cloudinary";
-import FormattedDate from "../../common/FormattedDate.astro"; // Importa el componente FormattedDate
+import { getCollection } from 'astro:content';
+// import { CldImage } from "astro-cloudinary";
+import FormattedDate from '../../common/FormattedDate.astro'; // Importa el componente FormattedDate
 
-const allPosts = await getCollection("blog");
+const allPosts = await getCollection('blog');
 
 // Ordenar por fecha de publicación (más reciente primero)
 const sortedPosts = allPosts.sort(
@@ -41,16 +41,11 @@ const latestPosts = sortedPosts.slice(0, 6);
               <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
                 <div class="w-full mb-5">
                   {entry.data.cover && (
-                    <CldImage
+                    <img
                       src={entry.data.cover}
-                      alt="Imagen de portada del artículo"
-                      format="jpg"
-                      width={1280}
-                      height={720}
+                      alt={entry.data.coverAlt || "Imagen de portada del artículo"}
+                      loading="lazy"
                       class="w-full h-auto object-cover rounded-lg"
-                      loading="lazy"|
-                      decoding="async"
-                      sizes="(min-width: 768px) 600px, 100vw"
                     />
                   )}
                 </div>
@@ -78,7 +73,7 @@ const latestPosts = sortedPosts.slice(0, 6);
                 </p>
                 <div class="flex justify-between items-center">
                   <div class="flex items-center space-x-4">
-                    <CldImage
+                    <img
                       class="w-7 h-7 rounded-full"
                       src={entry.data.author.image}
                       alt="avatar"
@@ -124,24 +119,24 @@ const latestPosts = sortedPosts.slice(0, 6);
 </section>
 
 <script>
-  import Swiper from "swiper";
-  import { Navigation, Pagination } from "swiper/modules";
-  import "swiper/css";
-  import "swiper/css/navigation"; // navigation
-  import "swiper/css/pagination"; // pagination
-  const blogSwiper = new Swiper(".blog-swiper", {
+  import Swiper from 'swiper';
+  import { Navigation, Pagination } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/navigation'; // navigation
+  import 'swiper/css/pagination'; // pagination
+  const blogSwiper = new Swiper('.blog-swiper', {
     modules: [Navigation, Pagination],
     slidesPerView: 3,
     slidesPerGroup: 1,
     spaceBetween: 30,
     loop: true,
     pagination: {
-      el: ".swiper-pagination",
+      el: '.swiper-pagination',
       clickable: true,
     },
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
     },
   });
 </script>

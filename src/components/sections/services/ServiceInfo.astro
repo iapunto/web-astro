@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Image } from 'astro:assets';
 const {
   description,
   image,
@@ -15,8 +15,8 @@ const {
       {/* Imagen del servicio */}
       <div class="md:order-2">
         {/* La imagen se muestra a la derecha en pantallas medianas */}
-        <Image
-          src={image}
+        <img
+          src={image.src || image}
           alt="Imagen del servicio"
           class="rounded-lg shadow-md object-cover h-full"
         />

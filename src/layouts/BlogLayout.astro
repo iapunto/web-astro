@@ -1,19 +1,20 @@
 ---
-import BaseHead from "@components/common/BaseHead.astro";
-import NavBar from "@components/layout/Header/Navbar.astro";
-import TopBar from "@components/layout/Header/TopBar.astro";
-import Footer from "@components/layout/Footer.astro";
-import BackToTop from "@components/layout/BackToTop.astro";
-import Breadcrumb from "@components/layout/Header/Breadcrumb.astro";
-import FormattedDate from "@components/common/FormattedDate.astro";
-import { getCollection } from "astro:content";
-import { CldImage } from "astro-cloudinary";
-import Analytics from "@vercel/analytics/astro";
+import BaseHead from '@components/common/BaseHead.astro';
+import NavBar from '@components/layout/Header/Navbar.astro';
+import TopBar from '@components/layout/Header/TopBar.astro';
+import Footer from '@components/layout/Footer.astro';
+import BackToTop from '@components/layout/BackToTop.astro';
+import Breadcrumb from '@components/layout/Header/Breadcrumb.astro';
+import FormattedDate from '@components/common/FormattedDate.astro';
+import { getCollection } from 'astro:content';
+import Analytics from '@vercel/analytics/astro';
+import { Image } from 'astro:assets';
+import SchemaMarkup from '@components/common/SchemaMarkup.astro';
 
 const { pageTitle, description, keywords, image, author, pubDate, post } =
   Astro.props; // Añade 'post' a las props
 
-const allPosts = await getCollection("blog");
+const allPosts = await getCollection('blog');
 
 function getRelatedPosts(currentPost: any) {
   const relatedPosts = allPosts.filter((p: any) => {
@@ -40,6 +41,7 @@ function getRelatedPosts(currentPost: any) {
     .slice(0, 4);
 }
 const relatedPosts = getRelatedPosts(post);
+const hasRelated = relatedPosts && relatedPosts.length > 0;
 ---
 
 <html lang="en">
@@ -50,6 +52,7 @@ const relatedPosts = getRelatedPosts(post);
       keywords={keywords}
       image={image}
     />
+    <SchemaMarkup post={post} />
   </head>
   <body>
     <TopBar />
@@ -60,29 +63,29 @@ const relatedPosts = getRelatedPosts(post);
     >
       <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
         <article
-          class="blog-content mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
+          class="blog-content mx-auto w-full max-w-2xl prose prose-lg dark:prose-invert"
         >
-          <CldImage
-            class="mr-6 mb-4 w-16 h-16 rounded-[10px]"
-            src={image}
-            width={660}
-            height={560}
-            alt={pageTitle}
-            header
+          <img
+            src={image.src || image}
+            alt={pageTitle || ''}
+            loading="lazy"
+            class="mr-6 mb-4 rounded-[10px]"
+            width="800"
+            height="450"
           />
           <address class="author flex items-center mb-6 not-italic">
             <div
               class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white"
             >
-              <CldImage
-                class="mr-6 w-16 h-16 rounded-full"
-                src={author.image}
-                width={48}
-                height={48}
-                alt={author.name}
+              <img
+                src={author.image.src || author.image}
+                alt={author.name || ''}
+                class="mr-6 rounded-full"
+                width="96"
+                height="96"
               />
-              <div>
-                <p class="text-xl font-bold text-gray-900 dark:text-white">
+              <div class="space-y-1">
+                <p class="text-xl font-bold text-gray-900 dark:text-white mb-0">
                   {author.name}
                   {/* Usa author.name */}
                 </p>
@@ -108,7 +111,7 @@ const relatedPosts = getRelatedPosts(post);
       </div>
     </main>
     {
-      relatedPosts && relatedPosts.length > 0 && (
+      hasRelated && (
         <aside
           aria-label="Related articles"
           class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800"
@@ -118,31 +121,34 @@ const relatedPosts = getRelatedPosts(post);
               Artículos relacionados
             </h2>
             <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-              {relatedPosts.map((related) => (
-                <article class="max-w-xs">
-                  <a href={`/blog/${related.id}`}>
-                    <CldImage
-                      src={related.data.cover}
-                      class="mb-5 rounded-lg"
-                      alt="Image 1"
-                      width={600}
-                      height={400}
-                    />
-                  </a>
-                  <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href={`/blog/${related.id}`}>{related.data.title}</a>
-                  </h2>
-                  <p class="mb-4 text-gray-500 dark:text-gray-400">
-                    {related.data.description}
-                  </p>
-                  <a
-                    href={`/blog/${related.id}`}
-                    class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
-                  >
-                    Leer más...
-                  </a>
-                </article>
-              ))}
+              {relatedPosts.map((related) => {
+                return (
+                  <article class="max-w-xs">
+                    <a href={`/blog/${related.id}`}>
+                      <img
+                        src={related.data.cover.src || related.data.cover}
+                        alt={related.data.title || ''}
+                        loading="lazy"
+                        class="mb-5 rounded-lg"
+                        width="600"
+                        height="400"
+                      />
+                    </a>
+                    <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
+                      <a href={`/blog/${related.id}`}>{related.data.title}</a>
+                    </h2>
+                    <p class="mb-4 text-gray-500 dark:text-gray-400">
+                      {related.data.description}
+                    </p>
+                    <a
+                      href={`/blog/${related.id}`}
+                      class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
+                    >
+                      Leer más...
+                    </a>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </aside>

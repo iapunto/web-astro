@@ -1,8 +1,12 @@
 // src/lib/constants/services.ts
+import type { ImageMetadata } from 'astro';
+
+import type { ImageMetadata } from 'astro';
+
 export interface Service {
   title: string;
   description: string;
-  icon: string; // URL de Cloudinary o ruta local
+  icon: ImageMetadata; // Ahora es ImageMetadata
   alt: string;
   link: string;
   ctaText: string;
@@ -17,170 +21,173 @@ export interface ServiceCategory {
   }>;
 }
 
-// Íconos cargados desde Cloudinary
+// Íconos cargados desde assets/icons
+import chatbot from '/public/icons/chatbot.png';
+import webDesign from '/public/icons/web-design.png';
+import advertising from '/public/icons/ads.png';
+import seo from '/public/icons/seo.png';
+import content from '/public/icons/content.png';
+import appDev from '/public/icons/app-dev.png';
+import odoo from '/public/icons/odoo.png';
+import optimization from '/public/icons/optimization.png';
+import automation from '/public/icons/automation.png';
+
 const ICONS = {
-  chatbot:
-    "https://res.cloudinary.com/your-cloud-name/image/upload/chatbot-icon.png",
-  webDesign:
-    "https://res.cloudinary.com/your-cloud-name/image/upload/web-design-icon.png",
-  advertising:
-    "https://res.cloudinary.com/your-cloud-name/image/upload/advertising-icon.png",
-  seo: "https://res.cloudinary.com/your-cloud-name/image/upload/seo-icon.png",
-  content:
-    "https://res.cloudinary.com/your-cloud-name/image/upload/content-icon.png",
-  appDev:
-    "https://res.cloudinary.com/your-cloud-name/image/upload/app-dev-icon.png",
-  odoo: "https://res.cloudinary.com/your-cloud-name/image/upload/odoo-icon.png",
-  optimization:
-    "https://res.cloudinary.com/your-cloud-name/image/upload/optimization-icon.png",
-  automation:
-    "https://res.cloudinary.com/your-cloud-name/image/upload/automation-icon.png",
+  chatbot,
+  webDesign,
+  advertising,
+  seo,
+  content,
+  appDev,
+  odoo,
+  optimization,
+  automation,
 };
 
 // Datos de los servicios
 export const services: Service[] = [
   {
-    title: "Chatbots Inteligentes",
+    title: 'Chatbots Inteligentes',
     description:
-      "Automatiza la atención al cliente 24/7, genera leads y mejora la satisfacción con chatbots personalizados e IA.",
+      'Automatiza la atención al cliente 24/7, genera leads y mejora la satisfacción con chatbots personalizados e IA.',
     icon: ICONS.chatbot,
-    alt: "Icono de Chatbots Inteligentes",
-    link: "/servicios/chatbots-inteligentes",
-    ctaText: "Saber más",
+    alt: 'Icono de Chatbots Inteligentes',
+    link: '/servicios/chatbots-inteligentes',
+    ctaText: 'Saber más',
   },
   {
-    title: "Diseño y Desarrollo Web",
+    title: 'Diseño y Desarrollo Web',
     description:
-      "Creamos sitios web profesionales a medida, enfocados en la conversión y optimizados para UX/UI.",
+      'Creamos sitios web profesionales a medida, enfocados en la conversión y optimizados para UX/UI.',
     icon: ICONS.webDesign,
-    alt: "Icono de Diseño y Desarrollo Web",
-    link: "/servicios/diseno-desarrollo-web",
-    ctaText: "Ver proyectos",
+    alt: 'Icono de Diseño y Desarrollo Web',
+    link: '/servicios/diseno-desarrollo-web',
+    ctaText: 'Ver proyectos',
   },
   {
-    title: "Publicidad Online con IA",
+    title: 'Publicidad Online con IA',
     description:
-      "Maximiza tu ROI con campañas publicitarias inteligentes en Google Ads y redes sociales, impulsadas por IA.",
+      'Maximiza tu ROI con campañas publicitarias inteligentes en Google Ads y redes sociales, impulsadas por IA.',
     icon: ICONS.advertising,
-    alt: "Icono de Publicidad Online con IA",
-    link: "/servicios/publicidad-online-ia",
-    ctaText: "Impulsa tu negocio",
+    alt: 'Icono de Publicidad Online con IA',
+    link: '/servicios/publicidad-online-ia',
+    ctaText: 'Impulsa tu negocio',
   },
   {
-    title: "Posicionamiento SEO",
+    title: 'Posicionamiento SEO',
     description:
-      "Aumenta tu visibilidad orgánica en Google con estrategias SEO On-Page y Off-Page.",
+      'Aumenta tu visibilidad orgánica en Google con estrategias SEO On-Page y Off-Page.',
     icon: ICONS.seo,
-    alt: "Icono de Posicionamiento SEO",
-    link: "/servicios/posicionamiento-seo",
-    ctaText: "Mejora tu ranking",
+    alt: 'Icono de Posicionamiento SEO',
+    link: '/servicios/posicionamiento-seo',
+    ctaText: 'Mejora tu ranking',
   },
   {
-    title: "Marketing de Contenidos",
+    title: 'Marketing de Contenidos',
     description:
-      "Creamos contenido optimizado para SEO que atrae a tu audiencia y posiciona tu marca. Usamos IA.",
+      'Creamos contenido optimizado para SEO que atrae a tu audiencia y posiciona tu marca. Usamos IA.',
     icon: ICONS.content,
-    alt: "Icono de Marketing de Contenidos",
-    link: "/servicios/marketing-de-contenidos",
-    ctaText: "Atrae más clientes",
+    alt: 'Icono de Marketing de Contenidos',
+    link: '/servicios/marketing-de-contenidos',
+    ctaText: 'Atrae más clientes',
   },
   {
-    title: "Desarrollo de Apps Móviles",
+    title: 'Desarrollo de Apps Móviles',
     description:
-      "Desarrollamos apps móviles nativas e híbridas para iOS y Android con diseño UI/UX intuitivo.",
+      'Desarrollamos apps móviles nativas e híbridas para iOS y Android con diseño UI/UX intuitivo.',
     icon: ICONS.appDev,
-    alt: "Icono de Desarrollo de Apps Móviles",
-    link: "/servicios/desarrollo-apps-moviles",
-    ctaText: "Desarrolla tu app",
+    alt: 'Icono de Desarrollo de Apps Móviles',
+    link: '/servicios/desarrollo-apps-moviles',
+    ctaText: 'Desarrolla tu app',
   },
   {
-    title: "Odoo ERP",
+    title: 'Odoo ERP',
     description:
-      "Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa.",
+      'Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa.',
     icon: ICONS.odoo,
-    alt: "Icono de Odoo ERP",
-    link: "/servicios/odoo-erp",
-    ctaText: "Optimiza tu gestión",
+    alt: 'Icono de Odoo ERP',
+    link: '/servicios/odoo-erp',
+    ctaText: 'Optimiza tu gestión',
   },
   {
-    title: "Optimización y Conversión",
+    title: 'Optimización y Conversión',
     description:
-      "Optimizamos tu sitio web para mejorar el rendimiento, la usabilidad y aumentar las conversiones.",
+      'Optimizamos tu sitio web para mejorar el rendimiento, la usabilidad y aumentar las conversiones.',
     icon: ICONS.optimization,
-    alt: "Icono de Optimización y Conversión",
-    link: "/servicios/optimizacion-conversion",
-    ctaText: "Aumenta tus ventas",
+    alt: 'Icono de Optimización y Conversión',
+    link: '/servicios/optimizacion-conversion',
+    ctaText: 'Aumenta tus ventas',
   },
   {
-    title: "Automatización Inteligente",
+    title: 'Automatización Inteligente',
     description:
-      "Automatizamos flujos de trabajo integrando tus aplicaciones y sistemas para aumentar la eficiencia.",
+      'Automatizamos flujos de trabajo integrando tus aplicaciones y sistemas para aumentar la eficiencia.',
     icon: ICONS.automation,
-    alt: "Icono de Automatización Inteligente",
-    link: "/servicios/automatizacion-inteligente",
-    ctaText: "Automatiza tu empresa",
+    alt: 'Icono de Automatización Inteligente',
+    link: '/servicios/automatizacion-inteligente',
+    ctaText: 'Automatiza tu empresa',
   },
 ];
 
 // Menú de categorías de servicios
 export const servicesMenuData: ServiceCategory[] = [
   {
-    title: "DESARROLLO DIGITAL",
+    title: 'DESARROLLO DIGITAL',
     links: [
       {
-        href: "/servicios/diseno-desarrollo-web",
-        text: "Desarrollo Web",
-        description: "Diseño y desarrollo web",
+        href: '/servicios/diseno-desarrollo-web',
+        text: 'Desarrollo Web',
+        description: 'Diseño y desarrollo web',
       },
       {
-        href: "/servicios/desarrollo-apps-moviles",
-        text: "Desarrollo Móvil",
-        description: "Desarrollo de apps móviles",
+        href: '/servicios/desarrollo-apps-moviles',
+        text: 'Desarrollo Móvil',
+        description: 'Desarrollo de apps móviles',
       },
       {
-        href: "/servicios/automatizacion-inteligente",
-        text: "Automatización Inteligente",
-        description: "Automatización de flujos",
+        href: '/servicios/automatizacion-inteligente',
+        text: 'Automatización Inteligente',
+        description: 'Automatización de flujos',
       },
     ],
   },
   {
-    title: "MARKETING DIGITAL",
+    title: 'MARKETING DIGITAL',
     links: [
       {
-        href: "/servicios/posicionamiento-seo",
-        text: "SEO",
-        description: "Posicionamiento en buscadores",
+        href: '/servicios/posicionamiento-seo',
+        text: 'SEO',
+        description: 'Posicionamiento en buscadores',
       },
       {
-        href: "/servicios/publicidad-online-ia",
-        text: "Publicidad Online con IA",
-        description: "Publicidad online impulsada con IA",
+        href: '/servicios/publicidad-online-ia',
+        text: 'Publicidad Online con IA',
+        description: 'Publicidad online impulsada con IA',
       },
       {
-        href: "/servicios/marketing-de-contenidos",
-        text: "Marketing de Contenidos",
-        description: "Marketing de contenidos con IA",
+        href: '/servicios/marketing-de-contenidos',
+        text: 'Marketing de Contenidos',
+        description: 'Marketing de contenidos con IA',
       },
     ],
   },
   {
-    title: "OPTIMIZACIÓN Y GESTIÓN",
+    title: 'OPTIMIZACIÓN Y GESTIÓN',
     links: [
       {
-        href: "/servicios/optimizacion-conversion",
-        text: "CRO",
-        description: "Optimización de conversiones",
+        href: '/servicios/optimizacion-conversion',
+        text: 'CRO',
+        description: 'Optimización de conversiones',
       },
       {
-        href: "/servicios/chatbots-inteligentes",
-        text: "Chatbots Inteligentes",
-        description: "Chatbots que responden con IA",
+        href: '/servicios/chatbots-inteligentes',
+        text: 'Chatbots Inteligentes',
+        description: 'Chatbots que responden con IA',
       },
       {
-        href: "/servicios/odoo-erp",
-        text: "Odoo ERP",
-        description: "Implementación de Odoo",
+        href: '/servicios/odoo-erp',
+        text: 'Odoo ERP',
+        description: 'Implementación de Odoo',
       },
     ],
   },

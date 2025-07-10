@@ -1,23 +1,24 @@
 ---
-title: "¿Puede la Inteligencia Artificial Volverse Agresiva? Lo que la Ciencia Reveló"
-slug: "inteligencia-artificial-agresiva-ciencia-revela"
-pubDate: "2017-02-15"
-description: "Descubre cómo la inteligencia artificial puede desarrollar comportamientos agresivos en entornos competitivos según estudios científicos recientes."
-cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739919881/ia-peligro-1.png"
+title: '¿Puede la Inteligencia Artificial Volverse Agresiva? Lo que la Ciencia Reveló'
+slug: 'inteligencia-artificial-agresiva-ciencia-revela'
+pubDate: '2017-02-15'
+description: 'Descubre cómo la inteligencia artificial puede desarrollar comportamientos agresivos en entornos competitivos según estudios científicos recientes.'
+cover: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739919881/ia-peligro-1.png'
+coverAlt: 'Inteligencia Artificial Agresiva'
 author:
-  name: "Marilyn Cardozo"
-  description: "Experta Desarrollo y Transformación Digital."
-  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739923879/marilyn_s2mi4a.png"
-category: "Inteligencia Artificial"
+  name: 'Marilyn Cardozo'
+  description: 'Experta Desarrollo y Transformación Digital.'
+  image: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739923879/marilyn_s2mi4a.png'
+category: 'Inteligencia Artificial'
 tags:
   [
-    "Inteligencia Artificial",
-    "IA Agresiva",
-    "Ética en IA",
-    "Innovación Tecnológica",
-    "Comportamiento de IA",
-    "Ciencia y Tecnología",
-    "Regulación de IA",
+    'Inteligencia Artificial',
+    'IA Agresiva',
+    'Ética en IA',
+    'Innovación Tecnológica',
+    'Comportamiento de IA',
+    'Ciencia y Tecnología',
+    'Regulación de IA',
   ]
 ---
 

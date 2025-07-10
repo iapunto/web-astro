@@ -1,10 +1,10 @@
 ---
-const phoneNumber = "+573163769935"; // Reemplaza con tu número de WhatsApp
-const message = "¡Hola! Me gustaría obtener más información."; // Mensaje predeterminado
+const phoneNumber = '+573163769935'; // Reemplaza con tu número de WhatsApp
+const message = '¡Hola! Me gustaría obtener más información.'; // Mensaje predeterminado
 const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 ---
 
-<!-- Botón flotante -->
+<!-- 
 <a
   id="whatsapp-button"
   href={whatsappURL}
@@ -88,19 +88,19 @@ const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
 </style>
 
 <script>
-  const button = document.getElementById("whatsapp-button");
+  const button = document.getElementById('whatsapp-button');
 
   // Función para crear el efecto de vibración
   function vibrateButton() {
-    button.style.transform = "translateX(5px)"; // Mover a la derecha
+    button.style.transform = 'translateX(5px)'; // Mover a la derecha
     setTimeout(() => {
-      button.style.transform = "translateX(-5px)"; // Mover a la izquierda
+      button.style.transform = 'translateX(-5px)'; // Mover a la izquierda
       setTimeout(() => {
-        button.style.transform = "translateY(-5px)"; // Mover hacia arriba
+        button.style.transform = 'translateY(-5px)'; // Mover hacia arriba
         setTimeout(() => {
-          button.style.transform = "translateY(5px)"; // Mover hacia abajo
+          button.style.transform = 'translateY(5px)'; // Mover hacia abajo
           setTimeout(() => {
-            button.style.transform = "translate(0, 0)"; // Volver a la posición original
+            button.style.transform = 'translate(0, 0)'; // Volver a la posición original
           }, 50);
         }, 50);
       }, 50);
@@ -110,3 +110,4 @@ const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
   // Repetir la vibración cada 10 segundos
   setInterval(vibrateButton, 10000);
 </script>
+-->

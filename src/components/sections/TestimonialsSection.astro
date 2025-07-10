@@ -1,7 +1,7 @@
 ---
-import { testimonials, companyLogos } from "../../lib/constants/testimonials";
-import TestimonialCard from "../common/TestimonialCard.astro";
-import CompanyLogo from "../common/CompanyLogo.astro";
+import { testimonials, companyLogos } from '../../lib/constants/testimonials';
+import TestimonialCard from '../common/TestimonialCard.astro';
+import CompanyLogo from '../common/CompanyLogo.astro';
 ---
 
 <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
@@ -41,13 +41,13 @@ import CompanyLogo from "../common/CompanyLogo.astro";
 <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
 
 <script>
-  import Swiper from "swiper";
-  import { Autoplay, Pagination } from "swiper/modules";
-  import "swiper/css";
-  import "swiper/css/pagination";
+  import Swiper from 'swiper';
+  import { Autoplay, Pagination } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/pagination';
 
   // Inicializar carrusel de logos
-  const logosSwiper = new Swiper(".swiper-logos", {
+  const logosSwiper = new Swiper('.swiper-logos', {
     modules: [Autoplay],
     slidesPerView: 6,
     slidesPerGroup: 1,
@@ -71,7 +71,7 @@ import CompanyLogo from "../common/CompanyLogo.astro";
   });
 
   // Inicializar carrusel de testimonios
-  const testimonialsSwiper = new Swiper(".swiper-testimonials", {
+  const testimonialsSwiper = new Swiper('.swiper-testimonials', {
     modules: [Pagination, Autoplay],
     slidesPerView: 1,
     slidesPerGroup: 1,
@@ -85,7 +85,7 @@ import CompanyLogo from "../common/CompanyLogo.astro";
       disableOnInteraction: false,
     },
     pagination: {
-      el: ".swiper-pagination",
+      el: '.swiper-pagination',
       clickable: true,
     },
   });

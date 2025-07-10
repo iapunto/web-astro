@@ -1,6 +1,7 @@
 ---
 // src/components/sections/blog/BlogCard.astro
-import type { blogPosts } from "../../../lib/constants/blogPosts";
+import type { blogPosts } from '../../../lib/constants/blogPosts';
+import { Image } from 'astro:assets';
 
 interface Props {
   post: (typeof blogPosts)[0];
@@ -13,7 +14,7 @@ const { post } = Astro.props;
   <div class="blog-card-image-container">
     <a href={post.link}>
       {/* Enlace solo para la imagen */}
-      <img src={post.imageUrl} alt={post.title} class="blog-card-image" />
+      <img src={post.imageUrl.src || post.imageUrl} alt={post.title} class="blog-card-image" width="600" height="300"/>
     </a>
     <span class="blog-card-category">{post.category}</span>
   </div>
@@ -25,10 +26,10 @@ const { post } = Astro.props;
     <p class="blog-card-excerpt">{post.excerpt}</p>
     <div class="blog-card-author">
       <img
-        src={post.authorImage}
+        src={post.authorImage.src || post.authorImage}
         alt="Imagen de Portada del Articulo"
-        width={600}
-        height={300}
+        width="32"
+        height="32"
         class="blog-card-author-image"
       />
       <div class="blog-card-author-info">

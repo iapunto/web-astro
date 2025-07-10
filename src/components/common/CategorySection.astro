@@ -1,0 +1,53 @@
+---
+import { Image } from 'astro:assets';
+
+export interface Props {
+  title: string;
+  subtitle: string;
+  description: string;
+  image: any;
+  alt: string;
+  link?: string;
+  ctaText?: string;
+  bg?: string;
+  reverse?: boolean;
+}
+const { title, subtitle, description, image, alt, link, ctaText, bg, reverse } =
+  Astro.props;
+---
+
+<section class={`py-16 ${bg === 'gray' ? 'bg-gray-100' : ''}`}>
+  <div
+    class={`container mx-auto flex flex-col md:flex-row items-center ${reverse ? 'md:flex-row-reverse' : ''}`}
+  >
+    <div class="md:w-1/2 w-full flex justify-center mb-8 md:mb-0">
+      <img
+        src={image.src || image}
+        alt={alt}
+        class="max-w-xs md:max-w-md rounded-lg shadow-lg"
+        loading="lazy"
+        width="400"
+        height="400"
+      />
+    </div>
+    <div class="md:w-1/2 w-full px-4">
+      <h3
+        class="text-sm font-semibold text-primary-600 mb-2 tracking-widest uppercase"
+      >
+        {subtitle}
+      </h3>
+      <h2 class="text-3xl font-bold mb-4 text-gray-900">{title}</h2>
+      <p class="text-lg text-gray-600 mb-6">{description}</p>
+      {
+        link && ctaText && (
+          <a
+            href={link}
+            class="inline-block px-6 py-2 bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700 transition"
+          >
+            {ctaText}
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>

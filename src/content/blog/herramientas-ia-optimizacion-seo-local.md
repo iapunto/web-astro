@@ -1,24 +1,25 @@
 ---
-title: "Herramientas de IA para Optimizar el SEO Local: Mejora tu Visibilidad y Atrae Clientes Cercanos"
-slug: "herramientas-ia-efectivas-seo-local"
-pubDate: "2024-10-27"
-description: "Descubre herramientas de IA como Google My Business, Moz Local y BrightLocal para optimizar tu SEO local, aumentar la visibilidad y atraer clientes cercanos."
-cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921281/realista_ztiyxc.jpg"
+title: 'Herramientas de IA para Optimizar el SEO Local: Mejora tu Visibilidad y Atrae Clientes Cercanos'
+slug: 'herramientas-ia-efectivas-seo-local'
+pubDate: '2024-10-27'
+description: 'Descubre herramientas de IA como Google My Business, Moz Local y BrightLocal para optimizar tu SEO local, aumentar la visibilidad y atraer clientes cercanos.'
+cover: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921281/realista_ztiyxc.jpg'
+coverAlt: 'Herramientas de IA para SEO Local'
 author:
-  name: "Sergio Rondón"
-  description: "CEO de IA Punto"
-  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png"
-category: "SEO y Marketing Digital"
+  name: 'Sergio Rondón'
+  description: 'CEO de IA Punto'
+  image: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png'
+category: 'SEO y Marketing Digital'
 tags:
   [
-    "Inteligencia Artificial",
-    "SEO Local",
-    "Herramientas de IA",
-    "Google My Business",
-    "Moz Local",
-    "BrightLocal",
-    "Optimización de Contenido",
-    "Marketing Digital",
+    'Inteligencia Artificial',
+    'SEO Local',
+    'Herramientas de IA',
+    'Google My Business',
+    'Moz Local',
+    'BrightLocal',
+    'Optimización de Contenido',
+    'Marketing Digital',
   ]
 ---
 

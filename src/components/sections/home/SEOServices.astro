@@ -1,9 +1,9 @@
 ---
-import ServiceGrid from "../../common/ServiceGrid.astro";
-import { services } from "../../../lib/constants/services";
-import ButtonPrimary from "../../common/ButtonPrimary.astro";
-import ButtonSecondary from "../../common/ButtonSecondary.astro";
-import MeetingModal from "@/components/common/MeetingModal.astro";
+import ServiceGrid from '../../common/ServiceGrid.astro';
+import { services } from '../../../lib/constants/services';
+import ButtonPrimary from '../../common/ButtonPrimary.astro';
+import ButtonSecondary from '../../common/ButtonSecondary.astro';
+import MeetingModal from '@/components/common/MeetingModal.astro';
 ---
 
 <section class="py-24">
@@ -38,28 +38,28 @@ import MeetingModal from "@/components/common/MeetingModal.astro";
 
 <script>
   // Obtener referencias al botón y al modal
-  const openModalButton = document.getElementById("open-modal");
-  const modal = document.getElementById("meeting-modal");
-  const closeButton = document.querySelector("#meeting-modal .close");
+  const openModalButton = document.getElementById('open-modal');
+  const modal = document.getElementById('meeting-modal');
+  const closeButton = document.querySelector('#meeting-modal .close');
 
   // Función para abrir el modal
-  openModalButton.addEventListener("click", () => {
+  openModalButton.addEventListener('click', () => {
     if (modal) {
-      modal.classList.remove("hidden");
+      modal.classList.remove('hidden');
     }
   });
 
   // Función para cerrar el modal
-  closeButton.addEventListener("click", () => {
+  closeButton.addEventListener('click', () => {
     if (modal) {
-      modal.classList.add("hidden");
+      modal.classList.add('hidden');
     }
   });
 
   // Cerrar el modal si se hace clic fuera de él
-  window.addEventListener("click", (event) => {
+  window.addEventListener('click', (event) => {
     if (event.target === modal) {
-      modal.classList.add("hidden");
+      modal.classList.add('hidden');
     }
   });
 </script>

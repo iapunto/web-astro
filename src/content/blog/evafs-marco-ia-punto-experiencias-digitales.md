@@ -1,26 +1,27 @@
 ---
-title: "EVAFS: El Marco de IA Punto para Experiencias Digitales Sobresalientes"
-slug: "evafs-marco-ia-punto-experiencias-digitales-sobresalientes"
-pubDate: "Octubre 27, 2024"
-description: "Descubre cómo EVAFS, el marco innovador de IA Punto, transforma experiencias digitales con IA, fidelizando clientes y potenciando el crecimiento."
-cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921301/evaf3_tirklj.jpg"
+title: 'EVAFS: El Marco de IA Punto para Experiencias Digitales Sobresalientes'
+slug: 'evafs-marco-ia-punto-experiencias-digitales-sobresalientes'
+pubDate: 'Octubre 27, 2024'
+description: 'Descubre cómo EVAFS, el marco innovador de IA Punto, transforma experiencias digitales con IA, fidelizando clientes y potenciando el crecimiento.'
+cover: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921301/evaf3_tirklj.jpg'
+coverAlt: 'Marco EVAFS de IA Punto'
 author:
-  name: "Sergio Rondón"
-  description: "CEO de IA Punto"
-  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png"
-category: "Marketing Digital"
+  name: 'Sergio Rondón'
+  description: 'CEO de IA Punto'
+  image: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png'
+category: 'Marketing Digital'
 tags:
   [
-    "EVAFS",
-    "IA Punto",
-    "Inteligencia Artificial",
-    "Marketing Digital",
-    "Experiencia del Cliente",
-    "Fidelización de Clientes",
-    "Transformación Digital",
-    "Automatización de Marketing",
-    "Personalización",
-    "Análisis Predictivo",
+    'EVAFS',
+    'IA Punto',
+    'Inteligencia Artificial',
+    'Marketing Digital',
+    'Experiencia del Cliente',
+    'Fidelización de Clientes',
+    'Transformación Digital',
+    'Automatización de Marketing',
+    'Personalización',
+    'Análisis Predictivo',
   ]
 ---
 

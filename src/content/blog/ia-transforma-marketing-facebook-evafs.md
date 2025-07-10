@@ -1,23 +1,24 @@
 ---
-title: "Cómo la IA Transforma el Marketing en Facebook: Estrategias Inteligentes con EVAFS"
-slug: "ia-transforma-marketing-facebook-evafs"
-pubDate: "2025-02-20"
-description: "Descubre cómo la IA revoluciona el marketing en Facebook. Con EVAFS de IA Punto, optimiza campañas, mejora la interacción y aumenta conversiones."
-cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739991168/ia-en-facebook_dudhsa.png"
+title: 'Cómo la IA Transforma el Marketing en Facebook: Estrategias Inteligentes con EVAFS'
+slug: 'ia-transforma-marketing-facebook-evafs'
+pubDate: '2025-02-20'
+description: 'Descubre cómo la IA revoluciona el marketing en Facebook. Con EVAFS de IA Punto, optimiza campañas, mejora la interacción y aumenta conversiones.'
+cover: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739991168/ia-en-facebook_dudhsa.png'
+coverAlt: 'IA en Marketing de Facebook'
 author:
-  name: "Sergio Rondón"
-  description: "CEO de IA Punto"
-  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png"
-category: "Marketing Digital"
+  name: 'Sergio Rondón'
+  description: 'CEO de IA Punto'
+  image: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png'
+category: 'Marketing Digital'
 tags:
   [
-    "Inteligencia Artificial",
-    "Marketing en Redes Sociales",
-    "Facebook",
-    "EVAFS",
-    "Automatización",
-    "Optimización de Campañas",
-    "IA Punto",
+    'Inteligencia Artificial',
+    'Marketing en Redes Sociales',
+    'Facebook',
+    'EVAFS',
+    'Automatización',
+    'Optimización de Campañas',
+    'IA Punto',
   ]
 ---
 

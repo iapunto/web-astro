@@ -1,14 +1,15 @@
 ---
-import BlogLayout from "../../layouts/BlogLayout.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
-import { render } from "astro:content";
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
 
 export const prerender = true;
 
-const blogEntries = await getCollection("blog");
+const blogEntries = await getCollection('blog');
 
 export async function getStaticPaths() {
-  const currentPost = await getCollection("blog");
+  const currentPost = await getCollection('blog');
   return currentPost.map((entry: any) => ({
     params: { slug: entry.id },
     props: {

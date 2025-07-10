@@ -1,48 +1,44 @@
 // @ts-check
-import { defineConfig, envField } from "astro/config";
-import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
-import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/node";
-import cloudinary from "astro-cloudinary";
+import { defineConfig, envField } from 'astro/config';
+import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
+import sitemap from '@astrojs/sitemap';
+import node from '@astrojs/node';
+import astroIcon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
   // Dominio principal (adaptado para entornos de producción/desarrollo)
   site: process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000",
+    : 'http://localhost:3000',
 
   integrations: [
     tailwind(),
     react({
-      include: ["**/react/*"],
+      include: ['**/react/*'],
     }),
     sitemap(),
-    cloudinary({
-      cloudName: process.env.PUBLIC_CLOUDINARY_CLOUD_NAME,
-      apiKey: process.env.PUBLIC_CLOUDINARY_API_KEY,
-      apiSecret: process.env.CLOUDINARY_API_SECRET,
-      cloudinaryUrl: process.env.CLOUDINARY_URL,
+    astroIcon({
+      publicDir: './public',
     }),
   ],
-  output: "server",
+  output: 'server',
   adapter: node({
-    mode: "standalone",
+    mode: 'standalone',
   }),
 
   image: {
-    service: cloudinary(),
-    domains: ["res.cloudinary.com"],
+    domains: ['res.cloudinary.com'],
   },
 
   // Alias de rutas para imports limpios
   vite: {
     resolve: {
       alias: {
-        "@": new URL("./src", import.meta.url).pathname,
-        "@components": new URL("./src/components", import.meta.url).pathname,
-        "@services": new URL("./src/services", import.meta.url).pathname,
+        '@': new URL('./src', import.meta.url).pathname,
+        '@components': new URL('./src/components', import.meta.url).pathname,
+        '@services': new URL('./src/services', import.meta.url).pathname,
       },
     },
   },
@@ -56,21 +52,19 @@ export default defineConfig({
   env: {
     schema: {
       STRAPI_API_URL: envField.string({
-        context: "client",
-        access: "public",
-        default: process.env.STRAPI_API_URL || "http://localhost:1337",
+        context: 'client',
+        access: 'public',
+        default: process.env.STRAPI_API_URL || 'http://localhost:1337',
         optional: false,
       }),
       SITE_NAME: {
-        type: "string",
-        context: "client",
-        access: "public",
+        type: 'string',
+        context: 'client',
+        access: 'public',
         default: process.env.SITE_NAME,
       },
     },
   },
 
-  experimental: {
-    responsiveImages: true,
-  },
+  
 });

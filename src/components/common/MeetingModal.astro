@@ -4,9 +4,9 @@ const calendlyURL = process.env.CALENDY_URL;
 
 // Función para abrir el modal
 export function openModal() {
-  const modal = document.getElementById("meeting-modal");
+  const modal = document.getElementById('meeting-modal');
   if (modal) {
-    modal.classList.remove("hidden");
+    modal.classList.remove('hidden');
   }
 }
 ---
@@ -74,19 +74,19 @@ export function openModal() {
 
 <script>
   // Cerrar el modal al hacer clic en la "X"
-  const closeButton = document.querySelector(".close");
-  closeButton.addEventListener("click", () => {
-    const modal = document.getElementById("meeting-modal");
+  const closeButton = document.querySelector('.close');
+  closeButton.addEventListener('click', () => {
+    const modal = document.getElementById('meeting-modal');
     if (modal) {
-      modal.classList.add("hidden");
+      modal.classList.add('hidden');
     }
   });
 
   // Cerrar el modal si se hace clic fuera de él
-  window.addEventListener("click", (event) => {
-    const modal = document.getElementById("meeting-modal");
+  window.addEventListener('click', (event) => {
+    const modal = document.getElementById('meeting-modal');
     if (event.target === modal) {
-      modal.classList.add("hidden");
+      modal.classList.add('hidden');
     }
   });
 </script>

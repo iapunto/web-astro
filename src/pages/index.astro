@@ -1,20 +1,21 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Hero from "../components/sections/home/Hero.astro";
-import FeaturedServices from "../components/sections/home/FeaturedServices.astro";
-import HeroSEO from "../components/sections/home/HeroSEO.astro";
-import ServicesSection from "../components/sections/home/ServicesSection.astro";
-import SEOServices from "../components/sections/home/SEOServices.astro";
-import ServiceCategories from "../components/sections/home/ServiceCategories.astro";
-import TestimonialsSection from "../components/sections/TestimonialsSection.astro";
-import BlogSection from "../components/sections/blog/BlogSection.astro";
-import ContactSection from "../components/sections/home/ContactSection.astro";
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/sections/home/Hero.astro';
+import FeaturedServices from '../components/sections/home/FeaturedServices.astro';
+import HeroSEO from '../components/sections/home/HeroSEO.astro';
+import ServicesSection from '../components/sections/home/ServicesSection.astro';
+import SEOServices from '../components/sections/home/SEOServices.astro';
+import ServiceCategories from '../components/sections/home/ServiceCategories.astro';
+import TestimonialsSection from '../components/sections/TestimonialsSection.astro';
+import BlogSection from '../components/sections/blog/BlogSection.astro';
+import ContactSection from '../components/sections/home/ContactSection.astro';
 
 const {
-  title = "Soluciones de Inteligencia Artificial para Empresas",
-  description = "Transforma tu negocio con Inteligencia Artificial. Marketing digital, desarrollo web, automatización y consultoría estratégica. Soluciones innovadoras para empresas en la era digital.",
-  image = "https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg",
-  keywords = "Inteligencia Artificial para empresas, automatización de procesos, desarrollo web con IA, consultoría digital, marketing con IA, Odoo ERP",
+  title = 'Soluciones de Inteligencia Artificial para Empresas',
+  description = 'Transforma tu negocio con Inteligencia Artificial. Marketing digital, desarrollo web, automatización y consultoría estratégica. Soluciones innovadoras para empresas en la era digital.',
+  image = 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg',
+  keywords = 'Inteligencia Artificial para empresas, automatización de procesos, desarrollo web con IA, consultoría digital, marketing con IA, Odoo ERP',
+  alt = 'Logo de IA Punto, una empresa de soluciones de Inteligencia Artificial',
 } = Astro.props;
 ---
 
@@ -23,6 +24,7 @@ const {
   image={image}
   description={description}
   keywords={keywords}
+  alt={alt}
 >
   <Hero />
   <FeaturedServices />

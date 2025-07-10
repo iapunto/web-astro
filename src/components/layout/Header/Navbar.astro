@@ -1,10 +1,10 @@
 ---
 // src/components/layout/Header/Navbar.astro
-import Logo from "../Logo.astro";
-import NavLink from "./NavLink.astro";
-import DropdownMenu from "./DropdownMenu.astro";
-import MeetingModal from "../../common/MeetingModal.astro";
-import { servicesMenuData } from "../../../lib/constants/services";
+import Logo from '../Logo.astro';
+import NavLink from './NavLink.astro';
+import DropdownMenu from './DropdownMenu.astro';
+import MeetingModal from '../../common/MeetingModal.astro';
+import { servicesMenuData } from '../../../lib/constants/services';
 ---
 
 <nav
@@ -78,20 +78,20 @@ import { servicesMenuData } from "../../../lib/constants/services";
 
 <script>
   // Funcionalidad para el menú móvil
-  const menuToggle = document.getElementById("menu-toggle");
-  const mobileMenu = document.getElementById("mobile-menu");
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
 
-  menuToggle.addEventListener("click", () => {
-    mobileMenu.classList.toggle("hidden");
+  menuToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
   });
 
   // Cerrar el menú si se hace clic fuera de él
-  document.addEventListener("click", (event) => {
+  document.addEventListener('click', (event) => {
     if (
       !menuToggle.contains(event.target) &&
       !mobileMenu.contains(event.target)
     ) {
-      mobileMenu.classList.add("hidden");
+      mobileMenu.classList.add('hidden');
     }
   });
 </script>

@@ -1,6 +1,11 @@
 ---
-// src/components/common/SchemaMarkup.astro
-const schema = {
+export interface Props {
+  post?: any; // Add post prop for blog articles
+}
+
+const { post } = Astro.props;
+
+const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "IA Punto",
@@ -22,5 +27,39 @@ const schema = {
     contactType: "Ventas y Soporte técnico",
   },
 };
+
+let combinedSchema = [organizationSchema];
+
+if (post) {
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.data.title,
+    image: post.data.cover, // Assuming cover is the main image for the article
+    datePublished: post.data.pubDate.toISOString(),
+    dateModified: post.data.pubDate.toISOString(), // Assuming no separate modified date
+    author: {
+      "@type": "Person",
+      name: post.data.author.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: organizationSchema.name,
+      logo: {
+        "@type": "ImageObject",
+        url: organizationSchema.logo,
+      },
+    },
+    description: post.data.description,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": Astro.url.href, // Current page URL
+    },
+  };
+  combinedSchema.push(articleSchema);
+}
 ---
-<script type="application/ld+json">{JSON.stringify(schema)}</script>
+
+<script type="application/ld+json">
+  {JSON.stringify(combinedSchema.length === 1 ? combinedSchema[0] : combinedSchema)}
+</script>

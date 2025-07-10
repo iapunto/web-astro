@@ -1,22 +1,23 @@
 ---
-title: "¿Cómo la IA Ayuda a las PYMES a Competir con Grandes Marcas en SEO Local?"
-slug: "ia-pymes-competir-seo-local"
-pubDate: "Oct 27 2024"
-description: "Descubre cómo la IA potencia el SEO local de pequeñas empresas, aumentando su visibilidad y permitiéndoles competir con grandes marcas."
-cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915876/seo-post1_sufhto.jpg"
+title: '¿Cómo la IA Ayuda a las PYMES a Competir con Grandes Marcas en SEO Local?'
+slug: 'ia-pymes-competir-seo-local'
+pubDate: 'Oct 27 2024'
+description: 'Descubre cómo la IA potencia el SEO local de pequeñas empresas, aumentando su visibilidad y permitiéndoles competir con grandes marcas.'
+cover: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915876/seo-post1_sufhto.jpg'
+coverAlt: 'IA ayuda a empresas a competir en SEO local'
 author:
-  name: "Sergio Rondón"
-  description: "CEO de IA Punto"
-  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png"
-category: "SEO y Marketing Digital"
+  name: 'Sergio Rondón'
+  description: 'CEO de IA Punto'
+  image: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png'
+category: 'SEO y Marketing Digital'
 tags:
   [
-    "Inteligencia Artificial",
-    "SEO Local",
-    "PYMES",
-    "Google My Business",
-    "Marketing Digital",
-    "Optimización de Contenido",
+    'Inteligencia Artificial',
+    'SEO Local',
+    'PYMES',
+    'Google My Business',
+    'Marketing Digital',
+    'Optimización de Contenido',
   ]
 ---
 

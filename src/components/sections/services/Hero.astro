@@ -1,37 +1,17 @@
 ---
-import { Image } from "astro:assets";
-import { effect } from "astro:schema";
-const {
-  title,
-  description,
-  publicId,
-  bgColor = "#fcfcfc", // Color de fondo por defecto: gris claro
-  textColor = "#000000", // Color de texto por defecto: negro
-  effect,
-} = Astro.props;
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
-const cloudName = "dkb9jfet8";
+export interface Props {
+  title: string;
+  description: string;
+  image: ImageMetadata;
+  alt: string;
+  bgColor?: string;
+  textColor?: string;
+}
 
-// Generar la URL de la imagen de Cloudinary
-const generateCloudinaryUrl = (publicId: any, effect: any) => {
-  if (!publicId) return null; // Si no se proporciona un publicId, no hay imagen
-
-  // se carga la URL
-  let url = `https://res.cloudinary.com/${cloudName}/image/upload/`;
-
-  // Agregar efectos si están definidos
-  if (effect) url += `e_${effect},`;
-
-  // Agregar dimensiones y recorte
-  url += "w_450,h_450,c_fill/";
-
-  // Agregar el Public ID
-  url += `${publicId}.jpg`;
-
-  return url;
-};
-
-const imageUrl = generateCloudinaryUrl(publicId, effect);
+const { title, description, image, alt, bgColor = '#fcfcfc', textColor = '#000000' } = Astro.props;
 ---
 
 <section
@@ -42,21 +22,19 @@ const imageUrl = generateCloudinaryUrl(publicId, effect);
     {/* Centra vertical y horizontalmente */}
     <div class="mb-4 flex flex-col items-center">
       {/* Espacio entre la imagen y el título */}
-      <Image
-        src={imageUrl}
-        alt={title}
+      <img
+        src={image.src}
+        alt={alt}
         class="object-contain w-full h-auto aspect-3/2 responsive"
         width={450}
         height={450}
-        sizes="100vw"
         loading="lazy"
-        layout="responsive"
       />
     </div>
-    <h1 class={`text-5xl font-bold mb-4 ${textColor}`}>
+    <h1 class="text-5xl font-bold mb-4 text-black">
       {title}
     </h1>
-    <p class={`text-2xl mb-8 w-[700px] ${textColor}`}>
+    <p class="text-2xl mb-8 w-[700px] text-black">
       {description}
     </p>
     {/* Puedes añadir un botón u otros elementos aquí */}

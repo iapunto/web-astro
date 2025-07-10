@@ -1,33 +1,20 @@
 ---
-import BaseHead from "../components/common/BaseHead.astro";
-import TopBar from "../components/layout/Header/TopBar.astro";
-import Navbar from "../components/layout/Header/Navbar.astro";
-import Footer from "../components/layout/Footer.astro";
-import BackToTop from "@/components/layout/BackToTop.astro";
-import WhatsAppButton from "@/components/layout/WhatsAppButton.astro";
-import Analytics from "@vercel/analytics/astro";
+import BaseHead from '../components/common/BaseHead.astro';
+import TopBar from '../components/layout/Header/TopBar.astro';
+import Navbar from '../components/layout/Header/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import BackToTop from '@/components/layout/BackToTop.astro';
+import WhatsAppButton from '@/components/layout/WhatsAppButton.astro';
 
 interface Props {
   pageTitle: string;
   description: string;
   image?: string;
   keywords?: string;
+  alt?: string;
 }
 
-const pageTitle = "Soluciones de Inteligencia Artificial para Empresas";
-const description =
-  "Transforma tu negocio con Inteligencia Artificial. Marketing digital, desarrollo web, automatización y consultoría estratégica. Soluciones innovadoras para empresas en la era digital.";
-const image =
-  "https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg";
-const keywords = [
-  "Inteligencia Artificial para empresas",
-  "automatización de procesos",
-  "desarrollo web con IA",
-  "consultoría digital",
-  "marketing con IA",
-  "Odoo ERP",
-  "soluciones tecnológicas",
-];
+const { pageTitle, description, image, keywords, alt } = Astro.props;
 ---
 
 <html lang="es">
@@ -37,6 +24,7 @@ const keywords = [
       description={description}
       image={image}
       keywords={keywords}
+      alt={alt}
     />
   </head>
   <body>
@@ -51,7 +39,6 @@ const keywords = [
       is:inline
       src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
     ></script>
-    <Analytics />
   </body>
 </html>
 

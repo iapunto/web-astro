@@ -1,16 +1,16 @@
 ---
-import Hero from "@/components/sections/services/Hero.astro";
-import Web from "@/assets/images/web.png";
-import DefaultLayout from "../../../layouts/DefaultLayout.astro";
-import { Image } from "astro:assets";
+import DefaultLayout from '../../../layouts/DefaultLayout.astro';
+import webDesignImage from '/public/icons/web-design.png';
+import Hero from '../../../components/sections/services/Hero.astro';
+
 ---
 
 <DefaultLayout pageTitle="Diseño y Desarrollo Web">
   <Hero
     title="Tu Presencia Digital Hecha Realidad"
     description="Convierte visitantes en clientes con un sitio web profesional, funcional y optimizado para el éxito."
-    publicId="web-development_tjp941"
-    alt="Imagen de portada"
+    image={webDesignImage}
+    alt="Icono de Diseño y Desarrollo Web"
   />
   <section>
     <div class="overflow-hidden bg-white py-24 sm:py-32">
@@ -131,12 +131,12 @@ import { Image } from "astro:assets";
               </dl>
             </div>
           </div>
-          <Image
-            src={Web}
+          <img
+            src="YOUR_CLOUDINARY_URL_FOR_WEB_IMAGE"
             alt="Product screenshot"
             class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
-            width={2432}
-            height={1442}
+            width="2432"
+            height="1442"
           />
         </div>
       </div>

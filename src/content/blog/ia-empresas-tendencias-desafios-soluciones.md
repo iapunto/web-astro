@@ -1,23 +1,24 @@
 ---
-title: "Inteligencia Artificial en las Empresas: Tendencias, Desafíos y Soluciones"
-slug: "inteligencia-artificial-empresas-tendencias-desafios-soluciones"
-pubDate: "Dec 27 2023"
-description: "Descubre cómo la IA transforma las empresas con tendencias como infraestructuras híbridas, modelos de lenguaje avanzados y soluciones a personalizadas."
-cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921296/automatizaciones_ner7eh.jpg"
+title: 'Inteligencia Artificial en las Empresas: Tendencias, Desafíos y Soluciones'
+slug: 'inteligencia-artificial-empresas-tendencias-desafios-soluciones'
+pubDate: 'Dec 27 2023'
+description: 'Descubre cómo la IA transforma las empresas con tendencias como infraestructuras híbridas, modelos de lenguaje avanzados y soluciones a personalizadas.'
+cover: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921296/automatizaciones_ner7eh.jpg'
+coverAlt: 'IA en Empresas: Tendencias, Desafíos y Soluciones'
 author:
-  name: "Sergio Rondón"
-  description: "CEO de IA Punto"
-  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png"
-category: "Inteligencia Artificial"
+  name: 'Sergio Rondón'
+  description: 'CEO de IA Punto'
+  image: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png'
+category: 'Inteligencia Artificial'
 tags:
   [
-    "Inteligencia Artificial",
-    "Transformación Digital",
-    "Infraestructura Híbrida",
-    "Modelos de Lenguaje",
-    "Gobernanza de Datos",
-    "Innovación Empresarial",
-    "IA Personalizada",
+    'Inteligencia Artificial',
+    'Transformación Digital',
+    'Infraestructura Híbrida',
+    'Modelos de Lenguaje',
+    'Gobernanza de Datos',
+    'Innovación Empresarial',
+    'IA Personalizada',
   ]
 ---
 

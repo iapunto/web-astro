@@ -1,6 +1,6 @@
 // Importar módulos necesarios
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 // Función para leer recursivamente todos los archivos relevantes
 function leerArchivos(dir, fileList = []) {
@@ -12,7 +12,7 @@ function leerArchivos(dir, fileList = []) {
 
     // Excluir carpetas específicas
     if (stats.isDirectory()) {
-      if (["node_modules", ".cspell", ".vscode", ".astro"].includes(file)) {
+      if (['node_modules', '.cspell', '.vscode', '.astro'].includes(file)) {
         return; // Ignorar estas carpetas
       }
       // Si es un directorio válido, leer recursivamente
@@ -29,24 +29,24 @@ function leerArchivos(dir, fileList = []) {
 // Función para determinar si un archivo es relevante
 function esArchivoRelevante(file) {
   const extensionesValidas = [
-    ".astro",
-    ".js",
-    ".ts",
-    ".jsx",
-    ".tsx",
-    ".json",
-    ".md",
+    '.astro',
+    '.js',
+    '.ts',
+    '.jsx',
+    '.tsx',
+    '.json',
+    '.md',
   ];
   return extensionesValidas.includes(path.extname(file));
 }
 
 // Función para concatenar archivos
 function concatenarArchivos(archivos, archivoSalida) {
-  let contenidoConcatenado = "";
+  let contenidoConcatenado = '';
 
   archivos.forEach((archivo) => {
     const nombreArchivo = path.relative(process.cwd(), archivo); // Obtener ruta relativa
-    const contenidoArchivo = fs.readFileSync(archivo, "utf-8");
+    const contenidoArchivo = fs.readFileSync(archivo, 'utf-8');
 
     // Agregar un comentario con el nombre del archivo
     contenidoConcatenado += `\n\n/* ===================== Archivo: ${nombreArchivo} ===================== */\n\n`;
@@ -54,13 +54,13 @@ function concatenarArchivos(archivos, archivoSalida) {
   });
 
   // Escribir el contenido concatenado en el archivo de salida
-  fs.writeFileSync(archivoSalida, contenidoConcatenado, "utf-8");
+  fs.writeFileSync(archivoSalida, contenidoConcatenado, 'utf-8');
   console.log(`Todos los archivos han sido concatenados en: ${archivoSalida}`);
 }
 
 // Configuración
-const directorioProyecto = "./"; // Directorio raíz del proyecto
-const archivoSalida = "./proyecto_concatenado.txt"; // Nombre del archivo de salida
+const directorioProyecto = './'; // Directorio raíz del proyecto
+const archivoSalida = './proyecto_concatenado.txt'; // Nombre del archivo de salida
 
 // Ejecutar el proceso
 const archivos = leerArchivos(directorioProyecto);

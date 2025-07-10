@@ -1,23 +1,24 @@
 ---
-title: "Cómo la IA Mejora el SEO Local: Atrae Clientes Cercanos con Inteligencia Artificial"
-slug: "ia-mejora-seo-local-atraer-clientes-cercanos"
-pubDate: "Oct 27 2024"
-description: "Descubre cómo la IA optimiza el SEO local, mejora Google My Business y atrae clientes cercanos. Personalización, análisis predictivo y más."
-cover: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921275/local4_nw4hmq.webp"
+title: 'Cómo la IA Mejora el SEO Local: Atrae Clientes Cercanos con Inteligencia Artificial'
+slug: 'ia-mejora-seo-local-atraer-clientes-cercanos'
+pubDate: 'Oct 27 2024'
+description: 'Descubre cómo la IA optimiza el SEO local, mejora Google My Business y atrae clientes cercanos. Personalización, análisis predictivo y más.'
+cover: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739921275/local4_nw4hmq.webp'
+coverAlt: 'IA mejora SEO local'
 author:
-  name: "Sergio Rondón"
-  description: "CEO de IA Punto"
-  image: "https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png"
-category: "SEO y Marketing Digital"
+  name: 'Sergio Rondón'
+  description: 'CEO de IA Punto'
+  image: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png'
+category: 'SEO y Marketing Digital'
 tags:
   [
-    "Inteligencia Artificial",
-    "SEO Local",
-    "Google My Business",
-    "Personalización",
-    "Análisis Predictivo",
-    "Optimización de Contenido",
-    "EVAFS",
+    'Inteligencia Artificial',
+    'SEO Local',
+    'Google My Business',
+    'Personalización',
+    'Análisis Predictivo',
+    'Optimización de Contenido',
+    'EVAFS',
   ]
 ---
 

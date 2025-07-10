@@ -50,25 +50,25 @@ const { buttonText, data } = Astro.props;
 </div>
 
 <script>
-  const servicesMenuButton = document.getElementById("services-menu-button");
-  const servicesMenu = document.getElementById("services-menu");
+  const servicesMenuButton = document.getElementById('services-menu-button');
+  const servicesMenu = document.getElementById('services-menu');
 
-  servicesMenuButton.addEventListener("click", () => {
-    servicesMenu.classList.toggle("hidden");
+  servicesMenuButton.addEventListener('click', () => {
+    servicesMenu.classList.toggle('hidden');
     servicesMenuButton.setAttribute(
-      "aria-expanded",
-      servicesMenu.classList.contains("hidden") ? "false" : "true"
+      'aria-expanded',
+      servicesMenu.classList.contains('hidden') ? 'false' : 'true'
     );
   });
 
   // Cerrar el menú si se hace clic fuera de él
-  document.addEventListener("click", (event) => {
+  document.addEventListener('click', (event) => {
     if (
       !servicesMenuButton.contains(event.target) &&
       !servicesMenu.contains(event.target)
     ) {
-      servicesMenu.classList.add("hidden");
-      servicesMenuButton.setAttribute("aria-expanded", "false");
+      servicesMenu.classList.add('hidden');
+      servicesMenuButton.setAttribute('aria-expanded', 'false');
     }
   });
 </script>

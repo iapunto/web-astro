@@ -13,8 +13,8 @@
 }
 
 body {
-  font-family: "Roboto", Arial, Helvetica, sans-serif, "DejaVu Sans",
-    "Liberation Sans";
+  font-family:
+    'Roboto', Arial, Helvetica, sans-serif, 'DejaVu Sans', 'Liberation Sans';
   background-color: var(--body-background);
   color: var(--textos);
 }
@@ -228,13 +228,13 @@ li.agenda button {
   color: var(--primary-accent);
 }
 
-input[type="tel"] {
+input[type='tel'] {
   background-color: transparent !important;
   border: none !important;
   outline: none !important;
 }
 
-.PhoneInput--focus > .PhoneInputInput input[type="tel"] {
+.PhoneInput--focus > .PhoneInputInput input[type='tel'] {
   background-color: transparent !important;
   border: 0 !important;
 }

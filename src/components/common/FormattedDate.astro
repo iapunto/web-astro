@@ -1,0 +1,11 @@
+---
+export interface Props {
+  date: string | Date;
+}
+const { date } = Astro.props;
+const fecha = new Date(date);
+const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
+---
+
+<span>{fechaFormateada}</span>
