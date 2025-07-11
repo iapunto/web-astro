@@ -1,9 +1,7 @@
 ---
-import ServiceGrid from '../../common/ServiceGrid.astro';
-import { services } from '../../../lib/constants/services';
-import ButtonPrimary from '../../common/ButtonPrimary.astro';
-import ButtonSecondary from '../../common/ButtonSecondary.astro';
-import MeetingModal from '@/components/common/MeetingModal.astro';
+import ServiceGrid from "../../common/ServiceGrid.astro";
+import { services } from "../../../lib/constants/services";
+import Button from "../../common/Button.astro";
 ---
 
 <section class="py-24">
@@ -24,42 +22,23 @@ import MeetingModal from '@/components/common/MeetingModal.astro';
 
     <!-- Grid de servicios -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-      {services.map((services) => <ServiceGrid {...services} />)}
+      {services.map((service) => <ServiceGrid {...service} />)}
     </div>
 
     <!-- Botones -->
     <div class="flex flex-col md:flex-row justify-center gap-6 mt-16">
-      <ButtonPrimary id="open-modal" text="Agenda una Reunión Gratuita" />
-      <ButtonSecondary text="Solicita una Cotización" href="/" />
+      <Button
+        id="open-modal-btn-services"
+        text="Agenda una Reunión Gratuita"
+        variant="primary"
+      />
+      <Button
+        text="Solicita una Cotización"
+        href="/contacto"
+        variant="secondary"
+      />
     </div>
   </div>
 </section>
-<MeetingModal />
 
-<script>
-  // Obtener referencias al botón y al modal
-  const openModalButton = document.getElementById('open-modal');
-  const modal = document.getElementById('meeting-modal');
-  const closeButton = document.querySelector('#meeting-modal .close');
 
-  // Función para abrir el modal
-  openModalButton.addEventListener('click', () => {
-    if (modal) {
-      modal.classList.remove('hidden');
-    }
-  });
-
-  // Función para cerrar el modal
-  closeButton.addEventListener('click', () => {
-    if (modal) {
-      modal.classList.add('hidden');
-    }
-  });
-
-  // Cerrar el modal si se hace clic fuera de él
-  window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-      modal.classList.add('hidden');
-    }
-  });
-</script>

@@ -1,11 +1,17 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import DefaultLayout from '../layouts/DefaultLayout.astro';
 import { Image } from 'astro:assets';
 import notFoundImage from '../assets/404.svg'; // Importa una imagen SVG
-import ButtonPrimary from '../components/common/ButtonPrimary.astro';
+import Button from '../components/common/Button.astro';
 ---
 
-<Layout title="Página no encontrada">
+<DefaultLayout
+  pageTitle="Página no encontrada"
+  description="La página que buscas no existe. Tal vez quieras volver al inicio."
+  image={notFoundImage.src}
+  keywords="404, error, página no encontrada"
+  alt="Página no encontrada"
+>
   <section>
     <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
       <div class="mx-auto max-w-screen-sm text-center">
@@ -26,11 +32,11 @@ import ButtonPrimary from '../components/common/ButtonPrimary.astro';
         >
           La página que buscas no existe. Tal vez quieras volver al inicio:
         </p>
-        <ButtonPrimary text="Ir al Inicio" href="/" />
+        <Button text="Ir al Inicio" href="/" variant="primary" />
       </div>
     </div>
   </section>
-</Layout>
+</DefaultLayout>
 
 <style>
   .error-404 {

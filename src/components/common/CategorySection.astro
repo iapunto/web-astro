@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import Button from '../common/Button.astro';
 
 export interface Props {
   title: string;
@@ -24,28 +25,19 @@ const { title, subtitle, description, image, alt, link, ctaText, bg, reverse } =
       <img
         src={image.src || image}
         alt={alt}
-        class="max-w-xs md:max-w-md rounded-lg shadow-lg"
+        class="max-w-xs md:max-w-md"
         loading="lazy"
         width="400"
         height="400"
       />
     </div>
     <div class="md:w-1/2 w-full px-4">
-      <h3
-        class="text-sm font-semibold text-primary-600 mb-2 tracking-widest uppercase"
-      >
-        {subtitle}
-      </h3>
-      <h2 class="text-3xl font-bold mb-4 text-gray-900">{title}</h2>
-      <p class="text-lg text-gray-600 mb-6">{description}</p>
+      <h3 class="text-xl font-light text-gray-600 uppercase tracking-wider mb-2">{subtitle}</h3>
+      <h2 class="text-5xl font-bold text-gray-900 leading-tight mb-4">{title}</h2>
+      <p class="text-xl text-gray-600 font-light tracking-wider leading-8 pb-12 max-w-lg">{description}</p>
       {
         link && ctaText && (
-          <a
-            href={link}
-            class="inline-block px-6 py-2 bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700 transition"
-          >
-            {ctaText}
-          </a>
+          <Button text={ctaText} href={link} variant="primary" />
         )
       }
     </div>

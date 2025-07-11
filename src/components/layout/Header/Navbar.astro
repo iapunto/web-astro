@@ -5,11 +5,12 @@ import NavLink from './NavLink.astro';
 import DropdownMenu from './DropdownMenu.astro';
 import MeetingModal from '../../common/MeetingModal.astro';
 import { servicesMenuData } from '../../../lib/constants/services';
+import Button from '../../common/Button.astro';
 ---
 
 <nav
   id="navbar"
-  class="navbar bg-white py-4 relative top-0 z-50 transition-all duration-300"
+  class="navbar bg-white py-4 sticky top-0 z-50 transition-all duration-300 shadow-sm"
 >
   <div class="container mx-auto px-4 flex justify-between items-center">
     <!-- Logo -->
@@ -22,53 +23,43 @@ import { servicesMenuData } from '../../../lib/constants/services';
       <li><NavLink href="/blog" text="IDEAS 360" /></li>
       <li><NavLink href="/contacto" text="CONTACTO" /></li>
       <li>
-        <button
-          id="open-modal-btn"
-          class="bg-primary text-white px-4 py-2 rounded hover:bg-secondary"
-          onclick="openModal()"
-        >
-          Agenda una Reunión
-        </button>
+        <Button text="Agenda una Reunión" id="open-modal-btn-nav" variant="primary" />
       </li>
     </ul>
 
-    <!-- Botón del menú móvil -->
-    <button
-      id="menu-toggle"
-      class="md:hidden text-gray-700 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-      aria-label="Menú móvil"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
+    <!-- Botón hamburguesa (mobile) -->
+    <button id="menu-toggle" class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none" aria-label="Abrir menú">
+      <span class="block w-6 h-0.5 bg-gray-800 mb-1"></span>
+      <span class="block w-6 h-0.5 bg-gray-800 mb-1"></span>
+      <span class="block w-6 h-0.5 bg-gray-800"></span>
     </button>
   </div>
-
-  <!-- Menú desplegable móvil -->
-  <div id="mobile-menu" class="hidden md:hidden">
-    <ul class="flex flex-col space-y-4 p-4 bg-white shadow-md">
+  <!-- Menú móvil -->
+  <div id="mobile-menu" class="md:hidden fixed top-0 left-0 w-full h-full bg-white z-40 flex flex-col items-center justify-center transition-transform duration-300 translate-x-full">
+    <button id="menu-close" class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center" aria-label="Cerrar menú">
+      <span class="block w-6 h-0.5 bg-gray-800 rotate-45 absolute"></span>
+      <span class="block w-6 h-0.5 bg-gray-800 -rotate-45 absolute"></span>
+    </button>
+    <ul class="flex flex-col items-center space-y-8 text-2xl font-semibold mt-16">
       <li><NavLink href="/acerca-de" text="LA AGENCIA" /></li>
-      <li><DropdownMenu buttonText="SERVICIOS" data={servicesMenuData} /></li>
+      <li class="relative w-full flex flex-col items-center">
+        <button id="mobile-services-toggle" class="tracking-widest uppercase text-[15px] text-gray-600 hover:text-primary transition-colors duration-300 font-normal flex items-center focus:outline-none">
+          SERVICIOS
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        </button>
+        <ul id="mobile-services-list" class="hidden flex-col items-center mt-4 space-y-4 bg-white rounded shadow-md p-4 w-64 z-50">
+          <!-- Lista de servicios -->
+          {
+            servicesMenuData.flatMap(cat => cat.links).map(link => (
+              <li><a href={link.href} class="block w-full text-center text-lg text-gray-700 hover:text-primary transition-colors duration-200">{link.text}</a></li>
+            ))
+          }
+        </ul>
+      </li>
       <li><NavLink href="/blog" text="IDEAS 360" /></li>
       <li><NavLink href="/contacto" text="CONTACTO" /></li>
       <li>
-        <button
-          id="open-modal-btn-mobile"
-          class="bg-primary text-white px-4 py-2 rounded w-full hover:bg-secondary"
-          onclick="openModal()"
-        >
-          Agenda una Reunión
-        </button>
+        <Button text="Agenda una Reunión" id="open-modal-btn-nav-mobile" variant="primary" />
       </li>
     </ul>
   </div>
@@ -76,22 +67,84 @@ import { servicesMenuData } from '../../../lib/constants/services';
 
 <MeetingModal />
 
-<script>
-  // Funcionalidad para el menú móvil
+<style>
+  /* Clases para tamaño reducido */
+  .navbar.shrink {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+  #mobile-menu {
+    pointer-events: none;
+  }
+  #mobile-menu.open {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  #mobile-menu {
+    transform: translateX(100%);
+  }
+  #menu-close span:first-child {
+    transform: rotate(45deg);
+  }
+  #menu-close span:last-child {
+    transform: rotate(-45deg);
+  }
+</style>
+
+<script is:inline>
+  let lastScroll = 0;
+  const navbar = document.getElementById('navbar');
+  const topbar = document.getElementById('topbar-container');
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+    if (currentScroll > 60) {
+      if (topbar) topbar.style.transform = 'translateY(-100%)';
+      if (navbar) navbar.classList.add('shrink');
+    } else {
+      if (topbar) topbar.style.transform = 'translateY(0)';
+      if (navbar) navbar.classList.remove('shrink');
+    }
+    lastScroll = currentScroll;
+  });
+
+  // Menú hamburguesa
   const menuToggle = document.getElementById('menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
-
-  menuToggle.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-  });
-
-  // Cerrar el menú si se hace clic fuera de él
-  document.addEventListener('click', (event) => {
-    if (
-      !menuToggle.contains(event.target) &&
-      !mobileMenu.contains(event.target)
-    ) {
-      mobileMenu.classList.add('hidden');
+  const menuClose = document.getElementById('menu-close');
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.add('open');
+    });
+  }
+  if (menuClose && mobileMenu) {
+    menuClose.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+    });
+  }
+  // Cerrar menú al hacer click fuera
+  document.addEventListener('click', (e) => {
+    if (mobileMenu && mobileMenu.classList.contains('open')) {
+      if (!mobileMenu.contains(e.target) && e.target !== menuToggle) {
+        mobileMenu.classList.remove('open');
+      }
     }
   });
+
+  // Dropdown de servicios en mobile
+  const mobileServicesToggle = document.getElementById('mobile-services-toggle');
+  const mobileServicesList = document.getElementById('mobile-services-list');
+  if (mobileServicesToggle && mobileServicesList) {
+    mobileServicesToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      mobileServicesList.classList.toggle('hidden');
+    });
+    // Cerrar el dropdown si se hace click fuera
+    document.addEventListener('click', (e) => {
+      if (!mobileServicesToggle.contains(e.target) && !mobileServicesList.contains(e.target)) {
+        mobileServicesList.classList.add('hidden');
+      }
+    });
+  }
 </script>
+
+

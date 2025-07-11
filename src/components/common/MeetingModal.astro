@@ -1,92 +1,250 @@
 ---
-// src/components/common/MeetingModal.astro
-const calendlyURL = process.env.CALENDY_URL;
-
-// Función para abrir el modal
-export function openModal() {
-  const modal = document.getElementById('meeting-modal');
-  if (modal) {
-    modal.classList.remove('hidden');
-  }
-}
+import Button from '../common/Button.astro';
+// No se necesita lógica de servidor aquí por ahora 
 ---
+
+<!-- Estilos de Flatpickr (necesarios para que el calendario se vea bien) -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
 
 <!-- Modal -->
 <div id="meeting-modal" class="modal hidden">
   <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Agendar Reunión</h2>
-    <!-- Contenedor para el iframe de Calendly -->
-    <div class="calendly-container">
-      <iframe
-        src={calendlyURL}
-        width="100%"
-        height="600px"
-        data-resize="true"
-        title="Calendly Scheduling"></iframe>
+    <span id="close-modal-btn" class="close">&times;</span>
+
+    <div class="modal-body">
+      <div class="form-container">
+        <h2 class="text-2xl font-bold mb-2 text-gray-800">Agendar una Reunión</h2>
+        <p class="text-gray-600 mb-6">Elige una fecha y hora para que conversemos sobre tu proyecto.</p>
+        
+        <form id="appointment-form">
+          <div class="form-group">
+            <label for="name">Nombre Completo</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Correo Electrónico</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="appointment-time">Fecha y Hora</label>
+            <input type="text" id="appointment-time" name="appointment-time" required placeholder="Selecciona un horario..." />
+          </div>
+
+          <Button text="Confirmar Cita" variant="primary" type="submit" />
+        </form>
+      </div>
+
+      <div id="confirmation-message" class="confirmation-container hidden">
+        <h2 class="text-2xl font-bold text-green-600">¡Cita Agendada!</h2>
+        <p class="text-gray-700">Hemos recibido tus datos. Recibirás una invitación de Google Calendar en tu correo en los próximos minutos.</p>
+        <p class="text-gray-600 mt-4">Puedes cerrar esta ventana.</p>
+      </div>
+
     </div>
   </div>
 </div>
 
 <style>
-  /* Estilos del modal */
   .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
   }
 
-  .modal.hidden {
-    display: none;
+  .modal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .modal-content {
     background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 1200px;
+    padding: 2.5rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
     position: relative;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+  }
+
+  .modal:not(.hidden) .modal-content {
+    transform: scale(1);
   }
 
   .close {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    color: #aaa;
     cursor: pointer;
+    line-height: 1;
   }
 
-  .calendly-container {
-    margin-top: 20px;
-    overflow: hidden;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  .close:hover {
+    color: #333;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #4a5568;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 0.875rem;
+    background-color: #4F46E5; /* Indigo-600 */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .submit-button:hover {
+    background-color: #4338CA; /* Indigo-700 */
+  }
+
+  .confirmation-container {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  /* Estilos para Flatpickr */
+  .flatpickr-calendar {
+    font-family: 'Inter', sans-serif;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  .flatpickr-day.selected {
+    background: #4F46E5;
+    border-color: #4F46E5;
+  }
+  .flatpickr-time .flatpickr-hour:hover, .flatpickr-time .flatpickr-minute:hover {
+    background: #E0E7FF; /* Indigo-100 */
+  }
+  .flatpickr-day.today {
+    border-color: #4F46E5;
   }
 </style>
 
 <script>
-  // Cerrar el modal al hacer clic en la "X"
-  const closeButton = document.querySelector('.close');
-  closeButton.addEventListener('click', () => {
-    const modal = document.getElementById('meeting-modal');
+  import flatpickr from 'flatpickr';
+
+  const modal = document.getElementById("meeting-modal");
+  const closeModalBtn = document.getElementById("close-modal-btn");
+  const form = document.getElementById('appointment-form');
+  const formContainer = document.querySelector('.form-container');
+  const confirmationMessage = document.getElementById('confirmation-message');
+
+  // --- DATOS DE EJEMPLO (Esto vendrá de N8N) ---
+  const busySlots = [
+    { from: "2025-07-15T14:00:00.000Z", to: "2025-07-15T15:00:00.000Z" },
+    { from: "2025-07-16T10:00:00.000Z", to: "2025-07-16T11:30:00.000Z" },
+    // Día completo deshabilitado
+    new Date().fp_incr(3), // Deshabilitar en 3 días a partir de hoy
+  ];
+  // ---------------------------------------------
+
+  const openModal = () => {
     if (modal) {
-      modal.classList.add('hidden');
+      modal.classList.remove("hidden");
+      // Reiniciar el formulario por si se agendó antes
+      form.classList.remove('hidden');
+      confirmationMessage.classList.add('hidden');
+    }
+  };
+
+  const closeModal = () => {
+    if (modal) {
+      modal.classList.add("hidden");
+    }
+  };
+
+  document.addEventListener("open-meeting-modal", openModal);
+  closeModalBtn?.addEventListener("click", closeModal);
+
+  const openModalButtons = document.querySelectorAll("[id^='open-modal-btn']");
+  openModalButtons.forEach(btn => btn.addEventListener("click", openModal));
+
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      closeModal();
     }
   });
 
-  // Cerrar el modal si se hace clic fuera de él
-  window.addEventListener('click', (event) => {
-    const modal = document.getElementById('meeting-modal');
-    if (event.target === modal) {
-      modal.classList.add('hidden');
+  // Inicializar Flatpickr
+  const fp = flatpickr("#appointment-time", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    minDate: "today",
+    maxDate: new Date().fp_incr(60), // Permitir agendar en los próximos 60 días
+    time_24hr: true,
+    minTime: "09:00",
+    maxTime: "18:00",
+    minuteIncrement: 30,
+    disable: busySlots, // Aquí se usa la data de ejemplo
+    locale: {
+        firstDayOfWeek: 1, // Lunes como primer día
+        weekdays: {
+            shorthand: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+            longhand: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+        },
+        months: {
+            shorthand: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            longhand: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        },
     }
   });
+
+  // Manejar el envío del formulario
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('Formulario enviado (simulación)');
+    
+    // Aquí iría la llamada fetch al webhook de N8N para crear la cita
+
+    // Simular éxito y mostrar mensaje de confirmación
+    form.classList.add('hidden');
+    confirmationMessage.classList.remove('hidden');
+  });
+
 </script>
