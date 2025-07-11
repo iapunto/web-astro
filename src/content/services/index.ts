@@ -1,0 +1,1213 @@
+import type { ServiceData } from '../../lib/constants/servicesData.ts';
+
+// Estructura robusta para cada servicio
+export const services: ServiceData[] = [
+  // Chatbots Inteligentes
+  {
+    slug: 'chatbots-inteligentes',
+    title: 'Chatbots Inteligentes',
+    hero: {
+      title: 'Chatbots Inteligentes que Hablan por Ti',
+      description:
+        'Automatiza tu atención al cliente, genera leads y dispara la satisfacción con chatbots personalizados que ¡sí que saben conversar!',
+      image: '/public/icons/chatbot.png',
+      alt: 'Chatbots Inteligentes que Hablan por Ti',
+    },
+    mainImage: {
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/chatbot-concept_ravyht.png',
+      alt: 'Concepto de Chatbot',
+    },
+    benefits: [
+      {
+        title: 'Disponibilidad 24/7',
+        description:
+          '¡Dile adiós a las esperas! Tus clientes tendrán respuestas al instante, incluso si estás de vacaciones en la luna.',
+      },
+      {
+        title: 'Atención Personalizada',
+        description:
+          'Cada cliente es único, ¡y tus chatbots también! Se adaptan a sus necesidades y les dan la atención VIP que se merecen.',
+      },
+      {
+        title: 'Generación de Leads',
+        description:
+          '¡Olvídate de perseguir clientes! Tus chatbots capturan la información clave y te la entregan en bandeja de plata.',
+      },
+      {
+        title: 'Aumento de la Satisfacción',
+        description:
+          'Clientes felices, ¡vida feliz! Los chatbots resuelven sus dudas al instante y les hacen sentir como reyes.',
+      },
+      {
+        title: 'Reducción de Costos',
+        description:
+          '¡Que el dinero no se te escape! Los chatbots automatizan tareas y liberan a tu equipo para que se enfoque en lo que realmente importa.',
+      },
+    ],
+    howItWorks: {
+      title: '¿Cómo Funciona?',
+      subtitle: '¡Magia Digital en Acción!',
+      description:
+        'Cada chatbot que creamos es único, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+      steps: [
+        {
+          title: 'Análisis de Necesidades',
+          description:
+            'Entendemos tu negocio y a tus clientes para diseñar un chatbot a medida.',
+          icon: `<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"></path></svg>`,
+        },
+        {
+          title: 'Diseño Personalizado',
+          description:
+            'Creamos un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+          icon: `<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"></path></svg>`,
+        },
+        {
+          title: 'Integración Inteligente',
+          description:
+            'Conectamos tu chatbot con tus plataformas favoritas (CRM, redes sociales, etc.) para que todo fluya como la seda.',
+          icon: `<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"></path></svg>`,
+        },
+        {
+          title: 'Entrenamiento Continuo',
+          description:
+            '¡Tu chatbot nunca deja de aprender! Lo entrenamos con datos reales para que cada vez sea más inteligente y eficiente.',
+          icon: `<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33"></path></svg>`,
+        },
+      ],
+    },
+    features: [
+      {
+        title: 'E-Commerce',
+        description:
+          'Responde preguntas sobre productos, guía a los clientes en el proceso de compra, ofrece descuentos personalizados.',
+      },
+      {
+        title: 'Atención al Cliente',
+        description:
+          'Resuelve dudas frecuentes, gestiona quejas, programa citas, ofrece soporte técnico.',
+      },
+      {
+        title: 'Marketing',
+        description:
+          'Captura leads, realiza encuestas, promociona productos, segmenta audiencias.',
+      },
+      {
+        title: 'Recursos Humanos',
+        description:
+          'Responde preguntas sobre la empresa, gestiona solicitudes de empleo, programa entrevistas.',
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Qué es un chatbot inteligente y cómo funciona?',
+        answer:
+          'Un chatbot inteligente es un programa informático que utiliza inteligencia artificial (IA) para simular una conversación con usuarios humanos. Funciona mediante el procesamiento del lenguaje natural (PLN) y el aprendizaje automático (ML) para entender las preguntas de los usuarios y ofrecer respuestas relevantes y coherentes.',
+      },
+      {
+        question: '¿Qué tipos de chatbots existen?',
+        answer:
+          'Existen diferentes tipos de chatbots, cada uno con sus propias características y funcionalidades:\n\n- Chatbots basados en reglas: Siguen un conjunto de reglas predefinidas para responder a preguntas específicas.\n- Chatbots basados en IA: Utilizan IA para entender el lenguaje natural y ofrecer respuestas más flexibles y personalizadas.\n- Chatbots de voz: Interactúan con los usuarios a través de la voz, como los asistentes virtuales (Siri, Alexa).',
+      },
+      {
+        question:
+          '¿Qué beneficios ofrecen los chatbots inteligentes para mi negocio?',
+        answer:
+          'Los chatbots inteligentes ofrecen una amplia gama de beneficios para las empresas, como:\n\n- Disponibilidad 24/7: Atienden a los clientes en cualquier momento.\n- Respuestas instantáneas: Reducen el tiempo de espera del cliente.\n- Atención personalizada: Ofrecen una experiencia adaptada a cada usuario.\n- Generación de leads: Capturan información de clientes potenciales.\n- Reducción de costos: Automatizan tareas y liberan a los agentes humanos.\n- Mayor satisfacción del cliente: Mejoran la experiencia general del cliente.',
+      },
+      {
+        question:
+          '¿Cómo puedo integrar un chatbot en mi sitio web o redes sociales?',
+        answer:
+          'La integración de un chatbot depende de la plataforma que elijas. En IA Punto, te ofrecemos soluciones personalizadas para integrar chatbots en tu sitio web, Facebook Messenger, WhatsApp u otras plataformas de mensajería.',
+      },
+      {
+        question: '¿Cuánto cuesta un chatbot inteligente?',
+        answer:
+          'El costo de un chatbot varía según su complejidad, funcionalidades e integración con otras plataformas. En IA Punto, ofrecemos soluciones a medida que se adaptan a tu presupuesto y necesidades desde los COP $180.000. Contáctanos para obtener una cotización personalizada.',
+      },
+      {
+        question: '¿Necesito conocimientos técnicos para usar un chatbot?',
+        answer:
+          'No necesitas conocimientos técnicos para usar un chatbot. Nuestras soluciones son fáciles de usar y te brindamos la capacitación y el soporte necesarios para que puedas aprovechar al máximo tu chatbot.',
+      },
+      {
+        question: '¿Qué tan seguros son los chatbots inteligentes?',
+        answer:
+          'La seguridad de un chatbot depende de la plataforma y las medidas de seguridad implementadas. En IA Punto, nos tomamos la seguridad muy en serio y utilizamos las mejores prácticas para proteger la información de tus clientes.',
+      },
+      {
+        question: '¿Qué tipo de preguntas puede responder un chatbot?',
+        answer:
+          'Un chatbot puede responder una amplia gama de preguntas, desde consultas simples sobre productos o servicios hasta preguntas más complejas que requieren análisis de datos. La capacidad de respuesta depende de la complejidad del chatbot y de la información con la que se le haya entrenado.',
+      },
+      {
+        question:
+          '¿Puedo personalizar la personalidad y el tono de mi chatbot?',
+        answer:
+          'Sí, puedes personalizar la personalidad y el tono de tu chatbot para que se ajuste a la identidad de tu marca y a tu público objetivo. En IA Punto, te ayudamos a crear un chatbot que refleje la voz y el estilo de tu empresa.',
+      },
+    ],
+    faqSubtitle: 'Chatbots Inteligentes: ¡Todo lo que Necesitas Saber!',
+    faqDescription:
+      '¿Tienes preguntas sobre los chatbots? ¡Tenemos respuestas! Aquí te despejamos las dudas más comunes sobre nuestros chatbots inteligentes y cómo pueden revolucionar tu negocio.',
+    cta: {
+      text: 'Solicita tu chatbot personalizado',
+      link: '/contacto',
+    },
+    extraBlocks: [
+      {
+        type: 'intro',
+        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
+          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div class="lg:pt-4 lg:pr-8">
+                <div class="lg:max-w-lg">
+                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué los Chatbots Inteligentes son Tan Geniales?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">Automatiza tu atención al cliente, genera leads y dispara la satisfacción con chatbots personalizados que ¡sí que saben conversar!</p>
+                </div>
+              </div>
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/chatbot-concept_ravyht.png" alt="Concepto de Chatbot" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+            </div>
+          </div>
+        </section>`,
+      },
+    ],
+  },
+  // Publicidad Online con IA
+  {
+    slug: 'publicidad-online-ia',
+    title: 'Publicidad Online con IA',
+    hero: {
+      title: '¡Haz que tu Marca Exploté en Internet!',
+      description:
+        'Creamos experiencias digitales que convierten espectadores en clientes fieles. Con nuestra tecnología impulsada por inteligencia artificial, llevamos tus campañas publicitarias al siguiente nivel.',
+      image: '/public/icons/ads.png',
+      alt: 'Icono de Publicidad Online con IA',
+    },
+    mainImage: {
+      url: 'YOUR_CLOUDINARY_URL_FOR_ADVERTISING_IMAGE',
+      alt: 'Publicidad Online con IA - Gráfico',
+    },
+    benefits: [
+      {
+        title: 'Precisión Láser',
+        description:
+          'La IA analiza millones de datos para encontrar a tu audiencia perfecta. No más disparos al aire; ahora apuntas directamente al blanco.',
+      },
+      {
+        title: 'Optimización en Tiempo Real',
+        description:
+          'Tus campañas se ajustan automáticamente según el rendimiento, asegurando que siempre obtengas los mejores resultados.',
+      },
+      {
+        title: 'Ahorro Inteligente',
+        description:
+          'Maximiza tu presupuesto eliminando gastos innecesarios y enfocándote en lo que realmente funciona.',
+      },
+      {
+        title: 'Creatividad Potenciada',
+        description:
+          'Diseñamos anuncios impactantes que no solo llaman la atención, sino que también generan engagement y conversiones.',
+      },
+      {
+        title: 'Resultados Medibles',
+        description:
+          'Informes claros y detallados que te muestran exactamente cómo está funcionando tu inversión.',
+      },
+    ],
+    howItWorks: {
+      title: '¿Cómo Funciona?',
+      subtitle: 'Un proceso avanzado que parece magia, pero es pura ciencia',
+      description:
+        'Convertimos datos en decisiones estratégicas mediante un sistema inteligente que entiende, predice y optimiza tus campañas. Así lo hacemos:',
+      steps: [
+        {
+          title: 'Análisis Predictivo',
+          description:
+            'Utilizamos IA para estudiar el comportamiento de tu audiencia y predecir sus acciones futuras. Sabemos quién es tu cliente ideal antes de que haga clic.',
+        },
+        {
+          title: 'Segmentación Inteligente',
+          description:
+            'Dividimos tu audiencia en grupos específicos basados en intereses, comportamientos y datos demográficos. Cada grupo recibe un mensaje personalizado.',
+        },
+        {
+          title: 'Optimización Automática',
+          description:
+            'La IA ajusta tus campañas en tiempo real, redistribuyendo el presupuesto hacia los canales y estrategias más efectivas.',
+        },
+        {
+          title: 'Monitoreo y Reportes',
+          description:
+            'Recibes informes semanales con métricas clave, análisis profundo y recomendaciones estratégicas para mejorar aún más.',
+        },
+      ],
+    },
+    features: [
+      {
+        title: 'E-Commerce',
+        description:
+          'Aumenta tus ventas online con anuncios dirigidos a compradores potenciales y remarketing para recuperar carritos abandonados.',
+      },
+      {
+        title: 'Emprendedores Ambiciosos',
+        description:
+          'Si estás comenzando y necesitas visibilidad rápida, nuestras campañas te ayudarán a destacar en un mercado competitivo.',
+      },
+      {
+        title: 'Pequeñas y Medianas Empresas',
+        description:
+          'Optimiza tu presupuesto publicitario y genera leads calificados sin gastar de más.',
+      },
+      {
+        title: 'Grandes Corporaciones',
+        description:
+          'Escala tus campañas a nivel nacional o internacional con estrategias personalizadas y tecnologías avanzadas.',
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Qué plataformas utilizan para la publicidad?',
+        answer:
+          'Trabajamos con las principales plataformas digitales, como Google Ads, Meta Ads (Facebook e Instagram), LinkedIn Ads y TikTok Ads. Elegimos las mejores opciones según tus objetivos.',
+      },
+      {
+        question: '¿Necesito tener experiencia previa en publicidad digital?',
+        answer:
+          '¡Para nada! Nos encargamos de todo, desde el diseño de la estrategia hasta la ejecución y optimización. Solo necesitas estar listo para ver resultados.',
+      },
+      {
+        question: '¿Cuánto tiempo tardan en mostrar resultados?',
+        answer:
+          'Los resultados iniciales suelen verse en las primeras semanas, pero las campañas más efectivas requieren al menos 2-3 meses para alcanzar su máximo potencial.',
+      },
+      {
+        question: '¿Qué pasa si no estoy satisfecho con los resultados?',
+        answer:
+          'Nos tomamos muy en serio tu satisfacción. Si algo no funciona como esperabas, ajustamos la estrategia hasta que alcancemos los resultados deseados.',
+      },
+      {
+        question: '¿Ofrecen servicios de remarketing?',
+        answer:
+          '¡Claro que sí! El remarketing es una de nuestras especialidades. Traemos de vuelta a los usuarios que visitaron tu sitio web o interactuaron con tus anuncios.',
+      },
+    ],
+    faqSubtitle: 'Publicidad Online con IA: Resuelve tus Dudas',
+    faqDescription:
+      '¿Tienes preguntas sobre cómo la inteligencia artificial puede potenciar tu publicidad digital? Aquí respondemos las dudas más frecuentes para que tomes decisiones informadas y lleves tus campañas al siguiente nivel.',
+    cta: {
+      text: 'Solicita una auditoría gratuita de tu publicidad',
+      link: '/contacto',
+    },
+    extraBlocks: [
+      {
+        type: 'intro',
+        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
+          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div class="lg:pt-4 lg:pr-8">
+                <div class="lg:max-w-lg">
+                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué la Publicidad Online con IA es Tan Genial?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">Creamos experiencias digitales que convierten espectadores en clientes fieles. Con nuestra tecnología impulsada por inteligencia artificial, llevamos tus campañas publicitarias al siguiente nivel.</p>
+                </div>
+              </div>
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/ads_zjzj1j.png" alt="Publicidad Online con IA" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+            </div>
+          </div>
+        </section>`,
+      },
+    ],
+  },
+  // Posicionamiento SEO
+  {
+    slug: 'posicionamiento-seo',
+    title: 'Posicionamiento SEO',
+    hero: {
+      title: '¡Llega a la Cima de Google y Domina tu Mercado!',
+      description:
+        'No solo optimizamos sitios web… ¡Los lanzamos directamente a la primera página de los resultados de búsqueda!',
+      image: '/public/icons/seo.png',
+      alt: 'Icono de Posicionamiento SEO',
+    },
+    mainImage: {
+      url: 'YOUR_CLOUDINARY_URL_FOR_SEO_IMAGE',
+      alt: 'SEO Inteligente - Gráfico',
+    },
+    benefits: [
+      {
+        title: 'Visibilidad Garantizada',
+        description:
+          'Mejoramos tu posicionamiento en Google para que aparezcas justo cuando tu audiencia te busca.',
+      },
+      {
+        title: 'Tráfico Calificado',
+        description:
+          'Atraemos visitantes reales interesados en tus productos o servicios, no solo clics aleatorios.',
+      },
+      {
+        title: 'Optimización Automática',
+        description:
+          'La IA ajusta constantemente tu estrategia SEO para mantenerse al día con los cambios de los algoritmos de Google.',
+      },
+      {
+        title: 'ROI Medible',
+        description:
+          'Cada acción está diseñada para generar resultados tangibles y medibles, desde más visitas hasta conversiones.',
+      },
+      {
+        title: 'Competencia Superada',
+        description:
+          'Analizamos a tus competidores y creamos estrategias para destacarte sobre ellos.',
+      },
+    ],
+    howItWorks: {
+      title: '¿Cómo Funciona?',
+      subtitle: 'Un proceso tan estratégico que parece magia.',
+      description:
+        'Detrás de cada campaña de SEO hay un sistema inteligente que convierte datos en decisiones estratégicas. Aquí te explicamos cómo lo hacemos:',
+      steps: [
+        {
+          title: 'Análisis Inicial de Necesidades',
+          description:
+            'Evaluamos tu sitio web, identificamos áreas de mejora y analizamos palabras clave relevantes para tu negocio.',
+        },
+        {
+          title: 'Optimización On-Page',
+          description:
+            'Mejoramos la estructura de tu sitio, optimizamos títulos, meta descripciones, imágenes y contenido para que Google te ame.',
+        },
+        {
+          title: 'SEO Técnico',
+          description:
+            'Corregimos errores técnicos, mejoramos la velocidad de carga y aseguramos la indexación correcta.',
+        },
+        {
+          title: 'Estrategia de Contenidos',
+          description:
+            'Creamos y optimizamos contenido relevante y de valor para atraer y retener a tu audiencia.',
+        },
+        {
+          title: 'Linkbuilding Inteligente',
+          description:
+            'Generamos enlaces de calidad para aumentar la autoridad de tu sitio.',
+        },
+      ],
+    },
+    features: [
+      {
+        title: 'SEO On-Page y Off-Page',
+        description:
+          'Optimizamos tanto el contenido interno como la autoridad externa de tu web.',
+      },
+      {
+        title: 'Auditoría SEO Completa',
+        description:
+          'Analizamos todos los aspectos técnicos y de contenido para detectar oportunidades.',
+      },
+      {
+        title: 'Monitorización y Reporting',
+        description:
+          'Seguimiento constante de posiciones, tráfico y conversiones.',
+      },
+      {
+        title: 'Estrategias Personalizadas',
+        description:
+          'Cada negocio es único, por eso diseñamos estrategias a medida.',
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Cuánto tiempo tarda en verse resultados?',
+        answer:
+          'El SEO es una estrategia a mediano y largo plazo. Normalmente se ven mejoras en 3-6 meses.',
+      },
+      {
+        question: '¿Qué diferencia hay entre SEO y SEM?',
+        answer:
+          'El SEO se enfoca en resultados orgánicos, mientras que el SEM implica publicidad pagada.',
+      },
+      {
+        question: '¿Incluyen informes periódicos?',
+        answer:
+          'Sí, recibirás reportes periódicos con métricas clave y recomendaciones.',
+      },
+    ],
+    cta: {
+      text: 'Solicita una auditoría SEO gratuita',
+      link: '/contacto',
+    },
+    extraBlocks: [
+      {
+        type: 'intro',
+        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
+          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div class="lg:pt-4 lg:pr-8">
+                <div class="lg:max-w-lg">
+                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Posicionamiento SEO es Tan Genial?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">No solo optimizamos sitios web… ¡Los lanzamos directamente a la primera página de los resultados de búsqueda!</p>
+                </div>
+              </div>
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/seo_zjzj1j.png" alt="Posicionamiento SEO" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+            </div>
+          </div>
+        </section>`,
+      },
+    ],
+  },
+  // Marketing de Contenidos
+  {
+    slug: 'marketing-de-contenidos',
+    title: 'Marketing de Contenidos',
+    hero: {
+      title: 'Marketing de Contenidos',
+      description:
+        'Creamos contenido optimizado para SEO que atrae a tu audiencia y posiciona tu marca. Usamos IA.',
+      image: '/public/icons/content.png',
+      alt: 'Icono de Marketing de Contenidos',
+    },
+    mainImage: {
+      url: 'YOUR_CLOUDINARY_URL_FOR_MARKETING_IMAGE',
+      alt: 'Marketing de Contenidos - Gráfico',
+    },
+    benefits: [
+      {
+        title: 'Disponibilidad 24/7',
+        description:
+          '¡Dile adiós a las esperas! Tus clientes tendrán respuestas al instante, incluso si estás de vacaciones en la luna.',
+      },
+      {
+        title: 'Atención Personalizada',
+        description:
+          'Cada cliente es único, ¡y tus chatbots también! Se adaptan a sus necesidades y les dan la atención VIP que se merecen.',
+      },
+      {
+        title: 'Generación de Leads',
+        description:
+          '¡Olvídate de perseguir clientes! Tus chatbots capturan la información clave y te la entregan en bandeja de plata.',
+      },
+      {
+        title: 'Aumento de la Satisfacción',
+        description:
+          'Clientes felices, ¡vida feliz! Los chatbots resuelven sus dudas al instante y les hacen sentir como reyes.',
+      },
+      {
+        title: 'Reducción de Costos',
+        description:
+          '¡Que el dinero no se te escape! Los chatbots automatizan tareas y liberan a tu equipo para que se enfoque en lo que realmente importa.',
+      },
+    ],
+    howItWorks: {
+      title: '¿Cómo Funciona?',
+      subtitle: '¡Magia Digital en Acción!',
+      description:
+        'Cada chatbot que creamos es único, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+      steps: [
+        {
+          title: 'Análisis de Necesidades',
+          description:
+            'Entendemos tu negocio y a tus clientes para diseñar un chatbot a medida.',
+        },
+        {
+          title: 'Diseño Personalizado',
+          description:
+            'Creamos un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+        },
+      ],
+    },
+    features: [
+      {
+        title: 'Blog Corporativo',
+        description:
+          'Publicaciones optimizadas para SEO y alineadas a tu estrategia de marca.',
+      },
+      {
+        title: 'Redacción para Landing Pages',
+        description:
+          'Textos persuasivos que convierten visitantes en clientes.',
+      },
+      {
+        title: 'Guiones para Video y Podcast',
+        description:
+          'Contenido multimedia para potenciar tu presencia digital.',
+      },
+      {
+        title: 'Difusión en Redes Sociales',
+        description: 'Adaptación de contenidos para cada canal y audiencia.',
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Qué tipo de contenido crean?',
+        answer:
+          'Creamos blogs, artículos, guiones, textos para landing pages, redes sociales y más.',
+      },
+      {
+        question: '¿El contenido es original?',
+        answer: 'Sí, todo el contenido es 100% original y optimizado para SEO.',
+      },
+    ],
+    cta: {
+      text: 'Solicita una consultoría gratuita de contenidos',
+      link: '/contacto',
+    },
+    extraBlocks: [
+      {
+        type: 'intro',
+        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
+          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div class="lg:pt-4 lg:pr-8">
+                <div class="lg:max-w-lg">
+                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Marketing de Contenidos es Tan Genial?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">Creamos contenido optimizado para SEO que atrae a tu audiencia y posiciona tu marca. Usamos IA.</p>
+                </div>
+              </div>
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/content_zjzj1j.png" alt="Marketing de Contenidos" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+            </div>
+          </div>
+        </section>`,
+      },
+    ],
+  },
+  // Desarrollo de Apps Móviles
+  {
+    slug: 'desarrollo-apps-moviles',
+    title: 'Desarrollo de Apps Móviles',
+    hero: {
+      title: 'Conecta con tu Audiencia en Cualquier Lugar',
+      description:
+        'Llega a tus clientes donde quiera que estén con una app móvil atractiva y funcional.',
+      image: '/public/icons/app-dev.png',
+      alt: 'Icono de Desarrollo de Apps Móviles',
+    },
+    mainImage: {
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1740099869/app-movil_kimh1c.png',
+      alt: 'Desarrollo de Apps Móviles - Pantalla de Producto',
+    },
+    benefits: [
+      {
+        title: 'Accesibilidad 24/7',
+        description:
+          'Tu audiencia puede interactuar contigo en cualquier momento y lugar.',
+      },
+      {
+        title: 'Personalización avanzada',
+        description:
+          'Diseñamos apps que reflejan la identidad y los valores de tu marca.',
+      },
+      {
+        title: 'Escalabilidad',
+        description:
+          'Tus apps pueden crecer junto con tu negocio, añadiendo nuevas funcionalidades según sea necesario.',
+      },
+      {
+        title: 'Seguridad robusta',
+        description:
+          'Implementamos medidas de seguridad avanzadas para proteger los datos de tus usuarios.',
+      },
+      {
+        title: 'Optimización para el rendimiento',
+        description:
+          'Aseguramos que tu app funcione sin problemas en todos los dispositivos.',
+      },
+    ],
+    howItWorks: {
+      title: '¿Cómo Funciona?',
+      subtitle:
+        'Un enfoque claro y colaborativo para llevar tu idea al mundo móvil.',
+      description:
+        'Cada app que creamos es única, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener una app con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+      steps: [
+        {
+          title: 'Análisis inicial',
+          description:
+            'Comprendemos tus objetivos, público objetivo y requisitos técnicos.',
+        },
+        {
+          title: 'Diseño UI/UX',
+          description:
+            'Creamos prototipos y maquetas que reflejan la identidad de tu marca y la experiencia del usuario.',
+        },
+        {
+          title: 'Desarrollo técnico',
+          description:
+            'Implementamos las funcionalidades necesarias y optimizamos el rendimiento.',
+        },
+        {
+          title: 'Pruebas exhaustivas',
+          description:
+            'Probamos la app en diferentes dispositivos y escenarios para garantizar su calidad.',
+        },
+      ],
+    },
+    features: [
+      {
+        title: 'Apps Híbridas y Nativas',
+        description:
+          'Desarrollamos tanto apps híbridas como nativas según las necesidades de tu proyecto.',
+      },
+      {
+        title: 'Integración con Sistemas Externos',
+        description:
+          'Conectamos tu app con CRMs, sistemas de reservas, plataformas de email marketing y más.',
+      },
+      {
+        title: 'Soporte Multiplataforma',
+        description:
+          'Aseguramos compatibilidad con iOS y Android para llegar a la mayor audiencia posible.',
+      },
+      {
+        title: 'Mantenimiento y Actualizaciones',
+        description:
+          'Ofrecemos planes de mantenimiento para que tu app permanezca actualizada y segura.',
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Cuánto tiempo toma desarrollar una app móvil?',
+        answer:
+          'Depende del alcance del proyecto, pero generalmente los proyectos básicos tardan entre 1 y 2 meses, mientras que los más complejos pueden tomar un poco más de tiempo.',
+      },
+      {
+        question: '¿Ofrecen mantenimiento después del lanzamiento?',
+        answer:
+          'Sí, ofrecemos planes de mantenimiento para garantizar que tu app permanezca actualizada y segura.',
+      },
+      {
+        question: '¿Pueden integrar mi app con otras herramientas?',
+        answer:
+          '¡Claro! Podemos integrar tu app con CRMs, sistemas de reservas, plataformas de email marketing y más.',
+      },
+      {
+        question: '¿Qué pasa si necesito cambios después del lanzamiento?',
+        answer:
+          'No hay problema. Ofrecemos paquetes de soporte post-lanzamiento para implementar cualquier cambio o mejora que necesites.',
+      },
+    ],
+    cta: {
+      text: 'Solicita una consultoría gratuita para tu app',
+      link: '/contacto',
+    },
+    extraBlocks: [
+      {
+        type: 'intro',
+        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
+          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div class="lg:pt-4 lg:pr-8">
+                <div class="lg:max-w-lg">
+                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Desarrollo de Apps Móviles es Tan Genial?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">Llega a tus clientes donde quiera que estén con una app móvil atractiva y funcional.</p>
+                </div>
+              </div>
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1740099869/app-movil_kimh1c.png" alt="Desarrollo de Apps Móviles" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+            </div>
+          </div>
+        </section>`,
+      },
+    ],
+  },
+  // Odoo ERP
+  {
+    slug: 'odoo-erp',
+    title: 'Odoo ERP',
+    hero: {
+      title: 'Odoo ERP',
+      description:
+        'Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa.',
+      image: '/public/icons/odoo.png',
+      alt: 'Icono de Odoo ERP',
+    },
+    mainImage: {
+      url: 'YOUR_CLOUDINARY_URL_FOR_ODOO_IMAGE',
+      alt: 'Odoo ERP - Interfaz de Usuario',
+    },
+    benefits: [
+      {
+        title: 'Disponibilidad 24/7',
+        description:
+          '¡Dile adiós a las esperas! Tus clientes tendrán respuestas al instante, incluso si estás de vacaciones en la luna.',
+      },
+      {
+        title: 'Atención Personalizada',
+        description:
+          'Cada cliente es único, ¡y tus chatbots también! Se adaptan a sus necesidades y les dan la atención VIP que se merecen.',
+      },
+      {
+        title: 'Generación de Leads',
+        description:
+          '¡Olvídate de perseguir clientes! Tus chatbots capturan la información clave y te la entregan en bandeja de plata.',
+      },
+      {
+        title: 'Aumento de la Satisfacción',
+        description:
+          'Clientes felices, ¡vida feliz! Los chatbots resuelven sus dudas al instante y les hacen sentir como reyes.',
+      },
+      {
+        title: 'Reducción de Costos',
+        description:
+          '¡Que el dinero no se te escape! Los chatbots automatizan tareas y liberan a tu equipo para que se enfoque en lo que realmente importa.',
+      },
+    ],
+    howItWorks: {
+      title: '¿Cómo Funciona?',
+      subtitle: '¡Magia Digital en Acción!',
+      description:
+        'Cada chatbot que creamos es único, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+      steps: [
+        {
+          title: 'Análisis de Necesidades',
+          description:
+            'Entendemos tu negocio y a tus clientes para diseñar un chatbot a medida.',
+        },
+        {
+          title: 'Diseño Personalizado',
+          description:
+            'Creamos un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+        },
+      ],
+    },
+    features: [
+      {
+        title: 'Gestión Integral',
+        description:
+          'Control total de ventas, compras, inventario, contabilidad y más.',
+      },
+      {
+        title: 'Personalización',
+        description:
+          'Adaptamos Odoo a los procesos y necesidades específicas de tu empresa.',
+      },
+      {
+        title: 'Automatización de Procesos',
+        description: 'Reduce tareas manuales y errores con flujos automáticos.',
+      },
+      {
+        title: 'Soporte y Actualizaciones',
+        description: 'Acompañamiento y mantenimiento continuo para tu ERP.',
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Qué es Odoo ERP?',
+        answer:
+          'Odoo es un sistema de gestión empresarial (ERP) modular y flexible que integra todas las áreas de tu empresa en una sola plataforma.',
+      },
+      {
+        question: '¿Puedo migrar mis datos actuales a Odoo?',
+        answer:
+          'Sí, realizamos migraciones de datos desde otros sistemas a Odoo de forma segura.',
+      },
+    ],
+    cta: {
+      text: 'Solicita una consultoría gratuita de Odoo',
+      link: '/contacto',
+    },
+    extraBlocks: [
+      {
+        type: 'intro',
+        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
+          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div class="lg:pt-4 lg:pr-8">
+                <div class="lg:max-w-lg">
+                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Odoo ERP es Tan Genial?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa.</p>
+                </div>
+              </div>
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/odoo_zjzj1j.png" alt="Odoo ERP" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+            </div>
+          </div>
+        </section>`,
+      },
+    ],
+  },
+  // Optimización y Conversión
+  {
+    slug: 'optimizacion-conversion',
+    title: 'Optimización y Conversión',
+    hero: {
+      title: 'Optimización y Conversión',
+      description:
+        'Optimizamos tu sitio web para mejorar el rendimiento, la usabilidad y aumentar las conversiones.',
+      image: '/public/icons/optimization.png',
+      alt: 'Icono de Optimización y Conversión',
+    },
+    mainImage: {
+      url: 'YOUR_CLOUDINARY_URL_FOR_OPTIMIZATION_IMAGE',
+      alt: 'Optimización y Conversión - Gráfico',
+    },
+    benefits: [
+      {
+        title: 'Disponibilidad 24/7',
+        description:
+          '¡Dile adiós a las esperas! Tus clientes tendrán respuestas al instante, incluso si estás de vacaciones en la luna.',
+      },
+      {
+        title: 'Atención Personalizada',
+        description:
+          'Cada cliente es único, ¡y tus chatbots también! Se adaptan a sus necesidades y les dan la atención VIP que se merecen.',
+      },
+      {
+        title: 'Generación de Leads',
+        description:
+          '¡Olvídate de perseguir clientes! Tus chatbots capturan la información clave y te la entregan en bandeja de plata.',
+      },
+      {
+        title: 'Aumento de la Satisfacción',
+        description:
+          'Clientes felices, ¡vida feliz! Los chatbots resuelven sus dudas al instante y les hacen sentir como reyes.',
+      },
+      {
+        title: 'Reducción de Costos',
+        description:
+          '¡Que el dinero no se te escape! Los chatbots automatizan tareas y liberan a tu equipo para que se enfoque en lo que realmente importa.',
+      },
+    ],
+    howItWorks: {
+      title: '¿Cómo Funciona?',
+      subtitle: '¡Magia Digital en Acción!',
+      description:
+        'Cada chatbot que creamos es único, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+      steps: [
+        {
+          title: 'Análisis de Necesidades',
+          description:
+            'Entendemos tu negocio y a tus clientes para diseñar un chatbot a medida.',
+        },
+        {
+          title: 'Diseño Personalizado',
+          description:
+            'Creamos un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+        },
+      ],
+    },
+    features: [
+      {
+        title: 'Auditoría Web',
+        description:
+          'Análisis exhaustivo de tu sitio para detectar oportunidades de mejora.',
+      },
+      {
+        title: 'Optimización de Conversiones',
+        description:
+          'Mejoras en el diseño, copy y experiencia de usuario para aumentar ventas.',
+      },
+      {
+        title: 'Test A/B',
+        description:
+          'Experimentos controlados para validar cambios y maximizar resultados.',
+      },
+      {
+        title: 'Soporte y Seguimiento',
+        description:
+          'Acompañamiento continuo para mantener y mejorar tus conversiones.',
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Qué es la optimización de conversión?',
+        answer:
+          'Es el proceso de mejorar tu sitio web para que más visitantes realicen una acción deseada, como comprar o registrarse.',
+      },
+      {
+        question: '¿Cómo miden los resultados?',
+        answer:
+          'Utilizamos herramientas de analítica y test A/B para medir el impacto de cada mejora.',
+      },
+    ],
+    cta: {
+      text: 'Solicita una auditoría gratuita de conversión',
+      link: '/contacto',
+    },
+    extraBlocks: [
+      {
+        type: 'intro',
+        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
+          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div class="lg:pt-4 lg:pr-8">
+                <div class="lg:max-w-lg">
+                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué la Optimización y Conversión es Tan Genial?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">Optimizamos tu sitio web para mejorar el rendimiento, la usabilidad y aumentar las conversiones.</p>
+                </div>
+              </div>
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/optimization_zjzj1j.png" alt="Optimización y Conversión" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+            </div>
+          </div>
+        </section>`,
+      },
+    ],
+  },
+  // Automatización Inteligente
+  {
+    slug: 'automatizacion-inteligente',
+    title: 'Automatización Inteligente',
+    hero: {
+      title: 'La Revolución que tu Negocio Necesita',
+      description:
+        'Imagina un mundo donde las tareas repetitivas desaparecen, los errores son cosa del pasado y tu equipo se enfoca en lo que realmente importa: innovar y crecer.',
+      image: '/public/icons/automation.png',
+      alt: 'Icono de Automatización Inteligente',
+    },
+    mainImage: {
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1740168099/automatizacion-inteligente_plg82y.png',
+      alt: 'Automatización Inteligente - Flujo de Trabajo',
+    },
+    benefits: [
+      {
+        title: 'Ahorra Tiempo y Recursos',
+        description:
+          'Automatiza tareas repetitivas y libera a tu equipo para que se enfoque en estrategias de alto impacto.',
+      },
+      {
+        title: 'Reduce Errores Humanos',
+        description:
+          'Con procesos precisos y sistemas inteligentes, los errores se convierten en cosa del pasado.',
+      },
+      {
+        title: 'Toma Decisiones más Rápidas',
+        description:
+          'Accede a datos en tiempo real y toma decisiones informadas al instante.',
+      },
+      {
+        title: 'Mejora la Experiencia del Cliente',
+        description:
+          'Ofrece respuestas rápidas, servicios personalizados y una atención impecable.',
+      },
+    ],
+    howItWorks: {
+      title: '¿Cómo Funciona la Automatización Inteligente?',
+      subtitle: '',
+      description:
+        'En IA Punto, la automatización inteligente es lo que hacemos.',
+      steps: [
+        {
+          title: 'Diagnóstico y Planificación',
+          description:
+            'Analizamos tus procesos actuales para identificar áreas de mejora y oportunidades de automatización.',
+        },
+        {
+          title: 'Diseño de Flujos de Trabajo',
+          description:
+            'Creamos flujos inteligentes que se adaptan a tus necesidades y objetivos.',
+        },
+        {
+          title: 'Implementación de IA',
+          description:
+            'Integramos tecnologías avanzadas de Inteligencia Artificial (IA) para automatizar tareas.',
+        },
+        {
+          title: 'Monitoreo y Optimización',
+          description:
+            'Aseguramos que todo funcione a la perfección y ajustamos los sistemas según sea necesario.',
+        },
+      ],
+    },
+    features: [
+      {
+        title: 'Procesos Administrativos',
+        description:
+          'Automatiza tareas como facturación, gestión de inventarios y reportes.',
+      },
+      {
+        title: 'Atención al Cliente',
+        description:
+          'Responde consultas frecuentes, gestiona tickets y mejora la experiencia del usuario.',
+      },
+      {
+        title: 'Integración de Sistemas',
+        description:
+          'Conecta tus plataformas y herramientas para un flujo de trabajo sin fricciones.',
+      },
+      {
+        title: 'Alertas y Monitoreo',
+        description:
+          'Recibe notificaciones automáticas y monitorea procesos en tiempo real.',
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Qué tipo de tareas se pueden automatizar?',
+        answer:
+          'Casi cualquier tarea repetitiva: desde envío de emails y gestión de inventarios hasta análisis de datos y atención al cliente.',
+      },
+      {
+        question: '¿Es complicado implementar la automatización?',
+        answer:
+          '¡Para nada! En IA Punto, nos encargamos de todo. Desde el diagnóstico hasta la implementación y el soporte continuo.',
+      },
+      {
+        question: '¿Qué herramientas de IA utilizan?',
+        answer:
+          'Usamos herramientas de vanguardia como Zapier, Make, Microsoft Power Automate y soluciones personalizadas desarrolladas por nuestro equipo.',
+      },
+      {
+        question: '¿Cuánto tiempo se tarda en ver resultados?',
+        answer:
+          'Depende del proyecto, pero la mayoría de nuestros clientes ven mejoras significativas en cuestión de semanas.',
+      },
+      {
+        question: '¿Es costoso implementar la automatización?',
+        answer:
+          'Es una inversión que se paga sola. El ahorro de tiempo y recursos, junto con el aumento de eficiencia, generan un retorno rápido y tangible.',
+      },
+    ],
+    cta: {
+      text: 'Solicita una consultoría gratuita de automatización',
+      link: '/contacto',
+    },
+    extraBlocks: [
+      {
+        type: 'intro',
+        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
+          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div class="lg:pt-4 lg:pr-8">
+                <div class="lg:max-w-lg">
+                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué la Automatización Inteligente es Tan Genial?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">La Revolución que tu Negocio Necesita</p>
+                </div>
+              </div>
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1740168099/automatizacion-inteligente_plg82y.png" alt="Automatización Inteligente" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+            </div>
+          </div>
+        </section>`,
+      },
+    ],
+  },
+  // Diseño y Desarrollo Web
+  {
+    slug: 'diseno-desarrollo-web',
+    title: 'Diseño y Desarrollo Web',
+    hero: {
+      title: 'Tu Presencia Digital Hecha Realidad',
+      description:
+        'Convierte visitantes en clientes con un sitio web profesional, funcional y optimizado para el éxito.',
+      image: '/public/icons/web-design.png',
+      alt: 'Icono de Diseño y Desarrollo Web',
+    },
+    mainImage: {
+      url: 'YOUR_CLOUDINARY_URL_FOR_WEB_IMAGE',
+      alt: 'Product screenshot',
+    },
+    benefits: [
+      {
+        title: 'Adaptabilidad',
+        description: 'Diseño responsive (adaptable a móviles y tablets).',
+      },
+      {
+        title: 'Integración',
+        description:
+          'Integración con herramientas como CRM, sistemas de reservas y más.',
+      },
+      {
+        title: 'Fácil de encontrar',
+        description:
+          'Optimización SEO para mejorar tu visibilidad en buscadores.',
+      },
+      {
+        title: 'Páginas que venden',
+        description:
+          'Tiendas online con gestión avanzada de inventario y programas de fidelización.',
+      },
+    ],
+    howItWorks: {
+      title: '¿Cómo Funciona?',
+      subtitle: 'Nuestro Proceso de Diseño y Desarrollo',
+      description:
+        'Un enfoque claro y colaborativo para crear tu sitio web ideal.',
+      steps: [
+        {
+          title: 'Análisis inicial',
+          description:
+            'Comprendemos tus objetivos, público objetivo y requisitos técnicos.',
+        },
+        {
+          title: 'Diseño UX/UI',
+          description:
+            'Creamos prototipos y maquetas que reflejan la identidad de tu marca.',
+        },
+        {
+          title: 'Desarrollo técnico',
+          description:
+            'Implementamos las funcionalidades necesarias y optimizamos el rendimiento.',
+        },
+        {
+          title: 'Pruebas y ajustes',
+          description:
+            'Probamos exhaustivamente el sitio antes del lanzamiento para asegurarnos de que todo funcione perfectamente.',
+        },
+      ],
+    },
+    features: [
+      {
+        title: 'Sitios Corporativos',
+        description:
+          'Webs institucionales, portafolios y páginas de presentación.',
+      },
+      {
+        title: 'E-commerce',
+        description:
+          'Tiendas online con pasarelas de pago y gestión de inventario.',
+      },
+      {
+        title: 'Integraciones',
+        description:
+          'Conexión con CRMs, sistemas de reservas, email marketing y más.',
+      },
+      {
+        title: 'Soporte y Mantenimiento',
+        description:
+          'Planes de soporte para mantener tu web actualizada y segura.',
+      },
+    ],
+    faqs: [
+      {
+        question: '¿Cuánto tiempo toma desarrollar un sitio web?',
+        answer:
+          'Depende del alcance del proyecto, pero generalmente los proyectos básicos tardan entre 2 y 4 semanas, mientras que los más complejos pueden tomar hasta 8 semanas.',
+      },
+      {
+        question: '¿Ofrecen mantenimiento después del lanzamiento?',
+        answer:
+          'Sí, ofrecemos planes de soporte y mantenimiento para que tu web permanezca actualizada y segura.',
+      },
+    ],
+    cta: {
+      text: 'Solicita una consultoría gratuita para tu web',
+      link: '/contacto',
+    },
+    extraBlocks: [
+      {
+        type: 'intro',
+        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
+          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div class="lg:pt-4 lg:pr-8">
+                <div class="lg:max-w-lg">
+                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Diseño y Desarrollo Web es Tan Genial?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">Convierte visitantes en clientes con un sitio web profesional, funcional y optimizado para el éxito.</p>
+                </div>
+              </div>
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/web-design_zjzj1j.png" alt="Diseño y Desarrollo Web" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+            </div>
+          </div>
+        </section>`,
+      },
+    ],
+  },
+];
+
+export default services;

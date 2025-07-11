@@ -1,27 +1,76 @@
 ---
 import DefaultLayout from '../../layouts/DefaultLayout.astro';
 import ServiceHero from '../../components/sections/services/ServiceHero.astro';
-import { servicesData } from '../../lib/constants/servicesData';
+import services from '../../content/services/index';
 import type { ServiceData } from '../../lib/constants/servicesData';
 import ServiceBenefits from '../../components/sections/services/ServiceBenefits.astro';
 import ServiceHowItWorks from '../../components/sections/services/ServiceHowItWorks.astro';
 import ServiceFeatures from '../../components/sections/services/ServiceFeatures.astro';
 import ServiceFAQ from '../../components/sections/services/ServiceFAQ.astro';
-import ServiceCTA from '../../components/sections/services/ServiceCTA.astro';
+import { Icon } from 'astro-icon/components';
 
 const { slug } = Astro.params;
-const service: ServiceData | undefined = servicesData.find(s => s.slug === slug);
+const service: ServiceData | undefined = services.find(s => s.slug === slug);
 
 if (!service) {
   throw new Error(`Servicio no encontrado: ${slug}`);
 }
 ---
 
-<DefaultLayout pageTitle={service.title}>
+<DefaultLayout
+  pageTitle={service.title}
+  ctaTitle={service.cta?.text || 'Impulsa tu Negocio con IA'}
+  ctaDescription={service.hero?.description || 'Descubre cómo la inteligencia artificial puede transformar tu empresa.'}
+  ctaButtonText={service.cta?.text || 'Agenda una Consulta Gratuita'}
+  ctaButtonHref={service.cta?.link || '/contacto'}
+>
   <ServiceHero {...service.hero} />
-  <ServiceBenefits benefits={service.benefits} />
+  {service.extraBlocks && service.extraBlocks.length > 0 ? (
+    <section class="overflow-hidden bg-white py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+        <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+          <div class="lg:pt-4 lg:pr-8">
+            <div class="lg:max-w-lg">
+              <!-- Título y párrafo del bloque visual -->
+              <h2 class="text-base/7 font-semibold text-[#E51F52] mb-2">{service.extraBlocks[0].content.match(/<h2[^>]*>(.*?)<\/h2>/)?.[1]}</h2>
+              <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">
+                {service.extraBlocks[0].content.match(/<p class=\"mt-2[^>]*>(.*?)<\/p>/)?.[1]}
+              </p>
+              <p class="mt-6 text-lg/8 text-gray-600">
+                {service.extraBlocks[0].content.match(/<p class=\"mt-6[^>]*>(.*?)<\/p>/)?.[1]}
+              </p>
+              <!-- Lista de beneficios estructurada -->
+              <dl class="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
+                {service.benefits.map((b, i) => (
+                  <div class="relative pl-9 flex items-start gap-2">
+                    <span class="absolute top-1 left-1">
+                      <Icon name="material-symbols:check-circle-rounded" class="w-5 h-5 text-[#E51F52]" />
+                    </span>
+                    <p class="inline font-semibold text-gray-900">
+                      {b.title}: <span class="font-normal text-gray-600">{b.description}</span>
+                    </p>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+          {/* Imagen del bloque visual */}
+          <div>
+            <img src={service.hero.image} alt={service.hero.alt} class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+  ) : (
+    <ServiceBenefits benefits={service.benefits} />
+  )}
   <ServiceHowItWorks {...service.howItWorks} />
   {service.features.length > 0 && <ServiceFeatures features={service.features} />}
-  {service.faqs.length > 0 && <ServiceFAQ faqs={service.faqs} />}
-  <ServiceCTA {...service.cta} />
+  {service.faqs.length > 0 && (
+    <ServiceFAQ
+      faqs={service.faqs}
+      subtitle={service.faqSubtitle}
+      description={service.faqDescription}
+    />
+  )}
 </DefaultLayout> 

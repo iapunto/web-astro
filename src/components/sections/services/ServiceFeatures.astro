@@ -8,17 +8,25 @@ export interface Props {
 }
 const { features } = Astro.props;
 ---
-<section class="w-full bg-gray-100 py-12 md:py-20">
-  <div class="container mx-auto px-4">
-    <h2 class="text-2xl md:text-3xl font-bold text-primary-600 mb-8 text-center">Características Destacadas</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {features.map((f, i) => (
-        <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center" key={i}>
-          {f.icon && <span class="mb-4">{f.icon}</span>}
-          <h3 class="text-lg font-semibold text-gray-900 mb-2">{f.title}</h3>
-          <p class="text-gray-600">{f.description}</p>
+<section class="overflow-hidden bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+    <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+      <div class="lg:pt-4 lg:pr-8">
+        <div class="lg:max-w-lg">
+          <h2 class="text-base/7 font-semibold text-[#E51F52] mb-2">Características Destacadas</h2>
+          <dl class="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
+            {features.map((f, i) => (
+              <div class="relative pl-9">
+                <dt class="inline font-semibold text-gray-900">
+                  {f.icon && <span class="absolute top-1 left-1 size-5 text-[#E51F52]">{f.icon}</span>}
+                  {f.title}:
+                </dt>
+                <dd class="inline"> {f.description}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-      ))}
+      </div>
     </div>
   </div>
 </section> 

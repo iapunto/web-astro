@@ -8,7 +8,7 @@ import Footer from '../components/layout/Footer.astro';
 import BackToTop from '../components/layout/BackToTop.astro';
 import Breadcrumb from '../components/layout/Header/Breadcrumb.astro';
 
-const { pageTitle, description, image, keywords, robots } = Astro.props;
+const { pageTitle, description, image, keywords, robots, ctaTitle, ctaDescription, ctaButtonText, ctaButtonHref } = Astro.props;
 ---
 
 <html lang="es">
@@ -26,7 +26,7 @@ const { pageTitle, description, image, keywords, robots } = Astro.props;
     <Navbar />
     <Breadcrumb pageTitle={pageTitle} />
     <slot />
-    <Footer />
+    <Footer ctaTitle={ctaTitle} ctaDescription={ctaDescription} ctaButtonText={ctaButtonText} ctaButtonHref={ctaButtonHref} />
     <BackToTop />
     <script
       is:inline

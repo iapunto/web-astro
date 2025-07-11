@@ -2,6 +2,13 @@
 // import ButtonPrimary from "./common/ButtonPrimary.astro";
 import Logo from './Logo.astro';
 import Button from '../common/Button.astro';
+
+const {
+  ctaTitle = 'Impulsa tu Negocio con IA',
+  ctaDescription = 'Descubre cómo la inteligencia artificial puede transformar tu empresa.',
+  ctaButtonText = 'Agenda una Consulta Gratuita',
+  ctaButtonHref = '/',
+} = Astro.props;
 ---
 
 <section class="bg-white dark:bg-gray-900">
@@ -10,12 +17,12 @@ import Button from '../common/Button.astro';
       <h2
         class="mb-2 text-4xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-white"
       >
-        Impulsa tu Negocio con IA
+        {ctaTitle}
       </h2>
       <p class="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
-        Descubre cómo la inteligencia artificial puede transformar tu empresa.
+        {ctaDescription}
       </p>
-      <Button text="Agenda una Consulta Gratuita" href="/" variant="primary" />
+      <Button text={ctaButtonText} href={ctaButtonHref} variant="primary" />
     </div>
   </div>
 </section>
