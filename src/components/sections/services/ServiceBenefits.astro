@@ -1,0 +1,24 @@
+---
+export interface Props {
+  benefits: Array<{
+    icon?: string;
+    title: string;
+    description: string;
+  }>;
+}
+const { benefits } = Astro.props;
+---
+<section class="w-full bg-gray-50 py-12 md:py-20">
+  <div class="container mx-auto px-4">
+    <h2 class="text-2xl md:text-3xl font-bold text-primary-600 mb-8 text-center">Beneficios Clave</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {benefits.map((b, i) => (
+        <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center" key={i}>
+          {b.icon && <span class="mb-4">{b.icon}</span>}
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">{b.title}</h3>
+          <p class="text-gray-600">{b.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section> 

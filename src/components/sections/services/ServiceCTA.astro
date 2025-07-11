@@ -1,0 +1,12 @@
+---
+export interface Props {
+  text: string;
+  link: string;
+}
+const { text, link } = Astro.props;
+---
+<section class="w-full bg-primary-600 py-12 md:py-16 flex justify-center items-center">
+  <a href={link} class="px-8 py-4 bg-white text-primary-600 font-bold rounded-lg shadow hover:bg-primary-600 hover:text-white transition-colors text-xl">
+    {text}
+  </a>
+</section> 

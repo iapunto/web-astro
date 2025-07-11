@@ -1,0 +1,27 @@
+---
+import DefaultLayout from '../../layouts/DefaultLayout.astro';
+import ServiceHero from '../../components/sections/services/ServiceHero.astro';
+import { servicesData } from '../../lib/constants/servicesData';
+import type { ServiceData } from '../../lib/constants/servicesData';
+import ServiceBenefits from '../../components/sections/services/ServiceBenefits.astro';
+import ServiceHowItWorks from '../../components/sections/services/ServiceHowItWorks.astro';
+import ServiceFeatures from '../../components/sections/services/ServiceFeatures.astro';
+import ServiceFAQ from '../../components/sections/services/ServiceFAQ.astro';
+import ServiceCTA from '../../components/sections/services/ServiceCTA.astro';
+
+const { slug } = Astro.params;
+const service: ServiceData | undefined = servicesData.find(s => s.slug === slug);
+
+if (!service) {
+  throw new Error(`Servicio no encontrado: ${slug}`);
+}
+---
+
+<DefaultLayout pageTitle={service.title}>
+  <ServiceHero {...service.hero} />
+  <ServiceBenefits benefits={service.benefits} />
+  <ServiceHowItWorks {...service.howItWorks} />
+  {service.features.length > 0 && <ServiceFeatures features={service.features} />}
+  {service.faqs.length > 0 && <ServiceFAQ faqs={service.faqs} />}
+  <ServiceCTA {...service.cta} />
+</DefaultLayout> 
