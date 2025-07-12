@@ -16,7 +16,7 @@ const { title, description, icon, alt, link, ctaText } = Astro.props;
 ---
 
 <article
-  class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center h-full"
+  class="bg-white rounded-lg border border-gray-200 p-8 flex flex-col items-center text-center h-full"
 >
   <img src={icon.src} alt={alt} class="w-20 h-20 mb-4" loading="lazy" width="80" height="80" />
   <h3 class="text-xl font-bold mb-2 text-gray-900">{title}</h3>

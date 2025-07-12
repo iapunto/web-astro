@@ -46,3 +46,31 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+# Despliegue en Coolify
+
+## Requisitos
+
+- Tener una instancia de Coolify configurada en tu servidor propio.
+- Tener Docker instalado (Coolify lo usa internamente).
+
+## Variables de entorno
+
+- SITE_URL: la URL pública de tu sitio (ejemplo: <https://tusitio.com>)
+
+## Pasos básicos
+
+1. Elimina cualquier referencia a Vercel en el proyecto (ya realizado).
+2. Si tu proyecto no tiene un Dockerfile, Coolify puede detectar automáticamente proyectos Astro y usar el comando de build estándar.
+3. Sube el repositorio a tu instancia de Coolify y selecciona el tipo de proyecto Astro.
+4. Configura la variable de entorno SITE_URL en el panel de Coolify.
+5. Despliega la aplicación.
+
+## Notas
+
+- Si necesitas personalizar el build, puedes agregar un Dockerfile propio.
+- Para builds estándar, Coolify ejecuta `npm install` y `npm run build` automáticamente.
+
+---
+
+# web-iapunto

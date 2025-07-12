@@ -1,0 +1,9 @@
+[
+  {
+    "Library ID": "coolify-docs",
+    "Context7 URL": "https://context7.dev/coollabsio/coolify-docs",
+    "Version": "v4.x (documentación)",
+    "Usage Notes": "Coolify permite desplegar proyectos Astro fácilmente. Solo necesitas configurar la variable de entorno SITE_URL y Coolify detecta el build estándar. Si se requiere personalización, se puede agregar un Dockerfile. No es necesario ningún archivo especial para Astro.",
+    "Last Updated": "2025-07-12T12:47:31-0500"
+  }
+]

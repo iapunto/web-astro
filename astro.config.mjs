@@ -9,9 +9,7 @@ import astroIcon from 'astro-icon';
 // https://astro.build/config
 export default defineConfig({
   // Dominio principal (adaptado para entornos de producción/desarrollo)
-  site: process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000',
+  site: process.env.SITE_URL || 'http://localhost:3000',
 
   integrations: [
     tailwind(),
@@ -65,6 +63,4 @@ export default defineConfig({
       },
     },
   },
-
-  
 });

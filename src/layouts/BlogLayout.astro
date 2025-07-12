@@ -7,7 +7,6 @@ import BackToTop from '@components/layout/BackToTop.astro';
 import Breadcrumb from '@components/layout/Header/Breadcrumb.astro';
 import FormattedDate from '@components/common/FormattedDate.astro';
 import { getCollection } from 'astro:content';
-import Analytics from '@vercel/analytics/astro';
 import { Image } from 'astro:assets';
 import SchemaMarkup from '@components/common/SchemaMarkup.astro';
 
@@ -66,12 +65,9 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
           class="blog-content mx-auto w-full max-w-2xl prose prose-lg dark:prose-invert"
         >
           <img
-            src={image.src || image}
-            alt={pageTitle || ''}
-            loading="lazy"
-            class="mr-6 mb-4 rounded-[10px]"
-            width="800"
-            height="450"
+            src={post.data.cover}
+            alt={post.data.coverAlt}
+            class="w-full h-auto rounded-lg mb-8"
           />
           <address class="author flex items-center mb-6 not-italic">
             <div
@@ -156,6 +152,5 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
     }
     <Footer />
     <BackToTop />
-    <Analytics />
   </body>
 </html>
