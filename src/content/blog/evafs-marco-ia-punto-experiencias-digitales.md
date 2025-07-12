@@ -105,7 +105,7 @@ En **IA Punto**, creemos que la creación de experiencias digitales exitosas va 
 
 ## Referencias
 
-1. <a href="https://www.salesforce.com/mx/blog/transformacion-digital-en-la-experiencia-del-cliente/" target="_blank" rel="noopener noreferrer">Transformación digital en la experiencia del cliente</a>
+1. [Transformación digital en la experiencia del cliente](https://www.salesforce.com/mx/blog/transformacion-digital-en-la-experiencia-del-cliente)
 2. [McKinsey: El poder del análisis de datos en el marketing](https://www.mckinsey.com/business-functions/marketing-and-sales/our-insights/the-power-of-data-in-marketing)
 3. [Forbes: Cómo la IA está transformando el comercio electrónico](https://www.forbes.com/sites/forbestechcouncil/2023/03/15/how-ai-is-transforming-e-commerce/)
 4. [Bain & Company: Programas de fidelización basados en IA](https://www.bain.com/insights/how-ai-is-revolutionizing-loyalty-programs/)

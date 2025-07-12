@@ -72,9 +72,9 @@ Evalúa qué procesos en tu empresa podrían beneficiarse de la automatización 
 
 Existen numerosas plataformas de IA diseñadas específicamente para PYMES. Algunas recomendaciones incluyen:
 
-1.  **Chatfuel** para chatbots.
-2.  **HubSpot CRM** para gestión de relaciones con clientes.
-3.  **Canva Magic Design** para diseño gráfico automatizado.
+1. **Chatfuel** para chatbots.
+2. **HubSpot CRM** para gestión de relaciones con clientes.
+3. **Canva Magic Design** para diseño gráfico automatizado.
 
 - **Capacita a tu Equipo:**
 
@@ -86,7 +86,7 @@ Utiliza métricas claras para evaluar el impacto de la IA en tu negocio. ¿Has r
 
 ---
 
-## 4. Casos de Éxito:
+## 4. Casos de Éxito
 
 - **Restaurante Local:**
 
