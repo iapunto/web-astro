@@ -41,7 +41,7 @@ En **IA Punto**, creemos que la creación de experiencias digitales exitosas va 
 - Mejora en las tasas de clics (CTR).
 - Personalización en tiempo real basada en datos.
 
-**Enlace de interés**: <a href="https://www.salesforce.com/mx/blog/transformacion-digital-en-la-experiencia-del-cliente/" target="_blank" rel="noopener noreferrer">Transformación digital en la experiencia del cliente</a>
+**Enlace de interés**: [Transformación digital en la experiencia del cliente](https://www.salesforce.com/mx/blog/transformacion-digital-en-la-experiencia-del-cliente)
 
 ### V – Valoración (Comprender a Fondo las Expectativas y Necesidades)
 
