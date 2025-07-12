@@ -4,8 +4,9 @@ export interface Props {
   href?: string;
   id?: string;
   variant?: "primary" | "secondary";
+  type?: "button" | "submit" | "reset";
 }
-const { text, href, id, variant = "primary" } = Astro.props;
+const { text, href, id, variant = "primary", type = "button" } = Astro.props;
 
 const variants = {
   primary: "bg-primary-600 text-white border border-primary-600 hover:bg-white hover:text-primary-600 hover:border-primary-600 transition-colors duration-200",

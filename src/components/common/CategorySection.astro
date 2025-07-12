@@ -12,8 +12,9 @@ export interface Props {
   ctaText?: string;
   bg?: string;
   reverse?: boolean;
+  key?: number;
 }
-const { title, subtitle, description, image, alt, link, ctaText, bg, reverse } =
+const { title, subtitle, description, image, alt, link, ctaText, bg, reverse, key } =
   Astro.props;
 ---
 
