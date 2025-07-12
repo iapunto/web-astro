@@ -1,10 +1,10 @@
 # Etapa 1: Build
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --production=false
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm ci --production=false
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 # Etapa 2: Producción
 FROM node:20-alpine AS runner
