@@ -31,6 +31,9 @@ jobs:
       - name: Listar archivos ocultos
         run: ls -la
 
+      - name: Mostrar pnpm-lock.yaml
+        run: cat pnpm-lock.yaml
+
       - name: Instalar dependencias
         run: pnpm install --frozen-lockfile
 
