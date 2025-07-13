@@ -24,6 +24,12 @@ jobs:
         with:
           version: 8
 
+      - name: Listar archivos en el workspace
+        run: ls -l
+
+      - name: Listar archivos ocultos
+        run: ls -la
+
       - name: Instalar dependencias
         run: pnpm install --frozen-lockfile
 
