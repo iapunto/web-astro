@@ -72,30 +72,46 @@ export const services: ServiceData[] = [
           title: 'Entrenamiento Continuo',
           description:
             '¡Tu chatbot nunca deja de aprender! Lo entrenamos con datos reales para que cada vez sea más inteligente y eficiente.',
-          icon: `<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33"></path></svg>`,
+          icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z"/></svg>`,
         },
       ],
     },
     features: [
       {
+        icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z"/></svg>`,
         title: 'E-Commerce',
         description:
           'Responde preguntas sobre productos, guía a los clientes en el proceso de compra, ofrece descuentos personalizados.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
         title: 'Atención al Cliente',
         description:
           'Resuelve dudas frecuentes, gestiona quejas, programa citas, ofrece soporte técnico.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
         title: 'Marketing',
         description:
           'Captura leads, realiza encuestas, promociona productos, segmenta audiencias.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>`,
         title: 'Recursos Humanos',
         description:
           'Responde preguntas sobre la empresa, gestiona solicitudes de empleo, programa entrevistas.',
+      },
+      {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
+        title: 'Integración Multicanal',
+        description:
+          'Conecta tu chatbot con WhatsApp, Facebook Messenger, Instagram y más.',
+      },
+      {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
+        title: 'Análisis y Reportes',
+        description:
+          'Obtén métricas detalladas sobre las conversaciones y el rendimiento de tu chatbot.',
       },
     ],
     faqs: [
@@ -247,21 +263,25 @@ export const services: ServiceData[] = [
     },
     features: [
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
         title: 'E-Commerce',
         description:
           'Aumenta tus ventas online con anuncios dirigidos a compradores potenciales y remarketing para recuperar carritos abandonados.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>`,
         title: 'Emprendedores Ambiciosos',
         description:
           'Si estás comenzando y necesitas visibilidad rápida, nuestras campañas te ayudarán a destacar en un mercado competitivo.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
         title: 'Pequeñas y Medianas Empresas',
         description:
           'Optimiza tu presupuesto publicitario y genera leads calificados sin gastar de más.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
         title: 'Grandes Corporaciones',
         description:
           'Escala tus campañas a nivel nacional o internacional con estrategias personalizadas y tecnologías avanzadas.',
@@ -398,21 +418,25 @@ export const services: ServiceData[] = [
     },
     features: [
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
         title: 'SEO On-Page y Off-Page',
         description:
           'Optimizamos tanto el contenido interno como la autoridad externa de tu web.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
         title: 'Auditoría SEO Completa',
         description:
           'Analizamos todos los aspectos técnicos y de contenido para detectar oportunidades.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
         title: 'Monitorización y Reporting',
         description:
           'Seguimiento constante de posiciones, tráfico y conversiones.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
         title: 'Estrategias Personalizadas',
         description:
           'Cada negocio es único, por eso diseñamos estrategias a medida.',
@@ -521,21 +545,25 @@ export const services: ServiceData[] = [
     },
     features: [
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
         title: 'Blog Corporativo',
         description:
           'Publicaciones optimizadas para SEO y alineadas a tu estrategia de marca.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
         title: 'Redacción para Landing Pages',
         description:
           'Textos persuasivos que convierten visitantes en clientes.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
         title: 'Guiones para Video y Podcast',
         description:
           'Contenido multimedia para potenciar tu presencia digital.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
         title: 'Difusión en Redes Sociales',
         description: 'Adaptación de contenidos para cada canal y audiencia.',
       },
@@ -648,21 +676,25 @@ export const services: ServiceData[] = [
     },
     features: [
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
         title: 'Apps Híbridas y Nativas',
         description:
           'Desarrollamos tanto apps híbridas como nativas según las necesidades de tu proyecto.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
         title: 'Integración con Sistemas Externos',
         description:
           'Conectamos tu app con CRMs, sistemas de reservas, plataformas de email marketing y más.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
         title: 'Soporte Multiplataforma',
         description:
           'Aseguramos compatibilidad con iOS y Android para llegar a la mayor audiencia posible.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
         title: 'Mantenimiento y Actualizaciones',
         description:
           'Ofrecemos planes de mantenimiento para que tu app permanezca actualizada y segura.',
@@ -776,20 +808,24 @@ export const services: ServiceData[] = [
     },
     features: [
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
         title: 'Gestión Integral',
         description:
           'Control total de ventas, compras, inventario, contabilidad y más.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
         title: 'Personalización',
         description:
           'Adaptamos Odoo a los procesos y necesidades específicas de tu empresa.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
         title: 'Automatización de Procesos',
         description: 'Reduce tareas manuales y errores con flujos automáticos.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
         title: 'Soporte y Actualizaciones',
         description: 'Acompañamiento y mantenimiento continuo para tu ERP.',
       },
@@ -892,24 +928,40 @@ export const services: ServiceData[] = [
     },
     features: [
       {
-        title: 'Auditoría Web',
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
+        title: 'E-Commerce',
         description:
-          'Análisis exhaustivo de tu sitio para detectar oportunidades de mejora.',
+          'Responde preguntas sobre productos, guía a los clientes en el proceso de compra, ofrece descuentos personalizados.',
       },
       {
-        title: 'Optimización de Conversiones',
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
+        title: 'Atención al Cliente',
         description:
-          'Mejoras en el diseño, copy y experiencia de usuario para aumentar ventas.',
+          'Resuelve dudas frecuentes, gestiona quejas, programa citas, ofrece soporte técnico.',
       },
       {
-        title: 'Test A/B',
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
+        title: 'Marketing',
         description:
-          'Experimentos controlados para validar cambios y maximizar resultados.',
+          'Captura leads, realiza encuestas, promociona productos, segmenta audiencias.',
       },
       {
-        title: 'Soporte y Seguimiento',
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>`,
+        title: 'Recursos Humanos',
         description:
-          'Acompañamiento continuo para mantener y mejorar tus conversiones.',
+          'Responde preguntas sobre la empresa, gestiona solicitudes de empleo, programa entrevistas.',
+      },
+      {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
+        title: 'Integración Multicanal',
+        description:
+          'Conecta tu chatbot con WhatsApp, Facebook Messenger, Instagram y más.',
+      },
+      {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
+        title: 'Análisis y Reportes',
+        description:
+          'Obtén métricas detalladas sobre las conversaciones y el rendimiento de tu chatbot.',
       },
     ],
     faqs: [
@@ -1015,21 +1067,25 @@ export const services: ServiceData[] = [
     },
     features: [
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
         title: 'Procesos Administrativos',
         description:
           'Automatiza tareas como facturación, gestión de inventarios y reportes.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
         title: 'Atención al Cliente',
         description:
           'Responde consultas frecuentes, gestiona tickets y mejora la experiencia del usuario.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
         title: 'Integración de Sistemas',
         description:
           'Conecta tus plataformas y herramientas para un flujo de trabajo sin fricciones.',
       },
       {
+        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
         title: 'Alertas y Monitoreo',
         description:
           'Recibe notificaciones automáticas y monitorea procesos en tiempo real.',
@@ -1132,41 +1188,62 @@ export const services: ServiceData[] = [
           title: 'Análisis inicial',
           description:
             'Comprendemos tus objetivos, público objetivo y requisitos técnicos.',
+          icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 15v3c0 .5523.44772 1 1 1h4v-4m-5 0v-4m0 4h5m-5-4V6c0-.55228.44772-1 1-1h16c.5523 0 1 .44772 1 1v1.98935M3 11h5v4m9.4708 4.1718-.8696-1.4388-2.8164-.235-2.573-4.2573 1.4873-2.8362 1.4441 2.3893c.3865.6396 1.2183.8447 1.8579.4582.6396-.3866.8447-1.2184.4582-1.858l-1.444-2.38925h3.1353l2.6101 4.27715-1.0713 2.5847.8695 1.4388"/></svg>`,
         },
         {
           title: 'Diseño UX/UI',
           description:
             'Creamos prototipos y maquetas que reflejan la identidad de tu marca.',
+          icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.988 19.012 5.41-5.41m2.366-6.424 4.058 4.058-2.03 5.41L5.3 20 4 18.701l3.355-9.494 5.41-2.029Zm4.626 4.625L12.197 6.61 14.807 4 20 9.194l-2.61 2.61Z"/></svg>`,
         },
         {
           title: 'Desarrollo técnico',
           description:
             'Implementamos las funcionalidades necesarias y optimizamos el rendimiento.',
+          icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.35709 16V5.78571c0-.43393.34822-.78571.77777-.78571H18.5793c.4296 0 .7778.35178.7778.78571V16M5.35709 16h-1c-.55229 0-1 .4477-1 1v1c0 .5523.44771 1 1 1H20.3571c.5523 0 1-.4477 1-1v-1c0-.5523-.4477-1-1-1h-1M5.35709 16H19.3571M9.35709 8l2.62501 2.5L9.35709 13m4.00001 0h2"/></svg>`,
         },
         {
           title: 'Pruebas y ajustes',
           description:
             'Probamos exhaustivamente el sitio antes del lanzamiento para asegurarnos de que todo funcione perfectamente.',
+          icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 16H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v1M9 12H4m8 8V9h8v11h-8Zm0 0H9m8-4a1 1 0 1 0-2 0 1 1 0 0 0 2 0Z"/></svg>`,
         },
       ],
     },
     features: [
       {
+        icon: `<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z"/></svg>`,
         title: 'Sitios Corporativos',
         description:
           'Webs institucionales, portafolios y páginas de presentación.',
       },
       {
+        icon: `<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 12c.263 0 .524-.06.767-.175a2 2 0 0 0 .65-.491c.186-.21.333-.46.433-.734.1-.274.15-.568.15-.864a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 12 9.736a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 16 9.736c0 .295.052.588.152.861s.248.521.434.73a2 2 0 0 0 .649.488 1.809 1.809 0 0 0 1.53 0 2.03 2.03 0 0 0 .65-.488c.185-.209.332-.457.433-.73.1-.273.152-.566.152-.861 0-.974-1.108-3.85-1.618-5.121A.983.983 0 0 0 17.466 4H6.456a.986.986 0 0 0-.93.645C5.045 5.962 4 8.905 4 9.736c.023.59.241 1.148.611 1.567.37.418.865.667 1.389.697Zm0 0c.328 0 .651-.091.94-.266A2.1 2.1 0 0 0 7.66 11h.681a2.1 2.1 0 0 0 .718.734c.29.175.613.266.942.266.328 0 .651-.091.94-.266.29-.174.537-.427.719-.734h.681a2.1 2.1 0 0 0 .719.734c.289.175.612.266.94.266.329 0 .652-.091.942-.266.29-.174.536-.427.718-.734h.681c.183.307.43.56.719.734.29.174.613.266.941.266a1.819 1.819 0 0 0 1.06-.351M6 12a1.766 1.766 0 0 1-1.163-.476M5 12v7a1 1 0 0 0 1 1h2v-5h3v5h7a1 1 0 0 0 1-1v-7m-5 3v2h2v-2h-2Z"/></svg>
+`,
         title: 'E-commerce',
         description:
           'Tiendas online con pasarelas de pago y gestión de inventario.',
       },
       {
+        icon: `<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 8v8m0-8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V9a3 3 0 0 0-3-3h-3m1.5-2-2 2 2 2"/></svg>`,
         title: 'Integraciones',
         description:
           'Conexión con CRMs, sistemas de reservas, email marketing y más.',
       },
       {
+        icon: `<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m10.051 8.102-3.778.322-1.994 1.994a.94.94 0 0 0 .533 1.6l2.698.316m8.39 1.617-.322 3.78-1.994 1.994a.94.94 0 0 1-1.595-.533l-.4-2.652m8.166-11.174a1.366 1.366 0 0 0-1.12-1.12c-1.616-.279-4.906-.623-6.38.853-1.671 1.672-5.211 8.015-6.31 10.023a.932.932 0 0 0 .162 1.111l.828.835.833.832a.932.932 0 0 0 1.111.163c2.008-1.102 8.35-4.642 10.021-6.312 1.475-1.478 1.133-4.77.855-6.385Zm-2.961 3.722a1.88 1.88 0 1 1-3.76 0 1.88 1.88 0 0 1 3.76 0Z"/></svg>`,
+        title: 'Optimización de Velocidad',
+        description:
+          'Webs rápidas y ligeras para mejorar la experiencia del usuario y el SEO.',
+      },
+      {
+        icon: `<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="1" d="M4.37 7.657c2.063.528 2.396 2.806 3.202 3.87 1.07 1.413 2.075 1.228 3.192 2.644 1.805 2.289 1.312 5.705 1.312 6.705M20 15h-1a4 4 0 0 0-4 4v1M8.587 3.992c0 .822.112 1.886 1.515 2.58 1.402.693 2.918.351 2.918 2.334 0 .276 0 2.008 1.972 2.008 2.026.031 2.026-1.678 2.026-2.008 0-.65.527-.9 1.177-.9H20M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`,
+        title: 'Accesibilidad Web',
+        description:
+          'Sitios diseñados para ser usables por todas las personas, cumpliendo estándares internacionales.',
+      },
+      {
+        icon: `<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M14.079 6.839a3 3 0 0 0-4.255.1M13 20h1.083A3.916 3.916 0 0 0 18 16.083V9A6 6 0 1 0 6 9v7m7 4v-1a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1Zm-7-4v-6H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1Zm12-6h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1v-6Z"/></svg>`,
         title: 'Soporte y Mantenimiento',
         description:
           'Planes de soporte para mantener tu web actualizada y segura.',
@@ -1205,6 +1282,61 @@ export const services: ServiceData[] = [
             </div>
           </div>
         </section>`,
+      },
+    ],
+    pricing: [
+      {
+        title: 'Desarrollo Inicial',
+        type: 'grid',
+        plans: [
+          {
+            name: 'Plan Básico',
+            price: '$180.000',
+            features: [
+              'Hasta 5 páginas',
+              'Diseño responsive',
+              'Soporte básico',
+            ],
+          },
+          {
+            name: 'Plan Intermedio',
+            price: '$280.000',
+            features: [
+              'Hasta 10 páginas',
+              'Integración con formularios',
+              'Soporte estándar',
+            ],
+          },
+          {
+            name: 'Plan Avanzado',
+            price: '$350.000',
+            features: [
+              'Hasta 20 páginas',
+              'Integración con CRM y pasarela de pago',
+              'Soporte prioritario',
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Mantenimiento y Soporte',
+        type: 'table',
+        plans: [
+          {
+            name: 'Soporte Básico',
+            price: '$50.000/mes',
+            features: ['Actualizaciones menores', 'Soporte por email'],
+          },
+          {
+            name: 'Soporte Premium',
+            price: '$120.000/mes',
+            features: [
+              'Actualizaciones ilimitadas',
+              'Soporte prioritario',
+              'Backups automáticos',
+            ],
+          },
+        ],
       },
     ],
   },

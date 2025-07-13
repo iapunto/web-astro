@@ -10,22 +10,17 @@ const { features } = Astro.props;
 ---
 <section class="overflow-hidden bg-white py-24 sm:py-32">
   <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
-    <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-      <div class="lg:pt-4 lg:pr-8">
-        <div class="lg:max-w-lg">
-          <h2 class="text-base/7 font-semibold text-[#E51F52] mb-2">Características Destacadas</h2>
-          <dl class="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
-            {features.map((f, i) => (
-              <div class="relative pl-9">
-                <dt class="inline font-semibold text-gray-900">
-                  {f.icon && <span class="absolute top-1 left-1 size-5 text-[#E51F52]">{f.icon}</span>}
-                  {f.title}:
-                </dt>
-                <dd class="inline"> {f.description}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+    <div class="mx-auto max-w-4xl">
+      <h2 class="text-3xl font-bold text-center mb-4">Características Destacadas</h2>
+      <p class="text-center text-gray-500 text-lg mb-12">Descubre por qué nuestros servicios marcan la diferencia</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {features.slice(0, 6).map((f, i) => (
+          <div class="flex flex-col items-center text-center px-4">
+            {f.icon && <span class="mb-4 text-5xl text-primary-600" set:html={f.icon} />}
+            <h3 class="font-bold text-xl mb-2">{f.title}</h3>
+            <p class="text-gray-600 mb-4">{f.description}</p>
+          </div>
+        ))}
       </div>
     </div>
   </div>

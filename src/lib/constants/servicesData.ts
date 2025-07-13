@@ -46,4 +46,13 @@ export interface ServiceData {
   }>;
   faqSubtitle?: string;
   faqDescription?: string;
+  pricing?: Array<{
+    title: string;
+    type: 'grid' | 'table';
+    plans: Array<{
+      name: string;
+      price: string;
+      features: string[];
+    }>;
+  }>;
 }

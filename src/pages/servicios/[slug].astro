@@ -25,6 +25,58 @@ if (!service) {
   ctaButtonHref={service.cta?.link || '/contacto'}
 >
   <ServiceHero {...service.hero} />
+  {service.pricing && service.pricing.length > 0 && (
+    <section class="overflow-hidden bg-white py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
+        <div class="mx-auto max-w-4xl space-y-16">
+          {service.pricing.map((section, idx) => (
+            <div>
+              <h2 class="text-3xl font-bold text-center mb-4">{section.title}</h2>
+              {section.type === 'grid' ? (
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {section.plans.map((plan, i) => (
+                    <div class="border rounded-lg shadow p-6 flex flex-col items-center bg-gray-50">
+                      <h3 class="text-xl font-bold mb-2 text-primary-600">{plan.name}</h3>
+                      <div class="text-3xl font-extrabold mb-4">{plan.price}</div>
+                      <ul class="mb-6 text-gray-700 text-left list-disc pl-4">
+                        {plan.features.map(f => <li>{f}</li>)}
+                      </ul>
+                      <a href="/contacto" class="mt-auto px-4 py-2 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition">Contratar</a>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div class="overflow-x-auto">
+                  <table class="min-w-full border rounded-lg bg-white shadow">
+                    <thead>
+                      <tr class="bg-primary-50">
+                        <th class="px-4 py-2 text-left">Plan</th>
+                        <th class="px-4 py-2 text-left">Precio</th>
+                        <th class="px-4 py-2 text-left">Características</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {section.plans.map((plan) => (
+                        <tr class="border-t">
+                          <td class="px-4 py-2 font-semibold text-primary-600">{plan.name}</td>
+                          <td class="px-4 py-2">{plan.price}</td>
+                          <td class="px-4 py-2">
+                            <ul class="list-disc pl-4">
+                              {plan.features.map(f => <li>{f}</li>)}
+                            </ul>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
   {service.extraBlocks && service.extraBlocks.length > 0 ? (
     <section class="overflow-hidden bg-white py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
