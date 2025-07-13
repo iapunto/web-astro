@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-//import Button from '../common/Button.astro';
+import Button from '../common/Button.astro';
 
 export interface Props {
   title: string;
@@ -12,9 +12,8 @@ export interface Props {
   ctaText?: string;
   bg?: string;
   reverse?: boolean;
-  key?: number;
 }
-const { title, subtitle, description, image, alt, link, ctaText, bg, reverse, key } =
+const { title, subtitle, description, image, alt, link, ctaText, bg, reverse } =
   Astro.props;
 ---
 
@@ -36,11 +35,11 @@ const { title, subtitle, description, image, alt, link, ctaText, bg, reverse, ke
       <h3 class="text-xl font-light text-gray-600 uppercase tracking-wider mb-2">{subtitle}</h3>
       <h2 class="text-5xl font-bold text-gray-900 leading-tight mb-4">{title}</h2>
       <p class="text-xl text-gray-600 font-light tracking-wider leading-8 pb-12 max-w-lg">{description}</p>
-      <!-- {
+      {
         link && ctaText && (
           <Button text={ctaText} href={link} variant="primary" />
         )
-      } -->
+      }
     </div>
   </div>
 </section>

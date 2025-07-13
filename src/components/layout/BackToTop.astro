@@ -1,8 +1,8 @@
 ---
-// import Button from '../common/Button.astro';
+// Eliminamos el import de Button
 ---
 <>
-  <!-- <Button id="myBtn" variant="primary" text="" client:load>
+  <button id="myBtn" class="inline-block px-6 py-3 font-semibold rounded-lg shadow transition-colors duration-200 text-center bg-primary-600 text-white border border-primary-600 hover:bg-white hover:text-primary-600 hover:border-primary-600 fixed bottom-8 right-8 z-50 hidden" aria-label="Volver arriba">
     <svg
       class="w-6 h-6 text-white dark:text-white"
       aria-hidden="true"
@@ -19,10 +19,11 @@
         stroke-width="2"
         d="m5 15 7-7 7 7"></path>
     </svg>
-  </Button> -->
+  </button>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const mybutton = document.getElementById('myBtn');
+      if (!mybutton) return;
       window.onscroll = function () {
         if (
           document.body.scrollTop > 20 ||
