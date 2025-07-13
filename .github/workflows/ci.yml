@@ -14,16 +14,16 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-
-      - name: Instalar pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
 
       - name: Listar archivos en el workspace
         run: ls -l
