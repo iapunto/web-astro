@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SITE_NAME: 'IA Punto'
 
     steps:
       - name: Checkout código
