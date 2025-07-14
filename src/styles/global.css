@@ -16,7 +16,7 @@ html, body {
   margin: 0;
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
   overflow-y: visible;
 }
 
@@ -256,4 +256,14 @@ input[type='tel'] {
   to {
     transform: translateY(0);
   }
+}
+
+.container {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.swiper {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
