@@ -28,168 +28,156 @@ const {
 
 <footer class="p-4 bg-white sm:p-6 dark:bg-gray-800">
   <div class="mx-auto max-w-screen-xl">
-    <div class="md:flex md:justify-between">
-      <div class="mb-6 md:mb-0">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="flex items-start lg:items-center mb-6 lg:mb-0">
         <a href="https://iapunto.com" class="flex items-center">
           <Logo />
         </a>
       </div>
-      <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3 lg:grid-cols-4">
-        <div>
-          <h2
-            class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
-          >
-            Servicios
-          </h2>
-          <ul class="text-gray-500 dark:text-gray-400">
-            <li class="mb-2">
-              <a
-                href="/servicios/chatbots-inteligentes"
-                class="hover:text-[#E51F52] hover:underline"
-              >
-                Chatbots Inteligentes
-              </a>
-            </li>
-            <li class="mb-2">
-              <a
-                href="/servicios/diseno-desarrollo-web"
-                class="hover:text-[#E51F52] hover:underline"
-              >
-                Diseño y Desarrollo Web
-              </a>
-            </li>
-            <li class="mb-2">
-              <a
-                href="/servicios/publicidad-online-ia"
-                class="hover:text-[#E51F52] hover:underline"
-              >
-                Publicidad Online con IA
-              </a>
-            </li>
-            <li class="mb-2">
-              <a
-                href="/servicios/posicionamiento-seo"
-                class="hover:text-[#E51F52] hover:underline"
-              >
-                Posicionamiento SEO
-              </a>
-            </li>
-            <li class="mb-2">
-              <a
-                href="/servicios/marketing-de-contenidos"
-                class="hover:text-[#E51F52] hover:underline"
-              >
-                Marketing de Contenidos
-              </a>
-            </li>
-            <li class="mb-2">
-              <a
-                href="/servicios/desarrollo-apps-moviles"
-                class="hover:text-[#E51F52] hover:underline"
-              >
-                Desarrollo de Apps Móviles
-              </a>
-            </li>
-            <li class="mb-2">
-              <a
-                href="/servicios/odoo-erp"
-                class="hover:text-[#E51F52] hover:underline"
-              >
-                Odoo ERP
-              </a>
-            </li>
-            <li class="mb-2">
-              <a
-                href="/servicios/optimizacion-conversion"
-                class="hover:text-[#E51F52] hover:underline"
-              >
-                Optimización y Conversión
-              </a>
-            </li>
-            <li>
-              <a
-                href="/servicios/automatizacion-inteligente"
-                class="hover:text-[#E51F52] hover:underline"
-              >
-                Automatización Inteligente
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h2
-            class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
-          >
-            Legal
-          </h2>
-          <ul class="text-gray-600 dark:text-gray-400">
-            <li class="mb-2">
-              <a
-                href="/legal/politica-de-privacidad"
-                class="hover:text-[#E51F52] hover:underline"
-                >Política de Privacidad</a
-              >
-            </li>
-            <li class="mb-2">
-              <a
-                href="/legal/terminos-y-condiciones"
-                class="hover:text-[#E51F52] hover:underline"
-                >T&eacute;rminos &amp; Condiciones</a
-              >
-            </li>
-            <li class="mb-2">
-              <a
-                href="/legal/aviso-legal"
-                class="hover:text-[#E51F52] hover:underline">Aviso Legal</a
-              >
-            </li>
-            <li class="mb-2">
-              <a
-                href="/legal/declaracion-de-accesibilidad"
-                class="hover:text-[#E51F52] hover:underline"
-                >Declaración de Accesibilidad</a
-              >
-            </li>
-            <li class="mb-2">
-              <a
-                href="/legal/politica-anti-spam"
-                class="hover:text-[#E51F52] hover:underline"
-                >Política Anti-Spam</a
-              >
-            </li>
-            <li class="mb-2">
-              <a
-                href="/legal/politica-de-devoluciones-y-reembolsos"
-                class="hover:text-[#E51F52] hover:underline"
-                >Política de Devoluciones y Reembolsos</a
-              >
-            </li>
-            <li class="mb-2">
-              <a
-                href="/legal/politica-de-seguridad"
-                class="hover:text-[#E51F52] hover:underline"
-                >Política de Seguridad</a
-              >
-            </li>
-            <li class="mb-2">
-              <a
-                href="/legal/uso-de-cookies"
-                class="hover:text-[#E51F52] hover:underline">Uso de Cookies</a
-              >
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-            Suscríbete
-          </h2>
-          <form class="flex flex-col gap-2" name="newsletter" method="POST" data-netlify="true">
-            <input type="hidden" name="form-name" value="newsletter" />
-            <input type="email" name="email" required placeholder="Tu email" class="px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#E51F52]" />
-            <button type="submit" class="bg-[#E51F52] text-white rounded px-3 py-2 font-semibold hover:bg-[#c81a4a] transition">Suscribirme</button>
-          </form>
-          <p class="text-xs text-gray-400 mt-2">Recibe novedades y recursos de IA Punto. Sin spam.</p>
-        </div>
+      <div>
+        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">SERVICIOS</h2>
+        <ul class="text-gray-500 dark:text-gray-400">
+          <li class="mb-2">
+            <a
+              href="/servicios/chatbots-inteligentes"
+              class="hover:text-[#E51F52] hover:underline"
+            >
+              Chatbots Inteligentes
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/servicios/diseno-desarrollo-web"
+              class="hover:text-[#E51F52] hover:underline"
+            >
+              Diseño y Desarrollo Web
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/servicios/publicidad-online-ia"
+              class="hover:text-[#E51F52] hover:underline"
+            >
+              Publicidad Online con IA
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/servicios/posicionamiento-seo"
+              class="hover:text-[#E51F52] hover:underline"
+            >
+              Posicionamiento SEO
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/servicios/marketing-de-contenidos"
+              class="hover:text-[#E51F52] hover:underline"
+            >
+              Marketing de Contenidos
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/servicios/desarrollo-apps-moviles"
+              class="hover:text-[#E51F52] hover:underline"
+            >
+              Desarrollo de Apps Móviles
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/servicios/odoo-erp"
+              class="hover:text-[#E51F52] hover:underline"
+            >
+              Odoo ERP
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/servicios/optimizacion-conversion"
+              class="hover:text-[#E51F52] hover:underline"
+            >
+              Optimización y Conversión
+            </a>
+          </li>
+          <li>
+            <a
+              href="/servicios/automatizacion-inteligente"
+              class="hover:text-[#E51F52] hover:underline"
+            >
+              Automatización Inteligente
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">LEGAL</h2>
+        <ul class="text-gray-600 dark:text-gray-400">
+          <li class="mb-2">
+            <a
+              href="/legal/politica-de-privacidad"
+              class="hover:text-[#E51F52] hover:underline"
+              >Política de Privacidad</a
+            >
+          </li>
+          <li class="mb-2">
+            <a
+              href="/legal/terminos-y-condiciones"
+              class="hover:text-[#E51F52] hover:underline"
+              >T&eacute;rminos &amp; Condiciones</a
+            >
+          </li>
+          <li class="mb-2">
+            <a
+              href="/legal/aviso-legal"
+              class="hover:text-[#E51F52] hover:underline">Aviso Legal</a
+            >
+          </li>
+          <li class="mb-2">
+            <a
+              href="/legal/declaracion-de-accesibilidad"
+              class="hover:text-[#E51F52] hover:underline"
+              >Declaración de Accesibilidad</a
+            >
+          </li>
+          <li class="mb-2">
+            <a
+              href="/legal/politica-anti-spam"
+              class="hover:text-[#E51F52] hover:underline"
+              >Política Anti-Spam</a
+            >
+          </li>
+          <li class="mb-2">
+            <a
+              href="/legal/politica-de-devoluciones-y-reembolsos"
+              class="hover:text-[#E51F52] hover:underline"
+              >Política de Devoluciones y Reembolsos</a
+            >
+          </li>
+          <li class="mb-2">
+            <a
+              href="/legal/politica-de-seguridad"
+              class="hover:text-[#E51F52] hover:underline"
+              >Política de Seguridad</a
+            >
+          </li>
+          <li class="mb-2">
+            <a
+              href="/legal/uso-de-cookies"
+              class="hover:text-[#E51F52] hover:underline">Uso de Cookies</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">SUSCRÍBETE</h2>
+        <form class="flex flex-col gap-2" name="newsletter" method="POST" data-netlify="true">
+          <input type="hidden" name="form-name" value="newsletter" />
+          <input type="email" name="email" required placeholder="Tu email" class="px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#E51F52]" />
+          <button type="submit" class="bg-[#E51F52] text-white rounded px-3 py-2 font-semibold hover:bg-[#c81a4a] transition">Suscribirme</button>
+        </form>
+        <p class="text-xs text-gray-400 mt-2">Recibe novedades y recursos de IA Punto. Sin spam.</p>
       </div>
     </div>
   </div>
