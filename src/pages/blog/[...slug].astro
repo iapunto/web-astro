@@ -3,15 +3,18 @@ import BlogLayout from '../../layouts/BlogLayout.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { render } from 'astro:content';
 import { Image } from 'astro:assets';
+import TableOfContents from '../../components/sections/blog/TableOfContents.astro';
+import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
 
 export const prerender = true;
 
 const blogEntries = await getCollection('blog');
+console.log('Slugs detectados:', blogEntries.map(e => e.data.slug));
 
 export async function getStaticPaths() {
   const currentPost = await getCollection('blog');
   return currentPost.map((entry: any) => ({
-    params: { slug: entry.id },
+    params: { slug: entry.data.slug },
     props: {
       post: entry,
       pageTitle: entry.data.title,
@@ -30,7 +33,8 @@ export async function getStaticPaths() {
 
 const { post, pageTitle, description, keywords, image, author, pubDate } =
   Astro.props;
-const { Content } = await render(post);
+console.log('Post actual:', post?.data?.slug);
+const { Content, content } = await render(post);
 
 // Ordena los posts por fecha (el mismo orden que en el índice del blog)
 const sortedPosts = [...blogEntries].sort(
@@ -39,11 +43,14 @@ const sortedPosts = [...blogEntries].sort(
 );
 
 // Encuentra el índice del post actual en el array ordenado
-const currentIndex = sortedPosts.findIndex((entry) => entry.id === post.id);
+const currentIndex = sortedPosts.findIndex((entry) => entry.data.slug === post.data.slug);
 
-// Obtiene los IDs de los posts anterior y siguiente (maneja los casos de límites)
-const prevPostId = sortedPosts[currentIndex - 1]?.id || null;
-const nextPostId = sortedPosts[currentIndex + 1]?.id || null;
+// Obtiene los slugs de los posts anterior y siguiente (maneja los casos de límites)
+const prevPostSlug = sortedPosts[currentIndex - 1]?.data.slug || null;
+const nextPostSlug = sortedPosts[currentIndex + 1]?.data.slug || null;
+
+// Para el sidebar derecho (últimos posts)
+const latestPosts = blogEntries.slice(0, 5);
 ---
 
 <BlogLayout
@@ -55,14 +62,14 @@ const nextPostId = sortedPosts[currentIndex + 1]?.id || null;
   pubDate={pubDate}
   post={post}
 >
-  <Content />
-  {/* Renderiza el contenido del post */}
-
-  <div class="flex justify-between mt-8">
-    {
-      prevPostId && (
+  <TableOfContents html={post.body} slot="toc" />
+  <SidebarFilters latestPosts={latestPosts} slot="sidebar" />
+  <div>
+    <Content />
+    <div class="flex justify-between mt-8">
+      {prevPostSlug && (
         <a
-          href={`/blog/${prevPostId}`}
+          href={`/blog/${prevPostSlug}`}
           class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-1 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         >
           <svg
@@ -81,13 +88,11 @@ const nextPostId = sortedPosts[currentIndex + 1]?.id || null;
           </svg>
           Anterior
         </a>
-      )
-    }
-    <div></div>
-    {
-      nextPostId && (
+      )}
+      <div></div>
+      {nextPostSlug && (
         <a
-          href={`/blog/${nextPostId}`}
+          href={`/blog/${nextPostSlug}`}
           class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         >
           Siguiente
@@ -106,7 +111,7 @@ const nextPostId = sortedPosts[currentIndex + 1]?.id || null;
             />
           </svg>
         </a>
-      )
-    }
+      )}
+    </div>
   </div>
 </BlogLayout>

@@ -3,19 +3,19 @@ import { defineConfig, envField } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
+import mdx from '@astrojs/mdx';
 import node from '@astrojs/node';
 import astroIcon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-  // Dominio principal (adaptado para entornos de producción/desarrollo)
   site: process.env.SITE_URL || 'http://localhost:3000',
-
   integrations: [
     tailwind(),
     react({
       include: ['**/react/*'],
     }),
+    mdx(),
     sitemap(),
     astroIcon({
       publicDir: './public',
@@ -25,12 +25,9 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone',
   }),
-
   image: {
     domains: ['res.cloudinary.com'],
   },
-
-  // Alias de rutas para imports limpios
   vite: {
     resolve: {
       alias: {
@@ -40,13 +37,9 @@ export default defineConfig({
       },
     },
   },
-
-  // Seguridad: Headers CSP para prevención de XSS [[4]]
   security: {
     checkOrigin: true,
   },
-
-  // Variables de entorno públicas (ej: URL de Strapi) [[5]][[6]]
   env: {
     schema: {
       STRAPI_API_URL: envField.string({

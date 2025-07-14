@@ -37,6 +37,7 @@
     "react-phone-number-input": "^3.4.12",
     "react-select": "^5.10.1",
     "remark-gfm": "^4.0.1",
+    "remark-slug": "^8.0.0",
     "remark-toc": "^9.0.0",
     "resend": "^4.1.2",
     "sharp": "^0.33.5",

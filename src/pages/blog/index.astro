@@ -3,19 +3,63 @@ import DefaultLayout from '../../layouts/DefaultLayout.astro';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/common/FormattedDate.astro';
 import { Image } from 'astro:assets';
+import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
 
 const blogEntries = (await getCollection('blog')).sort(
   (a, b) =>
     new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
 );
 
-const postsPerPage = 6; // Cantidad de artículos por página
-const totalPages = Math.ceil(blogEntries.length / postsPerPage);
-const currentPage = Number(Astro.url.searchParams.get('page')) || 1;
+// Extraer categorías y tags únicas
+type Entry = typeof blogEntries[0];
+const categories = Array.from(new Set(blogEntries.map((p: Entry) => p.data.category)));
+const tags = Array.from(
+  new Set(
+    blogEntries.flatMap((p: Entry) => Array.isArray(p.data.tags) ? p.data.tags : (p.data.tags ? [p.data.tags] : []))
+  )
+);
 
+// Estado de filtros (Astro no es reactivo, se usa query params)
+const url = new URL(Astro.request.url);
+const query = url.searchParams.get('q') || '';
+const selectedCategory = url.searchParams.get('category') || '';
+const selectedTags = url.searchParams.getAll('tag');
+
+// Filtrado profesional
+function matches(post: Entry) {
+  const q = query.trim().toLowerCase();
+  const inTitle = post.data.title.toLowerCase().includes(q);
+  const inDesc = post.data.description.toLowerCase().includes(q);
+  const inContent = post.body ? post.body.toLowerCase().includes(q) : false;
+  const matchQuery = !q || inTitle || inDesc || inContent;
+  const matchCategory = !selectedCategory || post.data.category === selectedCategory;
+  const postTags = Array.isArray(post.data.tags) ? post.data.tags : (post.data.tags ? [post.data.tags] : []);
+  const matchTags = selectedTags.length === 0 || selectedTags.every((t) => postTags.includes(t));
+  return matchQuery && matchCategory && matchTags;
+}
+const filteredPosts = blogEntries.filter(matches);
+
+// Paginación sobre filtrados
+const postsPerPage = 6;
+const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+const currentPage = Number(url.searchParams.get('page')) || 1;
 const startIndex = (currentPage - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;
-const currentPosts = blogEntries.slice(startIndex, endIndex);
+const currentPosts = filteredPosts.slice(startIndex, endIndex);
+
+// Handlers para SidebarFilters (redirige con query params)
+function handleFilterChange({ query, category, tags }) {
+  const params = new URLSearchParams();
+  if (query) params.set('q', query);
+  if (category) params.set('category', category);
+  tags.forEach((tag) => params.append('tag', tag));
+  window.location.search = params.toString();
+}
+function handleClear() {
+  window.location.search = '';
+}
+
+const latestPosts = blogEntries.slice(0, 5);
 ---
 
 <DefaultLayout
@@ -46,161 +90,184 @@ const currentPosts = blogEntries.slice(startIndex, endIndex);
           del marketing digital.
         </p>
       </div>
-      <div class="grid gap-8 lg:grid-cols-2">
-        {
-          currentPosts.map((entry) => (
-            <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-              <div class="w-full mb-5">
-                {entry.data.cover && (
-                  <img
-                    src={entry.data.cover.src || entry.data.cover}
-                    alt={entry.data.title}
-                    width="600"
-                    height="400"
-                    class="w-full h-auto object-cover rounded-lg"
-                    loading="lazy"
-                  />
-                )}
-              </div>
-              <div class="flex justify-between items-center mb-5 text-gray-500">
-                <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
-                  <svg
-                    class="mr-1 w-3 h-3"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-                  </svg>
-                  {entry.data.category}
-                </span>
-                <span class="text-sm">
-                  <FormattedDate date={entry.data.pubDate} />
-                </span>
-              </div>
-              <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <a href={`/blog/${entry.data.slug}`}>{entry.data.title}</a>
-              </h2>
-              <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
-                {entry.data.description}
-              </p>
-              <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                  <img
-                    src={entry.data.author.image.src || entry.data.author.image}
-                    alt="avatar"
-                    width="36"
-                    height="36"
-                    class="w-7 h-7 rounded-full"
-                  />
-                  <span class="font-medium dark:text-white">
-                    {entry.data.author.name}
-                  </span>
-                </div>
-                <a
-                  href={`/blog/${entry.data.slug}`}
-                  class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
-                >
-                  Leer más...
-                  <svg
-                    class="ml-2 w-4 h-4"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </a>
-              </div>
-            </article>
-          ))
-        }
+      <div class="grid gap-8 lg:grid-cols-4">
+        <div class="lg:col-span-3">
+          {currentPosts.length === 0 ? (
+            <div class="text-center text-gray-500 dark:text-gray-400 py-16">
+              <p class="text-lg font-semibold mb-2">No se encontraron resultados.</p>
+              <p>Prueba con otros filtros o términos de búsqueda.</p>
+            </div>
+          ) : (
+            <div class="grid gap-8 md:grid-cols-2">
+              {currentPosts.map((entry) => (
+                <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+                  <div class="w-full mb-5">
+                    {entry.data.cover && (
+                      <img
+                        src={entry.data.cover.src || entry.data.cover}
+                        alt={entry.data.title}
+                        width="600"
+                        height="400"
+                        class="w-full h-auto object-cover rounded-lg"
+                        loading="lazy"
+                      />
+                    )}
+                  </div>
+                  <div class="flex justify-between items-center mb-5 text-gray-500">
+                    <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
+                      <svg
+                        class="mr-1 w-3 h-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
+                      </svg>
+                      {entry.data.category}
+                    </span>
+                    <span class="text-sm">
+                      <FormattedDate date={entry.data.pubDate} />
+                    </span>
+                  </div>
+                  <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    <a href={`/blog/${entry.data.slug}`}>{entry.data.title}</a>
+                  </h2>
+                  <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
+                    {entry.data.description}
+                  </p>
+                  <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                      <img
+                        src={entry.data.author.image.src || entry.data.author.image}
+                        alt="avatar"
+                        width="36"
+                        height="36"
+                        class="w-7 h-7 rounded-full"
+                      />
+                      <span class="font-medium dark:text-white">
+                        {entry.data.author.name}
+                      </span>
+                    </div>
+                    <a
+                      href={`/blog/${entry.data.slug}`}
+                      class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
+                    >
+                      Leer más...
+                      <svg
+                        class="ml-2 w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+          {/* Paginación */}
+          <nav aria-label="navigation" class="mt-8">
+            <ul class="flex items-center -space-x-px h-10 text-base justify-center">
+              {/* Centrar la paginación */}
+              {
+                currentPage > 1 && (
+                  <li>
+                    <a
+                      href={`?${new URLSearchParams({ ...Object.fromEntries(url.searchParams.entries()), page: (currentPage - 1).toString() })}`}
+                      class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      <span class="sr-only">Anterior</span>
+                      <svg
+                        class="w-3 h-3 rtl:rotate-180"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 6 10"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 1 1 5l4 4"
+                        />
+                      </svg>
+                    </a>
+                  </li>
+                )
+              }
+
+              {
+                [...Array(totalPages)].map((_, i) => {
+                  const pageNumber = i + 1;
+                  const params = new URLSearchParams(url.searchParams);
+                  params.set('page', pageNumber.toString());
+                  return (
+                    <li data-key={pageNumber}>
+                      <a
+                        href={`?${params.toString()}`}
+                        class={`flex items-center justify-center px-4 h-10 leading-tight ${
+                          pageNumber === currentPage
+                            ? 'z-10 text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                            : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+                        }`}
+                      >
+                        {pageNumber}
+                      </a>
+                    </li>
+                  );
+                })
+              }
+
+              {
+                currentPage < totalPages && (
+                  <li>
+                    <a
+                      href={`?${new URLSearchParams({ ...Object.fromEntries(url.searchParams.entries()), page: (currentPage + 1).toString() })}`}
+                      class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      <span class="sr-only">Siguiente</span>
+                      <svg
+                        class="w-3 h-3 rtl:rotate-180"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 6 10"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="m1 9 4-4-4-4"
+                        />
+                      </svg>
+                    </a>
+                  </li>
+                )
+              }
+            </ul>
+          </nav>
+        </div>
+        <div class="lg:col-span-1">
+          <SidebarFilters
+            query={query}
+            selectedCategory={selectedCategory}
+            selectedTags={selectedTags}
+            categories={categories}
+            tags={tags}
+            onFilterChange={handleFilterChange}
+            onClear={handleClear}
+            latestPosts={latestPosts}
+          />
+        </div>
       </div>
-      {/* Paginación */}
-      <nav aria-label="navigation" class="mt-8">
-        <ul class="flex items-center -space-x-px h-10 text-base justify-center">
-          {/* Centrar la paginación */}
-          {
-            currentPage > 1 && (
-              <li>
-                <a
-                  href={`/blog/?page=${currentPage - 1}`}
-                  class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  <span class="sr-only">Anterior</span>
-                  <svg
-                    class="w-3 h-3 rtl:rotate-180"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 6 10"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 1 1 5l4 4"
-                    />
-                  </svg>
-                </a>
-              </li>
-            )
-          }
-
-          {
-            [...Array(totalPages)].map((_, i) => {
-              const pageNumber = i + 1;
-              return (
-                <li data-key={pageNumber}>
-                  <a
-                    href={`/blog/?page=${pageNumber}`}
-                    class={`flex items-center justify-center px-4 h-10 leading-tight ${
-                      pageNumber === currentPage
-                        ? 'z-10 text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
-                        : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
-                    }`}
-                  >
-                    {pageNumber}
-                  </a>
-                </li>
-              );
-            })
-          }
-
-          {
-            currentPage < totalPages && (
-              <li>
-                <a
-                  href={`/blog/?page=${currentPage + 1}`}
-                  class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  <span class="sr-only">Siguiente</span>
-                  <svg
-                    class="w-3 h-3 rtl:rotate-180"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 6 10"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m1 9 4-4-4-4"
-                    />
-                  </svg>
-                </a>
-              </li>
-            )
-          }
-        </ul>
-      </nav>
     </div>
   </section>
 </DefaultLayout>

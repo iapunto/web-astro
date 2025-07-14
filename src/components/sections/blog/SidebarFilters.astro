@@ -1,0 +1,115 @@
+---
+// SidebarFilters.astro
+// Sidebar profesional para búsqueda y filtrado de posts del blog
+// NOTA: Este componente es puramente de presentación. La lógica de filtrado y estado debe manejarse en el padre (página o componente React/Preact).
+// Props esperados:
+// - query: string
+// - selectedCategory: string
+// - selectedTags: string[]
+// - categories: string[]
+// - tags: string[]
+// - onFilterChange: (filters: { query: string; category: string; tags: string[] }) => void
+// - onClear: () => void
+// - latestPosts: Post[]
+
+const { query, selectedCategory, selectedTags, categories, tags, latestPosts } = Astro.props;
+---
+
+<aside class="w-full max-w-xs bg-white dark:bg-gray-800 rounded-lg shadow p-8 mb-8 sticky top-8 z-10 ml-4">
+  <form method="get" action="/blog" class="space-y-6">
+    <div>
+      <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Buscar</label>
+      <input
+        id="search"
+        type="text"
+        name="q"
+        value={query}
+        placeholder="Buscar por título, resumen..."
+        class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+        autocomplete="off"
+      />
+    </div>
+    <div>
+      <span class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Categoría</span>
+      <div class="space-y-1">
+        <label class="flex items-center gap-2">
+          <input
+            type="radio"
+            name="category"
+            value=""
+            checked={selectedCategory === ''}
+          />
+          Todas
+        </label>
+        {categories && categories.length > 0 && categories.map(cat => (
+          <label class="flex items-center gap-2">
+            <input
+              type="radio"
+              name="category"
+              value={cat}
+              checked={selectedCategory === cat}
+            />
+            {cat}
+          </label>
+        ))}
+      </div>
+    </div>
+    <div>
+      <span class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tags</span>
+      <div class="flex flex-wrap gap-2">
+        {tags && tags.length > 0 && tags.map(tag => (
+          <label class="flex items-center gap-1 text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">
+            <input
+              type="checkbox"
+              name="tag"
+              value={tag}
+              checked={selectedTags.includes(tag)}
+            />
+            {tag}
+          </label>
+        ))}
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button
+        type="submit"
+        class="w-full py-2 px-4 bg-primary-600 text-white rounded hover:bg-primary-700 transition"
+      >
+        Buscar
+      </button>
+      <a href="/blog" class="w-full py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-center transition">
+        Limpiar
+      </a>
+    </div>
+  </form>
+  <hr class="my-6 border-gray-200 dark:border-gray-700" />
+  <section>
+    <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Últimos artículos</h3>
+    <ul class="space-y-3">
+      {latestPosts && latestPosts.length > 0 ? latestPosts.map(post => (
+        <li>
+          <a href={`/blog/${post.data.slug}`} class="text-primary-700 dark:text-primary-400 hover:underline font-medium text-sm">
+            {post.data.title}
+          </a>
+          <span class="block text-xs text-gray-400 dark:text-gray-500">{post.data.pubDate?.toLocaleDateString?.() ?? ''}</span>
+        </li>
+      )) : (
+        <li class="text-gray-400 text-sm">No hay artículos recientes.</li>
+      )}
+    </ul>
+  </section>
+  {/* Aquí puedes agregar futuras secciones como 'Relacionados', 'Populares', etc. */}
+</aside>
+
+<style>
+  aside {
+    min-width: 220px;
+  }
+  @media (max-width: 1024px) {
+    aside {
+      position: static;
+      max-width: 100%;
+      margin-bottom: 2rem;
+    }
+  }
+</style> 

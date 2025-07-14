@@ -1,0 +1,49 @@
+---
+// TableOfContents.astro
+// Props: html (string, opcional) o <slot /> para children
+const { html } = Astro.props;
+
+// Utilidad para extraer encabezados del HTML (acepta h2/h3 con o sin id)
+function extractHeadings(html) {
+  if (!html) return [];
+  const regex = /<(h2|h3)(?:\s+id=["']([^"']+)["'])?[^>]*>(.*?)<\/\1>/gi;
+  const headings = [];
+  let match;
+  while ((match = regex.exec(html))) {
+    headings.push({
+      level: match[1],
+      id: match[2] || match[3].replace(/<[^>]+>/g, '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, ''),
+      text: match[3].replace(/<[^>]+>/g, ''),
+    });
+  }
+  return headings;
+}
+
+const headings = html ? extractHeadings(html) : [];
+---
+
+<nav class="hidden lg:block w-full max-w-xs sticky top-8 z-10 bg-white dark:bg-gray-800 rounded-lg shadow p-8 mb-8 border border-gray-100 dark:border-gray-700 mr-4">
+  <h3 class="text-lg font-bold mb-4 text-gray-900 dark:text-white">En este artículo</h3>
+  {headings.length > 0 ? (
+    <ul class="space-y-2 toc-list">
+      {headings.map(h => (
+        <li class={h.level === 'h2' ? 'pl-0' : 'pl-4'}>
+          <a href={`#${h.id}`} class="block text-sm text-gray-700 dark:text-gray-200 hover:text-primary-600 transition-colors font-medium">
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="text-gray-400 text-sm">No se detectaron secciones en este artículo.</p>
+  )}
+</nav>
+
+<style>
+  .toc-list li {
+    list-style: none;
+  }
+  .toc-list li + li {
+    margin-top: 0.25rem;
+  }
+</style> 

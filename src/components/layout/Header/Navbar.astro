@@ -21,7 +21,33 @@ import Button from '../../common/Button.astro';
       <li><NavLink href="/acerca-de" text="LA AGENCIA" /></li>
       <li><DropdownMenu buttonText="SERVICIOS" data={servicesMenuData} /></li>
       <li><NavLink href="/blog" text="IDEAS 360" /></li>
-      <li><NavLink href="/contacto" text="CONTACTO" /></li>
+      <li>
+        <NavLink href="/contacto" text="CONTACTO" />
+      </li>
+      <!-- Buscador global (desktop) -->
+      <li class="relative">
+        <form method="get" action="/search" class="searchbar-desktop flex items-center" role="search" aria-label="Buscar en todo el sitio">
+          <button type="button" id="search-toggle-btn" class="group bg-transparent p-2 rounded-full hover:bg-gray-100 transition flex items-center focus:outline-none" aria-label="Mostrar buscador">
+            <svg class="w-5 h-5 stroke-gray-500 group-hover:stroke-primary-600 transition-colors" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+          <input
+            type="text"
+            name="q"
+            id="searchbar-input"
+            placeholder="Buscar en todo el sitio..."
+            class="searchbar-input hidden absolute right-0 top-0 px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 bg-white z-50 transition-all duration-200"
+            autocomplete="off"
+            aria-label="Buscar en todo el sitio"
+            style="min-width: 220px;"
+          />
+          <button type="submit" class="searchbar-submit hidden absolute right-0 top-0 bg-primary-600 text-white px-3 py-1 rounded hover:bg-primary-700 transition ml-2" aria-label="Buscar">
+            Buscar
+          </button>
+        </form>
+      </li>
       <li>
         <Button text="Agenda una Reunión" id="open-modal-btn-nav" variant="primary" />
       </li>
@@ -40,6 +66,23 @@ import Button from '../../common/Button.astro';
       <span class="block w-6 h-0.5 bg-gray-800 rotate-45 absolute"></span>
       <span class="block w-6 h-0.5 bg-gray-800 -rotate-45 absolute"></span>
     </button>
+    <!-- Buscador global (mobile) -->
+    <form method="get" action="/search" class="w-4/5 mb-8 flex items-center" role="search" aria-label="Buscar en todo el sitio">
+      <input
+        type="text"
+        name="q"
+        placeholder="Buscar en todo el sitio..."
+        class="flex-1 px-3 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+        autocomplete="off"
+        aria-label="Buscar en todo el sitio"
+      />
+      <button type="submit" class="group bg-primary-600 text-white px-3 py-2 rounded-r hover:bg-primary-700 transition flex items-center" aria-label="Buscar">
+        <svg class="w-5 h-5 stroke-gray-500 group-hover:stroke-primary-600 transition-colors" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+      </button>
+    </form>
     <ul class="flex flex-col items-center space-y-8 text-2xl font-semibold mt-16">
       <li><NavLink href="/acerca-de" text="LA AGENCIA" /></li>
       <li class="relative w-full flex flex-col items-center">
@@ -48,7 +91,6 @@ import Button from '../../common/Button.astro';
           <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
         </button>
         <ul id="mobile-services-list" class="hidden flex-col items-center mt-4 space-y-4 bg-white rounded shadow-md p-4 w-64 z-50">
-          <!-- Lista de servicios -->
           {
             servicesMenuData.flatMap(cat => cat.links).map(link => (
               <li><a href={link.href} class="block w-full text-center text-lg text-gray-700 hover:text-primary transition-colors duration-200">{link.text}</a></li>
@@ -88,6 +130,28 @@ import Button from '../../common/Button.astro';
   }
   #menu-close span:last-child {
     transform: rotate(-45deg);
+  }
+  .searchbar-input {
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    min-width: 0;
+  }
+  .searchbar-input.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+    width: 220px;
+    min-width: 220px;
+    right: 0;
+    background: white;
+    z-index: 50;
+  }
+  .searchbar-submit {
+    display: none;
+  }
+  .searchbar-input.active + .searchbar-submit {
+    display: inline-block;
   }
 </style>
 
@@ -142,6 +206,52 @@ import Button from '../../common/Button.astro';
     document.addEventListener('click', (e) => {
       if (!mobileServicesToggle.contains(e.target) && !mobileServicesList.contains(e.target)) {
         mobileServicesList.classList.add('hidden');
+      }
+    });
+  }
+
+  // Buscador global desktop desplegable
+  const searchToggleBtn = document.getElementById('search-toggle-btn');
+  const searchbarInput = document.getElementById('searchbar-input');
+  const searchbarForm = searchToggleBtn?.closest('form');
+  if (searchToggleBtn && searchbarInput && searchbarForm) {
+    function closeSearchbar() {
+      searchbarInput.classList.remove('active');
+      searchbarInput.value = '';
+    }
+    searchToggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (searchbarInput.classList.contains('active')) {
+        closeSearchbar();
+      } else {
+        searchbarInput.classList.add('active');
+        searchbarInput.focus();
+        searchbarInput.value = '';
+      }
+    });
+    searchbarInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        closeSearchbar();
+      }, 200);
+    });
+    document.addEventListener('mousedown', (e) => {
+      if (
+        searchbarInput.classList.contains('active') &&
+        !searchbarInput.contains(e.target) &&
+        !searchToggleBtn.contains(e.target)
+      ) {
+        closeSearchbar();
+      }
+    });
+    searchbarForm.addEventListener('submit', (e) => {
+      if (!searchbarInput.value.trim()) {
+        e.preventDefault();
+        searchbarInput.focus();
+      }
+    });
+    searchbarInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        searchbarForm.submit();
       }
     });
   }

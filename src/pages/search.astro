@@ -1,0 +1,97 @@
+---
+import DefaultLayout from '../layouts/DefaultLayout.astro';
+import { getCollection } from 'astro:content';
+import { services as serviceEntries } from '../content/services';
+
+const url = new URL(Astro.request.url);
+const query = url.searchParams.get('q')?.toLowerCase() || '';
+
+const blogEntries = await getCollection('blog');
+
+// Tipos
+// BlogEntry: tipo de los posts del blog
+// ServiceEntry: tipo de los servicios importados
+
+type BlogEntry = typeof blogEntries[number];
+type ServiceEntry = typeof serviceEntries[number];
+
+function matchesBlog(post: BlogEntry) {
+  const inTitle = post.data.title.toLowerCase().includes(query);
+  const inDesc = post.data.description.toLowerCase().includes(query);
+  return query && (inTitle || inDesc);
+}
+function matchesService(service: ServiceEntry) {
+  const inTitle = service.title.toLowerCase().includes(query);
+  const inDesc = service.hero?.description?.toLowerCase().includes(query) || false;
+  return query && (inTitle || inDesc);
+}
+const blogResults = blogEntries.filter(matchesBlog);
+const serviceResults = serviceEntries.filter(matchesService);
+const totalResults = blogResults.length + serviceResults.length;
+---
+
+<DefaultLayout pageTitle="Buscar en el sitio" description="Resultados de búsqueda global en IA Punto">
+  <section class="bg-white dark:bg-gray-900 min-h-[60vh]">
+    <div class="py-8 px-4 mx-auto max-w-screen-md lg:py-16 lg:px-6">
+      <h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Resultados de búsqueda</h1>
+      <form method="get" action="/search" class="mb-8 flex gap-2" role="search" aria-label="Buscar en todo el sitio">
+        <input
+          type="text"
+          name="q"
+          value={query}
+          placeholder="Buscar en todo el sitio..."
+          class="flex-1 px-3 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+          autocomplete="off"
+          aria-label="Buscar en todo el sitio"
+        />
+        <button type="submit" class="group bg-primary-600 text-white px-4 py-2 rounded-r hover:bg-primary-700 transition flex items-center" aria-label="Buscar">
+          <svg class="w-5 h-5 stroke-gray-500 group-hover:stroke-primary-600 transition-colors" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
+      </form>
+      {query === '' ? (
+        <p class="text-gray-500 dark:text-gray-400">Introduce un término para buscar en el sitio.</p>
+      ) : totalResults === 0 ? (
+        <div class="text-center text-gray-500 dark:text-gray-400 py-16">
+          <p class="text-lg font-semibold mb-2">No se encontraron resultados para "{query}".</p>
+          <p>Prueba con otros términos o revisa la ortografía.</p>
+        </div>
+      ) : (
+        <>
+          {blogResults.length > 0 && (
+            <>
+              <h2 class="text-xl font-bold mt-8 mb-2">Artículos del Blog</h2>
+              <ul class="space-y-6">
+                {blogResults.map(post => (
+                  <li class="border-b border-gray-200 dark:border-gray-700 pb-4">
+                    <a href={`/blog/${post.data.slug}`} class="text-xl font-semibold text-primary-700 dark:text-primary-400 hover:underline">
+                      {post.data.title}
+                    </a>
+                    <p class="text-gray-600 dark:text-gray-300 mt-1">{post.data.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {serviceResults.length > 0 && (
+            <>
+              <h2 class="text-xl font-bold mt-8 mb-2">Servicios</h2>
+              <ul class="space-y-6">
+                {serviceResults.map(service => (
+                  <li class="border-b border-gray-200 dark:border-gray-700 pb-4">
+                    <a href={`/servicios/${service.slug}`} class="text-xl font-semibold text-primary-700 dark:text-primary-400 hover:underline">
+                      {service.title}
+                    </a>
+                    <p class="text-gray-600 dark:text-gray-300 mt-1">{service.hero?.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </>
+      )}
+    </div>
+  </section>
+</DefaultLayout> 
