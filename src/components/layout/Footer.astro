@@ -34,7 +34,7 @@ const {
           <Logo />
         </a>
       </div>
-      <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+      <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-4">
         <div>
           <h2
             class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
@@ -179,27 +179,27 @@ const {
             </li>
           </ul>
         </div>
-        <!-- <div>
-          <h2
-            class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white"
-          >
-            S&iacute;guenos
+        <div>
+          <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+            Síguenos
           </h2>
           <ul class="text-gray-600 dark:text-gray-400">
-            <li class="mb-2">
-              <a
-                href="https://github.com/themesberg/flowbite"
-                class="hover:text-[#E51F52] hover:underline">Github</a
-              >
-            </li>
-            <li class="mb-2">
-              <a
-                href="https://discord.gg/4eeurUVvTy"
-                class="hover:text-[#E51F52] hover:underline">Discord</a
-              >
-            </li>
+            <li class="mb-2"><a href="https://www.facebook.com/iapunto" class="hover:text-[#E51F52] hover:underline">Facebook</a></li>
+            <li class="mb-2"><a href="https://www.instagram.com/iapunto" class="hover:text-[#E51F52] hover:underline">Instagram</a></li>
+            <li class="mb-2"><a href="https://www.linkedin.com/company/iapunto" class="hover:text-[#E51F52] hover:underline">LinkedIn</a></li>
           </ul>
-        </div> -->
+        </div>
+        <div>
+          <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+            Suscríbete
+          </h2>
+          <form class="flex flex-col gap-2" name="newsletter" method="POST" data-netlify="true">
+            <input type="hidden" name="form-name" value="newsletter" />
+            <input type="email" name="email" required placeholder="Tu email" class="px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#E51F52]" />
+            <button type="submit" class="bg-[#E51F52] text-white rounded px-3 py-2 font-semibold hover:bg-[#c81a4a] transition">Suscribirme</button>
+          </form>
+          <p class="text-xs text-gray-400 mt-2">Recibe novedades y recursos de IA Punto. Sin spam.</p>
+        </div>
       </div>
     </div>
   </div>
