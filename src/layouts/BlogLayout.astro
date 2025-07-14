@@ -56,99 +56,76 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
     <TopBar />
     <NavBar />
     <Breadcrumb pageTitle={pageTitle} />
-    <main
-      class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased"
-    >
-      <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-        <article
-          class="blog-content mx-auto w-full max-w-2xl prose prose-lg dark:prose-invert"
-        >
+    <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased overflow-x-hidden">
+      <div class="w-full max-w-screen-2xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Sidebar izquierdo (TOC) */}
+        <aside class="hidden lg:block lg:col-span-3">
+          <slot name="toc" />
+        </aside>
+        {/* Contenido principal */}
+        <article class="col-span-1 lg:col-span-6 w-full prose prose-lg dark:prose-invert mx-auto">
+          {/* Imagen de portada */}
           <img
             src={post.data.cover}
             alt={post.data.coverAlt}
             class="w-full h-auto rounded-lg mb-8"
           />
-          <address class="author flex items-center mb-6 not-italic">
-            <div
-              class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white"
-            >
-              <img
-                src={author.image.src || author.image}
-                alt={author.name || ''}
-                class="mr-6 rounded-full"
-                width="96"
-                height="96"
-              />
-              <div class="space-y-1">
-                <p class="text-xl font-bold text-gray-900 dark:text-white mb-0">
-                  {author.name}
-                  {/* Usa author.name */}
-                </p>
-                <p class="text-base text-gray-500 dark:text-gray-400">
-                  {author.description}
-                  {/* Usa author.description */}
-                </p>
-                <p class="text-base text-gray-500 dark:text-gray-400">
-                  <FormattedDate date={pubDate} />
-                </p>
+          {/* Autor, categoría y compartir */}
+          <div class="flex flex-col sm:flex-row items-center justify-between w-full gap-8 mb-6">
+            {/* Columna autor */}
+            <address class="author flex items-center not-italic">
+              <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                <img
+                  src={author.image.src || author.image}
+                  alt={author.name || ''}
+                  class="mr-6 rounded-full"
+                  width="96"
+                  height="96"
+                />
+                <div class="space-y-1">
+                  <p class="text-xl font-bold text-gray-900 dark:text-white mb-0">
+                    {author.name}
+                  </p>
+                  <p class="text-base text-gray-500 dark:text-gray-400">
+                    {author.description}
+                  </p>
+                  <p class="text-base text-gray-500 dark:text-gray-400">
+                    <FormattedDate date={pubDate} />
+                  </p>
+                </div>
+              </div>
+            </address>
+            {/* Columna categoría y compartir */}
+            <div class="flex flex-col items-center gap-4 min-w-[180px] ml-8">
+              {post.data.category && (
+                <a href={`/categoria/${post.data.category.toLowerCase().replace(/\s+/g, '-')}`} class="text-gray-500 font-semibold hover:text-primary-700 text-base transition-colors">
+                  {post.data.category}
+                </a>
+              )}
+              <div class="flex gap-3 mt-2">
+                {/* Facebook */}
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.toString())}`} target="_blank" rel="noopener noreferrer" aria-label="Compartir en Facebook">
+                  <img src="/icons/facebook.svg" alt="Facebook" class="w-6 h-6" />
+                </a>
+                {/* Instagram (no tiene compartir directo, solo perfil o copiar link) */}
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <img src="/icons/instagram.svg" alt="Instagram" class="w-6 h-6" />
+                </a>
+                {/* LinkedIn */}
+                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.toString())}`} target="_blank" rel="noopener noreferrer" aria-label="Compartir en LinkedIn">
+                  <img src="/icons/linkedin.svg" alt="LinkedIn" class="w-6 h-6" />
+                </a>
+                {/* WhatsApp */}
+                <a href={`https://wa.me/?text=${encodeURIComponent(pageTitle + ' ' + Astro.url.toString())}`} target="_blank" rel="noopener noreferrer" aria-label="Compartir en WhatsApp">
+                  <img src="/icons/whatsapp.svg" alt="WhatsApp" class="w-6 h-6" />
+                </a>
               </div>
             </div>
-          </address>
-          <h1
-            class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white"
-          >
-            {pageTitle}
-          </h1>
-
+          </div>
           <slot />
-          {/* Aquí se renderiza el contenido del post */}
         </article>
       </div>
     </main>
-    {
-      hasRelated && (
-        <aside
-          aria-label="Related articles"
-          class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800"
-        >
-          <div class="px-4 mx-auto max-w-screen-xl">
-            <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
-              Artículos relacionados
-            </h2>
-            <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-              {relatedPosts.map((related) => {
-                return (
-                  <article class="max-w-xs">
-                    <a href={`/blog/${related.id}`}>
-                      <img
-                        src={related.data.cover.src || related.data.cover}
-                        alt={related.data.title || ''}
-                        loading="lazy"
-                        class="mb-5 rounded-lg"
-                        width="600"
-                        height="400"
-                      />
-                    </a>
-                    <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                      <a href={`/blog/${related.id}`}>{related.data.title}</a>
-                    </h2>
-                    <p class="mb-4 text-gray-500 dark:text-gray-400">
-                      {related.data.description}
-                    </p>
-                    <a
-                      href={`/blog/${related.id}`}
-                      class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
-                    >
-                      Leer más...
-                    </a>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </aside>
-      )
-    }
     <Footer />
     <BackToTop />
   </body>
