@@ -6,7 +6,7 @@
     "start": "astro start",
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "astro preview --port ${PORT:-4321}",
     "astro": "astro",
     "format": "pnpm exec prettier --write ."
   },
