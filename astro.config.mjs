@@ -9,7 +9,7 @@ import astroIcon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-  site: process.env.SITE_URL || 'http://localhost:3000',
+  site: process.env.SITE_URL || 'https://iapunto.com',
   integrations: [
     tailwind(),
     react({
