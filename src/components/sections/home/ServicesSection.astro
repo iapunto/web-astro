@@ -57,7 +57,14 @@ const services = [
     </h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {services.map((service) => <ServiceCard {...service} />)}
+      {services.map((service) => <ServiceCard
+        icon={service.icon}
+        altText={service.altText || `${service.title} - Servicio`}
+        title={service.title}
+        description={service.description}
+        linkHref={service.linkHref}
+        ctaText={service.ctaText}
+      />)}
     </div>
   </div>
 

@@ -8,17 +8,18 @@ export interface Props {
   title: string;
   description: string;
   icon: ImageMetadata;
-  alt: string;
+  alt?: string;
+  altText?: string;
   link: string;
   ctaText: string;
 }
-const { title, description, icon, alt, link, ctaText } = Astro.props;
+const { title, description, icon, alt, altText, link, ctaText } = Astro.props;
 ---
 
 <article
   class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center h-full"
 >
-  <img src={icon.src} alt={alt} class="w-64 h-64 mb-4" loading="lazy" width="256" height="256" />
+  <img src={icon.src} alt={altText || alt || title} class="w-64 h-64 mb-4" loading="lazy" width="256" height="256" />
   <h3 class="text-xl font-bold mb-2 text-gray-900">{title}</h3>
   <p class="text-gray-600 mb-6 flex-1">{description}</p>
   <Button text={ctaText} href={link} variant="primary" />
