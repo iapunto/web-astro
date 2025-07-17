@@ -105,19 +105,19 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
               <div class="flex gap-3 mt-2">
                 {/* Facebook */}
                 <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.toString())}`} target="_blank" rel="noopener noreferrer" aria-label="Compartir en Facebook">
-                  <img src="/icons/facebook.svg" alt="Facebook" class="w-6 h-6" />
+                  <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#6b7280"><path d="M17 2H14C12.6739 2 11.4021 2.52678 10.4645 3.46447C9.52678 4.40215 9 5.67392 9 7V10H6V14H9V22H13V14H16L17 10H13V7C13 6.73478 13.1054 6.48043 13.2929 6.29289C13.4804 6.10536 13.7348 6 14 6H17V2Z" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                 </a>
                 {/* Instagram (no tiene compartir directo, solo perfil o copiar link) */}
                 <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                  <img src="/icons/instagram.svg" alt="Instagram" class="w-6 h-6" />
+                  <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#6b7280"><path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 16V8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16Z" stroke="#6b7280" stroke-width="1.5"></path><path d="M17.5 6.51L17.51 6.49889" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                 </a>
                 {/* LinkedIn */}
                 <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.toString())}`} target="_blank" rel="noopener noreferrer" aria-label="Compartir en LinkedIn">
-                  <img src="/icons/linkedin.svg" alt="LinkedIn" class="w-6 h-6" />
+                  <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#6b7280"><path d="M21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16V8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8Z" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7 17V13.5V10" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 17V13.75M11 10V13.75M11 13.75C11 10 17 10 17 13.75V17" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7 7.01L7.01 6.99889" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                 </a>
                 {/* WhatsApp */}
                 <a href={`https://wa.me/?text=${encodeURIComponent(pageTitle + ' ' + Astro.url.toString())}`} target="_blank" rel="noopener noreferrer" aria-label="Compartir en WhatsApp">
-                  <img src="/icons/whatsapp.svg" alt="WhatsApp" class="w-6 h-6" />
+                  <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#6b7280"><path d="M22 12C22 17.5228 17.5228 22 12 22C10.1786 22 8.47087 21.513 7 20.6622L2 21.5L2.83209 16C2.29689 14.7751 2 13.4222 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12.9604 13.8683L15.0399 13.4624L17 14.2149V16.0385C17 16.6449 16.4783 17.1073 15.8901 16.9783C14.3671 16.6444 11.5997 15.8043 9.67826 13.8683C7.84859 12.0248 7.22267 9.45734 7.01039 8.04128C6.92535 7.47406 7.3737 7 7.94306 7H9.83707L10.572 8.96888L10.1832 11.0701" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                 </a>
               </div>
             </div>
