@@ -30,9 +30,6 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
   // COOP: aislamiento de contexto
   response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
 
-  // COEP: aislamiento de recursos
-  response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
-
   // CORP: aislamiento de recursos
   response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
 
