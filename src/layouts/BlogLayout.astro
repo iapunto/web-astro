@@ -8,6 +8,7 @@ import Breadcrumb from '@components/layout/Header/Breadcrumb.astro';
 import FormattedDate from '@components/common/FormattedDate.astro';
 import { getCollection } from 'astro:content';
 import SchemaMarkup from '@components/common/SchemaMarkup.astro';
+import TrackingScripts from '@components/common/TrackingScripts.astro';
 
 const { pageTitle, description, keywords, image, author, pubDate, post } =
   Astro.props; // Añade 'post' a las props
@@ -51,6 +52,7 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
       image={image}
     />
     <SchemaMarkup post={post} />
+    <TrackingScripts />
   </head>
   <body>
     <TopBar />
