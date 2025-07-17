@@ -5,6 +5,7 @@ const {
   image,
   features = [], // Array de características del servicio
   benefits = [], // Array de beneficios del servicio
+  alt,
 } = Astro.props;
 ---
 
@@ -17,7 +18,7 @@ const {
         {/* La imagen se muestra a la derecha en pantallas medianas */}
         <img
           src={image.src || image}
-          alt="Imagen del servicio"
+          alt={alt || "Imagen del servicio"}
           class="rounded-lg shadow-md object-cover h-full"
         />
       </div>

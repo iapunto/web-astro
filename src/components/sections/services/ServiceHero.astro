@@ -11,7 +11,7 @@ const { title, description, image, alt } = Astro.props;
   <div class="mx-auto max-w-2xl flex flex-col items-center text-center px-4">
     <img
       src={image}
-      alt={alt}
+      alt={alt || title}
       class="w-56 h-56 mb-6 object-contain mx-auto rounded-xl shadow-lg"
       width="224"
       height="224"

@@ -16,7 +16,7 @@ const { icon, altText, title, description, linkHref, ctaText } = Astro.props;
 <article
   class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center h-full"
 >
-  <img src={icon.src} alt={altText} class="w-20 h-20 mb-4" loading="lazy" width="80" height="80" />
+  <img src={icon.src} alt={altText || title} class="w-20 h-20 mb-4" loading="lazy" width="80" height="80" />
   <h3 class="text-xl font-bold mb-2 text-gray-900">{title}</h3>
   <p class="text-gray-600 mb-6 flex-1">{description}</p>
   <a

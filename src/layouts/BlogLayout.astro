@@ -63,11 +63,11 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
           <slot name="toc" />
         </aside>
         {/* Contenido principal */}
-        <article class="col-span-1 lg:col-span-6 w-full prose prose-lg dark:prose-invert mx-auto">
+        <article class="col-span-1 lg:col-span-6 w-full prose prose-lg dark:prose-invert mx-auto blog-content">
           {/* Imagen de portada */}
           <img
             src={post.data.cover}
-            alt={post.data.coverAlt}
+            alt={post.data.coverAlt || pageTitle}
             class="w-full h-auto rounded-lg mb-8"
           />
           {/* Autor, categoría y compartir */}
@@ -122,6 +122,8 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
               </div>
             </div>
           </div>
+          {/* Encabezado principal del artículo */}
+          <h1 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">{pageTitle}</h1>
           <slot />
         </article>
       </div>

@@ -24,7 +24,7 @@ const { title, description, image, alt, bgColor = '#fcfcfc', textColor = '#00000
       {/* Espacio entre la imagen y el título */}
       <img
         src={image.src}
-        alt={alt}
+        alt={alt || title}
         class="object-contain w-full h-auto aspect-3/2 responsive"
         width={450}
         height={450}

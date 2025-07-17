@@ -80,11 +80,11 @@ const latestPosts = blogEntries.slice(0, 5);
   <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
       <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
-        <h2
+        <h1
           class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
         >
           Ideas 360
-        </h2>
+        </h1>
         <p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">
           Este es un blog lleno de ideas y noticias que te ayudaran en el mundo
           del marketing digital.
@@ -105,7 +105,7 @@ const latestPosts = blogEntries.slice(0, 5);
                     {entry.data.cover && (
                       <img
                         src={entry.data.cover.src || entry.data.cover}
-                        alt={entry.data.title}
+                        alt={entry.data.coverAlt || entry.data.title}
                         width="600"
                         height="400"
                         class="w-full h-auto object-cover rounded-lg"

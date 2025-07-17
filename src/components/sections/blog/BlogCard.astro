@@ -27,7 +27,7 @@ const { post } = Astro.props;
     <div class="blog-card-author">
       <img
         src={post.authorImage.src || post.authorImage}
-        alt="Imagen de Portada del Articulo"
+        alt={`Foto de ${post.author}`}
         width="32"
         height="32"
         class="blog-card-author-image"

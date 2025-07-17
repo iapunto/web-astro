@@ -43,7 +43,7 @@ const latestPosts = sortedPosts.slice(0, 6);
                   {entry.data.cover && (
                     <img
                       src={entry.data.cover}
-                      alt={entry.data.coverAlt || "Imagen de portada del artículo"}
+                      alt={entry.data.coverAlt || entry.data.title}
                       loading="lazy"
                       class="w-full h-full object-cover rounded-lg"
                       style="min-height: 100%; min-width: 100%;"
