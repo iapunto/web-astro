@@ -10,7 +10,7 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
       "default-src 'self'",
       "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "img-src 'self' data: https: https://res.cloudinary.com",
+      "img-src 'self' data: https: https://res.cloudinary.com https://blog.n8n.io https://techcrunch.com https://www.hubspot.com",
       "font-src 'self' https://fonts.gstatic.com",
       "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://api.resend.com",
       'frame-src https://www.youtube.com https://www.facebook.com',
