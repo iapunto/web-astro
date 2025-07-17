@@ -17,5 +17,10 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
       "form-action 'self'",
     ].join('; ')
   );
+  // HSTS: fuerza HTTPS en navegadores compatibles
+  response.headers.set(
+    'Strict-Transport-Security',
+    'max-age=63072000; includeSubDomains; preload'
+  );
   return response;
 };
