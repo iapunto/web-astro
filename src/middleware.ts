@@ -2,6 +2,8 @@ import type { MiddlewareHandler } from 'astro';
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
   const response = await next();
+
+  // Content Security Policy (CSP)
   response.headers.set(
     'Content-Security-Policy',
     [
@@ -15,21 +17,48 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
+      "frame-ancestors 'self'",
     ].join('; ')
   );
+
   // HSTS: fuerza HTTPS en navegadores compatibles
   response.headers.set(
     'Strict-Transport-Security',
     'max-age=63072000; includeSubDomains; preload'
   );
-  // COOP: mejora el aislamiento de la página
+
+  // COOP: aislamiento de contexto
   response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-  // X-Frame-Options: evita el embedding en iframes de otros orígenes
+
+  // COEP: aislamiento de recursos
+  response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
+
+  // CORP: aislamiento de recursos
+  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
+
+  // X-Frame-Options: evita clickjacking
   response.headers.set('X-Frame-Options', 'SAMEORIGIN');
-  // Content-Security-Policy: frame-ancestors (moderno)
+
+  // X-Content-Type-Options: evita sniffing de tipos MIME
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+
+  // Referrer-Policy: controla el envío del referer
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+  // Permissions-Policy: restringe APIs avanzadas del navegador
   response.headers.set(
-    'Content-Security-Policy',
-    response.headers.get('Content-Security-Policy') + "; frame-ancestors 'self'"
+    'Permissions-Policy',
+    [
+      'geolocation=()',
+      'microphone=()',
+      'camera=()',
+      'fullscreen=(self)',
+      'payment=()',
+    ].join(', ')
   );
+
+  // Eliminar encabezado X-Powered-By si existe
+  response.headers.delete('X-Powered-By');
+
   return response;
 };
