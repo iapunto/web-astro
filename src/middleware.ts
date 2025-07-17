@@ -57,5 +57,24 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
   // Eliminar encabezado X-Powered-By si existe
   response.headers.delete('X-Powered-By');
 
+  // Reglas de caché eficientes para recursos estáticos y HTML
+  const url = new URL(context.request.url);
+  if (
+    url.pathname.match(
+      /\.(js|css|png|jpg|jpeg|gif|svg|webp|woff2|woff|ttf|eot)$/
+    )
+  ) {
+    response.headers.set(
+      'Cache-Control',
+      'public, max-age=31536000, immutable'
+    );
+  } else if (
+    url.pathname.endsWith('.html') ||
+    url.pathname === '/' ||
+    url.pathname.endsWith('/')
+  ) {
+    response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+  }
+
   return response;
 };
