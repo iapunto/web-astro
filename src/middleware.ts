@@ -22,5 +22,14 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
     'Strict-Transport-Security',
     'max-age=63072000; includeSubDomains; preload'
   );
+  // COOP: mejora el aislamiento de la página
+  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+  // X-Frame-Options: evita el embedding en iframes de otros orígenes
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+  // Content-Security-Policy: frame-ancestors (moderno)
+  response.headers.set(
+    'Content-Security-Policy',
+    response.headers.get('Content-Security-Policy') + "; frame-ancestors 'self'"
+  );
   return response;
 };
