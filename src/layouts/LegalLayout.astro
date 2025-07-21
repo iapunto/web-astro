@@ -4,6 +4,7 @@ import BaseHead from '../components/common/BaseHead.astro';
 import TopBar from '../components/layout/Header/TopBar.astro';
 import Navbar from '../components/layout/Header/Navbar.astro';
 import Footer from '../components/layout/Footer.astro';
+import WhatsAppButton from '@components/layout/WhatsAppButton.astro';
 
 const siteName = 'IA Punto'; // Nombre del sitio (se puede definir en un archivo de configuración)
 const { pageTitle, description, content, canonicalURL, noindex } = Astro.props; // Título específico para la página principal
@@ -61,7 +62,8 @@ const toc = headings.map((heading) => {
       </main>
     </div>
     <Footer />
-  </body><style></style>
+    <WhatsAppButton />
+  </body>
 </html>
 
 <style>
