@@ -5,6 +5,7 @@ export interface Testimonial {
   image: string;
   position: string;
   company: string;
+  imageType?: 'avatar' | 'logo' | 'icono';
 }
 
 export interface CompanyLogo {

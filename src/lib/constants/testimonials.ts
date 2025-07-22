@@ -8,7 +8,8 @@ export const testimonials: Testimonial[] = [
     author: 'Ubilerma Meneses',
     position: 'CEO Manager',
     company: 'Distribuidora UVAYO',
-    image: '/assets/logos/tes003.jpg',
+    image: '/assets/logos/logo_uvayo.jpg',
+    imageType: 'logo',
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ export const testimonials: Testimonial[] = [
     author: 'Yaneth Zamora',
     position: 'CEO Manager',
     company: 'Integral Health',
-    image: '/assets/logos/ICON.png',
+    image: '/assets/logos/integral_health.jpg',
+    imageType: 'logo',
   },
   {
     id: 3,
@@ -26,7 +28,8 @@ export const testimonials: Testimonial[] = [
     author: 'Pedro Zambrano',
     position: 'Biogénica Global - Director',
     company: 'Biogénica Global',
-    image: '/assets/logos/82f43e79-81f3-4872-949f-01b2e051e9f1.jpeg',
+    image: '/assets/logos/pedro_zambrano.jpg',
+    imageType: 'avatar',
   },
 
   {
@@ -36,7 +39,8 @@ export const testimonials: Testimonial[] = [
     author: 'Magnolia García',
     position: 'Yo Soy Poder - Autora',
     company: 'Yo Soy Poder',
-    image: '/assets/logos/imagen-magnolia.jpg',
+    image: '/assets/logos/magnolia_garcia.jpg',
+    imageType: 'avatar',
   },
 
   {
@@ -46,7 +50,8 @@ export const testimonials: Testimonial[] = [
     author: 'Carlos Monnery Caiaffa',
     position: 'INEDIF - Director',
     company: 'INEDIF',
-    image: '/assets/logos/carlos-2.png',
+    image: '/assets/logos/carlos_monnery.png',
+    imageType: 'avatar',
   },
   // Más testimonios aquí
 ];
