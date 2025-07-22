@@ -12,7 +12,15 @@
 // - onClear: () => void
 // - latestPosts: Post[]
 
-const { query, selectedCategory, selectedTags, categories, tags, latestPosts } = Astro.props;
+import type { Post } from '../../../lib/types/blogPosts';
+const { query, selectedCategory, selectedTags, categories, tags, latestPosts } = Astro.props as {
+  query: string;
+  selectedCategory: string;
+  selectedTags: string[];
+  categories: string[];
+  tags: string[];
+  latestPosts: Post[];
+};
 ---
 
 <aside class="w-full max-w-xs bg-white dark:bg-gray-800 rounded-lg shadow p-8 mb-8 sticky top-8 z-10 ml-4">
@@ -41,7 +49,7 @@ const { query, selectedCategory, selectedTags, categories, tags, latestPosts } =
           />
           Todas
         </label>
-        {categories && categories.length > 0 && categories.map(cat => (
+        {categories && categories.length > 0 && categories.map((cat: string) => (
           <label class="flex items-center gap-2">
             <input
               type="radio"
@@ -50,22 +58,6 @@ const { query, selectedCategory, selectedTags, categories, tags, latestPosts } =
               checked={selectedCategory === cat}
             />
             {cat}
-          </label>
-        ))}
-      </div>
-    </div>
-    <div>
-      <span class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tags</span>
-      <div class="flex flex-wrap gap-2">
-        {tags && tags.length > 0 && tags.map(tag => (
-          <label class="flex items-center gap-1 text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">
-            <input
-              type="checkbox"
-              name="tag"
-              value={tag}
-              checked={selectedTags.includes(tag)}
-            />
-            {tag}
           </label>
         ))}
       </div>
@@ -86,7 +78,7 @@ const { query, selectedCategory, selectedTags, categories, tags, latestPosts } =
   <section>
     <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Últimos artículos</h3>
     <ul class="space-y-3">
-      {latestPosts && latestPosts.length > 0 ? latestPosts.map(post => (
+      {latestPosts && latestPosts.length > 0 ? latestPosts.map((post: any) => (
         <li>
           <a href={`/blog/${post.data.slug}`} class="text-primary-700 dark:text-primary-400 hover:underline font-medium text-sm">
             {post.data.title}

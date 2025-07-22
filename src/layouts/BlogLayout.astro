@@ -133,6 +133,19 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
           </div>
           {/* Encabezado principal del artículo */}
           <h1 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">{pageTitle}</h1>
+          {post.data.tags && post.data.tags.length > 0 && (
+            <div class="flex flex-wrap gap-2 mb-6">
+              {post.data.tags.map((tag: string) => (
+                <a
+                  href={`/blog?tag=${encodeURIComponent(tag)}`}
+                  class="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-100 text-gray-600 hover:bg-primary-100 hover:text-primary-700 transition"
+                  style="text-decoration: none;"
+                >
+                  #{tag}
+                </a>
+              ))}
+            </div>
+          )}
           <slot />
         </article>
       </div>
