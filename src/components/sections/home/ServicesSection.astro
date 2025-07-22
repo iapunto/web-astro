@@ -56,13 +56,18 @@ const services = [
       SEO que conquista las primeras posiciones
     </h2>
 
+    <p class="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
+      Como <strong>agencia de marketing</strong> especializada en <strong>desarrollo web</strong> y <strong>agencia de SEO</strong>, 
+      implementamos estrategias avanzadas para que tu negocio destaque en los resultados de búsqueda y atraiga más clientes.
+    </p>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {services.map((service) => <ServiceCard
         icon={service.icon}
         altText={service.altText || `${service.title} - Servicio`}
         title={service.title}
         description={service.description}
-        linkHref={service.linkHref}
+        link={service.linkHref}
         ctaText={service.ctaText}
       />)}
     </div>
