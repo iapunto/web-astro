@@ -17,6 +17,27 @@ const { testimonial } = Astro.props;
 <figure
   class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center h-full"
 >
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Review",
+      "reviewBody": testimonial.quote,
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5,
+        "bestRating": 5,
+        "worstRating": 1
+      },
+      "author": {
+        "@type": "Person",
+        "name": testimonial.author
+      },
+      "itemReviewed": {
+        "@type": "Organization",
+        "name": testimonial.company
+      }
+    })}
+  </script>
   <img
     src={testimonial.image}
     alt={testimonial.author || "Foto de cliente"}
