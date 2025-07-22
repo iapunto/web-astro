@@ -19,7 +19,7 @@ export const testimonials: Testimonial[] = [
     position: 'CEO Manager',
     company: 'Integral Health',
     image: '/assets/logos/integral_health.jpg',
-    imageType: 'logo',
+    imageType: 'icono',
   },
   {
     id: 3,
