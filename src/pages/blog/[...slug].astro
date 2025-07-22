@@ -5,6 +5,9 @@ import { render } from 'astro:content';
 import { Image } from 'astro:assets';
 import TableOfContents from '../../components/sections/blog/TableOfContents.astro';
 import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
+import AuthorQuote from '../../components/common/AuthorQuote.astro';
+import RecommendedArticle from '../../components/common/RecommendedArticle.astro';
+import { services } from '../../lib/constants/services';
 
 export const prerender = true;
 
@@ -51,6 +54,20 @@ const nextPostSlug = sortedPosts[currentIndex + 1]?.data.slug || null;
 
 // Para el sidebar derecho (últimos posts)
 const latestPosts = blogEntries.slice(0, 5);
+
+// Selección de artículo recomendado (aleatorio distinto al actual)
+const recommended = blogEntries.filter(e => e.data.slug !== post.data.slug)[Math.floor(Math.random() * (blogEntries.length - 1))]?.data;
+
+// Frase épica/reflexiva (del frontmatter o generada)
+const quote = post.data.quote || 'El marketing digital y la innovación tecnológica no son un lujo, son el motor que impulsa el crecimiento de las PYMES y startups.';
+const quoteAuthor = post.data.author?.name || 'Equipo IA Punto';
+
+// Enlaces internos a servicios cornerstone
+const cornerstoneLinks = [
+  services.find(s => s.link.endsWith('diseno-desarrollo-web')),
+  services.find(s => s.link.endsWith('posicionamiento-seo')),
+  services.find(s => s.link.endsWith('publicidad-online-ia')),
+].filter(Boolean);
 ---
 
 <BlogLayout
@@ -65,7 +82,26 @@ const latestPosts = blogEntries.slice(0, 5);
   <TableOfContents html={post.body} slot="toc" />
   <SidebarFilters latestPosts={latestPosts} slot="sidebar" />
   <div>
+    {/* Enlaces internos a servicios cornerstone */}
+    <section class="my-8 flex flex-wrap gap-4">
+      {cornerstoneLinks.map((service) => (
+        <a href={service.link} class="inline-block px-4 py-2 bg-primary-50 text-primary-700 rounded-lg font-semibold shadow hover:bg-primary-100 transition">
+          {service.title}
+        </a>
+      ))}
+    </section>
     <Content />
+    {/* Frase épica/reflexiva del autor */}
+    <AuthorQuote quote={quote} author={quoteAuthor} />
+    {/* Artículo recomendado al final */}
+    {recommended && (
+      <RecommendedArticle
+        title={recommended.title}
+        slug={recommended.slug}
+        description={recommended.description}
+        image={recommended.cover}
+      />
+    )}
     <div class="flex justify-between mt-8">
       {prevPostSlug && (
         <a
