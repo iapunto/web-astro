@@ -68,6 +68,13 @@ const cornerstoneLinks = [
   services.find(s => s.link.endsWith('posicionamiento-seo')),
   services.find(s => s.link.endsWith('publicidad-online-ia')),
 ].filter(Boolean);
+
+// Obtén la lista de categorías y tags oficiales de todos los artículos
+const allCategories = Array.from(new Set(blogEntries.map(e => e.data.category).filter(Boolean)));
+const allTags = Array.from(new Set(blogEntries.flatMap(e => Array.isArray(e.data.tags) ? e.data.tags : []).filter(Boolean)));
+const selectedCategory = post.data.category || '';
+const selectedTags = Array.isArray(post.data.tags) ? post.data.tags : [];
+const query = '';
 ---
 
 <BlogLayout
@@ -80,7 +87,15 @@ const cornerstoneLinks = [
   post={post}
 >
   <TableOfContents html={post.body} slot="toc" />
-  <SidebarFilters latestPosts={latestPosts} slot="sidebar" />
+  <SidebarFilters
+    categories={allCategories}
+    selectedCategory={selectedCategory}
+    tags={allTags}
+    selectedTags={selectedTags}
+    query={query}
+    latestPosts={latestPosts}
+    slot="sidebar"
+  />
   <div>
     {/* Enlaces internos a servicios cornerstone */}
     <section class="my-8 flex flex-wrap gap-4">
