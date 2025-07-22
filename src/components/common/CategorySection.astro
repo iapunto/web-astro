@@ -18,28 +18,30 @@ const { title, subtitle, description, image, alt, link, ctaText, bg, reverse } =
 ---
 
 <section class={`py-16 ${bg === 'gray' ? 'bg-gray-100' : ''}`}>
-  <div
-    class={`container mx-auto flex flex-col md:flex-row items-center ${reverse ? 'md:flex-row-reverse' : ''}`}
-  >
-    <div class="md:w-1/2 w-full flex justify-center mb-8 md:mb-0">
-      <img
-        src={image.src || image}
-        alt={alt}
-        class="max-w-xs md:max-w-md"
-        loading="lazy"
-        width="400"
-        height="400"
-      />
-    </div>
-    <div class="md:w-1/2 w-full px-4">
-      <h3 class="text-xl font-light text-gray-600 uppercase tracking-wider mb-2">{subtitle}</h3>
-      <h2 class="text-5xl font-bold text-gray-900 leading-tight mb-4">{title}</h2>
-      <p class="text-xl text-gray-600 font-light tracking-wider leading-8 pb-12 max-w-lg">{description}</p>
-      {
-        link && ctaText && (
-          <Button text={ctaText} href={link} variant="primary" />
-        )
-      }
+  <div class="container mx-auto">
+    <div
+      class={`flex flex-col md:flex-row items-center ${reverse ? 'md:flex-row-reverse' : ''}`}
+    >
+      <div class="md:w-1/2 w-full flex justify-center mb-8 md:mb-0">
+        <img
+          src={image.src || image}
+          alt={alt}
+          class="max-w-xs md:max-w-md"
+          loading="lazy"
+          width="400"
+          height="400"
+        />
+      </div>
+      <div class="md:w-1/2 w-full px-4">
+        <h3 class="text-xl font-light text-gray-600 uppercase tracking-wider mb-2">{subtitle}</h3>
+        <h2 class="text-5xl font-bold text-gray-900 leading-tight mb-4">{title}</h2>
+        <p class="text-xl text-gray-600 font-light tracking-wider leading-8 pb-12 max-w-lg">{description}</p>
+        {
+          link && ctaText && (
+            <Button text={ctaText} href={link} variant="primary" />
+          )
+        }
+      </div>
     </div>
   </div>
 </section>

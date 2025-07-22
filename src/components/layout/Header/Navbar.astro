@@ -12,53 +12,55 @@ import Button from '../../common/Button.astro';
   id="navbar"
   class="navbar bg-white py-4 sticky top-0 z-50 transition-all duration-300 shadow-sm"
 >
-  <div class="container mx-auto px-4 flex justify-between items-center">
-    <!-- Logo -->
-    <Logo />
+  <div class="container mx-auto">
+    <div class="flex justify-between items-center">
+      <!-- Logo -->
+      <Logo />
 
-    <!-- Menú de navegación (desktop) -->
-    <ul class="hidden md:flex space-x-6 items-center">
-      <li><NavLink href="/acerca-de" text="LA AGENCIA" /></li>
-      <li><DropdownMenu buttonText="SERVICIOS" data={servicesMenuData} /></li>
-      <li><NavLink href="/blog" text="IDEAS 360" /></li>
-      <li>
-        <NavLink href="/contacto" text="CONTACTO" />
-      </li>
-      <!-- Buscador global (desktop) -->
-      <li class="relative">
-        <form method="get" action="/search" class="searchbar-desktop flex items-center" role="search" aria-label="Buscar en todo el sitio">
-          <button type="button" id="search-toggle-btn" class="group bg-transparent p-2 rounded-full hover:bg-gray-100 transition flex items-center focus:outline-none" aria-label="Mostrar buscador">
-            <svg class="w-5 h-5 stroke-gray-500 group-hover:stroke-primary-600 transition-colors" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-          </button>
-          <input
-            type="text"
-            name="q"
-            id="searchbar-input"
-            placeholder="Buscar en todo el sitio..."
-            class="searchbar-input hidden absolute right-0 top-0 px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 bg-white z-50 transition-all duration-200"
-            autocomplete="off"
-            aria-label="Buscar en todo el sitio"
-            style="min-width: 220px;"
-          />
-          <button type="submit" class="searchbar-submit hidden absolute right-0 top-0 bg-primary-600 text-white px-3 py-1 rounded hover:bg-primary-700 transition ml-2" aria-label="Buscar">
-            Buscar
-          </button>
-        </form>
-      </li>
-      <li>
-        <Button text="Agenda una Reunión" id="open-modal-btn-nav" variant="primary" />
-      </li>
-    </ul>
+      <!-- Menú de navegación (desktop) -->
+      <ul class="hidden md:flex space-x-6 items-center">
+        <li><NavLink href="/acerca-de" text="LA AGENCIA" /></li>
+        <li><DropdownMenu buttonText="SERVICIOS" data={servicesMenuData} /></li>
+        <li><NavLink href="/blog" text="IDEAS 360" /></li>
+        <li>
+          <NavLink href="/contacto" text="CONTACTO" />
+        </li>
+        <!-- Buscador global (desktop) -->
+        <li class="relative">
+          <form method="get" action="/search" class="searchbar-desktop flex items-center" role="search" aria-label="Buscar en todo el sitio">
+            <button type="button" id="search-toggle-btn" class="group bg-transparent p-2 rounded-full hover:bg-gray-100 transition flex items-center focus:outline-none" aria-label="Mostrar buscador">
+              <svg class="w-5 h-5 stroke-gray-500 group-hover:stroke-primary-600 transition-colors" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </button>
+            <input
+              type="text"
+              name="q"
+              id="searchbar-input"
+              placeholder="Buscar en todo el sitio..."
+              class="searchbar-input hidden absolute right-0 top-0 px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 bg-white z-50 transition-all duration-200"
+              autocomplete="off"
+              aria-label="Buscar en todo el sitio"
+              style="min-width: 220px;"
+            />
+            <button type="submit" class="searchbar-submit hidden absolute right-0 top-0 bg-primary-600 text-white px-3 py-1 rounded hover:bg-primary-700 transition ml-2" aria-label="Buscar">
+              Buscar
+            </button>
+          </form>
+        </li>
+        <li>
+          <Button text="Agenda una Reunión" id="open-modal-btn-nav" variant="primary" />
+        </li>
+      </ul>
 
-    <!-- Botón hamburguesa (mobile) -->
-    <button id="menu-toggle" class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none" aria-label="Abrir menú">
-      <span class="block w-6 h-0.5 bg-gray-800 mb-1"></span>
-      <span class="block w-6 h-0.5 bg-gray-800 mb-1"></span>
-      <span class="block w-6 h-0.5 bg-gray-800"></span>
-    </button>
+      <!-- Botón hamburguesa (mobile) -->
+      <button id="menu-toggle" class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none" aria-label="Abrir menú">
+        <span class="block w-6 h-0.5 bg-gray-800 mb-1"></span>
+        <span class="block w-6 h-0.5 bg-gray-800 mb-1"></span>
+        <span class="block w-6 h-0.5 bg-gray-800"></span>
+      </button>
+    </div>
   </div>
   <!-- Menú móvil -->
   <div id="mobile-menu" class="md:hidden fixed top-0 left-0 w-full h-full bg-white z-40 flex flex-col items-center justify-center transition-transform duration-300 translate-x-full">

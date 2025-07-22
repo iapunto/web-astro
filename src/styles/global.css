@@ -263,8 +263,10 @@ input[type='tel'] {
 }
 
 .container {
-  max-width: 100vw;
-  overflow-x: hidden !important;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  overflow-x: visible;
 }
 
 .swiper,
