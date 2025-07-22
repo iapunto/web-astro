@@ -9,6 +9,7 @@ import ServiceFeatures from '../../components/sections/services/ServiceFeatures.
 import ServiceFAQ from '../../components/sections/services/ServiceFAQ.astro';
 import { Icon } from 'astro-icon/components';
 import SchemaMarkup from '../../components/common/SchemaMarkup.astro';
+import RecommendedServices from '../../components/common/RecommendedServices.astro';
 
 const { slug } = Astro.params;
 const service: ServiceData | undefined = services.find(s => s.slug === slug);
@@ -126,5 +127,6 @@ if (!service) {
       description={service.faqDescription}
     />
   )}
-  <SchemaMarkup service={service} faqs={service.faqs} cornerstone={service.slug === 'posicionamiento-seo'} />
+  <SchemaMarkup service={service} faqs={service.faqs} cornerstone={['diseno-desarrollo-web','posicionamiento-seo','publicidad-online-ia'].includes(service.slug)} />
+  <RecommendedServices excludeSlug={service.slug} />
 </DefaultLayout> 
