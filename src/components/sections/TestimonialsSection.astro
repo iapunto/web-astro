@@ -19,6 +19,11 @@ import TestimonialCard from '../common/TestimonialCard.astro';
       Experiencias IA Punto
     </p>
 
+    {/* Log visual de depuración: mostrar índice y empresa */}
+    <div class="mb-8 text-xs text-left text-gray-500">
+      {testimonials.map((t, i) => <div>{i}: {t.company}</div>)}
+    </div>
+
     <h2 class="text-4xl md:text-5xl font-bold mb-16">
       Testimonios que Inspiran Confianza
     </h2>
