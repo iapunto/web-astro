@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Permite acceso a contenido específico para LLMs
+Allow: /blog/
+Allow: /servicios/
+Allow: /acerca-de/
+Allow: /contacto/
+
+# Información del sitio para LLMs
+Site: https://iapunto.com
+Description: Agencia de marketing digital y desarrollo web especializada en inteligencia artificial
+Language: es
+Country: Colombia
+
+# Sitemap para LLMs
+Sitemap: https://iapunto.com/sitemap.xml
+
+# Política de crawling para LLMs
+Crawl-delay: 1 
