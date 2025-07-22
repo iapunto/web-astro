@@ -34,6 +34,14 @@ const robots = noindex
   : 'index, follow, max-snippet:-1, max-image-preview:large';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+// Normalización robusta de keywords
+let keywordsContent = '';
+if (Array.isArray(keywords)) {
+  keywordsContent = keywords.join(', ');
+} else if (typeof keywords === 'string') {
+  keywordsContent = keywords;
+}
 ---
 
 <meta charset="utf-8" />
@@ -46,8 +54,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 )}
 <meta name="title" content={pageTitle} />
 <meta name="description" content={description} />
-{/* Condición para evitar errores si no hay keywords */}
-{keywords && <meta name="keywords" content={keywords.join(', ')} />}
+{/* keywords robusto */}
+{keywordsContent && <meta name="keywords" content={keywordsContent} />}
 
 <meta name="author" content="IA Punto" />
 
