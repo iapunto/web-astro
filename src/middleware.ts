@@ -1,6 +1,26 @@
 import type { MiddlewareHandler } from 'astro';
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
+  const url = new URL(context.request.url);
+  const pathname = url.pathname;
+
+  // Redirecciones para evitar contenido duplicado
+  // Redirigir URLs sin barra final a URLs con barra final para páginas principales
+  if (
+    pathname === '/blog' ||
+    pathname === '/servicios' ||
+    pathname === '/acerca-de' ||
+    pathname === '/contacto'
+  ) {
+    return new Response(null, {
+      status: 301,
+      headers: {
+        Location: `${pathname}/`,
+        'Cache-Control': 'public, max-age=31536000',
+      },
+    });
+  }
+
   const response = await next();
 
   // Content Security Policy (CSP)
@@ -58,20 +78,17 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
   response.headers.delete('X-Powered-By');
 
   // Reglas de caché eficientes para recursos estáticos y HTML
-  const url = new URL(context.request.url);
   if (
-    url.pathname.match(
-      /\.(js|css|png|jpg|jpeg|gif|svg|webp|woff2|woff|ttf|eot)$/
-    )
+    pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|webp|woff2|woff|ttf|eot)$/)
   ) {
     response.headers.set(
       'Cache-Control',
       'public, max-age=31536000, immutable'
     );
   } else if (
-    url.pathname.endsWith('.html') ||
-    url.pathname === '/' ||
-    url.pathname.endsWith('/')
+    pathname.endsWith('.html') ||
+    pathname === '/' ||
+    pathname.endsWith('/')
   ) {
     response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
   }

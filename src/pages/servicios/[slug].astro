@@ -11,14 +11,12 @@ import { Icon } from 'astro-icon/components';
 import SchemaMarkup from '../../components/common/SchemaMarkup.astro';
 import RecommendedServices from '../../components/common/RecommendedServices.astro';
 
-export async function getStaticPaths() {
-  return services.map((service) => ({
-    params: { slug: service.slug },
-    props: { service },
-  }));
-}
+const { slug } = Astro.params;
+const service: ServiceData | undefined = services.find(s => s.slug === slug);
 
-const { service } = Astro.props;
+if (!service) {
+  throw new Error(`Servicio no encontrado: ${slug}`);
+}
 ---
 
 <DefaultLayout

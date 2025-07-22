@@ -23,7 +23,7 @@ export default defineConfig({
       publicDir: './public',
     }),
   ],
-  output: 'static',
+  output: 'server',
   adapter: node({
     mode: 'standalone',
   }),
