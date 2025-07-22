@@ -1,4 +1,4 @@
-import type { Testimonial, CompanyLogo } from '../types/testimonials';
+import type { Testimonial, CompanyLogo } from '../types/testimonials.ts';
 
 export const testimonials: Testimonial[] = [
   {
@@ -8,7 +8,7 @@ export const testimonials: Testimonial[] = [
     author: 'Ubilerma Meneses',
     position: 'CEO Manager',
     company: 'Distribuidora UVAYO',
-    image: 'https://iapunto.com/wp-content/uploads/2023/01/tes003.jpg',
+    image: '/assets/logos/tes003.jpg',
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const testimonials: Testimonial[] = [
     author: 'Yaneth Zamora',
     position: 'CEO Manager',
     company: 'Integral Health',
-    image: 'https://iapunto.com/wp-content/uploads/2023/12/ICON.png',
+    image: '/assets/logos/ICON.png',
   },
   {
     id: 3,
@@ -26,8 +26,7 @@ export const testimonials: Testimonial[] = [
     author: 'Pedro Zambrano',
     position: 'Biogénica Global - Director',
     company: 'Biogénica Global',
-    image:
-      'https://iapunto.com/wp-content/uploads/2023/12/82f43e79-81f3-4872-949f-01b2e051e9f1.jpeg',
+    image: '/assets/logos/82f43e79-81f3-4872-949f-01b2e051e9f1.jpeg',
   },
 
   {
@@ -37,8 +36,7 @@ export const testimonials: Testimonial[] = [
     author: 'Magnolia García',
     position: 'Yo Soy Poder - Autora',
     company: 'Yo Soy Poder',
-    image:
-      'https://inedif.com.co/congreso-internacional-de-cerebro-y-educacion/wp-content/uploads/2024/11/Imagen-de-WhatsApp-2024-02-12-a-las-12.09.33_304ee209.jpg',
+    image: '/assets/logos/imagen-magnolia.jpg',
   },
 
   {
@@ -48,7 +46,7 @@ export const testimonials: Testimonial[] = [
     author: 'Carlos Monnery Caiaffa',
     position: 'INEDIF - Director',
     company: 'INEDIF',
-    image: 'https://inedif.com.co/wp-content/uploads/2023/09/carlos-2.png',
+    image: '/assets/logos/carlos-2.png',
   },
   // Más testimonios aquí
 ];
