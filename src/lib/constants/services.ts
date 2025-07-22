@@ -47,81 +47,81 @@ const ICONS = {
 // Datos de los servicios
 export const services: Service[] = [
   {
-    title: 'Chatbots Inteligentes',
+    title: 'Chatbots Inteligentes para tu Negocio',
     description:
-      'Automatiza la atención al cliente 24/7, genera leads y mejora la satisfacción con chatbots personalizados e IA.',
+      'Atiende a tus clientes 24/7 y genera leads automáticamente con chatbots personalizados e IA. Mejora la satisfacción y ahorra tiempo.',
     icon: ICONS.chatbot,
     alt: 'Icono de Chatbots Inteligentes',
     link: '/servicios/chatbots-inteligentes',
     ctaText: 'Saber más',
   },
   {
-    title: 'Diseño y Desarrollo Web',
+    title: 'Diseño y Desarrollo Web Profesional',
     description:
-      'Creamos sitios web profesionales a medida, enfocados en la conversión y optimizados para UX/UI.',
+      'Aumenta tus clientes con una web a medida, optimizada para conversión, velocidad y experiencia de usuario. ¡Haz crecer tu empresa online!',
     icon: ICONS.webDesign,
     alt: 'Icono de Diseño y Desarrollo Web',
     link: '/servicios/diseno-desarrollo-web',
     ctaText: 'Ver proyectos',
   },
   {
-    title: 'Publicidad Online con IA',
+    title: 'Publicidad Online con IA: Más Clientes, Menos Gasto',
     description:
-      'Maximiza tu ROI con campañas publicitarias inteligentes en Google Ads y redes sociales, impulsadas por IA.',
+      'Lanza campañas inteligentes en Google Ads y redes sociales. Consigue más ventas y maximiza tu ROI con tecnología de IA.',
     icon: ICONS.advertising,
     alt: 'Icono de Publicidad Online con IA',
     link: '/servicios/publicidad-online-ia',
     ctaText: 'Impulsa tu negocio',
   },
   {
-    title: 'Posicionamiento SEO',
+    title: 'Posicionamiento SEO para Empresas',
     description:
-      'Aumenta tu visibilidad orgánica en Google con estrategias SEO On-Page y Off-Page.',
+      'Sube a la cima de Google y atrae más clientes con estrategias SEO avanzadas, personalizadas y orientadas a resultados.',
     icon: ICONS.seo,
     alt: 'Icono de Posicionamiento SEO',
     link: '/servicios/posicionamiento-seo',
     ctaText: 'Mejora tu ranking',
   },
   {
-    title: 'Marketing de Contenidos',
+    title: 'Marketing de Contenidos con IA',
     description:
-      'Creamos contenido optimizado para SEO que atrae a tu audiencia y posiciona tu marca. Usamos IA.',
+      'Atrae clientes y posiciona tu marca con contenido optimizado para SEO, creado por expertos y potenciado por inteligencia artificial.',
     icon: ICONS.content,
     alt: 'Icono de Marketing de Contenidos',
     link: '/servicios/marketing-de-contenidos',
     ctaText: 'Atrae más clientes',
   },
   {
-    title: 'Desarrollo de Apps Móviles',
+    title: 'Desarrollo de Apps Móviles para Empresas',
     description:
-      'Desarrollamos apps móviles nativas e híbridas para iOS y Android con diseño UI/UX intuitivo.',
+      'Lleva tu negocio al bolsillo de tus clientes. Apps nativas e híbridas para iOS y Android, con diseño UI/UX intuitivo y funcional.',
     icon: ICONS.appDev,
     alt: 'Icono de Desarrollo de Apps Móviles',
     link: '/servicios/desarrollo-apps-moviles',
     ctaText: 'Desarrolla tu app',
   },
   {
-    title: 'Odoo ERP',
+    title: 'Odoo ERP: Optimiza tu Gestión Empresarial',
     description:
-      'Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa.',
+      'Implementa y personaliza Odoo ERP para digitalizar y automatizar la gestión integral de tu empresa. Más control, menos esfuerzo.',
     icon: ICONS.odoo,
     alt: 'Icono de Odoo ERP',
     link: '/servicios/odoo-erp',
     ctaText: 'Optimiza tu gestión',
   },
   {
-    title: 'Optimización y Conversión',
+    title: 'Optimización Web y Conversión (CRO)',
     description:
-      'Optimizamos tu sitio web para mejorar el rendimiento, la usabilidad y aumentar las conversiones.',
+      'Mejora el rendimiento, la usabilidad y aumenta tus ventas con optimización profesional de tu sitio web. Convierte más visitantes en clientes.',
     icon: ICONS.optimization,
     alt: 'Icono de Optimización y Conversión',
     link: '/servicios/optimizacion-conversion',
     ctaText: 'Aumenta tus ventas',
   },
   {
-    title: 'Automatización Inteligente',
+    title: 'Automatización Inteligente de Procesos',
     description:
-      'Automatizamos flujos de trabajo integrando tus aplicaciones y sistemas para aumentar la eficiencia.',
+      'Automatiza flujos de trabajo, integra tus sistemas y ahorra tiempo. Más eficiencia y menos errores para tu empresa.',
     icon: ICONS.automation,
     alt: 'Icono de Automatización Inteligente',
     link: '/servicios/automatizacion-inteligente',
