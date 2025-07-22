@@ -1,9 +1,11 @@
 ---
 export interface Props {
-  post?: any; // Add post prop for blog articles
+  post?: any; // Para artículos de blog
+  service?: any; // Para páginas de servicios
+  faqs?: Array<{ question: string; answer: string }>; // Para FAQPage
 }
 
-const { post } = Astro.props;
+const { post, service, faqs } = Astro.props;
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -28,16 +30,16 @@ const organizationSchema = {
   },
 };
 
-let combinedSchema = [organizationSchema];
+let combinedSchema: any[] = [organizationSchema];
 
 if (post) {
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.data.title,
-    image: post.data.cover, // Assuming cover is the main image for the article
+    image: post.data.cover,
     datePublished: post.data.pubDate.toISOString(),
-    dateModified: post.data.pubDate.toISOString(), // Assuming no separate modified date
+    dateModified: post.data.pubDate.toISOString(),
     author: {
       "@type": "Person",
       name: post.data.author.name,
@@ -53,10 +55,60 @@ if (post) {
     description: post.data.description,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": Astro.url.href, // Current page URL
+      "@id": Astro.url.href,
     },
   };
   combinedSchema.push(articleSchema);
+}
+
+if (service) {
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.hero?.description || service.title,
+    serviceType: service.title,
+    provider: {
+      "@type": "Organization",
+      name: organizationSchema.name,
+      url: organizationSchema.url,
+      logo: organizationSchema.logo,
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "Colombia",
+    },
+    offers: service.pricing && service.pricing.length > 0 ? service.pricing.map((section: any) => ({
+      "@type": "Offer",
+      name: section.title,
+      price: section.plans && section.plans[0]?.price,
+      priceCurrency: "COP",
+      description: section.plans && section.plans[0]?.features?.join(", "),
+      url: Astro.url.href,
+    })) : undefined,
+    image: service.hero?.image,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": Astro.url.href,
+    },
+  };
+  combinedSchema.push(serviceSchema);
+}
+
+if (faqs && faqs.length > 0) {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+  combinedSchema.push(faqSchema);
 }
 ---
 

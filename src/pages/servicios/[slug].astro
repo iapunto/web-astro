@@ -8,6 +8,7 @@ import ServiceHowItWorks from '../../components/sections/services/ServiceHowItWo
 import ServiceFeatures from '../../components/sections/services/ServiceFeatures.astro';
 import ServiceFAQ from '../../components/sections/services/ServiceFAQ.astro';
 import { Icon } from 'astro-icon/components';
+import SchemaMarkup from '../../components/common/SchemaMarkup.astro';
 
 const { slug } = Astro.params;
 const service: ServiceData | undefined = services.find(s => s.slug === slug);
@@ -125,4 +126,5 @@ if (!service) {
       description={service.faqDescription}
     />
   )}
+  <SchemaMarkup service={service} faqs={service.faqs} />
 </DefaultLayout> 
