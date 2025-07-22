@@ -1,2 +1,29 @@
+---
 import SeoMeta from './SeoMeta.astro';
-export default SeoMeta;
+const {
+  pageTitle = '',
+  description = '',
+  image,
+  keywords,
+  robots,
+  noindex,
+  twitterSite,
+  twitterCreator,
+  ogType,
+  siteName,
+  locale,
+} = Astro.props;
+---
+<SeoMeta
+  pageTitle={pageTitle}
+  description={description}
+  image={image}
+  keywords={keywords}
+  robots={robots}
+  noindex={noindex}
+  twitterSite={twitterSite}
+  twitterCreator={twitterCreator}
+  ogType={ogType}
+  siteName={siteName}
+  locale={locale}
+/>
