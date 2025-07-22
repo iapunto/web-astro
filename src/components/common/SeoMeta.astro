@@ -39,7 +39,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-<title>IA Punto | {pageTitle}</title>
+{Astro.url.pathname === '/' ? (
+  <title>{siteName} | {pageTitle}</title>
+) : (
+  <title>{pageTitle} | {siteName}</title>
+)}
 <meta name="title" content={pageTitle} />
 <meta name="description" content={description} />
 {/* Condición para evitar errores si no hay keywords */}
