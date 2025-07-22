@@ -126,5 +126,5 @@ if (!service) {
       description={service.faqDescription}
     />
   )}
-  <SchemaMarkup service={service} faqs={service.faqs} />
+  <SchemaMarkup service={service} faqs={service.faqs} cornerstone={service.slug === 'posicionamiento-seo'} />
 </DefaultLayout> 

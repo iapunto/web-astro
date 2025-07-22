@@ -3,9 +3,10 @@ export interface Props {
   post?: any; // Para artículos de blog
   service?: any; // Para páginas de servicios
   faqs?: Array<{ question: string; answer: string }>; // Para FAQPage
+  cornerstone?: boolean; // Indica si la página es cornerstone
 }
 
-const { post, service, faqs } = Astro.props;
+const { post, service, faqs, cornerstone } = Astro.props;
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -62,7 +63,7 @@ if (post) {
 }
 
 if (service) {
-  const serviceSchema = {
+  const serviceSchema: any = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: service.title,
@@ -92,6 +93,19 @@ if (service) {
       "@id": Astro.url.href,
     },
   };
+  if (cornerstone) {
+    serviceSchema.isPartOf = {
+      "@type": "WebSite",
+      name: organizationSchema.name,
+      url: organizationSchema.url,
+    };
+    serviceSchema.mainEntityOfPage = {
+      "@type": "WebPage",
+      "@id": Astro.url.href,
+      "name": service.title,
+      "description": service.hero?.description || service.title,
+    };
+  }
   combinedSchema.push(serviceSchema);
 }
 

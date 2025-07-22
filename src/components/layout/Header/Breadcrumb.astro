@@ -4,7 +4,7 @@ import type { BreadcrumbItem } from '../../../lib/types/breadcrumb';
 import type { BreadcrumbProps } from '../../../lib/types/breadcrumbProps';
 
 // Props recibidas desde el layout
-const { pageTitle }: BreadcrumbProps = Astro.props;
+const { pageTitle = '' }: Partial<BreadcrumbProps> = Astro.props;
 
 // Función para generar el breadcrumb
 const getBreadcrumb = (path: string): BreadcrumbItem[] => {
@@ -42,56 +42,78 @@ const breadcrumb = getBreadcrumb(currentPath);
 
 {
   breadcrumb.length > 0 ? (
-    <nav class="bg-gray-100 py-2 px-4" aria-label="Breadcrumb navigation">
-      <div class="container w-4/5 mx-auto flex items-center space-x-2 text-sm">
-        {/* Enlace al Home */}
-        <a
-          href="/"
-          class="text-gray-900 font-bold hover:text-primary"
-          aria-current="page"
-        >
-          Home
-        </a>
+    <>
+      <nav class="bg-gray-100 py-2 px-4" aria-label="Breadcrumb navigation">
+        <div class="container w-4/5 mx-auto flex items-center space-x-2 text-sm">
+          {/* Enlace al Home */}
+          <a
+            href="/"
+            class="text-gray-900 font-bold hover:text-primary"
+            aria-current="page"
+          >
+            Home
+          </a>
 
-        {/* Mapeo de los elementos del breadcrumb */}
-        {breadcrumb.map((item, index) => (
-          <span key={item.url || item.name} class="flex items-center">
-            {/* Icono de flecha */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-
-            {/* Elemento del breadcrumb */}
-            {item.url ? (
-              <a
-                href={item.url}
-                class="text-gray-600 hover:text-gray-800"
-                aria-current={
-                  index === breadcrumb.length - 1 ? 'page' : undefined
-                }
+          {/* Mapeo de los elementos del breadcrumb */}
+          {breadcrumb.map((item, index) => (
+            <span class="flex items-center">
+              {/* Icono de flecha */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
               >
-                {item.name}
-              </a>
-            ) : (
-              <span class="text-gray-600" aria-current="page">
-                {item.name}
-              </span>
-            )}
-          </span>
-        ))}
-      </div>
-    </nav>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+
+              {/* Elemento del breadcrumb */}
+              {item.url ? (
+                <a
+                  href={item.url}
+                  class="text-gray-600 hover:text-gray-800"
+                  aria-current={
+                    index === breadcrumb.length - 1 ? 'page' : undefined
+                  }
+                >
+                  {item.name}
+                </a>
+              ) : (
+                <span class="text-gray-600" aria-current="page">
+                  {item.name}
+                </span>
+              )}
+            </span>
+          ))}
+        </div>
+      </nav>
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.iapunto.com/"
+            },
+            ...breadcrumb.map((item, index) => ({
+              "@type": "ListItem",
+              "position": index + 2,
+              "name": item.name,
+              ...(item.url ? { "item": `https://www.iapunto.com${item.url}` } : {})
+            }))
+          ]
+        })}
+      </script>
+    </>
   ) : null
 }
