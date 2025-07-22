@@ -16,6 +16,8 @@ const blogEntries = defineCollection({
       image: z.string().optional(),
     }),
     category: z.string(),
+    subcategory: z.string().optional(),
+    quote: z.string().optional(),
   }),
 });
 
