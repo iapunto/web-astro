@@ -16,7 +16,9 @@ export default defineConfig({
       include: ['**/react/*'],
     }),
     mdx(),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.startsWith('/legal/'),
+    }),
     astroIcon({
       publicDir: './public',
     }),
