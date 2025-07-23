@@ -144,3 +144,24 @@ tags: ['SEO Local', 'Inteligencia Artificial', 'Google', 'PYMES', 'Automatizaci�
 quote: 'Frase única y épica del artículo.'
 ---
 ```
+
+## Instrucciones para el campo quote (frase única y épica)
+
+- El campo `quote` debe contener una frase original, memorable y alineada con el mensaje central del artículo.
+- Debe ser breve, impactante y fácil de recordar (idealmente entre 8 y 20 palabras).
+- Puede ser inspiradora, motivacional, disruptiva o reflexiva, pero siempre relevante para el contenido.
+- Evita frases genéricas, clichés o citas de terceros. La frase debe ser propia del autor o del enfoque del artículo.
+- El tono debe ser profesional, auténtico y coherente con la voz de IA Punto.
+- Puedes usar la primera persona si el artículo es de opinión, o tercera persona para artículos informativos.
+- Si el artículo es de un caso de éxito, la frase debe reflejar el logro o aprendizaje principal.
+
+**Ejemplos de quote bien redactados:**
+
+- "El éxito digital no es casualidad: es el resultado de una estrategia coherente y medible."
+- "Transformar datos en decisiones es el verdadero poder de la inteligencia artificial."
+- "Cada cliente es una oportunidad para crear una experiencia memorable."
+- "La innovación comienza cuando te atreves a cuestionar lo establecido."
+- "Automatizar es liberar tiempo para lo que realmente importa: crecer."
+
+**Recomendación:**
+Si necesitas inspiración, puedes usar herramientas de generación de frases o IA, pero siempre revisa y adapta la frase para que sea única y relevante para tu artículo y audiencia [[fuente](https://instasize.com/tools/quote-generator)][[fuente](https://thestoryshack.com/tools/quote-generator/)].
