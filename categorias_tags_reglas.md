@@ -69,6 +69,32 @@
 
 ---
 
+## Servicios oficiales de IA Punto (Referencia para artículos)
+
+Los siguientes servicios pueden ser citados, recomendados o enlazados desde los artículos del blog, según la temática y el enfoque del contenido:
+
+- Estrategia Digital con IA
+- Desarrollo Web Inteligente
+- Automatización de Marketing
+- SEO Programático
+- Publicidad Digital con IA
+- Analítica y Dashboards Inteligentes
+- Integración de Chatbots y Asistentes Virtuales
+- Centralización de Datos y CRM
+- Consultoría en Transformación Digital
+- Implementación de EVAFS
+- Plataformas SaaS (Skailan)
+
+**Formato sugerido para citar un servicio:**
+
+> _¿Quieres llevar tu negocio al siguiente nivel? Descubre nuestro servicio de [Automatización de Marketing](https://iapunto.com/servicios/automatizacion-marketing) y transforma tu estrategia digital._
+
+**Ejemplo de uso en artículo:**
+
+> _Para implementar una estrategia de SEO programático, puedes apoyarte en nuestro servicio de [SEO Programático](https://iapunto.com/servicios/seo-programatico) diseñado para PYMES y empresas en crecimiento._
+
+---
+
 ## Lista oficial de tags permitidos
 
 Inteligencia Artificial, Machine Learning, Deep Learning, Modelos de Lenguaje, Chatbots, Automatización, No-Code, Low-Code, SEO, SEO Local, SEO Programático, Marketing Digital, Marketing de Contenidos, Publicidad Digital, Google, Facebook, OpenAI, PYMES, Empresas, Transformación Digital, Innovación, Tendencias, Opinión, Seguridad, Privacidad, Analítica, Datos, Productividad, Herramientas, Software, APIs, Integraciones, Biotecnología, Salud, Ecommerce, Personalización, EVAFS, Skailan, Futuro, Ética IA, Regulación IA, Hardware IA, Data Management, SaaS, Startups, Emprendimiento
