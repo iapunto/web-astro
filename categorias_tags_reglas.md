@@ -73,25 +73,23 @@
 
 Los siguientes servicios pueden ser citados, recomendados o enlazados desde los artículos del blog, según la temática y el enfoque del contenido. Usa el slug o la URL indicada para enlazar correctamente:
 
-- Estrategia Digital con IA — `/servicios/estrategia-digital-ia` o <https://iapunto.com/servicios/estrategia-digital-ia>
-- Desarrollo Web Inteligente — `/servicios/desarrollo-web-inteligente` o <https://iapunto.com/servicios/desarrollo-web-inteligente>
-- Automatización de Marketing — `/servicios/automatizacion-marketing` o <https://iapunto.com/servicios/automatizacion-marketing>
-- SEO Programático — `/servicios/seo-programatico` o <https://iapunto.com/servicios/seo-programatico>
-- Publicidad Digital con IA — `/servicios/publicidad-digital-ia` o <https://iapunto.com/servicios/publicidad-digital-ia>
-- Analítica y Dashboards Inteligentes — `/servicios/analitica-dashboards` o <https://iapunto.com/servicios/analitica-dashboards>
-- Integración de Chatbots y Asistentes Virtuales — `/servicios/chatbots-asistentes` o <https://iapunto.com/servicios/chatbots-asistentes>
-- Centralización de Datos y CRM — `/servicios/centralizacion-datos-crm` o <https://iapunto.com/servicios/centralizacion-datos-crm>
-- Consultoría en Transformación Digital — `/servicios/consultoria-transformacion-digital` o <https://iapunto.com/servicios/consultoria-transformacion-digital>
-- Implementación de EVAFS — `/servicios/evafs` o <https://iapunto.com/servicios/evafs>
-- Plataformas SaaS (Skailan) — `/servicios/skailan` o <https://iapunto.com/servicios/skailan>
+- Chatbots Inteligentes para tu Negocio — `/servicios/chatbots-inteligentes` o <https://iapunto.com/servicios/chatbots-inteligentes>
+- Diseño y Desarrollo Web Profesional — `/servicios/diseno-desarrollo-web` o <https://iapunto.com/servicios/diseno-desarrollo-web>
+- Publicidad Online con IA: Más Clientes, Menos Gasto — `/servicios/publicidad-online-ia` o <https://iapunto.com/servicios/publicidad-online-ia>
+- Posicionamiento SEO para Empresas — `/servicios/posicionamiento-seo` o <https://iapunto.com/servicios/posicionamiento-seo>
+- Marketing de Contenidos con IA — `/servicios/marketing-de-contenidos` o <https://iapunto.com/servicios/marketing-de-contenidos>
+- Desarrollo de Apps Móviles para Empresas — `/servicios/desarrollo-apps-moviles` o <https://iapunto.com/servicios/desarrollo-apps-moviles>
+- Odoo ERP: Optimiza tu Gestión Empresarial — `/servicios/odoo-erp` o <https://iapunto.com/servicios/odoo-erp>
+- Optimización Web y Conversión (CRO) — `/servicios/optimizacion-conversion` o <https://iapunto.com/servicios/optimizacion-conversion>
+- Automatización Inteligente de Procesos — `/servicios/automatizacion-inteligente` o <https://iapunto.com/servicios/automatizacion-inteligente>
 
 **Formato sugerido para citar un servicio:**
 
-> _¿Quieres llevar tu negocio al siguiente nivel? Descubre nuestro servicio de [Automatización de Marketing](/servicios/automatizacion-marketing) y transforma tu estrategia digital._
+> _¿Quieres llevar tu negocio al siguiente nivel? Descubre nuestro servicio de [Chatbots Inteligentes para tu Negocio](/servicios/chatbots-inteligentes) y transforma tu atención al cliente._
 
 **Ejemplo de uso en artículo:**
 
-> _Para implementar una estrategia de SEO programático, puedes apoyarte en nuestro servicio de [SEO Programático](/servicios/seo-programatico) diseñado para PYMES y empresas en crecimiento._
+> _Para mejorar tu posicionamiento en Google, puedes apoyarte en nuestro servicio de [Posicionamiento SEO para Empresas](/servicios/posicionamiento-seo) y atraer más clientes potenciales._
 
 ---
 
