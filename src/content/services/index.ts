@@ -11,7 +11,7 @@ export const services: ServiceData[] = [
       title: 'Chatbots que Atienden, Venden y Fidelizan',
       description:
         'Automatiza tu atención al cliente, genera leads y responde en segundos con chatbots inteligentes diseñados para WhatsApp, Instagram, Facebook y Telegram.',
-      image: '/public/icons/chatbot.png',
+      image: '/icons/chatbot.png',
       alt: 'Chatbots Inteligentes para Canales de Mensajería',
     },
     mainImage: {
@@ -186,11 +186,11 @@ export const services: ServiceData[] = [
       title: 'Publicidad Online con IA que Atrae, Convence y Vende',
       description:
         'Usamos inteligencia artificial para crear campañas publicitarias más inteligentes, rentables y personalizadas. Llega a tu audiencia ideal con anuncios que generan resultados reales.',
-      image: '/public/icons/ads.png',
+      image: '/icons/ads.png',
       alt: 'Publicidad Online con IA',
     },
     mainImage: {
-      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753228301/una-escena-moderna-y-minimalista-de-un-equipo-trabajando-en-desarrollo-web-un-escritorio-con-dos-pe_uttce8.jpg',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753233559/representa-un-entorno-digital-moderno-donde-se-visualiza-una-campaa-de-publicidad-online-con-inteli_1_kny4c1.jpg',
       alt: 'Publicidad Online con IA - Gráfico',
     },
     benefits: [

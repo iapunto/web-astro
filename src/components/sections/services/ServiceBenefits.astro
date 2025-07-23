@@ -10,10 +10,6 @@ export interface Props {
   };
 }
 const { benefits, mainImage } = Astro.props;
-
-// Debug: verificar si mainImage se está pasando
-console.log('ServiceBenefits - mainImage:', mainImage);
-console.log('ServiceBenefits - benefits:', benefits);
 ---
 
 <section class="overflow-hidden bg-white py-24 sm:py-32">
@@ -38,7 +34,16 @@ console.log('ServiceBenefits - benefits:', benefits);
       </div>
       {mainImage && (
         <div>
-          <img src={mainImage.url} alt={mainImage.alt} class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+          <img 
+            src={mainImage.url} 
+            alt={mainImage.alt} 
+            class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" 
+            width="2432" 
+            height="1442" 
+            loading="lazy"
+            onerror="console.error('Error loading image:', this.src)"
+            onload="console.log('Image loaded successfully:', this.src)"
+          />
         </div>
       )}
     </div>
