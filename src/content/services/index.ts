@@ -47,37 +47,37 @@ export const services: ServiceData[] = [
     ],
     features: [
       {
-        icon: '<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z"/></svg>',
+        icon: '<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z"/></svg>',
         title: 'E-Commerce',
         description:
           'Responde dudas, guía el proceso de compra y activa promociones por WhatsApp, Instagram y más.',
       },
       {
-        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
+        icon: '<svg class=w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M14.079 6.839a3 3 0 0 0-4.255.1M13 20h1.083A3.916 3.916 0 0 0 18 16.083V9A6 6 0 1 0 6 9v7m7 4v-1a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1Zm-7-4v-6H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1Zm12-6h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1v-6Z"/></svg>',
         title: 'Atención al Cliente',
         description:
           'Automatiza respuestas, programación de citas y soporte técnico.',
       },
       {
-        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
+        icon: '<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M11 9H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h6m0-6v6m0-6 5.419-3.87A1 1 0 0 1 18 5.942v12.114a1 1 0 0 1-1.581.814L11 15m7 0a3 3 0 0 0 0-6M6 15h3v5H6v-5Z"/></svg>',
         title: 'Marketing y Leads',
         description:
           'Segmenta audiencias, lanza campañas automatizadas y captura contactos valiosos.',
       },
       {
-        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>',
+        icon: '<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="1" d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/></svg>',
         title: 'Recursos Humanos',
         description:
           'Gestiona solicitudes, responde preguntas frecuentes internas y programa entrevistas.',
       },
       {
-        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>',
+        icon: '<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 8v8m0-8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V9a3 3 0 0 0-3-3h-3m1.5-2-2 2 2 2"/></svg>',
         title: 'Integración Multicanal',
         description:
           'Unifica la atención desde WhatsApp, Facebook, Instagram y Telegram en un solo flujo.',
       },
       {
-        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
+        icon: '<svg class="w-[64px] h-[64px] text-primary-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3Z"/></svg>',
         title: 'Análisis y Reportes',
         description:
           'Visualiza estadísticas de conversaciones, rendimiento y evolución del bot.',
@@ -181,152 +181,170 @@ export const services: ServiceData[] = [
   // Publicidad Online con IA
   {
     slug: 'publicidad-online-ia',
-    title: 'Publicidad Online con IA',
+    title: 'Publicidad Online Potenciada con IA',
     hero: {
-      title: '¡Haz que tu Marca Exploté en Internet!',
+      title: 'Publicidad Online con IA que Atrae, Convence y Vende',
       description:
-        'Creamos experiencias digitales que convierten espectadores en clientes fieles. Con nuestra tecnología impulsada por inteligencia artificial, llevamos tus campañas publicitarias al siguiente nivel.',
+        'Usamos inteligencia artificial para crear campañas publicitarias más inteligentes, rentables y personalizadas. Llega a tu audiencia ideal con anuncios que generan resultados reales.',
       image: '/public/icons/ads.png',
-      alt: 'Icono de Publicidad Online con IA',
+      alt: 'Publicidad Online con IA',
     },
     mainImage: {
-      url: 'YOUR_CLOUDINARY_URL_FOR_ADVERTISING_IMAGE',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753228301/una-escena-moderna-y-minimalista-de-un-equipo-trabajando-en-desarrollo-web-un-escritorio-con-dos-pe_uttce8.jpg',
       alt: 'Publicidad Online con IA - Gráfico',
     },
     benefits: [
       {
-        title: 'Precisión Láser',
+        title: 'Audiencias Precisas',
         description:
-          'La IA analiza millones de datos para encontrar a tu audiencia perfecta. No más disparos al aire; ahora apuntas directamente al blanco.',
+          'La IA analiza datos en tiempo real para segmentar tu publicidad y llegar solo a quienes están listos para comprar.',
       },
       {
-        title: 'Optimización en Tiempo Real',
+        title: 'Ads en Tiempo Real',
         description:
-          'Tus campañas se ajustan automáticamente según el rendimiento, asegurando que siempre obtengas los mejores resultados.',
+          'Tus campañas se ajustan automáticamente según el rendimiento. Más clics, menos gasto.',
       },
       {
-        title: 'Ahorro Inteligente',
+        title: 'Aprovechamiento del Presupuesto',
         description:
-          'Maximiza tu presupuesto eliminando gastos innecesarios y enfocándote en lo que realmente funciona.',
+          'Invertimos tu dinero donde realmente impacta. No más gastos innecesarios en publicidad digital.',
       },
       {
-        title: 'Creatividad Potenciada',
+        title: 'Creatividad que Conecta',
         description:
-          'Diseñamos anuncios impactantes que no solo llaman la atención, sino que también generan engagement y conversiones.',
+          'Diseñamos anuncios atractivos y efectivos para cada plataforma. Publicidad con estilo y resultados.',
       },
       {
         title: 'Resultados Medibles',
         description:
-          'Informes claros y detallados que te muestran exactamente cómo está funcionando tu inversión.',
+          'Obtén reportes claros con métricas clave: clics, conversiones, retorno y recomendaciones.',
       },
     ],
     howItWorks: {
       title: '¿Cómo Funciona?',
-      subtitle: 'Un proceso avanzado que parece magia, pero es pura ciencia',
+      subtitle: 'Publicidad con IA, paso a paso',
       description:
-        'Convertimos datos en decisiones estratégicas mediante un sistema inteligente que entiende, predice y optimiza tus campañas. Así lo hacemos:',
+        'Combinamos estrategia digital con algoritmos inteligentes para optimizar cada campaña en redes sociales, buscadores y plataformas digitales.',
       steps: [
         {
           title: 'Análisis Predictivo',
           description:
-            'Utilizamos IA para estudiar el comportamiento de tu audiencia y predecir sus acciones futuras. Sabemos quién es tu cliente ideal antes de que haga clic.',
+            'Estudiamos el comportamiento de tu audiencia para predecir acciones y anticipar resultados.',
         },
         {
           title: 'Segmentación Inteligente',
           description:
-            'Dividimos tu audiencia en grupos específicos basados en intereses, comportamientos y datos demográficos. Cada grupo recibe un mensaje personalizado.',
+            'Agrupamos a tus usuarios por intereses, comportamientos y datos para impactar con mensajes precisos.',
         },
         {
-          title: 'Optimización Automática',
+          title: 'Optimización con IA',
           description:
-            'La IA ajusta tus campañas en tiempo real, redistribuyendo el presupuesto hacia los canales y estrategias más efectivas.',
+            'La inteligencia artificial redistribuye tu presupuesto en tiempo real para potenciar lo que funciona.',
         },
         {
-          title: 'Monitoreo y Reportes',
+          title: 'Análisis y Reportes',
           description:
-            'Recibes informes semanales con métricas clave, análisis profundo y recomendaciones estratégicas para mejorar aún más.',
+            'Te entregamos insights útiles con recomendaciones para mejorar y escalar tus campañas.',
         },
       ],
     },
     features: [
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
         title: 'E-Commerce',
         description:
-          'Aumenta tus ventas online con anuncios dirigidos a compradores potenciales y remarketing para recuperar carritos abandonados.',
+          'Campañas de remarketing, conversión y productos dinámicos para tiendas online.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>`,
-        title: 'Emprendedores Ambiciosos',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>',
+        title: 'Emprendedores',
         description:
-          'Si estás comenzando y necesitas visibilidad rápida, nuestras campañas te ayudarán a destacar en un mercado competitivo.',
+          'Visibilidad rápida en redes sociales y buscadores para negocios que están comenzando.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
-        title: 'Pequeñas y Medianas Empresas',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>',
+        title: 'Pymes',
         description:
-          'Optimiza tu presupuesto publicitario y genera leads calificados sin gastar de más.',
+          'Publicidad rentable con resultados visibles en poco tiempo y control del presupuesto.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
-        title: 'Grandes Corporaciones',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
+        title: 'Corporativos',
         description:
-          'Escala tus campañas a nivel nacional o internacional con estrategias personalizadas y tecnologías avanzadas.',
+          'Estrategias avanzadas de publicidad en redes sociales, Google Ads y medios digitales.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>',
+        title: 'Publicidad en Redes',
+        description:
+          'Campañas optimizadas con IA en Facebook, Instagram, TikTok y más, enfocadas en conversión.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h3m0 0h12m-12 0V6m12 4v10M4 21h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1Z" /></svg>',
+        title: 'Análisis de Resultados',
+        description:
+          'Medición precisa del impacto publicitario para tomar decisiones basadas en datos.',
       },
     ],
     faqs: [
       {
-        question: '¿Qué plataformas utilizan para la publicidad?',
+        question: '¿Qué plataformas manejan para hacer publicidad online?',
         answer:
-          'Trabajamos con las principales plataformas digitales, como Google Ads, Meta Ads (Facebook e Instagram), LinkedIn Ads y TikTok Ads. Elegimos las mejores opciones según tus objetivos.',
+          'Trabajamos con Meta Ads (Facebook e Instagram), Google Ads, LinkedIn, TikTok y otras según tu objetivo.',
       },
       {
-        question: '¿Necesito tener experiencia previa en publicidad digital?',
+        question: '¿Cómo ayuda la IA en la publicidad digital?',
         answer:
-          '¡Para nada! Nos encargamos de todo, desde el diseño de la estrategia hasta la ejecución y optimización. Solo necesitas estar listo para ver resultados.',
+          'La IA mejora la segmentación, automatiza la optimización de anuncios y predice qué creativos generan mejores resultados.',
       },
       {
-        question: '¿Cuánto tiempo tardan en mostrar resultados?',
+        question: '¿Qué tipo de resultados puedo esperar?',
         answer:
-          'Los resultados iniciales suelen verse en las primeras semanas, pero las campañas más efectivas requieren al menos 2-3 meses para alcanzar su máximo potencial.',
+          'Dependiendo del tipo de campaña, puedes lograr más visitas, formularios, ventas o reconocimiento de marca.',
       },
       {
-        question: '¿Qué pasa si no estoy satisfecho con los resultados?',
+        question: '¿Cuánto presupuesto necesito para hacer ads?',
         answer:
-          'Nos tomamos muy en serio tu satisfacción. Si algo no funciona como esperabas, ajustamos la estrategia hasta que alcancemos los resultados deseados.',
+          'Desde COP $300.000 puedes empezar a ver resultados con campañas bien optimizadas.',
       },
       {
-        question: '¿Ofrecen servicios de remarketing?',
+        question: '¿También hacen publicidad en redes sociales?',
         answer:
-          '¡Claro que sí! El remarketing es una de nuestras especialidades. Traemos de vuelta a los usuarios que visitaron tu sitio web o interactuaron con tus anuncios.',
+          'Sí. Somos expertos en publicidad en redes sociales y adaptamos la estrategia a cada plataforma.',
+      },
+      {
+        question: '¿Cómo sabré si los anuncios están funcionando?',
+        answer:
+          'Te enviamos reportes detallados con métricas clave, análisis y mejoras constantes.',
+      },
+      {
+        question: '¿Necesito experiencia previa para contratar este servicio?',
+        answer:
+          'No. Nos encargamos de todo y te explicamos el rendimiento de tus campañas paso a paso.',
+      },
+      {
+        question: '¿Hacen campañas para tiendas online?',
+        answer:
+          'Sí. Especialmente para e-commerce que buscan escalar sus ventas con campañas inteligentes.',
+      },
+      {
+        question: '¿Qué diferencia su servicio de otros?',
+        answer:
+          'Usamos IA para optimizar presupuesto, creatividades y segmentación. No trabajamos con suposiciones, sino con datos reales.',
+      },
+      {
+        question: '¿Puedo tener campañas en más de una red a la vez?',
+        answer:
+          'Por supuesto. Podemos correr campañas multicanal integradas y medir el rendimiento de cada una.',
       },
     ],
-    faqSubtitle: 'Publicidad Online con IA: Resuelve tus Dudas',
+    faqSubtitle: 'Publicidad con IA: Todo lo que necesitas saber',
     faqDescription:
-      '¿Tienes preguntas sobre cómo la inteligencia artificial puede potenciar tu publicidad digital? Aquí respondemos las dudas más frecuentes para que tomes decisiones informadas y lleves tus campañas al siguiente nivel.',
+      'Respondemos las dudas más comunes sobre nuestros servicios de publicidad digital con inteligencia artificial.',
     cta: {
       text: 'Solicita una auditoría gratuita de tu publicidad',
       link: '/contacto',
     },
-    extraBlocks: [
-      {
-        type: 'intro',
-        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
-          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
-            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              <div class="lg:pt-4 lg:pr-8">
-                <div class="lg:max-w-lg">
-                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
-                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué la Publicidad Online con IA es Tan Genial?</p>
-                  <p class="mt-6 text-lg/8 text-gray-600">Creamos experiencias digitales que convierten espectadores en clientes fieles. Con nuestra tecnología impulsada por inteligencia artificial, llevamos tus campañas publicitarias al siguiente nivel.</p>
-                </div>
-              </div>
-              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/ads_zjzj1j.png" alt="Publicidad Online con IA" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
-            </div>
-          </div>
-        </section>`,
-      },
-    ],
   },
   // Posicionamiento SEO
   {
@@ -340,7 +358,7 @@ export const services: ServiceData[] = [
       alt: 'Icono de Posicionamiento SEO',
     },
     mainImage: {
-      url: 'YOUR_CLOUDINARY_URL_FOR_SEO_IMAGE',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753233559/representa-un-entorno-digital-moderno-donde-se-visualiza-una-campaa-de-publicidad-online-con-inteli_1_kny4c1.jpg',
       alt: 'SEO Inteligente - Gráfico',
     },
     benefits: [
