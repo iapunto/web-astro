@@ -71,27 +71,27 @@
 
 ## Servicios oficiales de IA Punto (Referencia para artículos)
 
-Los siguientes servicios pueden ser citados, recomendados o enlazados desde los artículos del blog, según la temática y el enfoque del contenido:
+Los siguientes servicios pueden ser citados, recomendados o enlazados desde los artículos del blog, según la temática y el enfoque del contenido. Usa el slug o la URL indicada para enlazar correctamente:
 
-- Estrategia Digital con IA
-- Desarrollo Web Inteligente
-- Automatización de Marketing
-- SEO Programático
-- Publicidad Digital con IA
-- Analítica y Dashboards Inteligentes
-- Integración de Chatbots y Asistentes Virtuales
-- Centralización de Datos y CRM
-- Consultoría en Transformación Digital
-- Implementación de EVAFS
-- Plataformas SaaS (Skailan)
+- Estrategia Digital con IA — `/servicios/estrategia-digital-ia` o <https://iapunto.com/servicios/estrategia-digital-ia>
+- Desarrollo Web Inteligente — `/servicios/desarrollo-web-inteligente` o <https://iapunto.com/servicios/desarrollo-web-inteligente>
+- Automatización de Marketing — `/servicios/automatizacion-marketing` o <https://iapunto.com/servicios/automatizacion-marketing>
+- SEO Programático — `/servicios/seo-programatico` o <https://iapunto.com/servicios/seo-programatico>
+- Publicidad Digital con IA — `/servicios/publicidad-digital-ia` o <https://iapunto.com/servicios/publicidad-digital-ia>
+- Analítica y Dashboards Inteligentes — `/servicios/analitica-dashboards` o <https://iapunto.com/servicios/analitica-dashboards>
+- Integración de Chatbots y Asistentes Virtuales — `/servicios/chatbots-asistentes` o <https://iapunto.com/servicios/chatbots-asistentes>
+- Centralización de Datos y CRM — `/servicios/centralizacion-datos-crm` o <https://iapunto.com/servicios/centralizacion-datos-crm>
+- Consultoría en Transformación Digital — `/servicios/consultoria-transformacion-digital` o <https://iapunto.com/servicios/consultoria-transformacion-digital>
+- Implementación de EVAFS — `/servicios/evafs` o <https://iapunto.com/servicios/evafs>
+- Plataformas SaaS (Skailan) — `/servicios/skailan` o <https://iapunto.com/servicios/skailan>
 
 **Formato sugerido para citar un servicio:**
 
-> _¿Quieres llevar tu negocio al siguiente nivel? Descubre nuestro servicio de [Automatización de Marketing](https://iapunto.com/servicios/automatizacion-marketing) y transforma tu estrategia digital._
+> _¿Quieres llevar tu negocio al siguiente nivel? Descubre nuestro servicio de [Automatización de Marketing](/servicios/automatizacion-marketing) y transforma tu estrategia digital._
 
 **Ejemplo de uso en artículo:**
 
-> _Para implementar una estrategia de SEO programático, puedes apoyarte en nuestro servicio de [SEO Programático](https://iapunto.com/servicios/seo-programatico) diseñado para PYMES y empresas en crecimiento._
+> _Para implementar una estrategia de SEO programático, puedes apoyarte en nuestro servicio de [SEO Programático](/servicios/seo-programatico) diseñado para PYMES y empresas en crecimiento._
 
 ---
 
