@@ -1,13 +1,13 @@
 ---
 export interface Props {
   benefits: Array<{
-    icon?: string;
     title: string;
     description: string;
   }>;
 }
 const { benefits } = Astro.props;
 ---
+
 <section class="overflow-hidden bg-white py-24 sm:py-32">
   <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
     <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
@@ -19,7 +19,7 @@ const { benefits } = Astro.props;
             {benefits.map((b, i) => (
               <div class="relative pl-9">
                 <dt class="inline font-semibold text-gray-900">
-                  {b.icon && <span class="absolute top-1 left-1 size-5 text-[#E51F52]">{b.icon}</span>}
+                  <span class="absolute top-1 left-1 size-5 text-[#E51F52]">✓</span>
                   {b.title}:
                 </dt>
                 <dd class="inline"> {b.description}</dd>

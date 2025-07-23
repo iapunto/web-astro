@@ -1147,65 +1147,67 @@ export const services: ServiceData[] = [
     slug: 'diseno-desarrollo-web',
     title: 'Diseño y Desarrollo Web',
     hero: {
-      title: 'Tu Presencia Digital Hecha Realidad',
+      title:
+        'Diseño y Desarrollo Web Profesional para Negocios que Quieren Crecer',
       description:
-        'Convierte visitantes en clientes con un sitio web profesional, funcional y optimizado para el éxito.',
-      image: '/public/icons/web-design.png',
+        'Creamos sitios web que convierten: rápidos, seguros y optimizados para posicionarse en Google.',
+      image: '/icons/web-design.png',
       alt: 'Icono de Diseño y Desarrollo Web',
     },
     mainImage: {
-      url: 'YOUR_CLOUDINARY_URL_FOR_WEB_IMAGE',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753228301/una-escena-moderna-y-minimalista-de-un-equipo-trabajando-en-desarrollo-web-un-escritorio-con-dos-pe_uttce8.jpg',
       alt: 'Product screenshot',
     },
     benefits: [
       {
-        title: 'Adaptabilidad',
-        description: 'Diseño responsive (adaptable a móviles y tablets).',
+        title: 'Diseño responsive',
+        description:
+          'Tu sitio se adapta a móviles, tablets y todo tipo de pantalla.',
       },
       {
-        title: 'Integración',
+        title: 'Integración total',
         description:
-          'Integración con herramientas como CRM, sistemas de reservas y más.',
+          'Conectamos tu web con CRMs, reservas, WhatsApp, email marketing y más.',
       },
       {
-        title: 'Fácil de encontrar',
+        title: 'SEO de base',
         description:
-          'Optimización SEO para mejorar tu visibilidad en buscadores.',
+          'Optimización técnica desde el inicio para destacar en Google.',
       },
       {
-        title: 'Páginas que venden',
+        title: 'E-commerce funcional',
         description:
-          'Tiendas online con gestión avanzada de inventario y programas de fidelización.',
+          'Tiendas online con control de stock, cupones, pagos y fidelización.',
       },
     ],
     howItWorks: {
       title: '¿Cómo Funciona?',
-      subtitle: 'Nuestro Proceso de Diseño y Desarrollo',
+      subtitle: 'Nuestro Proceso de Diseño y Desarrollo Web',
       description:
-        'Un enfoque claro y colaborativo para crear tu sitio web ideal.',
+        'Construimos tu web con estrategia, diseño y tecnología. Nada genérico.',
       steps: [
         {
-          title: 'Análisis inicial',
+          title: 'Análisis Estratégico',
           description:
-            'Comprendemos tus objetivos, público objetivo y requisitos técnicos.',
+            'Investigamos tu negocio, mercado, competencia y objetivos digitales.',
           icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 15v3c0 .5523.44772 1 1 1h4v-4m-5 0v-4m0 4h5m-5-4V6c0-.55228.44772-1 1-1h16c.5523 0 1 .44772 1 1v1.98935M3 11h5v4m9.4708 4.1718-.8696-1.4388-2.8164-.235-2.573-4.2573 1.4873-2.8362 1.4441 2.3893c.3865.6396 1.2183.8447 1.8579.4582.6396-.3866.8447-1.2184.4582-1.858l-1.444-2.38925h3.1353l2.6101 4.27715-1.0713 2.5847.8695 1.4388"/></svg>`,
         },
         {
           title: 'Diseño UX/UI',
           description:
-            'Creamos prototipos y maquetas que reflejan la identidad de tu marca.',
+            'Diseñamos interfaces intuitivas y visuales que conectan con tu audiencia.',
           icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.988 19.012 5.41-5.41m2.366-6.424 4.058 4.058-2.03 5.41L5.3 20 4 18.701l3.355-9.494 5.41-2.029Zm4.626 4.625L12.197 6.61 14.807 4 20 9.194l-2.61 2.61Z"/></svg>`,
         },
         {
           title: 'Desarrollo técnico',
           description:
-            'Implementamos las funcionalidades necesarias y optimizamos el rendimiento.',
+            'Programamos tu sitio web con velocidad, seguridad y compatibilidad total.',
           icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.35709 16V5.78571c0-.43393.34822-.78571.77777-.78571H18.5793c.4296 0 .7778.35178.7778.78571V16M5.35709 16h-1c-.55229 0-1 .4477-1 1v1c0 .5523.44771 1 1 1H20.3571c.5523 0 1-.4477 1-1v-1c0-.5523-.4477-1-1-1h-1M5.35709 16H19.3571M9.35709 8l2.62501 2.5L9.35709 13m4.00001 0h2"/></svg>`,
         },
         {
-          title: 'Pruebas y ajustes',
+          title: 'Pruebas + Lanzamiento',
           description:
-            'Probamos exhaustivamente el sitio antes del lanzamiento para asegurarnos de que todo funcione perfectamente.',
+            'Validamos funcionalidad, velocidad y usabilidad antes de lanzar tu sitio.',
           icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 16H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v1M9 12H4m8 8V9h8v11h-8Zm0 0H9m8-4a1 1 0 1 0-2 0 1 1 0 0 0 2 0Z"/></svg>`,
         },
       ],
@@ -1251,14 +1253,38 @@ export const services: ServiceData[] = [
     ],
     faqs: [
       {
-        question: '¿Cuánto tiempo toma desarrollar un sitio web?',
+        question: '¿Qué incluye el servicio de desarrollo web?',
         answer:
-          'Depende del alcance del proyecto, pero generalmente los proyectos básicos tardan entre 2 y 4 semanas, mientras que los más complejos pueden tomar hasta 8 semanas.',
+          'Diseño UX/UI, programación personalizada, integración de herramientas, optimización SEO y soporte técnico post-lanzamiento.',
       },
       {
-        question: '¿Ofrecen mantenimiento después del lanzamiento?',
+        question: '¿En cuánto tiempo estará lista mi web?',
         answer:
-          'Sí, ofrecemos planes de soporte y mantenimiento para que tu web permanezca actualizada y segura.',
+          'Entre 2 y 8 semanas, según la complejidad. Definimos contigo un cronograma claro.',
+      },
+      {
+        question: '¿Puedo actualizar mi sitio luego del lanzamiento?',
+        answer:
+          'Sí. Entregamos acceso total a un panel de administración intuitivo.',
+      },
+      {
+        question: '¿El desarrollo web incluye dominio y hosting?',
+        answer: 'Podemos asesorarte o gestionar ambos por ti. Tú decides.',
+      },
+      {
+        question: '¿La web estará optimizada para buscadores?',
+        answer:
+          'Sí. Todos nuestros proyectos incluyen optimización técnica SEO para destacar en Google.',
+      },
+      {
+        question: '¿Puedo agregar tienda online o agendamiento de citas?',
+        answer:
+          'Claro. Integramos e-commerce, calendarios, CRM, pagos en línea y todo lo que necesites.',
+      },
+      {
+        question: '¿Qué pasa si necesito ayuda luego del lanzamiento?',
+        answer:
+          'Contamos con planes de soporte y mantenimiento desde $50.000 al mes.',
       },
     ],
     cta: {
@@ -1274,11 +1300,11 @@ export const services: ServiceData[] = [
               <div class="lg:pt-4 lg:pr-8">
                 <div class="lg:max-w-lg">
                   <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
-                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Diseño y Desarrollo Web es Tan Genial?</p>
-                  <p class="mt-6 text-lg/8 text-gray-600">Convierte visitantes en clientes con un sitio web profesional, funcional y optimizado para el éxito.</p>
+                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por Qué Invertir en Desarrollo Web Hoy?</p>
+                  <p class="mt-6 text-lg/8 text-gray-600">Convierte visitantes en clientes con un sitio web profesional, funcional y optimizado para el éxito. Estas son razones reales, no promesas vacías:</p>
                 </div>
               </div>
-              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/web-design_zjzj1j.png" alt="Diseño y Desarrollo Web" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1753228301/una-escena-moderna-y-minimalista-de-un-equipo-trabajando-en-desarrollo-web-un-escritorio-con-dos-pe_uttce8.jpg" alt="Diseño y Desarrollo Web" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
             </div>
           </div>
         </section>`,
@@ -1291,7 +1317,7 @@ export const services: ServiceData[] = [
         plans: [
           {
             name: 'Plan Básico',
-            price: '$180.000',
+            price: '$1.200.000',
             features: [
               'Hasta 5 páginas',
               'Diseño responsive',
@@ -1300,7 +1326,7 @@ export const services: ServiceData[] = [
           },
           {
             name: 'Plan Intermedio',
-            price: '$280.000',
+            price: '$1.600.000',
             features: [
               'Hasta 10 páginas',
               'Integración con formularios',
@@ -1309,7 +1335,7 @@ export const services: ServiceData[] = [
           },
           {
             name: 'Plan Avanzado',
-            price: '$350.000',
+            price: '$1.900.000',
             features: [
               'Hasta 20 páginas',
               'Integración con CRM y pasarela de pago',
@@ -1324,12 +1350,12 @@ export const services: ServiceData[] = [
         plans: [
           {
             name: 'Soporte Básico',
-            price: '$50.000/mes',
+            price: '$80.000/mes',
             features: ['Actualizaciones menores', 'Soporte por email'],
           },
           {
             name: 'Soporte Premium',
-            price: '$120.000/mes',
+            price: '$190.000/mes',
             features: [
               'Actualizaciones ilimitadas',
               'Soporte prioritario',
