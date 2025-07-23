@@ -116,7 +116,7 @@ if (!service) {
       </div>
     </section>
   ) : (
-    <ServiceBenefits benefits={service.benefits} />
+    <ServiceBenefits benefits={service.benefits} mainImage={service.mainImage} />
   )}
   <ServiceHowItWorks {...service.howItWorks} />
   {service.features.length > 0 && <ServiceFeatures features={service.features} />}

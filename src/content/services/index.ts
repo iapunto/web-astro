@@ -5,189 +5,176 @@ export const services: ServiceData[] = [
   // Chatbots Inteligentes
   {
     slug: 'chatbots-inteligentes',
-    title: 'Chatbots Inteligentes',
+    title:
+      'Chatbots Inteligentes para WhatsApp, Instagram, Facebook y Telegram',
     hero: {
-      title: 'Chatbots Inteligentes que Hablan por Ti',
+      title: 'Chatbots que Atienden, Venden y Fidelizan',
       description:
-        'Automatiza tu atención al cliente, genera leads y dispara la satisfacción con chatbots personalizados que ¡sí que saben conversar!',
+        'Automatiza tu atención al cliente, genera leads y responde en segundos con chatbots inteligentes diseñados para WhatsApp, Instagram, Facebook y Telegram.',
       image: '/public/icons/chatbot.png',
-      alt: 'Chatbots Inteligentes que Hablan por Ti',
+      alt: 'Chatbots Inteligentes para Canales de Mensajería',
     },
     mainImage: {
-      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/chatbot-concept_ravyht.png',
-      alt: 'Concepto de Chatbot',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753230622/chatbots_inteligentes_image_uotuxy.jpg',
+      alt: 'Chatbot en canales de mensajería',
     },
     benefits: [
       {
         title: 'Disponibilidad 24/7',
         description:
-          '¡Dile adiós a las esperas! Tus clientes tendrán respuestas al instante, incluso si estás de vacaciones en la luna.',
+          'Tus clientes obtienen respuestas automáticas al instante, sin importar la hora ni el día.',
       },
       {
         title: 'Atención Personalizada',
         description:
-          'Cada cliente es único, ¡y tus chatbots también! Se adaptan a sus necesidades y les dan la atención VIP que se merecen.',
+          'Los chatbots aprenden y adaptan sus respuestas para ofrecer experiencias únicas en cada conversación.',
       },
       {
-        title: 'Generación de Leads',
+        title: 'Captura de Leads',
         description:
-          '¡Olvídate de perseguir clientes! Tus chatbots capturan la información clave y te la entregan en bandeja de plata.',
+          'Recolecta datos clave como nombre, correo y necesidades específicas de cada cliente mientras conversan por WhatsApp, Instagram o Facebook.',
       },
       {
-        title: 'Aumento de la Satisfacción',
+        title: 'Mejora en Satisfacción',
         description:
-          'Clientes felices, ¡vida feliz! Los chatbots resuelven sus dudas al instante y les hacen sentir como reyes.',
+          'Los clientes obtienen soluciones inmediatas, lo que aumenta la confianza y reduce la frustración.',
       },
       {
         title: 'Reducción de Costos',
         description:
-          '¡Que el dinero no se te escape! Los chatbots automatizan tareas y liberan a tu equipo para que se enfoque en lo que realmente importa.',
+          'Automatiza procesos repetitivos y reduce la carga de tu equipo humano.',
+      },
+    ],
+    features: [
+      {
+        icon: '<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z"/></svg>',
+        title: 'E-Commerce',
+        description:
+          'Responde dudas, guía el proceso de compra y activa promociones por WhatsApp, Instagram y más.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
+        title: 'Atención al Cliente',
+        description:
+          'Automatiza respuestas, programación de citas y soporte técnico.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
+        title: 'Marketing y Leads',
+        description:
+          'Segmenta audiencias, lanza campañas automatizadas y captura contactos valiosos.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>',
+        title: 'Recursos Humanos',
+        description:
+          'Gestiona solicitudes, responde preguntas frecuentes internas y programa entrevistas.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>',
+        title: 'Integración Multicanal',
+        description:
+          'Unifica la atención desde WhatsApp, Facebook, Instagram y Telegram en un solo flujo.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
+        title: 'Análisis y Reportes',
+        description:
+          'Visualiza estadísticas de conversaciones, rendimiento y evolución del bot.',
       },
     ],
     howItWorks: {
       title: '¿Cómo Funciona?',
-      subtitle: '¡Magia Digital en Acción!',
+      subtitle: 'Tu chatbot en 4 pasos',
       description:
-        'Cada chatbot que creamos es único, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+        'Creamos chatbots personalizados que entienden tu negocio, responden con precisión y mejoran con el tiempo.',
       steps: [
         {
-          title: 'Análisis de Necesidades',
+          title: 'Diagnóstico del negocio',
           description:
-            'Entendemos tu negocio y a tus clientes para diseñar un chatbot a medida.',
-          icon: `<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"></path></svg>`,
+            'Analizamos tu flujo de atención actual y detectamos oportunidades para automatizar y mejorar.',
+          icon: '<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"></path></svg>',
         },
         {
-          title: 'Diseño Personalizado',
+          title: 'Diseño conversacional',
           description:
-            'Creamos un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
-          icon: `<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"></path></svg>`,
+            'Diseñamos los flujos, mensajes y respuestas para reflejar el tono y personalidad de tu marca.',
+          icon: '<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"></path></svg>',
         },
         {
-          title: 'Integración Inteligente',
+          title: 'Integración multicanal',
           description:
-            'Conectamos tu chatbot con tus plataformas favoritas (CRM, redes sociales, etc.) para que todo fluya como la seda.',
-          icon: `<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"></path></svg>`,
+            'Conectamos tu chatbot con WhatsApp, Instagram, Facebook, Telegram y tus sistemas internos como CRM o e-commerce.',
+          icon: '<svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182"></path></svg>',
         },
         {
-          title: 'Entrenamiento Continuo',
+          title: 'Entrenamiento y mejora',
           description:
-            '¡Tu chatbot nunca deja de aprender! Lo entrenamos con datos reales para que cada vez sea más inteligente y eficiente.',
-          icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z"/></svg>`,
+            'Revisamos métricas reales, entrenamos al bot con nuevas preguntas y lo actualizamos constantemente.',
+          icon: '<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z"/></svg>',
         },
       ],
     },
-    features: [
-      {
-        icon: `<svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z"/></svg>`,
-        title: 'E-Commerce',
-        description:
-          'Responde preguntas sobre productos, guía a los clientes en el proceso de compra, ofrece descuentos personalizados.',
-      },
-      {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
-        title: 'Atención al Cliente',
-        description:
-          'Resuelve dudas frecuentes, gestiona quejas, programa citas, ofrece soporte técnico.',
-      },
-      {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
-        title: 'Marketing',
-        description:
-          'Captura leads, realiza encuestas, promociona productos, segmenta audiencias.',
-      },
-      {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>`,
-        title: 'Recursos Humanos',
-        description:
-          'Responde preguntas sobre la empresa, gestiona solicitudes de empleo, programa entrevistas.',
-      },
-      {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
-        title: 'Integración Multicanal',
-        description:
-          'Conecta tu chatbot con WhatsApp, Facebook Messenger, Instagram y más.',
-      },
-      {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
-        title: 'Análisis y Reportes',
-        description:
-          'Obtén métricas detalladas sobre las conversaciones y el rendimiento de tu chatbot.',
-      },
-    ],
-    faqs: [
-      {
-        question: '¿Qué es un chatbot inteligente y cómo funciona?',
-        answer:
-          'Un chatbot inteligente es un programa informático que utiliza inteligencia artificial (IA) para simular una conversación con usuarios humanos. Funciona mediante el procesamiento del lenguaje natural (PLN) y el aprendizaje automático (ML) para entender las preguntas de los usuarios y ofrecer respuestas relevantes y coherentes.',
-      },
-      {
-        question: '¿Qué tipos de chatbots existen?',
-        answer:
-          'Existen diferentes tipos de chatbots, cada uno con sus propias características y funcionalidades:\n\n- Chatbots basados en reglas: Siguen un conjunto de reglas predefinidas para responder a preguntas específicas.\n- Chatbots basados en IA: Utilizan IA para entender el lenguaje natural y ofrecer respuestas más flexibles y personalizadas.\n- Chatbots de voz: Interactúan con los usuarios a través de la voz, como los asistentes virtuales (Siri, Alexa).',
-      },
-      {
-        question:
-          '¿Qué beneficios ofrecen los chatbots inteligentes para mi negocio?',
-        answer:
-          'Los chatbots inteligentes ofrecen una amplia gama de beneficios para las empresas, como:\n\n- Disponibilidad 24/7: Atienden a los clientes en cualquier momento.\n- Respuestas instantáneas: Reducen el tiempo de espera del cliente.\n- Atención personalizada: Ofrecen una experiencia adaptada a cada usuario.\n- Generación de leads: Capturan información de clientes potenciales.\n- Reducción de costos: Automatizan tareas y liberan a los agentes humanos.\n- Mayor satisfacción del cliente: Mejoran la experiencia general del cliente.',
-      },
-      {
-        question:
-          '¿Cómo puedo integrar un chatbot en mi sitio web o redes sociales?',
-        answer:
-          'La integración de un chatbot depende de la plataforma que elijas. En IA Punto, te ofrecemos soluciones personalizadas para integrar chatbots en tu sitio web, Facebook Messenger, WhatsApp u otras plataformas de mensajería.',
-      },
-      {
-        question: '¿Cuánto cuesta un chatbot inteligente?',
-        answer:
-          'El costo de un chatbot varía según su complejidad, funcionalidades e integración con otras plataformas. En IA Punto, ofrecemos soluciones a medida que se adaptan a tu presupuesto y necesidades desde los COP $180.000. Contáctanos para obtener una cotización personalizada.',
-      },
-      {
-        question: '¿Necesito conocimientos técnicos para usar un chatbot?',
-        answer:
-          'No necesitas conocimientos técnicos para usar un chatbot. Nuestras soluciones son fáciles de usar y te brindamos la capacitación y el soporte necesarios para que puedas aprovechar al máximo tu chatbot.',
-      },
-      {
-        question: '¿Qué tan seguros son los chatbots inteligentes?',
-        answer:
-          'La seguridad de un chatbot depende de la plataforma y las medidas de seguridad implementadas. En IA Punto, nos tomamos la seguridad muy en serio y utilizamos las mejores prácticas para proteger la información de tus clientes.',
-      },
-      {
-        question: '¿Qué tipo de preguntas puede responder un chatbot?',
-        answer:
-          'Un chatbot puede responder una amplia gama de preguntas, desde consultas simples sobre productos o servicios hasta preguntas más complejas que requieren análisis de datos. La capacidad de respuesta depende de la complejidad del chatbot y de la información con la que se le haya entrenado.',
-      },
-      {
-        question:
-          '¿Puedo personalizar la personalidad y el tono de mi chatbot?',
-        answer:
-          'Sí, puedes personalizar la personalidad y el tono de tu chatbot para que se ajuste a la identidad de tu marca y a tu público objetivo. En IA Punto, te ayudamos a crear un chatbot que refleje la voz y el estilo de tu empresa.',
-      },
-    ],
-    faqSubtitle: 'Chatbots Inteligentes: ¡Todo lo que Necesitas Saber!',
+    faqSubtitle:
+      'Chatbots para WhatsApp, Instagram y más: lo que necesitas saber',
     faqDescription:
-      '¿Tienes preguntas sobre los chatbots? ¡Tenemos respuestas! Aquí te despejamos las dudas más comunes sobre nuestros chatbots inteligentes y cómo pueden revolucionar tu negocio.',
+      'Resolvemos las dudas más comunes sobre nuestros chatbots inteligentes para mensajería y cómo pueden ayudarte a automatizar y escalar tu atención al cliente.',
     cta: {
       text: 'Solicita tu chatbot personalizado',
       link: '/contacto',
     },
-    extraBlocks: [
+    faqs: [
       {
-        type: 'intro',
-        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
-          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
-            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              <div class="lg:pt-4 lg:pr-8">
-                <div class="lg:max-w-lg">
-                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
-                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué los Chatbots Inteligentes son Tan Geniales?</p>
-                  <p class="mt-6 text-lg/8 text-gray-600">Automatiza tu atención al cliente, genera leads y dispara la satisfacción con chatbots personalizados que ¡sí que saben conversar!</p>
-                </div>
-              </div>
-              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/chatbot-concept_ravyht.png" alt="Concepto de Chatbot" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
-            </div>
-          </div>
-        </section>`,
+        question: '¿Qué canales de mensajería soportan estos chatbots?',
+        answer:
+          'Nuestros chatbots funcionan en WhatsApp, Instagram, Facebook Messenger y Telegram, con integración total en cada uno.',
+      },
+      {
+        question: '¿Puedo usar el mismo chatbot en múltiples plataformas?',
+        answer:
+          'Sí, diseñamos chatbots multicanal que pueden operar de forma coherente en diferentes plataformas al mismo tiempo.',
+      },
+      {
+        question: '¿Cómo recopila datos mi chatbot?',
+        answer:
+          'A través de conversaciones naturales, el chatbot solicita y guarda datos como nombre, email, teléfono o necesidades específicas.',
+      },
+      {
+        question:
+          '¿Qué tan difícil es integrarlo con mi CRM o sistema de ventas?',
+        answer:
+          'No es difícil. Nosotros nos encargamos de la integración con herramientas como HubSpot, Zoho, Google Sheets, o sistemas personalizados.',
+      },
+      {
+        question:
+          '¿Es posible entrenar el chatbot con mis preguntas frecuentes?',
+        answer:
+          'Sí, adaptamos el bot para que responda usando tus FAQs, flujos internos y tono de comunicación.',
+      },
+      {
+        question: '¿Qué pasa si el chatbot no entiende una pregunta?',
+        answer:
+          'Puede redirigir la conversación a un humano o dejar una alerta para revisión. Además, entrenamos constantemente para minimizar estos casos.',
+      },
+      {
+        question: '¿El chatbot puede vender productos directamente?',
+        answer:
+          'Sí, puede mostrar catálogos, procesar pedidos y dirigir a pasarelas de pago si lo necesitas.',
+      },
+      {
+        question: '¿Cuánto cuesta un chatbot para WhatsApp o Instagram?',
+        answer:
+          'Desde COP $180.000 según el alcance, flujos y número de canales. Te damos una cotización personalizada.',
+      },
+      {
+        question: '¿Qué tipo de empresas usan estos chatbots?',
+        answer:
+          'Trabajamos con tiendas online, clínicas, inmobiliarias, agencias de marketing, educación y más.',
+      },
+      {
+        question: '¿Necesito tener conocimientos técnicos para usarlo?',
+        answer:
+          'No. Recibes todo listo para usar y te damos capacitación si lo necesitas.',
       },
     ],
   },
