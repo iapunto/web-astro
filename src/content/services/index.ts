@@ -190,7 +190,7 @@ export const services: ServiceData[] = [
       alt: 'Publicidad Online con IA',
     },
     mainImage: {
-      url: '/src/assets/images/digital-marketing-service.png',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753233559/entorno-digital_1_kny4c1.jpg',
       alt: 'Publicidad Online con IA - Gráfico',
     },
     benefits: [
@@ -351,262 +351,307 @@ export const services: ServiceData[] = [
     slug: 'posicionamiento-seo',
     title: 'Posicionamiento SEO',
     hero: {
-      title: '¡Llega a la Cima de Google y Domina tu Mercado!',
+      title: '¡Llega a la Cima de Google con Estrategia y Tecnología!',
       description:
-        'No solo optimizamos sitios web… ¡Los lanzamos directamente a la primera página de los resultados de búsqueda!',
-      image: '/public/icons/seo.png',
+        'Optimizamos tu presencia digital con técnicas de posicionamiento SEO apoyadas por inteligencia artificial. Más visibilidad, más tráfico calificado, más clientes.',
+      image: '/icons/seo.png',
       alt: 'Icono de Posicionamiento SEO',
     },
     mainImage: {
-      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753233559/representa-un-entorno-digital-moderno-donde-se-visualiza-una-campaa-de-publicidad-online-con-inteli_1_kny4c1.jpg',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753235537/interfaz-seo-moderna_w2rqyk.jpg',
       alt: 'SEO Inteligente - Gráfico',
     },
     benefits: [
       {
         title: 'Visibilidad Garantizada',
         description:
-          'Mejoramos tu posicionamiento en Google para que aparezcas justo cuando tu audiencia te busca.',
+          'Mejoramos tu posicionamiento en Google para que te encuentren justo cuando te necesitan.',
       },
       {
         title: 'Tráfico Calificado',
         description:
-          'Atraemos visitantes reales interesados en tus productos o servicios, no solo clics aleatorios.',
+          'Atraemos visitantes que realmente están interesados en tus productos o servicios.',
       },
       {
-        title: 'Optimización Automática',
+        title: 'SEO Automatizado',
         description:
-          'La IA ajusta constantemente tu estrategia SEO para mantenerse al día con los cambios de los algoritmos de Google.',
+          'La inteligencia artificial se encarga de ajustar y actualizar tu estrategia sin que tengas que mover un dedo.',
       },
       {
-        title: 'ROI Medible',
+        title: 'Resultados Medibles',
         description:
-          'Cada acción está diseñada para generar resultados tangibles y medibles, desde más visitas hasta conversiones.',
+          'Cada mejora se traduce en más clics, más visitas, y más oportunidades de negocio.',
       },
       {
-        title: 'Competencia Superada',
+        title: 'Estrategia Contra tu Competencia',
         description:
-          'Analizamos a tus competidores y creamos estrategias para destacarte sobre ellos.',
+          'Analizamos a tus competidores para superarlos en posicionamiento y relevancia.',
       },
     ],
     howItWorks: {
       title: '¿Cómo Funciona?',
-      subtitle: 'Un proceso tan estratégico que parece magia.',
+      subtitle: 'Proceso SEO impulsado por IA',
       description:
-        'Detrás de cada campaña de SEO hay un sistema inteligente que convierte datos en decisiones estratégicas. Aquí te explicamos cómo lo hacemos:',
+        'Combinamos análisis profundo, inteligencia artificial y estrategias personalizadas para mejorar tu presencia orgánica:',
       steps: [
         {
-          title: 'Análisis Inicial de Necesidades',
+          title: 'Análisis Inicial',
           description:
-            'Evaluamos tu sitio web, identificamos áreas de mejora y analizamos palabras clave relevantes para tu negocio.',
+            'Auditoría completa de tu sitio y análisis de palabras clave.',
         },
         {
-          title: 'Optimización On-Page',
+          title: 'SEO On-Page',
           description:
-            'Mejoramos la estructura de tu sitio, optimizamos títulos, meta descripciones, imágenes y contenido para que Google te ame.',
+            'Optimización de estructura, velocidad, metadatos y contenido.',
         },
         {
           title: 'SEO Técnico',
           description:
-            'Corregimos errores técnicos, mejoramos la velocidad de carga y aseguramos la indexación correcta.',
+            'Corrección de errores, mejora de indexación y compatibilidad.',
         },
         {
-          title: 'Estrategia de Contenidos',
+          title: 'Contenido Estratégico',
           description:
-            'Creamos y optimizamos contenido relevante y de valor para atraer y retener a tu audiencia.',
+            'Creamos contenido enfocado en atraer búsquedas con alta intención.',
         },
         {
           title: 'Linkbuilding Inteligente',
           description:
-            'Generamos enlaces de calidad para aumentar la autoridad de tu sitio.',
+            'Obtenemos enlaces de calidad que aumentan tu autoridad online.',
         },
       ],
     },
     features: [
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>',
         title: 'SEO On-Page y Off-Page',
         description:
-          'Optimizamos tanto el contenido interno como la autoridad externa de tu web.',
+          'Optimizamos contenido y autoridad para que Google te priorice.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
         title: 'Auditoría SEO Completa',
         description:
-          'Analizamos todos los aspectos técnicos y de contenido para detectar oportunidades.',
+          'Identificamos problemas y oportunidades con un análisis exhaustivo.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>',
         title: 'Monitorización y Reporting',
         description:
-          'Seguimiento constante de posiciones, tráfico y conversiones.',
+          'Seguimiento continuo de métricas clave y reportes accionables.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
-        title: 'Estrategias Personalizadas',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
+        title: 'Estrategias a Medida',
+        description: 'Diseñamos planes SEO personalizados según tu negocio.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>',
+        title: 'Indexación y Velocidad',
         description:
-          'Cada negocio es único, por eso diseñamos estrategias a medida.',
+          'Mejoramos la velocidad del sitio y garantizamos correcta indexación en buscadores.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m-7.5-7.5v15" /></svg>',
+        title: 'SEO para Contenido',
+        description:
+          'Optimizamos tu blog, páginas de servicio y categorías para escalar en buscadores.',
       },
     ],
     faqs: [
       {
-        question: '¿Cuánto tiempo tarda en verse resultados?',
+        question: '¿Cuánto tiempo tarda en verse resultados con SEO?',
         answer:
-          'El SEO es una estrategia a mediano y largo plazo. Normalmente se ven mejoras en 3-6 meses.',
+          'El SEO empieza a mostrar resultados entre los 3 y 6 meses, dependiendo de tu industria y competencia.',
       },
       {
-        question: '¿Qué diferencia hay entre SEO y SEM?',
+        question: '¿Qué diferencia hay entre SEO y publicidad pagada (SEM)?',
         answer:
-          'El SEO se enfoca en resultados orgánicos, mientras que el SEM implica publicidad pagada.',
+          'SEO genera tráfico orgánico a largo plazo, mientras SEM implica pago por clic en plataformas como Google Ads.',
       },
       {
-        question: '¿Incluyen informes periódicos?',
+        question: '¿Ustedes escriben contenido optimizado?',
         answer:
-          'Sí, recibirás reportes periódicos con métricas clave y recomendaciones.',
+          'Sí, creamos y mejoramos contenido basado en palabras clave relevantes para tu negocio.',
+      },
+      {
+        question: '¿Cómo sabré que está funcionando?',
+        answer:
+          'Te entregamos reportes periódicos con métricas clave: tráfico, rankings, conversiones y más.',
+      },
+      {
+        question: '¿El SEO incluye mejoras técnicas al sitio?',
+        answer:
+          'Sí. Trabajamos en velocidad, errores de indexación, estructura, y más aspectos técnicos.',
+      },
+      {
+        question: '¿Pueden posicionar cualquier tipo de sitio web?',
+        answer:
+          'Sí, ya sea e-commerce, blog, sitio corporativo o local, adaptamos la estrategia a tu caso.',
+      },
+      {
+        question: '¿Ofrecen auditorías SEO antes de contratar?',
+        answer:
+          'Sí. Puedes solicitar una auditoría gratuita para conocer el estado de tu sitio.',
       },
     ],
+    faqSubtitle: 'SEO Inteligente: Preguntas Frecuentes',
+    faqDescription:
+      'Respondemos las dudas más comunes sobre cómo mejorar tu posicionamiento web con ayuda de la IA.',
     cta: {
       text: 'Solicita una auditoría SEO gratuita',
       link: '/contacto',
     },
-    extraBlocks: [
-      {
-        type: 'intro',
-        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
-          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
-            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              <div class="lg:pt-4 lg:pr-8">
-                <div class="lg:max-w-lg">
-                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
-                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Posicionamiento SEO es Tan Genial?</p>
-                  <p class="mt-6 text-lg/8 text-gray-600">No solo optimizamos sitios web… ¡Los lanzamos directamente a la primera página de los resultados de búsqueda!</p>
-                </div>
-              </div>
-              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/seo_zjzj1j.png" alt="Posicionamiento SEO" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
-            </div>
-          </div>
-        </section>`,
-      },
-    ],
   },
   // Marketing de Contenidos
   {
     slug: 'marketing-de-contenidos',
     title: 'Marketing de Contenidos',
     hero: {
-      title: 'Marketing de Contenidos',
+      title: 'Convierte Contenido en Clientes',
       description:
-        'Creamos contenido optimizado para SEO que atrae a tu audiencia y posiciona tu marca. Usamos IA.',
+        'Creamos contenido inteligente, original y estratégico. Atrae, educa y convierte con textos impulsados por SEO e inteligencia artificial.',
       image: '/public/icons/content.png',
       alt: 'Icono de Marketing de Contenidos',
     },
     mainImage: {
-      url: 'YOUR_CLOUDINARY_URL_FOR_MARKETING_IMAGE',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753236224/marketing-de-contenidos_rvslam.jpg',
       alt: 'Marketing de Contenidos - Gráfico',
     },
     benefits: [
       {
-        title: 'Disponibilidad 24/7',
+        title: 'Atracción Orgánica',
         description:
-          '¡Dile adiós a las esperas! Tus clientes tendrán respuestas al instante, incluso si estás de vacaciones en la luna.',
+          'Atrae tráfico de calidad con contenido que responde a lo que tu audiencia busca.',
       },
       {
-        title: 'Atención Personalizada',
+        title: 'Confianza y Autoridad',
         description:
-          'Cada cliente es único, ¡y tus chatbots también! Se adaptan a sus necesidades y les dan la atención VIP que se merecen.',
+          'Posiciónate como referente en tu sector con artículos útiles, claros y bien escritos.',
       },
       {
-        title: 'Generación de Leads',
+        title: 'Conversión Potenciada',
         description:
-          '¡Olvídate de perseguir clientes! Tus chatbots capturan la información clave y te la entregan en bandeja de plata.',
+          'No solo informamos: persuadimos. El contenido impulsa tus objetivos de venta.',
       },
       {
-        title: 'Aumento de la Satisfacción',
+        title: 'Alineación SEO',
         description:
-          'Clientes felices, ¡vida feliz! Los chatbots resuelven sus dudas al instante y les hacen sentir como reyes.',
+          'Cada palabra está optimizada para mejorar tu posicionamiento en buscadores.',
       },
       {
-        title: 'Reducción de Costos',
+        title: 'Escalabilidad Automática',
         description:
-          '¡Que el dinero no se te escape! Los chatbots automatizan tareas y liberan a tu equipo para que se enfoque en lo que realmente importa.',
+          'Usamos IA para escalar producción de contenido sin perder calidad.',
       },
     ],
     howItWorks: {
       title: '¿Cómo Funciona?',
-      subtitle: '¡Magia Digital en Acción!',
+      subtitle: 'Contenido con propósito, proceso con lógica',
       description:
-        'Cada chatbot que creamos es único, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+        'Transformamos ideas en contenido estratégico que conecta con tu público y cumple objetivos reales:',
       steps: [
         {
-          title: 'Análisis de Necesidades',
+          title: 'Brief y Estrategia',
           description:
-            'Entendemos tu negocio y a tus clientes para diseñar un chatbot a medida.',
+            'Analizamos tu marca, público y metas para definir tono, temas y estilo.',
         },
         {
-          title: 'Diseño Personalizado',
+          title: 'Investigación y SEO',
           description:
-            'Creamos un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+            'Estudiamos keywords relevantes, intención de búsqueda y competencia.',
+        },
+        {
+          title: 'Redacción Profesional',
+          description:
+            'Creamos contenido original con estructura, narrativa y llamadas a la acción.',
+        },
+        {
+          title: 'Revisión y Optimización',
+          description:
+            'Ajustamos según métricas de legibilidad, SEO, y estilo de marca.',
         },
       ],
     },
     features: [
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>',
         title: 'Blog Corporativo',
         description:
-          'Publicaciones optimizadas para SEO y alineadas a tu estrategia de marca.',
+          'Publicaciones periódicas con valor, optimizadas para buscadores.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
-        title: 'Redacción para Landing Pages',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
+        title: 'Landing Pages',
         description:
-          'Textos persuasivos que convierten visitantes en clientes.',
+          'Textos que capturan leads y convierten visitantes en clientes.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
-        title: 'Guiones para Video y Podcast',
-        description:
-          'Contenido multimedia para potenciar tu presencia digital.',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>',
+        title: 'Scripts para Video/Podcast',
+        description: 'Ideas claras para contenidos que se escuchan y se ven.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
         title: 'Difusión en Redes Sociales',
-        description: 'Adaptación de contenidos para cada canal y audiencia.',
+        description: 'Adaptamos cada pieza a tu audiencia y canal digital.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
+        title: 'Boletines y Email Marketing',
+        description: 'Contenido por correo que nutre y convierte.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m-7.5-7.5v15" /></svg>',
+        title: 'Pilares y Clústeres SEO',
+        description:
+          'Arquitectura de contenido que estructura tu sitio para escalar.',
       },
     ],
     faqs: [
       {
-        question: '¿Qué tipo de contenido crean?',
+        question: '¿Qué tipo de contenido ofrecen?',
         answer:
-          'Creamos blogs, artículos, guiones, textos para landing pages, redes sociales y más.',
+          'Blogs, artículos, emails, guiones, contenido para redes, landing pages, ebooks y más.',
       },
       {
-        question: '¿El contenido es original?',
-        answer: 'Sí, todo el contenido es 100% original y optimizado para SEO.',
+        question: '¿El contenido es original y único?',
+        answer:
+          'Sí. Cada pieza es redactada a medida, libre de plagio y adaptada a tu marca.',
+      },
+      {
+        question: '¿Cómo aseguran que el contenido esté optimizado para SEO?',
+        answer:
+          'Incluimos keywords estratégicas, estructura clara, metadatos y enlaces internos.',
+      },
+      {
+        question: '¿Puedo revisar y aprobar los textos antes de publicarlos?',
+        answer:
+          'Por supuesto. Cada entrega pasa por tu aprobación antes de difusión.',
+      },
+      {
+        question: '¿Generan contenido para campañas específicas?',
+        answer:
+          'Sí. Creamos contenido enfocado en objetivos concretos: lanzamientos, promociones, eventos, etc.',
+      },
+      {
+        question: '¿El contenido lo escribe una persona o una IA?',
+        answer:
+          'Nuestros redactores utilizan IA como asistente, pero todo pasa por manos humanas expertas.',
+      },
+      {
+        question: '¿También pueden difundir el contenido?',
+        answer:
+          'Sí. Podemos ayudarte a programar y difundir cada pieza en redes, blog y email marketing.',
       },
     ],
+    faqSubtitle: 'Marketing de Contenidos: Preguntas Frecuentes',
+    faqDescription:
+      'Aquí respondemos lo esencial para que sepas cómo nuestra estrategia de contenidos puede impulsar tu marca.',
     cta: {
       text: 'Solicita una consultoría gratuita de contenidos',
       link: '/contacto',
     },
-    extraBlocks: [
-      {
-        type: 'intro',
-        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
-          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
-            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              <div class="lg:pt-4 lg:pr-8">
-                <div class="lg:max-w-lg">
-                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
-                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Marketing de Contenidos es Tan Genial?</p>
-                  <p class="mt-6 text-lg/8 text-gray-600">Creamos contenido optimizado para SEO que atrae a tu audiencia y posiciona tu marca. Usamos IA.</p>
-                </div>
-              </div>
-              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/content_zjzj1j.png" alt="Marketing de Contenidos" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
-            </div>
-          </div>
-        </section>`,
-      },
-    ],
   },
   // Desarrollo de Apps Móviles
   {
@@ -630,7 +675,7 @@ export const services: ServiceData[] = [
           'Tu audiencia puede interactuar contigo en cualquier momento y lugar.',
       },
       {
-        title: 'Personalización avanzada',
+        title: 'Personalización Avanzada',
         description:
           'Diseñamos apps que reflejan la identidad y los valores de tu marca.',
       },
@@ -640,12 +685,12 @@ export const services: ServiceData[] = [
           'Tus apps pueden crecer junto con tu negocio, añadiendo nuevas funcionalidades según sea necesario.',
       },
       {
-        title: 'Seguridad robusta',
+        title: 'Seguridad Robusta',
         description:
           'Implementamos medidas de seguridad avanzadas para proteger los datos de tus usuarios.',
       },
       {
-        title: 'Optimización para el rendimiento',
+        title: 'Optimización para el Rendimiento',
         description:
           'Aseguramos que tu app funcione sin problemas en todos los dispositivos.',
       },
@@ -655,10 +700,10 @@ export const services: ServiceData[] = [
       subtitle:
         'Un enfoque claro y colaborativo para llevar tu idea al mundo móvil.',
       description:
-        'Cada app que creamos es única, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener una app con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+        'Cada app que creamos es única, como tu negocio. Descubre cómo nuestro proceso personalizado convierte tu idea en una app funcional, intuitiva y potente.',
       steps: [
         {
-          title: 'Análisis inicial',
+          title: 'Análisis Inicial',
           description:
             'Comprendemos tus objetivos, público objetivo y requisitos técnicos.',
         },
@@ -668,12 +713,12 @@ export const services: ServiceData[] = [
             'Creamos prototipos y maquetas que reflejan la identidad de tu marca y la experiencia del usuario.',
         },
         {
-          title: 'Desarrollo técnico',
+          title: 'Desarrollo Técnico',
           description:
             'Implementamos las funcionalidades necesarias y optimizamos el rendimiento.',
         },
         {
-          title: 'Pruebas exhaustivas',
+          title: 'Pruebas Exhaustivas',
           description:
             'Probamos la app en diferentes dispositivos y escenarios para garantizar su calidad.',
         },
@@ -681,35 +726,47 @@ export const services: ServiceData[] = [
     },
     features: [
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>',
         title: 'Apps Híbridas y Nativas',
         description:
           'Desarrollamos tanto apps híbridas como nativas según las necesidades de tu proyecto.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
         title: 'Integración con Sistemas Externos',
         description:
           'Conectamos tu app con CRMs, sistemas de reservas, plataformas de email marketing y más.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>',
         title: 'Soporte Multiplataforma',
         description:
           'Aseguramos compatibilidad con iOS y Android para llegar a la mayor audiencia posible.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
         title: 'Mantenimiento y Actualizaciones',
         description:
           'Ofrecemos planes de mantenimiento para que tu app permanezca actualizada y segura.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12h12m-6-6v12" /></svg>',
+        title: 'Publicación en Tiendas',
+        description:
+          'Te ayudamos a publicar tu app en App Store y Google Play sin complicaciones.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>',
+        title: 'Notificaciones Push',
+        description:
+          'Enviamos mensajes directos a los dispositivos móviles de tus usuarios para aumentar la retención.',
       },
     ],
     faqs: [
       {
         question: '¿Cuánto tiempo toma desarrollar una app móvil?',
         answer:
-          'Depende del alcance del proyecto, pero generalmente los proyectos básicos tardan entre 1 y 2 meses, mientras que los más complejos pueden tomar un poco más de tiempo.',
+          'Depende del alcance del proyecto, pero generalmente los proyectos básicos tardan entre 1 y 2 meses, mientras que los más complejos pueden tomar más tiempo.',
       },
       {
         question: '¿Ofrecen mantenimiento después del lanzamiento?',
@@ -726,6 +783,22 @@ export const services: ServiceData[] = [
         answer:
           'No hay problema. Ofrecemos paquetes de soporte post-lanzamiento para implementar cualquier cambio o mejora que necesites.',
       },
+      {
+        question:
+          '¿Pueden ayudarme a publicar la app en App Store y Google Play?',
+        answer:
+          'Sí, nos encargamos de todo el proceso de publicación y te asesoramos para cumplir con todos los requisitos.',
+      },
+      {
+        question: '¿Qué tipo de apps desarrollan?',
+        answer:
+          'Desarrollamos apps nativas para iOS y Android, así como híbridas con tecnologías como Flutter o React Native.',
+      },
+      {
+        question: '¿El diseño de la app será personalizado?',
+        answer:
+          'Sí, cada diseño es creado a medida para reflejar la identidad visual y experiencia deseada por tu marca.',
+      },
     ],
     cta: {
       text: 'Solicita una consultoría gratuita para tu app',
@@ -734,17 +807,17 @@ export const services: ServiceData[] = [
     extraBlocks: [
       {
         type: 'intro',
-        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
-          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
-            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              <div class="lg:pt-4 lg:pr-8">
-                <div class="lg:max-w-lg">
-                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
-                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Desarrollo de Apps Móviles es Tan Genial?</p>
-                  <p class="mt-6 text-lg/8 text-gray-600">Llega a tus clientes donde quiera que estén con una app móvil atractiva y funcional.</p>
+        content: `<section class=\"overflow-hidden bg-white py-24 sm:py-32\">
+          <div class=\"mx-auto max-w-7xl px-4 lg:px-8 content-center\">
+            <div class=\"mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2\">
+              <div class=\"lg:pt-4 lg:pr-8\">
+                <div class=\"lg:max-w-lg\">
+                  <h2 class=\"text-base/7 font-semibold text-[#E51F52]\">Beneficios Clave</h2>
+                  <p class=\"mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl\">¿Por qué el Desarrollo de Apps Móviles es Tan Genial?</p>
+                  <p class=\"mt-6 text-lg/8 text-gray-600\">Llega a tus clientes donde quiera que estén con una app móvil atractiva y funcional.</p>
                 </div>
               </div>
-              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1740099869/app-movil_kimh1c.png" alt="Desarrollo de Apps Móviles" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+              <img src=\"https://res.cloudinary.com/dkb9jfet8/image/upload/v1740099869/app-movil_kimh1c.png\" alt=\"Desarrollo de Apps Móviles\" class=\"w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0\" width=\"2432\" height=\"1442\" loading=\"lazy\" />
             </div>
           </div>
         </section>`,
@@ -763,76 +836,98 @@ export const services: ServiceData[] = [
       alt: 'Icono de Odoo ERP',
     },
     mainImage: {
-      url: 'YOUR_CLOUDINARY_URL_FOR_ODOO_IMAGE',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753238925/SPI_homepage_zspy5z.png',
       alt: 'Odoo ERP - Interfaz de Usuario',
     },
     benefits: [
       {
-        title: 'Disponibilidad 24/7',
+        title: 'Control Total del Negocio',
         description:
-          '¡Dile adiós a las esperas! Tus clientes tendrán respuestas al instante, incluso si estás de vacaciones en la luna.',
+          'Gestiona desde ventas hasta contabilidad en un solo sistema centralizado.',
       },
       {
-        title: 'Atención Personalizada',
-        description:
-          'Cada cliente es único, ¡y tus chatbots también! Se adaptan a sus necesidades y les dan la atención VIP que se merecen.',
+        title: 'Flujos de Trabajo Inteligentes',
+        description: 'Automatiza procesos clave y elimina tareas repetitivas.',
       },
       {
-        title: 'Generación de Leads',
+        title: 'Acceso Remoto Seguro',
         description:
-          '¡Olvídate de perseguir clientes! Tus chatbots capturan la información clave y te la entregan en bandeja de plata.',
+          'Gestiona tu empresa desde cualquier lugar con seguridad garantizada.',
       },
       {
-        title: 'Aumento de la Satisfacción',
-        description:
-          'Clientes felices, ¡vida feliz! Los chatbots resuelven sus dudas al instante y les hacen sentir como reyes.',
+        title: 'Escalabilidad Modular',
+        description: 'Agrega funcionalidades cuando tu empresa lo necesite.',
       },
       {
-        title: 'Reducción de Costos',
+        title: 'Informes en Tiempo Real',
         description:
-          '¡Que el dinero no se te escape! Los chatbots automatizan tareas y liberan a tu equipo para que se enfoque en lo que realmente importa.',
+          'Toma decisiones informadas con datos actualizados y visualizaciones claras.',
       },
     ],
     howItWorks: {
       title: '¿Cómo Funciona?',
-      subtitle: '¡Magia Digital en Acción!',
+      subtitle: 'Implementación de Odoo paso a paso',
       description:
-        'Cada chatbot que creamos es único, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+        'Nuestro enfoque garantiza una implementación eficiente y personalizada de Odoo ERP. Así lo hacemos:',
       steps: [
         {
-          title: 'Análisis de Necesidades',
+          title: 'Configuración Inicial',
           description:
-            'Entendemos tu negocio y a tus clientes para diseñar un chatbot a medida.',
+            'Detectamos necesidades clave y definimos los módulos a integrar y configurar.',
         },
         {
-          title: 'Diseño Personalizado',
+          title: 'Personalización',
           description:
-            'Creamos un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+            'Adaptamos flujos, campos y vistas para alinearse con tus procesos.',
+        },
+        {
+          title: 'Capacitación',
+          description:
+            'Entrenamos a tu equipo para que saque el máximo provecho del sistema.',
+        },
+        {
+          title: 'Soporte Continuo',
+          description:
+            'Monitoreamos y damos asistencia para asegurar que todo funcione sin fricciones.',
         },
       ],
     },
     features: [
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
-        title: 'Gestión Integral',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>',
+        title: 'Gestión Financiera',
         description:
-          'Control total de ventas, compras, inventario, contabilidad y más.',
+          'Automatización contable, facturación electrónica y reportes fiscales.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
-        title: 'Personalización',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
+        title: 'CRM y Ventas',
         description:
-          'Adaptamos Odoo a los procesos y necesidades específicas de tu empresa.',
+          'Gestiona oportunidades, clientes y automatiza tu proceso comercial.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
-        title: 'Automatización de Procesos',
-        description: 'Reduce tareas manuales y errores con flujos automáticos.',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>',
+        title: 'Inventario y Compras',
+        description:
+          'Controla tu stock, automatiza pedidos y optimiza almacenes.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
-        title: 'Soporte y Actualizaciones',
-        description: 'Acompañamiento y mantenimiento continuo para tu ERP.',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
+        title: 'Recursos Humanos',
+        description:
+          'Administra personal, nómina, ausencias y desempeño desde un solo lugar.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>',
+        title: 'Marketing Automatizado',
+        description:
+          'Lanza campañas por correo, SMS o redes desde un solo panel.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>',
+        title: 'Reportes Personalizados',
+        description:
+          'Visualiza KPIs con dashboards personalizados y reportes dinámicos.',
       },
     ],
     faqs: [
@@ -846,6 +941,30 @@ export const services: ServiceData[] = [
         answer:
           'Sí, realizamos migraciones de datos desde otros sistemas a Odoo de forma segura.',
       },
+      {
+        question: '¿Odoo es escalable para empresas en crecimiento?',
+        answer:
+          'Sí, puedes empezar con los módulos básicos y añadir más a medida que tu negocio crece.',
+      },
+      {
+        question: '¿Se puede acceder a Odoo desde dispositivos móviles?',
+        answer: 'Sí, Odoo cuenta con apps móviles para Android y iOS.',
+      },
+      {
+        question: '¿Cuánto tiempo tarda la implementación?',
+        answer:
+          'Depende del tamaño y complejidad del proyecto, pero por lo general de 4 a 8 semanas.',
+      },
+      {
+        question: '¿Qué tipo de soporte ofrecen?',
+        answer:
+          'Brindamos soporte técnico continuo y mantenimiento personalizado.',
+      },
+      {
+        question: '¿Qué tan seguro es Odoo?',
+        answer:
+          'Muy seguro. Aplicamos configuraciones avanzadas de seguridad y respaldos automáticos.',
+      },
     ],
     cta: {
       text: 'Solicita una consultoría gratuita de Odoo',
@@ -854,20 +973,8 @@ export const services: ServiceData[] = [
     extraBlocks: [
       {
         type: 'intro',
-        content: `<section class="overflow-hidden bg-white py-24 sm:py-32">
-          <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">
-            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              <div class="lg:pt-4 lg:pr-8">
-                <div class="lg:max-w-lg">
-                  <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>
-                  <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué el Odoo ERP es Tan Genial?</p>
-                  <p class="mt-6 text-lg/8 text-gray-600">Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa.</p>
-                </div>
-              </div>
-              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/odoo_zjzj1j.png" alt="Odoo ERP" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
-            </div>
-          </div>
-        </section>`,
+        content:
+          '<section class="overflow-hidden bg-white py-24 sm:py-32">\n        <div class="mx-auto max-w-7xl px-4 lg:px-8 content-center">\n          <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">\n            <div class="lg:pt-4 lg:pr-8">\n              <div class="lg:max-w-lg">\n                <h2 class="text-base/7 font-semibold text-[#E51F52]">Beneficios Clave</h2>\n                <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">¿Por qué Odoo ERP es Tan Genial?</p>\n                <p class="mt-6 text-lg/8 text-gray-600">Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa.</p>\n              </div>\n            </div>\n            <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1753238925/SPI_homepage_zspy5z.png" alt="Odoo ERP" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />\n          </div>\n        </div>\n      </section>',
       },
     ],
   },
@@ -879,94 +986,104 @@ export const services: ServiceData[] = [
       title: 'Optimización y Conversión',
       description:
         'Optimizamos tu sitio web para mejorar el rendimiento, la usabilidad y aumentar las conversiones.',
-      image: '/public/icons/optimization.png',
+      image: '/icons/optimization.png',
       alt: 'Icono de Optimización y Conversión',
     },
     mainImage: {
-      url: 'YOUR_CLOUDINARY_URL_FOR_OPTIMIZATION_IMAGE',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753242378/optimizacin-de-sitios-web_wwaagb.jpg',
       alt: 'Optimización y Conversión - Gráfico',
     },
     benefits: [
       {
-        title: 'Disponibilidad 24/7',
+        title: 'Mejor Experiencia de Usuario',
         description:
-          '¡Dile adiós a las esperas! Tus clientes tendrán respuestas al instante, incluso si estás de vacaciones en la luna.',
+          'Diseñamos sitios que no solo se ven bien, sino que guían al usuario de forma natural hacia la conversión.',
       },
       {
-        title: 'Atención Personalizada',
+        title: 'Mayor Velocidad de Carga',
         description:
-          'Cada cliente es único, ¡y tus chatbots también! Se adaptan a sus necesidades y les dan la atención VIP que se merecen.',
+          'Reducimos el tiempo de carga de tu sitio para evitar abandonos innecesarios.',
       },
       {
-        title: 'Generación de Leads',
+        title: 'Elementos Persuasivos',
         description:
-          '¡Olvídate de perseguir clientes! Tus chatbots capturan la información clave y te la entregan en bandeja de plata.',
+          'Incluimos llamados a la acción efectivos y diseño centrado en conversiones.',
       },
       {
-        title: 'Aumento de la Satisfacción',
+        title: 'Pruebas A/B',
         description:
-          'Clientes felices, ¡vida feliz! Los chatbots resuelven sus dudas al instante y les hacen sentir como reyes.',
+          'Testeamos diferentes versiones de tu sitio para identificar qué funciona mejor.',
       },
       {
-        title: 'Reducción de Costos',
+        title: 'Adaptabilidad Mobile',
         description:
-          '¡Que el dinero no se te escape! Los chatbots automatizan tareas y liberan a tu equipo para que se enfoque en lo que realmente importa.',
+          'Optimizamos tu web para dispositivos móviles, donde ocurre gran parte del tráfico.',
       },
     ],
     howItWorks: {
       title: '¿Cómo Funciona?',
-      subtitle: '¡Magia Digital en Acción!',
+      subtitle: 'Convertimos clics en clientes.',
       description:
-        'Cada chatbot que creamos es único, como tu negocio. Descubre cómo nuestro proceso de diseño personalizado te permitirá tener un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+        'Analizamos tu embudo de conversión, identificamos puntos críticos y aplicamos mejoras medibles para convertir más visitantes en clientes.',
       steps: [
         {
-          title: 'Análisis de Necesidades',
+          title: 'Auditoría UX y Analítica',
           description:
-            'Entendemos tu negocio y a tus clientes para diseñar un chatbot a medida.',
+            'Revisamos el comportamiento del usuario en tu sitio para encontrar fricciones.',
         },
         {
-          title: 'Diseño Personalizado',
+          title: 'Hipótesis de Mejora',
           description:
-            'Creamos un chatbot con la personalidad de tu marca, ¡para que tus clientes se sientan como en casa!',
+            'Proponemos cambios basados en datos, no en suposiciones.',
+        },
+        {
+          title: 'Implementación',
+          description:
+            'Aplicamos ajustes técnicos, de contenido y diseño que impacten la conversión.',
+        },
+        {
+          title: 'Pruebas y Optimización Continua',
+          description:
+            'No nos detenemos en lanzar: medimos, analizamos y mejoramos constantemente.',
         },
       ],
     },
     features: [
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
-        title: 'E-Commerce',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>',
+        title: 'Heatmaps y Grabaciones',
         description:
-          'Responde preguntas sobre productos, guía a los clientes en el proceso de compra, ofrece descuentos personalizados.',
+          'Visualiza cómo navegan los usuarios en tu sitio para tomar decisiones informadas.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
-        title: 'Atención al Cliente',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
+        title: 'Optimización de Formularios',
         description:
-          'Resuelve dudas frecuentes, gestiona quejas, programa citas, ofrece soporte técnico.',
+          'Simplificamos y mejoramos tus formularios para aumentar el envío de leads.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
-        title: 'Marketing',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>',
+        title: 'CRO con IA',
         description:
-          'Captura leads, realiza encuestas, promociona productos, segmenta audiencias.',
+          'Usamos inteligencia artificial para identificar patrones y recomendar mejoras.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>`,
-        title: 'Recursos Humanos',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
+        title: 'Integración con CRM y Email Marketing',
         description:
-          'Responde preguntas sobre la empresa, gestiona solicitudes de empleo, programa entrevistas.',
+          'Alineamos tu web con tus herramientas de venta para cerrar más negocios.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
-        title: 'Integración Multicanal',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>',
+        title: 'Análisis de Funnel',
         description:
-          'Conecta tu chatbot con WhatsApp, Facebook Messenger, Instagram y más.',
+          'Detectamos dónde abandonan los usuarios para optimizar cada paso.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
-        title: 'Análisis y Reportes',
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>',
+        title: 'Monitoreo en Tiempo Real',
         description:
-          'Obtén métricas detalladas sobre las conversaciones y el rendimiento de tu chatbot.',
+          'Detectamos bloqueos en la experiencia del usuario mientras ocurren.',
       },
     ],
     faqs: [
@@ -979,6 +1096,30 @@ export const services: ServiceData[] = [
         question: '¿Cómo miden los resultados?',
         answer:
           'Utilizamos herramientas de analítica y test A/B para medir el impacto de cada mejora.',
+      },
+      {
+        question: '¿Qué tipo de pruebas realizan?',
+        answer:
+          'Realizamos pruebas A/B, heatmaps, test de formularios y monitoreo de comportamiento.',
+      },
+      {
+        question: '¿Cuánto tiempo tarda en verse resultados?',
+        answer:
+          'Depende del sitio, pero los primeros indicadores suelen aparecer en semanas.',
+      },
+      {
+        question: '¿Pueden trabajar con mi plataforma actual?',
+        answer:
+          'Sí, trabajamos con Shopify, WordPress, Webflow, Magento, entre otras.',
+      },
+      {
+        question: '¿Puedo mantener el diseño actual?',
+        answer: 'Sí, optimizamos sin perder la identidad visual de tu marca.',
+      },
+      {
+        question: '¿Es necesario instalar herramientas adicionales?',
+        answer:
+          'Solo si se requieren funciones como heatmaps o test A/B. Te asesoramos según el caso.',
       },
     ],
     cta: {
@@ -998,7 +1139,7 @@ export const services: ServiceData[] = [
                   <p class="mt-6 text-lg/8 text-gray-600">Optimizamos tu sitio web para mejorar el rendimiento, la usabilidad y aumentar las conversiones.</p>
                 </div>
               </div>
-              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1739915869/optimization_zjzj1j.png" alt="Optimización y Conversión" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
+              <img src="https://res.cloudinary.com/dkb9jfet8/image/upload/v1753242378/optimizacin-de-sitios-web_wwaagb.jpg" alt="Optimización y Conversión" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442" loading="lazy" />
             </div>
           </div>
         </section>`,
@@ -1072,28 +1213,40 @@ export const services: ServiceData[] = [
     },
     features: [
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5h18v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9Z" /></svg>',
         title: 'Procesos Administrativos',
         description:
           'Automatiza tareas como facturación, gestión de inventarios y reportes.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" /></svg>',
         title: 'Atención al Cliente',
         description:
           'Responde consultas frecuentes, gestiona tickets y mejora la experiencia del usuario.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12v-8m0 0-3 3m3-3 3 3" /></svg>',
         title: 'Integración de Sistemas',
         description:
           'Conecta tus plataformas y herramientas para un flujo de trabajo sin fricciones.',
       },
       {
-        icon: `<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>`,
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><circle cx="12" cy="7" r="4" /></svg>',
         title: 'Alertas y Monitoreo',
         description:
           'Recibe notificaciones automáticas y monitorea procesos en tiempo real.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0-3-3m3 3 3-3" /></svg>',
+        title: 'Análisis Predictivo',
+        description:
+          'Utiliza IA para anticipar comportamientos y optimizar procesos antes de que ocurran cuellos de botella.',
+      },
+      {
+        icon: '<svg class="size-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>',
+        title: 'Automatización Multicanal',
+        description:
+          'Sincroniza interacciones por email, redes sociales, formularios web y más desde un solo sistema automatizado.',
       },
     ],
     faqs: [
@@ -1121,6 +1274,16 @@ export const services: ServiceData[] = [
         question: '¿Es costoso implementar la automatización?',
         answer:
           'Es una inversión que se paga sola. El ahorro de tiempo y recursos, junto con el aumento de eficiencia, generan un retorno rápido y tangible.',
+      },
+      {
+        question: '¿La automatización es segura para mis datos?',
+        answer:
+          'Sí. Aplicamos estrictos protocolos de seguridad y cifrado en cada integración para proteger tu información.',
+      },
+      {
+        question: '¿La automatización se adapta a mi sector?',
+        answer:
+          'Sí. Hemos trabajado con sectores como salud, retail, educación, servicios financieros y más.',
       },
     ],
     cta: {
