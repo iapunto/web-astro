@@ -511,7 +511,7 @@ export const services: ServiceData[] = [
       title: 'Convierte Contenido en Clientes',
       description:
         'Creamos contenido inteligente, original y estratégico. Atrae, educa y convierte con textos impulsados por SEO e inteligencia artificial.',
-      image: '/public/icons/content.png',
+      image: '/icons/content.png',
       alt: 'Icono de Marketing de Contenidos',
     },
     mainImage: {
@@ -661,7 +661,7 @@ export const services: ServiceData[] = [
       title: 'Conecta con tu Audiencia en Cualquier Lugar',
       description:
         'Llega a tus clientes donde quiera que estén con una app móvil atractiva y funcional.',
-      image: '/public/icons/app-dev.png',
+      image: '/icons/app-dev.png',
       alt: 'Icono de Desarrollo de Apps Móviles',
     },
     mainImage: {
@@ -832,7 +832,7 @@ export const services: ServiceData[] = [
       title: 'Odoo ERP',
       description:
         'Implementamos y personalizamos Odoo ERP para optimizar la gestión integral de tu empresa.',
-      image: '/public/icons/odoo.png',
+      image: '/icons/odoo.png',
       alt: 'Icono de Odoo ERP',
     },
     mainImage: {
@@ -1154,7 +1154,7 @@ export const services: ServiceData[] = [
       title: 'La Revolución que tu Negocio Necesita',
       description:
         'Imagina un mundo donde las tareas repetitivas desaparecen, los errores son cosa del pasado y tu equipo se enfoca en lo que realmente importa: innovar y crecer.',
-      image: '/public/icons/automation.png',
+      image: '/icons/automation.png',
       alt: 'Icono de Automatización Inteligente',
     },
     mainImage: {
