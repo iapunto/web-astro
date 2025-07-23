@@ -190,7 +190,7 @@ export const services: ServiceData[] = [
       alt: 'Publicidad Online con IA',
     },
     mainImage: {
-      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753233559/representa-un-entorno-digital-moderno-donde-se-visualiza-una-campaa-de-publicidad-online-con-inteli_1_kny4c1.jpg',
+      url: '/src/assets/images/publicidad-online-ia_a3p1nu.png',
       alt: 'Publicidad Online con IA - Gráfico',
     },
     benefits: [
