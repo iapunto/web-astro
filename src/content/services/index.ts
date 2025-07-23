@@ -190,7 +190,7 @@ export const services: ServiceData[] = [
       alt: 'Publicidad Online con IA',
     },
     mainImage: {
-      url: '/src/assets/images/publicidad-online-ia_a3p1nu.png',
+      url: '/src/assets/images/digital-marketing-service.png',
       alt: 'Publicidad Online con IA - Gráfico',
     },
     benefits: [
