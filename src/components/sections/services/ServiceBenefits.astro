@@ -10,6 +10,10 @@ export interface Props {
   };
 }
 const { benefits, mainImage } = Astro.props;
+
+// Debug: verificar si mainImage se está pasando
+console.log('ServiceBenefits - mainImage:', mainImage);
+console.log('ServiceBenefits - benefits:', benefits);
 ---
 
 <section class="overflow-hidden bg-white py-24 sm:py-32">
