@@ -10,13 +10,18 @@ import TestimonialsSection from '../components/sections/TestimonialsSection.astr
 import BlogSection from '../components/sections/blog/BlogSection.astro';
 import ContactSection from '../components/sections/home/ContactSection.astro';
 
-const {
-  title = 'Agencia de Marketing y Desarrollo Web con IA | IA Punto',
-  description = 'Soluciones de Inteligencia Artificial para empresas: marketing digital, desarrollo web, automatización y consultoría estratégica. ¡Haz despegar tu negocio hoy mismo!',
-  image = 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg',
-  keywords = 'Inteligencia Artificial para empresas, automatización de procesos, desarrollo web con IA, consultoría digital, marketing con IA, Odoo ERP',
-  alt = 'Logo de IA Punto, una empresa de soluciones de Inteligencia Artificial',
-} = Astro.props;
+const title = 'Agencia de Marketing y Desarrollo Web con IA';
+const description = 'Soluciones de Inteligencia Artificial para empresas: marketing digital, desarrollo web, automatización y consultoría estratégica. ¡Haz despegar tu negocio hoy mismo!';
+const image = 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg';
+const keywords = [
+  'Inteligencia Artificial para empresas',
+  'automatización de procesos',
+  'desarrollo web con IA',
+  'consultoría digital',
+  'marketing con IA',
+  'Odoo ERP',
+];
+const alt = 'Logo de IA Punto, una empresa de soluciones de Inteligencia Artificial';
 ---
 
 <DefaultLayout

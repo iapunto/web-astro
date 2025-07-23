@@ -17,8 +17,8 @@ interface Props {
 }
 
 const {
-  pageTitle = 'Soluciones Innovadoras en Inteligencia Artificial',
-  description = 'Descubre soluciones innovadoras en inteligencia artificial con IA Punto.',
+  pageTitle = 'Agencia de Marketing y Desarrollo Web con IA',
+  description = 'Soluciones de Inteligencia Artificial para empresas: marketing digital, desarrollo web, automatización y consultoría estratégica. ¡Haz despegar tu negocio hoy mismo!',
   image = 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1741038442/logo-v3-cuadrado_seljkv.jpg',
   noindex,
   keywords,
@@ -47,12 +47,8 @@ if (Array.isArray(keywords)) {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-{Astro.url.pathname === '/' ? (
-  <title>{siteName} | {pageTitle}</title>
-) : (
-  <title>{pageTitle} | {siteName}</title>
-)}
-<meta name="title" content={pageTitle} />
+<title>{pageTitle} | {siteName}</title>
+<meta name="title" content={`${pageTitle} | ${siteName}`} />
 <meta name="description" content={description} />
 {/* keywords robusto */}
 {keywordsContent && <meta name="keywords" content={keywordsContent} />}
@@ -62,7 +58,7 @@ if (Array.isArray(keywords)) {
 <meta name="generator" content={Astro.generator} />
 
 <!-- Open Graph Meta Tags -->
-<meta property="og:title" content={pageTitle} />
+<meta property="og:title" content={`${pageTitle} | ${siteName}`} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={image} />
 <meta property="og:url" content={canonicalURL} />
@@ -72,7 +68,7 @@ if (Array.isArray(keywords)) {
 
 <!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:title" content={`${pageTitle} | ${siteName}`} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={image} />
 <meta name="twitter:site" content={twitterSite} />
