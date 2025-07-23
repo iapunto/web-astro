@@ -1155,7 +1155,7 @@ export const services: ServiceData[] = [
       alt: 'Icono de Diseño y Desarrollo Web',
     },
     mainImage: {
-      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753228301/una-escena-moderna-y-minimalista-de-un-equipo-trabajando-en-desarrollo-web-un-escritorio-con-dos-pe_uttce8.jpg',
+      url: 'https://res.cloudinary.com/dkb9jfet8/image/upload/v1753229236/una-escena-moderna-y-minimalista-de-un-equipo-trabajando-en-desarrollo-web-un-escritorio-con-dos-pe_1_gqhuma.jpg',
       alt: 'Product screenshot',
     },
     benefits: [
