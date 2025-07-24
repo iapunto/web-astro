@@ -26,37 +26,54 @@
     </svg>
   </button>
   <script is:inline>
-    window.addEventListener('DOMContentLoaded', () => {
+    function initBackToTop() {
       const mybutton = document.getElementById('myBtn');
-      const scrollContainer = document.getElementById('main-content');
+      console.log('BackToTop: initBackToTop, mybutton:', mybutton);
       
-      console.log('BackToTop: DOMContentLoaded, mybutton:', mybutton);
-      console.log('BackToTop: scrollContainer:', scrollContainer);
+      if (!mybutton) {
+        console.log('BackToTop: Button not found, retrying...');
+        setTimeout(initBackToTop, 100);
+        return;
+      }
       
-      if (!mybutton || !scrollContainer) return;
+      function getScrollPosition() {
+        return Math.max(
+          window.pageYOffset,
+          document.documentElement.scrollTop,
+          document.body.scrollTop
+        );
+      }
       
       function handleScroll() {
-        const scrollTop = scrollContainer.scrollTop;
-        console.log('BackToTop: Scroll event scrollTop:', scrollTop);
+        const scrollPosition = getScrollPosition();
+        console.log('BackToTop: Scroll event, position:', scrollPosition);
         
-        if (scrollTop > 20) {
+        if (scrollPosition > 20) {
           mybutton.classList.remove('hidden');
         } else {
           mybutton.classList.add('hidden');
         }
       }
       
-      scrollContainer.addEventListener('scroll', handleScroll);
+      // Escuchar scroll en window
+      window.addEventListener('scroll', handleScroll, { passive: true });
       
-      // Chequeo inicial por si la página ya está scrolleada
-      handleScroll();
+      // Chequeo inicial
+      setTimeout(handleScroll, 100);
       
       mybutton.onclick = function () {
-        scrollContainer.scrollTo({
+        window.scrollTo({
           top: 0,
           behavior: 'smooth',
         });
       };
-    });
+    }
+    
+    // Inicializar cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initBackToTop);
+    } else {
+      initBackToTop();
+    }
   </script>
 </>

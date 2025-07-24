@@ -43,10 +43,8 @@ const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
   <body>
     <TopBar />
     <Navbar />
-    <main id="main-content" class="main-scroll-container">
-      <Breadcrumb pageTitle={pageTitle} />
-      <slot />
-    </main>
+    <Breadcrumb pageTitle={pageTitle} />
+    <slot />
     <Footer
       ctaTitle={ctaTitle}
       ctaDescription={ctaDescription}
@@ -60,18 +58,3 @@ const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
       defer></script>
   </body>
 </html>
-
-<style>
-  body {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  #main-content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-</style>
