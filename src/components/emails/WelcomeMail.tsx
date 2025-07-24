@@ -9,7 +9,7 @@ import {
   Text,
 } from '@react-email/components';
 
-export function WelcomeEmail() {
+export default function WelcomeEmail() {
   return (
     <Html>
       <Head />
@@ -31,7 +31,7 @@ export function WelcomeEmail() {
               marginBottom: '20px',
             }}
           >
-            ¡Bienvenido!
+            ¡Bienvenido a IA Punto!
           </Text>
           <Text
             style={{
@@ -40,7 +40,7 @@ export function WelcomeEmail() {
               marginBottom: '20px',
             }}
           >
-            Gracias por contactarnos. Nos complace tenerte en nuestra comunidad.
+            Gracias por contactarnos. Nos complace tenerte en nuestra comunidad de marketing digital y desarrollo web con IA.
           </Text>
           <Text
             style={{
@@ -52,10 +52,10 @@ export function WelcomeEmail() {
             Aquí tienes algunos recursos útiles:
           </Text>
           <Link
-            href="https://tu-sitio-web.com"
+            href="https://iapunto.com"
             style={{
               fontSize: '16px',
-              color: '#007bff',
+              color: '#E51F52',
               textDecoration: 'none',
             }}
           >
@@ -69,5 +69,3 @@ export function WelcomeEmail() {
     </Html>
   );
 }
-
-export default WelcomeEmail;

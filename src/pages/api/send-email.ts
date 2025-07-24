@@ -86,16 +86,16 @@ export const POST: APIRoute = async ({ request }) => {
       <p>Mensaje: ${data.message}</p>
     `;
 
-    const WelcomeHtml = WelcomeMail;
-
-    await resend.emails.send({
+    // Enviar email de bienvenida al usuario
+    const welcomeEmailResponse = await resend.emails.send({
       from: process.env.EMAIL_FROM || 'desarrollo@iapunto.com',
       to: data.email,
       subject: 'Bienvenido a IA Punto',
-      react: WelcomeHtml(),
+      react: WelcomeMail,
     });
 
-    const emailResponse = await resend.emails.send({
+    // Enviar notificación al equipo
+    const notificationEmailResponse = await resend.emails.send({
       from: process.env.EMAIL_FROM || 'desarrollo@iapunto.com',
       to: process.env.EMAIL_TO || 'hola@iapunto.com',
       subject: 'Nuevo mensaje del formulario de contacto',
@@ -104,7 +104,11 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
     return new Response(
-      JSON.stringify({ message: 'Mensaje enviado con éxito', emailResponse }),
+      JSON.stringify({ 
+        message: 'Mensaje enviado con éxito', 
+        welcomeEmailResponse,
+        notificationEmailResponse 
+      }),
       {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
