@@ -13,6 +13,9 @@ const sortedPosts = allPosts.sort(
 
 // Obtener solo los últimos N artículos (ej. los 3 últimos)
 const latestPosts = sortedPosts.slice(0, 6);
+
+// Verificar si hay suficientes posts para el carousel
+const hasEnoughPosts = latestPosts.length >= 3;
 ---
 
 <section class="py-20 bg-gradient-to-b from-gray-50 to-white">
@@ -149,34 +152,59 @@ const latestPosts = sortedPosts.slice(0, 6);
   import 'swiper/css';
   import 'swiper/css/navigation'; // navigation
   import 'swiper/css/pagination'; // pagination
-  const blogSwiper = new Swiper('.blog-swiper', {
-    modules: [Navigation, Pagination],
-    slidesPerView: 3,
-    slidesPerGroup: 1,
-    spaceBetween: 30,
-    loop: true,
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-    breakpoints: {
-      320: {
-        slidesPerView: 1,
-        spaceBetween: 10,
-      },
-      640: {
-        slidesPerView: 2,
-        spaceBetween: 20,
-      },
-      1024: {
-        slidesPerView: 3,
-        spaceBetween: 30,
-      },
-    },
+  
+  // Esperar a que el DOM esté completamente cargado
+  document.addEventListener('DOMContentLoaded', function() {
+    const swiperElement = document.querySelector('.blog-swiper');
+    const slides = document.querySelectorAll('.blog-swiper .swiper-slide');
+    const hasEnoughPosts = slides.length >= 3;
+    
+    if (swiperElement) {
+      try {
+        const blogSwiper = new Swiper('.blog-swiper', {
+          modules: [Navigation, Pagination],
+          slidesPerView: 3,
+          slidesPerGroup: 1,
+          spaceBetween: 30,
+          loop: hasEnoughPosts, // Solo loop si hay suficientes slides
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          breakpoints: {
+            320: {
+              slidesPerView: 1,
+              spaceBetween: 10,
+            },
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+          },
+          // Agregar configuración para evitar comportamientos extraños
+          watchOverflow: true,
+          observer: true,
+          observeParents: true,
+        });
+        
+        // Verificar que el swiper se inicializó correctamente
+        if (blogSwiper) {
+          console.log('Blog Swiper inicializado correctamente');
+        }
+      } catch (error) {
+        console.error('Error al inicializar Blog Swiper:', error);
+      }
+    } else {
+      console.warn('Elemento .blog-swiper no encontrado');
+    }
   });
 </script>
 
