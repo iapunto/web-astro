@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 import { z } from 'zod';
-import WelcomeMail from '../../components/emails/WelcomeMail';
+import WelcomeMail from '../../components/emails/WelcomeMail.tsx';
 import dotenv from 'dotenv';
 
 dotenv.config();

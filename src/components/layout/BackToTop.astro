@@ -1,8 +1,13 @@
 ---
 // Eliminamos el import de Button
 ---
+
 <>
-  <button id="myBtn" class="inline-block px-6 py-3 font-semibold rounded-lg shadow transition-colors duration-200 text-center bg-primary-600 text-white border border-primary-600 hover:bg-white hover:text-primary-600 hover:border-primary-600 fixed bottom-8 right-8 z-50 hidden" aria-label="Volver arriba">
+  <button
+    id="myBtn"
+    class="inline-block px-6 py-3 font-semibold rounded-lg shadow transition-colors duration-200 text-center bg-primary-600 text-white border border-primary-600 hover:bg-white hover:text-primary-600 hover:border-primary-600 fixed bottom-8 left-1/2 -translate-x-1/2 z-50 hidden"
+    aria-label="Volver arriba"
+  >
     <svg
       class="w-6 h-6 text-white dark:text-white"
       aria-hidden="true"
@@ -11,7 +16,7 @@
       height="24"
       fill="none"
       viewBox="0 0 24 24"
-    > 
+    >
       <path
         stroke="currentColor"
         stroke-linecap="round"
@@ -20,5 +25,38 @@
         d="m5 15 7-7 7 7"></path>
     </svg>
   </button>
-  <script src="/scripts/backtotop.js" defer is:inline></script>
+  <script is:inline>
+    window.addEventListener('DOMContentLoaded', () => {
+      const mybutton = document.getElementById('myBtn');
+      const scrollContainer = document.getElementById('main-content');
+      
+      console.log('BackToTop: DOMContentLoaded, mybutton:', mybutton);
+      console.log('BackToTop: scrollContainer:', scrollContainer);
+      
+      if (!mybutton || !scrollContainer) return;
+      
+      function handleScroll() {
+        const scrollTop = scrollContainer.scrollTop;
+        console.log('BackToTop: Scroll event scrollTop:', scrollTop);
+        
+        if (scrollTop > 20) {
+          mybutton.classList.remove('hidden');
+        } else {
+          mybutton.classList.add('hidden');
+        }
+      }
+      
+      scrollContainer.addEventListener('scroll', handleScroll);
+      
+      // Chequeo inicial por si la página ya está scrolleada
+      handleScroll();
+      
+      mybutton.onclick = function () {
+        scrollContainer.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      };
+    });
+  </script>
 </>

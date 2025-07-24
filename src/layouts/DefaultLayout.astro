@@ -10,7 +10,18 @@ import Breadcrumb from '../components/layout/Header/Breadcrumb.astro';
 import TrackingScripts from '../components/common/TrackingScripts.astro';
 import WhatsAppButton from '../components/layout/WhatsAppButton.astro';
 
-const { pageTitle, description, image, keywords, robots, ctaTitle, ctaDescription, ctaButtonText, ctaButtonHref } = Astro.props;
+const {
+  pageTitle,
+  description,
+  image,
+  keywords,
+  robots,
+  ctaTitle,
+  ctaDescription,
+  ctaButtonText,
+  ctaButtonHref,
+} = Astro.props;
+const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 ---
 
 <html lang="es">
@@ -23,18 +34,44 @@ const { pageTitle, description, image, keywords, robots, ctaTitle, ctaDescriptio
       robots={robots}
     />
     <TrackingScripts />
+    <slot name="head" />
+    <script
+      src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}
+      defer
+      is:inline></script>
   </head>
   <body>
     <TopBar />
     <Navbar />
-    <Breadcrumb pageTitle={pageTitle} />
-    <slot />
-    <Footer ctaTitle={ctaTitle} ctaDescription={ctaDescription} ctaButtonText={ctaButtonText} ctaButtonHref={ctaButtonHref} />
+    <main id="main-content" class="main-scroll-container">
+      <Breadcrumb pageTitle={pageTitle} />
+      <slot />
+    </main>
+    <Footer
+      ctaTitle={ctaTitle}
+      ctaDescription={ctaDescription}
+      ctaButtonText={ctaButtonText}
+      ctaButtonHref={ctaButtonHref}
+    />
     <BackToTop />
     <WhatsAppButton />
     <script
       src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
-      defer
-    ></script>
+      defer></script>
   </body>
 </html>
+
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  #main-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+</style>
