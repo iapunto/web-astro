@@ -18,6 +18,7 @@ const latestPosts = sortedPosts.slice(0, 6);
 // Verificar si hay suficientes posts para el carousel
 const hasEnoughPosts = latestPosts.length >= 3;
 ---
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
 
 <section class="py-20 bg-gradient-to-b from-gray-50 to-white">
   <div class="container w-4/5 py-16 mx-auto px-4">
@@ -25,10 +26,7 @@ const hasEnoughPosts = latestPosts.length >= 3;
       <div class="flex items-center gap-4">
         <h2 class="text-2xl font-bold text-gray-900">Ideas 360</h2>
         <div class="flex items-center h-8">
-          <!-- Contenedor para centrar verticalmente -->
-          <span class="text-gray-300 text-3xl font-light leading-none mx-1"
-            >|</span
-          >
+          <span class="text-gray-300 text-3xl font-light leading-none mx-1">|</span>
         </div>
         <div class="flex items-center h-8">
           <a href="/" class="hover:text-[#D91A60]">
@@ -37,35 +35,32 @@ const hasEnoughPosts = latestPosts.length >= 3;
         </div>
       </div>
     </div>
-    <div class="swiper blog-swiper relative pb-16">
-      <div class="swiper-wrapper items-stretch">
-        {
-          latestPosts.map((entry) => (
-            <div class="swiper-slide">
-              <Card
-                variant="blog"
-                image={entry.data.cover}
-                alt={entry.data.coverAlt || entry.data.title}
-                title={entry.data.title}
-                description={entry.data.description}
-                category={entry.data.category}
-                date={entry.data.pubDate?.toLocaleDateString?.() ?? ''}
-                author={entry.data.author?.name}
-                authorImage={entry.data.author?.image}
-                link={`/blog/${entry.id}`}
-              />
-            </div>
-          ))
-        }
+    <div id="blog-splide" class="splide relative pb-16">
+      <div class="splide__track">
+        <ul class="splide__list">
+          {
+            latestPosts.map((entry) => (
+              <li class="splide__slide">
+                <Card
+                  variant="blog"
+                  image={entry.data.cover}
+                  alt={entry.data.coverAlt || entry.data.title}
+                  title={entry.data.title}
+                  description={entry.data.description}
+                  category={entry.data.category}
+                  date={entry.data.pubDate?.toLocaleDateString?.() ?? ''}
+                  author={entry.data.author?.name}
+                  authorImage={entry.data.author?.image}
+                  link={`/blog/${entry.id}`}
+                />
+              </li>
+            ))
+          }
+        </ul>
       </div>
-      <div class="swiper-pagination mt-8 absolute left-0 right-0 bottom-0 z-20"></div>
-      <div class="swiper-button-next custom-swiper-nav"></div>
-      <div class="swiper-button-prev custom-swiper-nav"></div>
     </div>
   </div>
   <div class="h-16"></div>
-  
-  <!-- Botón CTA para ir al blog -->
   <div class="flex justify-center mt-2">
     <a
       href="/blog"
@@ -90,92 +85,35 @@ const hasEnoughPosts = latestPosts.length >= 3;
   </div>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
 <script>
-  import Swiper from 'swiper';
-  import { Navigation, Pagination } from 'swiper/modules';
-  import 'swiper/css';
-  import 'swiper/css/navigation'; // navigation
-  import 'swiper/css/pagination'; // pagination
-  
-  // Esperar a que el DOM esté completamente cargado
-  document.addEventListener('DOMContentLoaded', function() {
-    const swiperElement = document.querySelector('.blog-swiper');
-    const slides = document.querySelectorAll('.blog-swiper .swiper-slide');
-    const hasEnoughPosts = slides.length >= 3;
-    
-    if (swiperElement) {
-      try {
-        const blogSwiper = new Swiper('.blog-swiper', {
-          modules: [Navigation, Pagination],
-          slidesPerView: 3,
-          slidesPerGroup: 1,
-          spaceBetween: 30,
-          loop: hasEnoughPosts, // Solo loop si hay suficientes slides
-          pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-          },
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          },
-          breakpoints: {
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 10,
-            },
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 30,
-            },
-          },
-          // Agregar configuración para evitar comportamientos extraños
-          watchOverflow: true,
-          observer: true,
-          observeParents: true,
-        });
-        
-        // Verificar que el swiper se inicializó correctamente
-        if (blogSwiper) {
-          console.log('Blog Swiper inicializado correctamente');
-        }
-      } catch (error) {
-        console.error('Error al inicializar Blog Swiper:', error);
-      }
-    } else {
-      console.warn('Elemento .blog-swiper no encontrado');
-    }
+  document.addEventListener('DOMContentLoaded', function () {
+    new Splide('#blog-splide', {
+      type: 'loop',
+      perPage: 3,
+      gap: 30,
+      arrows: true,
+      pagination: true,
+      breakpoints: {
+        1024: { perPage: 2, gap: 20 },
+        640: { perPage: 1, gap: 10 },
+      },
+      speed: 600,
+      classes: {
+        arrows: 'splide__arrows flex justify-center gap-4 mt-4',
+        arrow: 'splide__arrow bg-primary-600 text-white rounded-full w-10 h-10 flex items-center justify-center',
+        pagination: 'splide__pagination flex justify-center gap-2 mt-6',
+        page: 'splide__pagination__page bg-gray-300 rounded-full w-3 h-3',
+      },
+    }).mount();
   });
 </script>
 
-<style lang="scss">
-  :root {
-    --swiper-pagination-color: var(--primary-accent);
-    --swiper-pagination-bullet-size: 10px;
-    --swiper-pagination-bullet-inactive-color: #7e8083;
-  }
-  .swiper-pagination {
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -2.5rem;
-    z-index: 20;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .swiper-wrapper {
-    align-items: stretch;
-  }
-  .swiper-slide {
+<style>
+  .splide__slide {
     display: flex;
     height: auto;
+    justify-content: center;
   }
   article {
     height: 100%;
@@ -198,35 +136,8 @@ const hasEnoughPosts = latestPosts.length >= 3;
   .blog-card-title-link:hover .blog-card-title {
     color: #d91a60;
   }
-  .custom-swiper-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 30;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: linear-gradient(90deg, rgba(229,31,82,0.7) 60%, rgba(229,31,82,0) 100%);
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.3s;
-    opacity: 0.85;
-  }
-  .swiper-button-next.custom-swiper-nav {
-    right: 0.5rem;
-    left: auto;
-    background: linear-gradient(270deg, rgba(229,31,82,0.7) 60%, rgba(229,31,82,0) 100%);
-  }
-  .swiper-button-prev.custom-swiper-nav {
-    left: 0.5rem;
-    right: auto;
-    background: linear-gradient(90deg, rgba(229,31,82,0.7) 60%, rgba(229,31,82,0) 100%);
-  }
-  .custom-swiper-nav::after {
-    font-size: 1.5rem;
-    font-weight: bold;
+  .splide__arrows, .splide__arrow { display: flex !important; }
+  .splide__pagination__page.is-active {
+    background: #e51f52;
   }
 </style>
