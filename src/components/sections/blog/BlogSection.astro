@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 // import { CldImage } from "astro-cloudinary";
 import FormattedDate from '../../common/FormattedDate.astro'; // Importa el componente FormattedDate
+import Card from '../../common/Card.astro';
 
 const allPosts = await getCollection('blog');
 
@@ -39,77 +40,20 @@ const hasEnoughPosts = latestPosts.length >= 3;
     <div class="swiper blog-swiper relative pb-16">
       <div class="swiper-wrapper items-stretch">
         {
-          latestPosts.map((entry: any) => (
+          latestPosts.map((entry) => (
             <div class="swiper-slide">
-              <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 flex flex-col h-full justify-between">
-                <div class="w-full mb-5 h-56 flex items-center justify-center overflow-hidden">
-                  {entry.data.cover && (
-                    <img
-                      src={entry.data.cover}
-                      alt={entry.data.coverAlt || entry.data.title}
-                      loading="lazy"
-                      class="w-full h-full object-cover rounded-lg"
-                      style="min-height: 100%; min-width: 100%;"
-                    />
-                  )}
-                </div>
-                <div class="flex justify-between items-center mb-5 text-gray-500">
-                  <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
-                    <svg
-                      class="mr-1 w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-                    </svg>
-                    {entry.data.category}
-                  </span>
-                  <span class="text-sm">
-                    <FormattedDate date={entry.data.pubDate} />
-                  </span>
-                </div>
-                <a class="blog-card-title-link" href={`/blog/${entry.id}`}>
-                  <h3 class="blog-card-title">{entry.data.title}</h3>
-                </a>
-                <p class="description mb-5 font-light text-gray-500 dark:text-gray-400">
-                  {entry.data.description}
-                </p>
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center space-x-4">
-                    <img
-                      class="w-7 h-7 rounded-full"
-                      src={entry.data.author.image}
-                      alt="avatar"
-                      width={32}
-                      height={32}
-                      loading="lazy"
-                      sizes="100vw"
-                    />
-                    <span class="font-medium dark:text-white">
-                      {entry.data.author.name}
-                    </span>
-                  </div>
-                  <a
-                    href={`/blog/${entry.id}`}
-                    class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
-                  >
-                    Leer más...
-                    <svg
-                      class="ml-2 w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </a>
-                </div>
-              </article>
+              <Card
+                variant="blog"
+                image={entry.data.cover}
+                alt={entry.data.coverAlt || entry.data.title}
+                title={entry.data.title}
+                description={entry.data.description}
+                category={entry.data.category}
+                date={entry.data.pubDate?.toLocaleDateString?.() ?? ''}
+                author={entry.data.author?.name}
+                authorImage={entry.data.author?.image}
+                link={`/blog/${entry.id}`}
+              />
             </div>
           ))
         }

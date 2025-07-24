@@ -1,6 +1,6 @@
 ---
 import { testimonials, companyLogos } from '../../lib/constants/testimonials';
-import TestimonialCard from '../common/TestimonialCard.astro';
+import Card from '../common/Card.astro';
 // import CompanyLogo from '../common/CompanyLogo.astro';
 ---
 
@@ -31,7 +31,15 @@ import TestimonialCard from '../common/TestimonialCard.astro';
         <ul class="splide__list">
           {testimonials.map((testimonial) => (
             <li class="splide__slide">
-              <TestimonialCard testimonial={testimonial} />
+              <Card
+                variant="testimonial"
+                image={testimonial.image}
+                imageType={testimonial.imageType}
+                quote={testimonial.quote}
+                author={testimonial.author}
+                company={testimonial.company}
+                position={testimonial.position}
+              />
             </li>
           ))}
         </ul>

@@ -1,5 +1,5 @@
 ---
-import ServiceCard from '../../common/ServiceCard.astro';
+import Card from '../../common/Card.astro';
 // Importar los íconos/imágenes que necesites para los servicios
 import heroSeo from '../../../assets/images/hero-seo.svg';
 import organicSeo from '../../../assets/images/organic-seo.svg';
@@ -62,14 +62,17 @@ const services = [
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {services.map((service) => <ServiceCard
-        icon={service.icon}
-        altText={service.altText || `${service.title} - Servicio`}
-        title={service.title}
-        description={service.description}
-        link={service.linkHref}
-        ctaText={service.ctaText}
-      />)}
+      {services.map((service) => (
+        <Card
+          variant="service"
+          title={service.title}
+          description={service.description}
+          icon={service.icon}
+          alt={service.altText}
+          link={service.linkHref}
+          ctaText={service.ctaText}
+        />
+      ))}
     </div>
   </div>
 

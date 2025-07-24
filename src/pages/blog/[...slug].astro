@@ -6,7 +6,7 @@ import { Image } from 'astro:assets';
 import TableOfContents from '../../components/sections/blog/TableOfContents.astro';
 import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
 import AuthorQuote from '../../components/common/AuthorQuote.astro';
-import RecommendedArticle from '../../components/common/RecommendedArticle.astro';
+import Card from '../../components/common/Card.astro';
 import { services } from '../../lib/constants/services';
 
 export const prerender = true;
@@ -110,7 +110,8 @@ const query = '';
     <AuthorQuote quote={quote} author={quoteAuthor} />
     {/* Artículo recomendado al final */}
     {recommended && (
-      <RecommendedArticle
+      <Card
+        variant="recommended"
         title={recommended.title}
         slug={recommended.slug}
         description={recommended.description}

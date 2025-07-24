@@ -2,6 +2,7 @@
 import ServiceGrid from "../../common/ServiceGrid.astro";
 import { services } from "../../../lib/constants/services";
 import Button from "../../common/Button.astro";
+import Card from '../../common/Card.astro';
 ---
 
 <section class="py-24">
@@ -22,7 +23,17 @@ import Button from "../../common/Button.astro";
 
     <!-- Grid de servicios -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-      {services.map((service) => <ServiceGrid {...service} />)}
+      {services.map((service) => (
+        <Card
+          variant="service"
+          title={service.title}
+          description={service.description}
+          icon={service.icon}
+          alt={service.alt}
+          link={service.link}
+          ctaText={service.ctaText}
+        />
+      ))}
     </div>
 
     <!-- Botones -->

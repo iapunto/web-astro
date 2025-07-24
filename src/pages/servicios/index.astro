@@ -1,7 +1,7 @@
 ---
 import DefaultLayout from '../../layouts/DefaultLayout.astro';
 import Hero from '../../components/sections/services/Hero.astro';
-import ServicesCard from '../../components/common/ServicesCard.astro';
+import Card from '../../components/common/Card.astro';
 import { services } from '../../lib/constants/services';
 import heroImage from '../../assets/images/hero-image.svg';
 ---
@@ -18,7 +18,7 @@ import heroImage from '../../assets/images/hero-image.svg';
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         {
           services.map((services) => (
-            <ServicesCard
+            <Card variant="service"
               icon={services.icon}
               altText={services.alt}
               title={services.title}
