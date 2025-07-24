@@ -29,13 +29,13 @@
     function initBackToTop() {
       const mybutton = document.getElementById('myBtn');
       console.log('BackToTop: initBackToTop, mybutton:', mybutton);
-      
+
       if (!mybutton) {
         console.log('BackToTop: Button not found, retrying...');
         setTimeout(initBackToTop, 100);
         return;
       }
-      
+
       function getScrollPosition() {
         return Math.max(
           window.pageYOffset,
@@ -43,24 +43,24 @@
           document.body.scrollTop
         );
       }
-      
+
       function handleScroll() {
         const scrollPosition = getScrollPosition();
         console.log('BackToTop: Scroll event, position:', scrollPosition);
-        
+
         if (scrollPosition > 20) {
           mybutton.classList.remove('hidden');
         } else {
           mybutton.classList.add('hidden');
         }
       }
-      
+
       // Escuchar scroll en window
       window.addEventListener('scroll', handleScroll, { passive: true });
-      
+
       // Chequeo inicial
       setTimeout(handleScroll, 100);
-      
+
       mybutton.onclick = function () {
         window.scrollTo({
           top: 0,
@@ -68,7 +68,7 @@
         });
       };
     }
-    
+
     // Inicializar cuando el DOM esté listo
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initBackToTop);

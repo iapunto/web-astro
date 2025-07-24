@@ -1,14 +1,8 @@
 ---
 // src/layouts/DefaultLayout.astro
+// Layout simplificado que extiende BaseLayout
 
-import BaseHead from '../components/common/BaseHead.astro';
-import TopBar from '../components/layout/Header/TopBar.astro';
-import Navbar from '../components/layout/Header/Navbar.astro';
-import Footer from '../components/layout/Footer.astro';
-import BackToTop from '../components/layout/BackToTop.astro';
-import Breadcrumb from '../components/layout/Header/Breadcrumb.astro';
-import TrackingScripts from '../components/common/TrackingScripts.astro';
-import WhatsAppButton from '../components/layout/WhatsAppButton.astro';
+import BaseLayout from './BaseLayout.astro';
 
 const {
   pageTitle,
@@ -21,40 +15,24 @@ const {
   ctaButtonText,
   ctaButtonHref,
 } = Astro.props;
-const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 ---
 
-<html lang="es">
-  <head>
-    <BaseHead
-      pageTitle={pageTitle}
-      description={description}
-      image={image}
-      keywords={keywords}
-      robots={robots}
-    />
-    <TrackingScripts />
-    <slot name="head" />
-    <script
-      src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}
-      defer
-      is:inline></script>
-  </head>
-  <body>
-    <TopBar />
-    <Navbar />
-    <Breadcrumb pageTitle={pageTitle} />
-    <slot />
-    <Footer
-      ctaTitle={ctaTitle}
-      ctaDescription={ctaDescription}
-      ctaButtonText={ctaButtonText}
-      ctaButtonHref={ctaButtonHref}
-    />
-    <BackToTop />
-    <WhatsAppButton />
-    <script
-      src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
-      defer></script>
-  </body>
-</html>
+<BaseLayout
+  pageTitle={pageTitle}
+  description={description}
+  image={image}
+  keywords={keywords}
+  robots={robots}
+  ctaTitle={ctaTitle}
+  ctaDescription={ctaDescription}
+  ctaButtonText={ctaButtonText}
+  ctaButtonHref={ctaButtonHref}
+  variant="default"
+  showBreadcrumb={true}
+  showBackToTop={true}
+  showWhatsApp={true}
+  showTracking={true}
+  showRecaptcha={true}
+>
+  <slot />
+</BaseLayout>
