@@ -12,9 +12,30 @@ const schema = z.object({
   phone: z.string().min(1, 'Introduce un teléfono válido.'),
   company: z.string().optional(),
   message: z.string().min(1, 'El mensaje es obligatorio.'),
+  'g-recaptcha-response': z
+    .string()
+    .min(1, 'El token de reCAPTCHA es obligatorio.'),
 });
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
+  if (!secret) return false;
+  const response = await fetch(
+    'https://www.google.com/recaptcha/api/siteverify',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        secret,
+        response: token,
+      }).toString(),
+    }
+  );
+  const data = await response.json();
+  return data.success && data.score && data.score > 0.5;
+}
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -36,6 +57,18 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const data = validationResult.data;
+
+    // Validar reCAPTCHA
+    const recaptchaToken = data['g-recaptcha-response'];
+    const recaptchaOk = await verifyRecaptcha(recaptchaToken);
+    if (!recaptchaOk) {
+      return new Response(
+        JSON.stringify({
+          error: 'Fallo la verificación de reCAPTCHA. Intenta de nuevo.',
+        }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
     const text = `
       Nombre: ${data.name}
