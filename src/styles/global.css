@@ -275,3 +275,13 @@ input[type='tel'] {
   max-width: 100vw !important;
   overflow-x: hidden !important;
 }
+
+a[href^="mailto:"] {
+  color: #e51f52;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+a[href^="mailto:"]:hover {
+  color: #e51f52;
+  text-decoration: underline;
+}
