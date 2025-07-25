@@ -63,6 +63,10 @@ const RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY;
 
   contactForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    console.log('Iniciando envío del formulario');
+    console.log('Formulario encontrado:', contactForm);
+    console.log('reCAPTCHA disponible:', typeof grecaptcha !== 'undefined');
+
     successMsg?.classList.add('hidden');
     errorMsg?.classList.add('hidden');
     if (submitBtn) {
@@ -71,24 +75,42 @@ const RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY;
     }
     try {
       // Obtener el token de reCAPTCHA v3
+      console.log('Intentando obtener token reCAPTCHA...');
       const token = await grecaptcha.execute(recaptchaSiteKey, {
         action: 'submit',
       });
+      console.log('Token reCAPTCHA obtenido:', token);
+
       document.getElementById('g-recaptcha-response').value = token;
       const formData = new FormData(contactForm);
       const data = Object.fromEntries(formData.entries());
+      console.log('Datos del formulario:', data);
+
+      console.log('Enviando petición a /api/send-email...');
       const res = await fetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
+      console.log('Respuesta del servidor:', res);
+      console.log('Status:', res.status);
+
+      const responseData = await res.text();
+      console.log('Datos de respuesta:', responseData);
+
       if (res.ok) {
         contactForm.reset();
         successMsg?.classList.remove('hidden');
       } else {
+        console.error(
+          'Error en respuesta del servidor:',
+          res.status,
+          responseData
+        );
         errorMsg?.classList.remove('hidden');
       }
     } catch (err) {
+      console.error('Error en fetch:', err);
       errorMsg?.classList.remove('hidden');
     } finally {
       if (submitBtn) {
