@@ -2,7 +2,11 @@
 import Button from '../common/Button.astro';
 import Input from '../common/Input.astro';
 import Textarea from '../common/Textarea.astro';
-const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY;
 ---
 
 <form id="contact-form" class="space-y-6" method="post" autocomplete="off">
@@ -55,7 +59,7 @@ const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
   const submitBtn = document.getElementById('submit-btn');
   const successMsg = document.getElementById('form-success');
   const errorMsg = document.getElementById('form-error');
-  const recaptchaSiteKey = '' + RECAPTCHA_SITE_KEY;
+  const recaptchaSiteKey = "{RECAPTCHA_SITE_KEY}";
 
   contactForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
