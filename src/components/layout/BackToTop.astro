@@ -28,10 +28,8 @@
   <script is:inline>
     function initBackToTop() {
       const mybutton = document.getElementById('myBtn');
-      console.log('BackToTop: initBackToTop, mybutton:', mybutton);
 
       if (!mybutton) {
-        console.log('BackToTop: Button not found, retrying...');
         setTimeout(initBackToTop, 100);
         return;
       }
@@ -46,7 +44,6 @@
 
       function handleScroll() {
         const scrollPosition = getScrollPosition();
-        console.log('BackToTop: Scroll event, position:', scrollPosition);
 
         if (scrollPosition > 20) {
           mybutton.classList.remove('hidden');

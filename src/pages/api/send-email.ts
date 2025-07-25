@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 import { z } from 'zod';
+import React from 'react';
 import WelcomeMail from '../../components/emails/WelcomeMail.tsx';
 import dotenv from 'dotenv';
 
@@ -87,27 +88,56 @@ export const POST: APIRoute = async ({ request }) => {
     `;
 
     // Enviar email de bienvenida al usuario
-    const welcomeEmailResponse = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'desarrollo@iapunto.com',
-      to: data.email,
-      subject: 'Bienvenido a IA Punto',
-      react: WelcomeMail,
-    });
+    let welcomeEmailResponse = null;
+    let welcomeEmailError = null;
+    try {
+      welcomeEmailResponse = await resend.emails.send({
+        from: process.env.EMAIL_FROM || 'desarrollo@iapunto.com',
+        to: data.email,
+        subject: 'Bienvenido a IA Punto',
+        react: React.createElement(WelcomeMail),
+      });
+    } catch (err) {
+      welcomeEmailError = err instanceof Error ? err.message : String(err);
+    }
 
     // Enviar notificación al equipo
-    const notificationEmailResponse = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'desarrollo@iapunto.com',
-      to: process.env.EMAIL_TO || 'hola@iapunto.com',
-      subject: 'Nuevo mensaje del formulario de contacto',
-      html: html,
-      text: text,
-    });
+    let notificationEmailResponse = null;
+    let notificationEmailError = null;
+    try {
+      notificationEmailResponse = await resend.emails.send({
+        from: process.env.EMAIL_FROM || 'desarrollo@iapunto.com',
+        to: process.env.EMAIL_TO || 'hola@iapunto.com',
+        subject: 'Nuevo mensaje del formulario de contacto',
+        html: html,
+        text: text,
+      });
+    } catch (err) {
+      notificationEmailError = err instanceof Error ? err.message : String(err);
+    }
+
+    // Si hay error en alguno de los envíos, devolver el error exacto
+    if (welcomeEmailError || notificationEmailError) {
+      return new Response(
+        JSON.stringify({
+          error: 'Error al enviar uno o ambos correos',
+          welcomeEmailError,
+          welcomeEmailResponse,
+          notificationEmailError,
+          notificationEmailResponse,
+        }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
 
     return new Response(
-      JSON.stringify({ 
-        message: 'Mensaje enviado con éxito', 
+      JSON.stringify({
+        message: 'Mensaje enviado con éxito',
         welcomeEmailResponse,
-        notificationEmailResponse 
+        notificationEmailResponse,
       }),
       {
         status: 200,
