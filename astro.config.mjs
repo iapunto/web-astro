@@ -56,6 +56,12 @@ export default defineConfig({
         access: 'public',
         default: process.env.SITE_NAME,
       },
+      RECAPTCHA_SITE_KEY: {
+        type: 'string',
+        context: 'client',
+        access: 'public',
+        default: process.env.RECAPTCHA_SITE_KEY,
+      },
     },
   },
 });
