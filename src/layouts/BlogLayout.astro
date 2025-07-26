@@ -67,211 +67,127 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
       <article
         class="col-span-1 lg:col-span-6 w-full prose prose-lg dark:prose-invert mx-auto blog-content"
       >
-        {/* Imagen de portada */}
-        <img
-          src={post.data.cover}
-          alt={post.data.coverAlt || pageTitle}
-          class="w-full h-auto rounded-lg mb-8"
-        />
-        {/* Autor, categoría y compartir */}
-        <div
-          class="flex flex-col sm:flex-row items-center justify-between w-full gap-8 mb-6"
-        >
-          {/* Columna autor */}
-          <address class="author flex items-center not-italic">
-            <div
-              class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white"
+        {/* Nueva estructura del artículo con diseño de tarjeta */}
+        <div class="bg-gray-100 rounded-2xl shadow-lg overflow-hidden mb-8">
+          {/* Imagen de portada */}
+          <div class="w-full">
+            <img
+              src={post.data.cover}
+              alt={post.data.coverAlt || pageTitle}
+              class="w-full h-64 object-cover"
+            />
+          </div>
+
+          {/* Contenido de la tarjeta */}
+          <div class="p-6 bg-white">
+            {/* Título del artículo */}
+            <h1
+              class="mb-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
             >
-              <img
-                src={author.image.src || author.image}
-                alt={author.name || ''}
-                class="mr-6 rounded-full"
-                width="96"
-                height="96"
-              />
-              <div class="space-y-1">
-                <p class="text-xl font-bold text-gray-900 dark:text-white mb-0">
-                  {author.name}
-                </p>
-                <p class="text-base text-gray-500 dark:text-gray-400">
-                  {author.description}
-                </p>
-                <p class="text-base text-gray-500 dark:text-gray-400">
-                  <FormattedDate date={pubDate} />
-                </p>
-                <ReadingTime content={post.body} />
+              {pageTitle}
+            </h1>
+
+            {/* Línea divisoria */}
+            <div class="w-4/5 h-px bg-gray-200 mx-auto mb-6"></div>
+
+            {/* Metadatos del artículo */}
+            <div class="flex justify-between items-start mb-6">
+              {/* Lado izquierdo - Información del autor */}
+              <div class="flex items-center space-x-3">
+                <img
+                  src={author.image.src || author.image}
+                  alt={`Avatar de ${author.name}`}
+                  width="40"
+                  height="40"
+                  class="w-10 h-10 rounded-full"
+                />
+                <div>
+                  <span class="font-semibold text-gray-900 dark:text-white">
+                    {author.name}
+                  </span>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    {author.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Lado derecho - Información del artículo */}
+              <div class="flex flex-col items-end space-y-2">
+                {/* Categoría */}
+                {
+                  post.data.category && (
+                    <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      {post.data.category}
+                    </span>
+                  )
+                }
+
+                {/* Fecha y tiempo de lectura */}
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <div class="flex items-center space-x-1">
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                    <FormattedDate date={pubDate} />
+                  </div>
+                  <ReadingTime content={post.body} />
+                </div>
               </div>
             </div>
-          </address>
-          {/* Columna categoría y compartir */}
-          <div class="flex flex-col items-center gap-4 min-w-[180px] ml-8">
+
+            {/* Segunda línea divisoria */}
+            <div class="w-4/5 h-px bg-gray-200 mx-auto mb-4"></div>
+
+            {/* Tags */}
             {
-              post.data.category && (
-                <a
-                  href={`/categoria/${post.data.category.toLowerCase().replace(/\s+/g, '-')}`}
-                  class="text-gray-500 font-semibold hover:text-primary text-base transition-colors"
-                >
-                  {post.data.category}
-                </a>
+              post.data.tags && post.data.tags.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                  {post.data.tags.map((tag: string) => (
+                    <a
+                      href={`/blog?tag=${encodeURIComponent(tag)}`}
+                      class="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-100 text-gray-600 hover:bg-primary-100 hover:text-primary transition"
+                      style="text-decoration: none;"
+                    >
+                      #{tag}
+                    </a>
+                  ))}
+                </div>
               )
             }
-            {
-              post.data.subcategory && (
-                <span class="ml-2 text-primary-700 font-semibold text-base">
-                  / {post.data.subcategory}
-                </span>
-              )
-            }
-            <div class="flex gap-3 mt-2">
-              {/* Facebook */}
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.toString())}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Compartir en Facebook"
-              >
-                <!--?xml version="1.0" encoding="UTF-8"?-->
-                <svg
-                  width="24px"
-                  height="24px"
-                  stroke-width="1.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  color="#6b7280"
-                  ><path
-                    d="M17 2H14C12.6739 2 11.4021 2.52678 10.4645 3.46447C9.52678 4.40215 9 5.67392 9 7V10H6V14H9V22H13V14H16L17 10H13V7C13 6.73478 13.1054 6.48043 13.2929 6.29289C13.4804 6.10536 13.7348 6 14 6H17V2Z"
-                    stroke="#6b7280"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path></svg
-                >
-              </a>
-              {/* Instagram */}
-              <a
-                href="https://www.instagram.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-              >
-                <!--?xml version="1.0" encoding="UTF-8"?-->
-                <svg
-                  width="24px"
-                  height="24px"
-                  stroke-width="1.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  color="#6b7280"
-                  ><path
-                    d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"
-                    stroke="#6b7280"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path><path
-                    d="M3 16V8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16Z"
-                    stroke="#6b7280"
-                    stroke-width="1.5"></path><path
-                    d="M17.5 6.51L17.51 6.49889"
-                    stroke="#6b7280"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path></svg
-                >
-              </a>
-              {/* LinkedIn */}
-              <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.toString())}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Compartir en LinkedIn"
-              >
-                <!--?xml version="1.0" encoding="UTF-8"?-->
-                <svg
-                  width="24px"
-                  height="24px"
-                  stroke-width="1.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  color="#6b7280"
-                  ><path
-                    d="M21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16V8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8Z"
-                    stroke="#6b7280"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path><path
-                    d="M7 17V13.5V10"
-                    stroke="#6b7280"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path><path
-                    d="M11 17V13.75M11 10V13.75M11 13.75C11 10 17 10 17 13.75V17"
-                    stroke="#6b7280"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path><path
-                    d="M7 7.01L7.01 6.99889"
-                    stroke="#6b7280"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path></svg
-                >
-              </a>
-              {/* WhatsApp */}
-              <a
-                href={`https://wa.me/?text=${encodeURIComponent(pageTitle + ' ' + Astro.url.toString())}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Compartir en WhatsApp"
-              >
-                <!--?xml version="1.0" encoding="UTF-8"?-->
-                <svg
-                  width="24px"
-                  height="24px"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  color="#6b7280"
-                  ><path
-                    d="M22 12C22 17.5228 17.5228 22 12 22C10.1786 22 8.47087 21.513 7 20.6622L2 21.5L2.83209 16C2.29689 14.7751 2 13.4222 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                    stroke="#6b7280"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path><path
-                    d="M12.9604 13.8683L15.0399 13.4624L17 14.2149V16.0385C17 16.6449 16.4783 17.1073 15.8901 16.9783C14.3671 16.6444 11.5997 15.8043 9.67826 13.8683C7.84859 12.0248 7.22267 9.45734 7.01039 8.04128C6.92535 7.47406 7.3737 7 7.94306 7H9.83707L10.572 8.96888L10.1832 11.0701"
-                    stroke="#6b7280"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path></svg
-                >
-              </a>
-            </div>
           </div>
         </div>
-        {/* Encabezado principal del artículo */}
-        <h1 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-          {pageTitle}
-        </h1>
-        {
-          post.data.tags && post.data.tags.length > 0 && (
-            <div class="flex flex-wrap gap-2 mb-6">
-              {post.data.tags.map((tag: string) => (
-                <a
-                  href={`/blog?tag=${encodeURIComponent(tag)}`}
-                  class="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-100 text-gray-600 hover:bg-primary-100 hover:text-primary transition"
-                  style="text-decoration: none;"
-                >
-                  #{tag}
-                </a>
-              ))}
-            </div>
-          )
-        }
-        <slot />
       </article>
+      {/* Encabezado principal del artículo */}
+      <h1 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+        {pageTitle}
+      </h1>
+      {
+        post.data.tags && post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mb-6">
+            {post.data.tags.map((tag: string) => (
+              <a
+                href={`/blog?tag=${encodeURIComponent(tag)}`}
+                class="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-100 text-gray-600 hover:bg-primary-100 hover:text-primary transition"
+                style="text-decoration: none;"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+      <slot />
     </div>
-    <RecommendedServices />
   </main>
+  <RecommendedServices />
 </BaseLayout>
