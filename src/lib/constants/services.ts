@@ -1,8 +1,6 @@
 // src/lib/constants/services.ts
 import type { ImageMetadata } from 'astro';
 
-import type { ImageMetadata } from 'astro';
-
 export interface Service {
   title: string;
   description: string;

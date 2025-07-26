@@ -8,6 +8,8 @@ import ReadingTime from '@components/common/ReadingTime.astro';
 import { getCollection } from 'astro:content';
 import SchemaMarkup from '@components/common/SchemaMarkup.astro';
 import RecommendedServices from '@components/common/RecommendedServices.astro';
+import SidebarFilters from '@components/sections/blog/SidebarFilters.astro';
+import { services, type Service } from '@lib/constants/services';
 
 const { pageTitle, description, keywords, image, author, pubDate, post } =
   Astro.props;
@@ -35,6 +37,50 @@ function getRelatedPosts(currentPost: any) {
 
 const relatedPosts = getRelatedPosts(post);
 const hasRelated = relatedPosts && relatedPosts.length > 0;
+
+// Genera la tabla de contenido dinámicamente como en LegalLayout
+const headings = post.body.match(/<h[2-6].*?>(.*?)<\/h[2-6]>/g) || [];
+const toc = headings.map((heading: string) => {
+  const id =
+    heading.match(/id="([^"]*)"/)?.[1] ||
+    heading
+      .replace(/<[^>]*>/g, '')
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '-');
+  return {
+    text: heading.replace(/<[^>]*>/g, ''),
+    id: id,
+  };
+});
+
+// Datos para el sidebar
+const categories = Array.from(
+  new Set(allPosts.map((p: any) => p.data.category))
+);
+const tags = Array.from(
+  new Set(
+    allPosts.flatMap((p: any) =>
+      Array.isArray(p.data.tags)
+        ? p.data.tags
+        : p.data.tags
+          ? [p.data.tags]
+          : []
+    )
+  )
+);
+const latestPosts = allPosts.slice(0, 5);
+
+// Servicios destacados para el sidebar
+const cornerstoneSlugs = [
+  'diseno-desarrollo-web',
+  'posicionamiento-seo',
+  'publicidad-online-ia',
+];
+
+const featuredServices = services.filter((s: Service) =>
+  cornerstoneSlugs.some((slug) => s.link.endsWith(slug))
+);
 ---
 
 <BaseLayout
@@ -59,13 +105,32 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
     <div
       class="w-full max-w-screen-2xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8"
     >
-      {/* Sidebar izquierdo (TOC) */}
-      <aside class="hidden lg:block lg:col-span-3">
-        <slot name="toc" />
+      {/* Sidebar izquierdo (TOC como páginas legales) */}
+      <aside class="hidden lg:block lg:col-span-2">
+        <div class="sticky top-8">
+          <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+            Tabla de Contenido
+          </h2>
+          <ul class="space-y-2">
+            {
+              toc.map((item: { id: string; text: string }) => (
+                <li>
+                  <a
+                    href={`#${item.id}`}
+                    class="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  >
+                    {item.text}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </aside>
+
       {/* Contenido principal */}
       <article
-        class="col-span-1 lg:col-span-6 w-full prose prose-lg dark:prose-invert mx-auto blog-content overflow-hidden"
+        class="col-span-1 lg:col-span-7 w-full prose prose-lg dark:prose-invert mx-auto blog-content overflow-hidden"
       >
         {/* Nueva estructura del artículo con diseño de tarjeta */}
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 w-full">
@@ -118,7 +183,7 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
                 <div class="flex items-center space-x-2">
                   {
                     post.data.category && (
-                      <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      <span class="bg-gray-100 text-gray-600 text-xs font-medium px-2.5 py-0.5 rounded-full">
                         {post.data.category}
                       </span>
                     )
@@ -262,7 +327,76 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
           <slot />
         </div>
       </article>
+
+      {/* Sidebar derecho (filtros del blog + servicios destacados) */}
+      <aside class="hidden lg:block lg:col-span-3">
+        <div class="space-y-8">
+          {/* Filtros del blog */}
+          <SidebarFilters
+            query=""
+            selectedCategory=""
+            selectedTags={[]}
+            categories={categories}
+            tags={tags}
+            latestPosts={latestPosts}
+          />
+
+          {/* Servicios destacados */}
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h3
+              class="text-lg font-semibold mb-4 text-gray-900 dark:text-white"
+            >
+              Servicios Destacados
+            </h3>
+            <div class="space-y-4">
+              {
+                featuredServices.map((service: Service) => (
+                  <div class="flex items-center space-x-3">
+                    {/* Icono cuadrado redondeado */}
+                    <a
+                      href={service.link}
+                      class="flex-shrink-0 w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
+                    >
+                      <img
+                        src={service.icon.src || service.icon}
+                        alt={service.alt}
+                        width="24"
+                        height="24"
+                        class="w-6 h-6 object-contain"
+                      />
+                    </a>
+                    {/* Nombre del servicio */}
+                    <a
+                      href={service.link}
+                      class="text-sm font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex-1"
+                    >
+                      {service.title}
+                    </a>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
   </main>
-  <RecommendedServices />
 </BaseLayout>
+
+<style>
+  /* Estilos para el TOC como en páginas legales */
+  .blog-content h2,
+  .blog-content h3,
+  .blog-content h4,
+  .blog-content h5,
+  .blog-content h6 {
+    scroll-margin-top: 2rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
