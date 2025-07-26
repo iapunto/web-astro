@@ -71,6 +71,7 @@
     "react-email": "^4.1.1",
     "sass": "^1.85.1",
     "sass-embedded": "^1.85.1",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "wrangler": "^4.26.0"
   }
 }

@@ -26,6 +26,9 @@ export default defineConfig({
   output: 'server',
   adapter: cloudflare(),
   image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+    },
     domains: ['res.cloudinary.com'],
   },
   vite: {
