@@ -8,14 +8,9 @@
     "build": "astro build",
     "preview": "astro preview --port ${PORT:-4321}",
     "astro": "astro",
-    "format": "pnpm exec prettier --write .",
-    "deploy": "astro build && wrangler deploy",
-    "deploy:preview": "astro build && wrangler deploy --env preview",
-    "dev:workers": "astro build && wrangler dev",
-    "dev:pages": "astro build && wrangler pages dev ./dist"
+    "format": "pnpm exec prettier --write ."
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.0",
     "@astrojs/mdx": "^4.1.0",
     "@astrojs/node": "^9.2.2",
     "@astrojs/react": "^4.2.1",
@@ -73,7 +68,6 @@
     "react-email": "^4.1.1",
     "sass": "^1.85.1",
     "sass-embedded": "^1.85.1",
-    "typescript": "^5.8.2",
-    "wrangler": "^4.26.0"
+    "typescript": "^5.8.2"
   }
 }
