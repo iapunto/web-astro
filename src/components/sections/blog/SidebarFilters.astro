@@ -80,7 +80,7 @@ const { query, selectedCategory, selectedTags, categories, tags, latestPosts } =
     <ul class="space-y-3">
       {latestPosts && latestPosts.length > 0 ? latestPosts.map((post: any) => (
         <li>
-          <a href={`/blog/${post.data.slug}`} class="text-primary-700 dark:text-primary-400 hover:underline font-medium text-sm">
+          <a href={`/blog/${post.data.slug}`} class="text-primary-700 dark:text-primary-400 hover:text-primary transition-colors font-medium text-sm">
             {post.data.title}
           </a>
           <span class="block text-xs text-gray-400 dark:text-gray-500">{post.data.pubDate?.toLocaleDateString?.() ?? ''}</span>

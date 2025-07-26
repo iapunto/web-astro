@@ -28,7 +28,7 @@ const headings = html ? extractHeadings(html) : [];
     <ul class="space-y-2 toc-list">
       {headings.map(h => (
         <li class={h.level === 'h2' ? 'pl-0' : 'pl-4'}>
-          <a href={`#${h.id}`} class="block text-sm text-gray-700 dark:text-gray-200 hover:text-primary-600 transition-colors font-medium">
+          <a href={`#${h.id}`} class="block text-sm text-gray-700 dark:text-gray-200 hover:text-primary transition-colors font-medium">
             {h.text}
           </a>
         </li>
