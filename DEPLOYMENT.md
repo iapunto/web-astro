@@ -1,12 +1,12 @@
-# Despliegue en Cloudflare Pages
+# Despliegue en Cloudflare Workers
 
-Este proyecto está configurado para desplegarse en Cloudflare Pages.
+Este proyecto está configurado para desplegarse en Cloudflare Workers.
 
 ## Configuración
 
 ### Variables de Entorno
 
-Necesitas configurar las siguientes variables de entorno en Cloudflare Pages:
+Necesitas configurar las siguientes variables de entorno en Cloudflare Workers:
 
 #### Variables Públicas (Vars)
 
@@ -20,13 +20,13 @@ Necesitas configurar las siguientes variables de entorno en Cloudflare Pages:
 - `EMAIL_FROM`: Email desde el cual se envían los correos
 - `EMAIL_TO`: Email al cual se envían las notificaciones
 
-### Configuración en Cloudflare Pages
+### Configuración en Cloudflare Workers
 
-1. Ve a tu dashboard de Cloudflare Pages
-2. Conecta tu repositorio de GitHub
-3. Configura las variables de entorno en la sección "Settings" > "Environment variables"
+1. Ve a tu dashboard de Cloudflare Workers
+2. Crea un nuevo Worker
+3. Configura las variables de entorno en la sección "Settings" > "Variables"
 4. Configura el comando de build: `pnpm build`
-5. Configura el directorio de salida: `dist`
+5. El directorio de salida será `dist`
 
 ## Comandos de Despliegue
 
@@ -50,18 +50,24 @@ El despliegue automático se realiza a través de GitHub cuando se hace push a l
 ## Estructura del Proyecto
 
 - `output: 'server'`: Permite API routes dinámicas
-- `adapter: cloudflare()`: Configuración para Cloudflare Pages
+- `adapter: cloudflare()`: Configuración para Cloudflare Workers
 - API routes en `/src/pages/api/`: Funcionan en runtime
 - Páginas estáticas: Se generan en build time
+
+## Diferencias con Cloudflare Pages
+
+- **Workers**: Más control sobre el runtime, mejor para aplicaciones complejas
+- **Pages**: Más simple para sitios estáticos, menos control sobre el servidor
 
 ## Troubleshooting
 
 ### Problemas Comunes
 
-1. **Error de variables de entorno**: Asegúrate de que todas las variables estén configuradas en Cloudflare Pages
+1. **Error de variables de entorno**: Asegúrate de que todas las variables estén configuradas en Cloudflare Workers
 2. **Error de build**: Verifica que todas las dependencias estén instaladas
 3. **API routes no funcionan**: Verifica que el output esté configurado como 'server'
+4. **Error de Workers**: Verifica que el Worker tenga los permisos necesarios
 
 ### Logs
 
-Los logs de Cloudflare Pages se pueden ver en el dashboard de Cloudflare Pages en la sección "Deployments".
+Los logs de Cloudflare Workers se pueden ver en el dashboard de Cloudflare Workers en la sección "Logs".
