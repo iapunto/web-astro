@@ -69,14 +69,14 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
       >
         {/* Nueva estructura del artículo con diseño de tarjeta */}
         <div
-          class="bg-gray-100 rounded-2xl shadow-lg overflow-hidden mb-8 w-full"
+          class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 w-full"
         >
           {/* Imagen de portada */}
           <div class="w-full">
             <img
               src={post.data.cover}
               alt={post.data.coverAlt || pageTitle}
-              class="w-full h-64 object-cover"
+              class="w-full h-64 object-cover rounded-t-2xl"
             />
           </div>
 
