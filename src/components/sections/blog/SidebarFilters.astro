@@ -12,15 +12,27 @@
 // - onClear: () => void
 // - latestPosts: Post[]
 
-import type { Post } from '../../../lib/types/blogPosts';
+import { services, type Service } from '@lib/constants/services';
+
 const { query, selectedCategory, selectedTags, categories, tags, latestPosts } = Astro.props as {
   query: string;
   selectedCategory: string;
   selectedTags: string[];
   categories: string[];
   tags: string[];
-  latestPosts: Post[];
+  latestPosts: any[];
 };
+
+// Servicios destacados para el sidebar
+const cornerstoneSlugs = [
+  'diseno-desarrollo-web',
+  'posicionamiento-seo',
+  'publicidad-online-ia',
+];
+
+const featuredServices = services.filter((s: Service) =>
+  cornerstoneSlugs.some((slug) => s.link.endsWith(slug))
+);
 ---
 
 <aside class="w-full max-w-xs bg-white dark:bg-gray-800 rounded-lg shadow p-8 mb-8 sticky top-8 z-10 ml-4">
@@ -80,17 +92,71 @@ const { query, selectedCategory, selectedTags, categories, tags, latestPosts } =
     <ul class="space-y-3">
       {latestPosts && latestPosts.length > 0 ? latestPosts.map((post: any) => (
         <li>
-          <a href={`/blog/${post.data.slug}`} class="text-primary-700 dark:text-primary-400 hover:text-primary transition-colors font-medium text-sm">
-            {post.data.title}
+          <a href={`/blog/${post.data.slug}`} class="flex items-center space-x-3 group">
+            {/* Imagen de cover */}
+            <div class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
+              <img
+                src={post.data.cover}
+                alt={post.data.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+              />
+            </div>
+            {/* Contenido del artículo */}
+            <div class="flex-1 min-w-0">
+              <h4 class="text-primary-700 dark:text-primary-400 hover:text-primary transition-colors font-medium text-sm line-clamp-2">
+                {post.data.title}
+              </h4>
+              <span class="block text-xs text-gray-400 dark:text-gray-500">
+                {post.data.pubDate?.toLocaleDateString?.() ?? ''}
+              </span>
+            </div>
           </a>
-          <span class="block text-xs text-gray-400 dark:text-gray-500">{post.data.pubDate?.toLocaleDateString?.() ?? ''}</span>
         </li>
       )) : (
         <li class="text-gray-400 text-sm">No hay artículos recientes.</li>
       )}
     </ul>
   </section>
-  {/* Aquí puedes agregar futuras secciones como 'Relacionados', 'Populares', etc. */}
+
+  {/* Servicios destacados */}
+  <hr class="my-6 border-gray-200 dark:border-gray-700" />
+  <section>
+    <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+      Servicios Destacados
+    </h3>
+    <div class="space-y-4">
+      {
+        featuredServices.map((service: Service) => (
+          <div class="flex items-center space-x-3">
+            {/* Icono cuadrado redondeado */}
+            <a
+              href={service.link}
+              class="flex-shrink-0 w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
+            >
+              <img
+                src={
+                  typeof service.icon === 'string'
+                    ? service.icon
+                    : service.icon.src
+                }
+                alt={service.alt}
+                width="24"
+                height="24"
+                class="w-6 h-6 object-contain"
+              />
+            </a>
+            {/* Nombre del servicio */}
+            <a
+              href={service.link}
+              class="text-sm font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex-1"
+            >
+              {service.title}
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 </aside>
 
 <style>
@@ -103,5 +169,12 @@ const { query, selectedCategory, selectedTags, categories, tags, latestPosts } =
       max-width: 100%;
       margin-bottom: 2rem;
     }
+  }
+  /* Estilos para truncar texto en múltiples líneas */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 </style> 
