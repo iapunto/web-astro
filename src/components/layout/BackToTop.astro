@@ -55,8 +55,11 @@
       // Escuchar scroll en window
       window.addEventListener('scroll', handleScroll, { passive: true });
 
-      // Chequeo inicial
-      setTimeout(handleScroll, 100);
+      // Solo ejecutar handleScroll si ya hay scroll al cargar
+      const initialScroll = getScrollPosition();
+      if (initialScroll > 20) {
+        handleScroll();
+      }
 
       mybutton.onclick = function () {
         window.scrollTo({

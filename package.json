@@ -8,9 +8,12 @@
     "build": "astro build",
     "preview": "astro preview --port ${PORT:-4321}",
     "astro": "astro",
-    "format": "pnpm exec prettier --write ."
+    "format": "pnpm exec prettier --write .",
+    "deploy": "astro build && wrangler pages deploy dist",
+    "deploy:preview": "astro build && wrangler pages deploy dist --env preview"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^12.6.0",
     "@astrojs/mdx": "^4.1.0",
     "@astrojs/node": "^9.2.2",
     "@astrojs/react": "^4.2.1",

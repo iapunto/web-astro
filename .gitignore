@@ -40,3 +40,7 @@ PostgreSQL.md
 # CSpell
 cspell.json
 .cspell/
+
+# Cloudflare
+.wrangler/
+wrangler.toml

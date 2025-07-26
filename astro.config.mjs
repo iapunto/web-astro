@@ -4,7 +4,7 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
-import node from '@astrojs/node';
+import cloudflare from '@astrojs/cloudflare';
 import astroIcon from 'astro-icon';
 
 // https://astro.build/config
@@ -24,9 +24,7 @@ export default defineConfig({
     }),
   ],
   output: 'server',
-  adapter: node({
-    mode: 'standalone',
-  }),
+  adapter: cloudflare(),
   image: {
     domains: ['res.cloudinary.com'],
   },
