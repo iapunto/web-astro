@@ -4,6 +4,7 @@
 
 import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '@components/common/FormattedDate.astro';
+import ReadingTime from '@components/common/ReadingTime.astro';
 import { getCollection } from 'astro:content';
 import SchemaMarkup from '@components/common/SchemaMarkup.astro';
 import RecommendedServices from '@components/common/RecommendedServices.astro';
@@ -87,6 +88,7 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
                 <p class="text-base text-gray-500 dark:text-gray-400">
                   <FormattedDate date={pubDate} />
                 </p>
+                <ReadingTime content={post.body} />
               </div>
             </div>
           </address>

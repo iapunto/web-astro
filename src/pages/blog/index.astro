@@ -2,6 +2,7 @@
 import DefaultLayout from '../../layouts/DefaultLayout.astro';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/common/FormattedDate.astro';
+import ReadingTime from '../../components/common/ReadingTime.astro';
 import { Image } from 'astro:assets';
 import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
 
@@ -128,9 +129,10 @@ const latestPosts = blogEntries.slice(0, 5);
                       </svg>
                       {entry.data.category}
                     </span>
-                    <span class="text-sm">
+                    <div class="flex items-center gap-4 text-sm">
                       <FormattedDate date={entry.data.pubDate} />
-                    </span>
+                      <ReadingTime content={entry.body} />
+                    </div>
                   </div>
                   <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                     <a href={`/blog/${entry.data.slug}`}>{entry.data.title}</a>
