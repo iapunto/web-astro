@@ -68,9 +68,7 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
         class="col-span-1 lg:col-span-6 w-full prose prose-lg dark:prose-invert mx-auto blog-content overflow-hidden"
       >
         {/* Nueva estructura del artículo con diseño de tarjeta */}
-        <div
-          class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 w-full"
-        >
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 w-full">
           {/* Imagen de portada */}
           <div class="w-full">
             <img
@@ -99,9 +97,9 @@ const hasRelated = relatedPosts && relatedPosts.length > 0;
                 <img
                   src={author.image.src || author.image}
                   alt={`Avatar de ${author.name}`}
-                  width="40"
-                  height="40"
-                  class="w-10 h-10 rounded-full"
+                  width="64"
+                  height="64"
+                  class="w-16 h-16 rounded-xl object-cover"
                 />
                 <div class="space-y-1">
                   <div class="font-semibold text-gray-900 dark:text-white">
