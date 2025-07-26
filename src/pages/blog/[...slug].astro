@@ -126,8 +126,8 @@ const query = '';
           {/* Línea divisoria */}
           <div class="w-4/5 h-px bg-gray-200 mx-auto mb-4"></div>
           
-          {/* Tags */}
-          <div class="flex flex-wrap gap-2 justify-center">
+                     {/* Tags */}
+           <div class="flex flex-wrap gap-2">
             {post.data.tags.map((tag: string) => (
               <a
                 href={`/blog?tag=${encodeURIComponent(tag)}`}
