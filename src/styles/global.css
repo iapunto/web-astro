@@ -157,8 +157,8 @@ h6 + p {
 }
 
 .blog-content a:hover {
-  color: var(--primary-accent); /* Un azul aún más oscuro al hacer hover */
-  font-weight: 600; /* Negrita al hacer hover */
+  color: var(--primary-accent); /* Color primary al hacer hover */
+  /* Removido font-weight: 600 para evitar desplazamiento visual */
 }
 
 /*Estilos para las imagenes dentro del blog*/
