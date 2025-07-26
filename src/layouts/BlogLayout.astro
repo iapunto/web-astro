@@ -128,6 +128,9 @@ const featuredServices = services.filter((s: Service) =>
         </div>
       </aside>
 
+      {/* Línea divisoria entre TOC y artículo */}
+      <div class="hidden lg:block w-px bg-gray-200 dark:bg-gray-700 mx-4"></div>
+
       {/* Contenido principal */}
       <article
         class="col-span-1 lg:col-span-7 w-full prose prose-lg dark:prose-invert mx-auto blog-content overflow-hidden"
@@ -436,7 +439,11 @@ const featuredServices = services.filter((s: Service) =>
                       class="flex-shrink-0 w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors"
                     >
                       <img
-                        src={typeof service.icon === 'string' ? service.icon : service.icon.src}
+                        src={
+                          typeof service.icon === 'string'
+                            ? service.icon
+                            : service.icon.src
+                        }
                         alt={service.alt}
                         width="24"
                         height="24"
