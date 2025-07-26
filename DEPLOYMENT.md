@@ -9,10 +9,12 @@ Este proyecto está configurado para desplegarse en Cloudflare Pages.
 Necesitas configurar las siguientes variables de entorno en Cloudflare Pages:
 
 #### Variables Públicas (Vars)
+
 - `SITE_URL`: URL del sitio (ej: https://iapunto.com)
 - `RECAPTCHA_SITE_KEY`: Clave pública de reCAPTCHA
 
 #### Variables Secretas (Secrets)
+
 - `RESEND_API_KEY`: Clave API de Resend para envío de emails
 - `RECAPTCHA_SECRET_KEY`: Clave secreta de reCAPTCHA
 - `EMAIL_FROM`: Email desde el cual se envían los correos
@@ -29,6 +31,7 @@ Necesitas configurar las siguientes variables de entorno en Cloudflare Pages:
 ## Comandos de Despliegue
 
 ### Despliegue Manual
+
 ```bash
 # Build del proyecto
 pnpm build
@@ -41,6 +44,7 @@ pnpm deploy:preview
 ```
 
 ### Despliegue Automático
+
 El despliegue automático se realiza a través de GitHub cuando se hace push a la rama `main`.
 
 ## Estructura del Proyecto
@@ -59,4 +63,5 @@ El despliegue automático se realiza a través de GitHub cuando se hace push a l
 3. **API routes no funcionan**: Verifica que el output esté configurado como 'server'
 
 ### Logs
-Los logs de Cloudflare Pages se pueden ver en el dashboard de Cloudflare Pages en la sección "Deployments". 
+
+Los logs de Cloudflare Pages se pueden ver en el dashboard de Cloudflare Pages en la sección "Deployments".
