@@ -10,7 +10,9 @@
     "astro": "astro",
     "format": "pnpm exec prettier --write .",
     "deploy": "astro build && wrangler deploy",
-    "deploy:preview": "astro build && wrangler deploy --env preview"
+    "deploy:preview": "astro build && wrangler deploy --env preview",
+    "dev:workers": "astro build && wrangler dev",
+    "dev:pages": "astro build && wrangler pages dev ./dist"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.0",
