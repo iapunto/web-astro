@@ -12,32 +12,36 @@ const { content, class: className = '', showWords = false } = Astro.props;
 const readingTime = calculateReadingTimeFromContent(content);
 ---
 
-<div class={`flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 ${className}`}>
+<div
+  class={`flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 ${className}`}
+>
   <!-- Ícono de reloj -->
-  <svg 
-    class="w-4 h-4" 
-    fill="none" 
-    stroke="currentColor" 
-    viewBox="0 0 24 24" 
+  <svg
+    class="w-4 h-4"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path 
-      stroke-linecap="round" 
-      stroke-linejoin="round" 
-      stroke-width="2" 
-      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-    />
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
   </svg>
-  
+
   <!-- Tiempo de lectura -->
   <span class="font-medium">
-    {readingTime.text}
+    Lectura: {readingTime.text}
   </span>
-  
+
   <!-- Número de palabras (opcional) -->
-  {showWords && (
-    <span class="text-xs text-gray-400">
-      ({readingTime.words.toLocaleString()} palabras)
-    </span>
-  )}
-</div> 
+  {
+    showWords && (
+      <span class="text-xs text-gray-400">
+        ({readingTime.words.toLocaleString()} palabras)
+      </span>
+    )
+  }
+</div>
+
