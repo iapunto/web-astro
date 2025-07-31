@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import OptimizedImage from './OptimizedImage.astro';
 import Button from '../common/Button.astro';
 
 export interface Props {
@@ -23,19 +23,29 @@ const { title, subtitle, description, image, alt, link, ctaText, bg, reverse } =
       class={`flex flex-col md:flex-row items-center ${reverse ? 'md:flex-row-reverse' : ''}`}
     >
       <div class="md:w-1/2 w-full flex justify-center mb-8 md:mb-0">
-        <img
+        <OptimizedImage
           src={image.src || image}
           alt={alt}
           class="max-w-xs md:max-w-md"
-          loading="lazy"
-          width="400"
-          height="400"
+          width={400}
+          height={400}
+          sizes="(max-width: 768px) 100vw, 400px"
         />
       </div>
       <div class="md:w-1/2 w-full px-4">
-        <h3 class="text-xl font-light text-gray-600 uppercase tracking-wider mb-2">{subtitle}</h3>
-        <h2 class="text-5xl font-bold text-gray-900 leading-tight mb-4">{title}</h2>
-        <p class="text-xl text-gray-600 font-light tracking-wider leading-8 pb-12 max-w-lg">{description}</p>
+        <h3
+          class="text-xl font-light text-gray-600 uppercase tracking-wider mb-2"
+        >
+          {subtitle}
+        </h3>
+        <h2 class="text-5xl font-bold text-gray-900 leading-tight mb-4">
+          {title}
+        </h2>
+        <p
+          class="text-xl text-gray-600 font-light tracking-wider leading-8 pb-12 max-w-lg"
+        >
+          {description}
+        </p>
         {
           link && ctaText && (
             <Button text={ctaText} href={link} variant="primary" />

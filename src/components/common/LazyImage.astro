@@ -1,0 +1,133 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  placeholder?: string;
+  sizes?: string;
+  priority?: boolean;
+}
+
+const {
+  src,
+  alt,
+  width = 800,
+  height = 600,
+  class: className = '',
+  placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2NzM4MyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+',
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+  priority = false,
+} = Astro.props;
+---
+
+<div
+  class={`lazy-image-container ${className}`}
+  data-src={src}
+  data-alt={alt}
+  data-width={width}
+  data-height={height}
+  data-sizes={sizes}
+  data-priority={priority}
+>
+  <img
+    src={placeholder}
+    alt={alt}
+    width={width}
+    height={height}
+    class="w-full h-auto transition-opacity duration-300 opacity-0"
+    loading={priority ? 'eager' : 'lazy'}
+    decoding="async"
+    data-lazy="true"
+  />
+</div>
+
+<style>
+  .lazy-image-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lazy-image-container img {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .lazy-image-container img.loaded {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  // Intersection Observer para lazy loading
+  function initLazyLoading() {
+    const lazyImages = document.querySelectorAll('[data-lazy="true"]');
+
+    if ('IntersectionObserver' in window) {
+      const imageObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              const container = img.closest('.lazy-image-container');
+
+              if (container) {
+                const src = container.dataset.src;
+                const alt = container.dataset.alt;
+                const sizes = container.dataset.sizes;
+
+                if (src) {
+                  img.src = src;
+                  img.alt = alt;
+                  if (sizes) img.sizes = sizes;
+
+                  img.addEventListener('load', () => {
+                    img.classList.add('loaded');
+                  });
+
+                  observer.unobserve(img);
+                }
+              }
+            }
+          });
+        },
+        {
+          rootMargin: '50px 0px',
+          threshold: 0.01,
+        }
+      );
+
+      lazyImages.forEach((img) => {
+        imageObserver.observe(img);
+      });
+    } else {
+      // Fallback para navegadores que no soportan Intersection Observer
+      lazyImages.forEach((img) => {
+        const container = img.closest('.lazy-image-container');
+        if (container) {
+          const src = container.dataset.src;
+          const alt = container.dataset.alt;
+          const sizes = container.dataset.sizes;
+
+          if (src) {
+            img.src = src;
+            img.alt = alt;
+            if (sizes) img.sizes = sizes;
+
+            img.addEventListener('load', () => {
+              img.classList.add('loaded');
+            });
+          }
+        }
+      });
+    }
+  }
+
+  // Inicializar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLazyLoading);
+  } else {
+    initLazyLoading();
+  }
+</script>
+

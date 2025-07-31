@@ -1,4 +1,6 @@
 ---
+import OptimizedImage from './OptimizedImage.astro';
+
 /**
  * Card parametrizable para servicios, testimonios, artículos y recomendaciones.
  * Props:
@@ -51,91 +53,179 @@ const {
   slug,
   imageSize = 'md',
   imageWidth,
-  imageHeight
+  imageHeight,
 } = Astro.props as CardProps;
 
 // Lógica para determinar el tamaño de imagen
-let width = 80, height = 80;
-if (imageSize === 'sm') { width = height = 48; }
-else if (imageSize === 'md') { width = height = 80; }
-else if (imageSize === 'lg') { width = height = 128; }
-if (typeof imageSize === 'number') { width = height = imageSize; }
+let width = 80,
+  height = 80;
+if (imageSize === 'sm') {
+  width = height = 48;
+} else if (imageSize === 'md') {
+  width = height = 80;
+} else if (imageSize === 'lg') {
+  width = height = 128;
+}
+if (typeof imageSize === 'number') {
+  width = height = imageSize;
+}
 if (imageWidth) width = imageWidth;
 if (imageHeight) height = imageHeight;
 ---
-{variant === 'service' && (
-  <article class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center h-full">
-    <img src={icon?.src || image} alt={alt || title} class="mb-4" loading="lazy" width={width} height={height} style={`width:${width}px;height:${height}px;`} />
-    <h3 class="text-xl font-bold mb-2 text-gray-900">{title}</h3>
-    <p class="text-gray-600 mb-6 flex-1">{description}</p>
-    {link && ctaText && (
-      <a href={link} class="inline-block px-6 py-2 bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700 transition font-semibold">{ctaText}</a>
-    )}
-  </article>
-)}
-{variant === 'testimonial' && (
-  <figure class="bg-white rounded-lg shadow-xl border border-gray-200 p-8 flex flex-col items-center text-center h-full">
-    {image && imageType === 'avatar' && (
-      <img src={image} alt={author || 'Foto de cliente'} class="w-20 h-20 mb-4 rounded-full object-cover" loading="lazy" width="80" height="80" />
-    )}
-    {image && imageType === 'logo' && (
-      <img src={image} alt={company || 'Logo de empresa'} class="w-32 h-16 mb-4 rounded-none object-contain bg-white" loading="lazy" width="128" height="64" />
-    )}
-    {image && imageType === 'icono' && (
-      <img src={image} alt={company || 'Icono de empresa'} class="w-20 h-20 mb-4 rounded-lg object-contain bg-white" loading="lazy" width="80" height="80" />
-    )}
-    <blockquote class="text-lg italic text-gray-700 mb-4">“{quote}”</blockquote>
-    <figcaption class="text-gray-900 font-semibold">{author}</figcaption>
-    <div class="text-gray-500 text-sm">{position} - {company}</div>
-  </figure>
-)}
-{variant === 'blog' && (
-  <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 flex flex-col h-full justify-between">
-    <div class="w-full mb-5 h-56 flex items-center justify-center overflow-hidden">
-      {image && (
-        <img src={image} alt={alt || title} loading="lazy" class="w-full h-full object-cover rounded-lg" style="min-height: 100%; min-width: 100%;" />
+
+{
+  variant === 'service' && (
+    <article class="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center h-full">
+      <OptimizedImage
+        src={icon?.src || image || ''}
+        alt={alt || title || ''}
+        class={`mb-4 w-[${width}px] h-[${height}px]`}
+        width={width}
+        height={height}
+      />
+      <h3 class="text-xl font-bold mb-2 text-gray-900">{title}</h3>
+      <p class="text-gray-600 mb-6 flex-1">{description}</p>
+      {link && ctaText && (
+        <a
+          href={link}
+          class="inline-block px-6 py-2 bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700 transition font-semibold"
+        >
+          {ctaText}
+        </a>
       )}
-    </div>
-    <div class="flex justify-between items-center mb-5 text-gray-500">
-      {category && (
-        <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">{category}</span>
+    </article>
+  )
+}
+{
+  variant === 'testimonial' && (
+    <figure class="bg-white rounded-lg shadow-xl border border-gray-200 p-8 flex flex-col items-center text-center h-full">
+      {image && imageType === 'avatar' && (
+        <OptimizedImage
+          src={image}
+          alt={author || 'Foto de cliente'}
+          class="w-20 h-20 mb-4 rounded-full object-cover"
+          width={80}
+          height={80}
+        />
       )}
-      {date && (
-        <span class="text-sm">{date}</span>
+      {image && imageType === 'logo' && (
+        <OptimizedImage
+          src={image}
+          alt={company || 'Logo de empresa'}
+          class="w-32 h-16 mb-4 rounded-none object-contain bg-white"
+          width={128}
+          height={64}
+        />
       )}
-    </div>
-    {link ? (
-      <a class="blog-card-title-link" href={link}><h3 class="blog-card-title">{title}</h3></a>
-    ) : (
-      <h3 class="blog-card-title">{title}</h3>
-    )}
-    <p class="description mb-5 font-light text-gray-500 dark:text-gray-400">{description}</p>
-    <div class="flex justify-between items-center">
-      <div class="flex items-center space-x-4">
-        {authorImage && (
-          <img class="w-7 h-7 rounded-full" src={authorImage} alt="avatar" width={32} height={32} loading="lazy" sizes="100vw" />
-        )}
-        <span class="font-medium dark:text-white">{author}</span>
+      {image && imageType === 'icono' && (
+        <OptimizedImage
+          src={image}
+          alt={company || 'Icono de empresa'}
+          class="w-20 h-20 mb-4 rounded-lg object-contain bg-white"
+          width={80}
+          height={80}
+        />
+      )}
+      <blockquote class="text-lg italic text-gray-700 mb-4">
+        “{quote}”
+      </blockquote>
+      <figcaption class="text-gray-900 font-semibold">{author}</figcaption>
+      <div class="text-gray-500 text-sm">
+        {position} - {company}
       </div>
-      {link && (
-        <a href={link} class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline">Leer más...</a>
+    </figure>
+  )
+}
+{
+  variant === 'blog' && (
+    <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 flex flex-col h-full justify-between">
+      <div class="w-full mb-5 h-56 flex items-center justify-center overflow-hidden">
+        {image && (
+          <OptimizedImage
+            src={image}
+            alt={alt || title || ''}
+            class="w-full h-full object-cover rounded-lg min-h-full min-w-full"
+            width={600}
+            height={400}
+            sizes="(max-width: 768px) 100vw, 600px"
+          />
+        )}
+      </div>
+      <div class="flex justify-between items-center mb-5 text-gray-500">
+        {category && (
+          <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
+            {category}
+          </span>
+        )}
+        {date && <span class="text-sm">{date}</span>}
+      </div>
+      {link ? (
+        <a class="blog-card-title-link" href={link}>
+          <h3 class="blog-card-title">{title}</h3>
+        </a>
+      ) : (
+        <h3 class="blog-card-title">{title}</h3>
       )}
-    </div>
-  </article>
-)}
-{variant === 'recommended' && (
-  <section class="my-12 py-8 px-6 bg-white dark:bg-gray-900 rounded-lg shadow-md flex flex-col md:flex-row items-center gap-6 border-t-4 border-primary-600">
-    {image && (
-      <img src={image} alt={title} class="w-32 h-32 object-cover rounded-lg mb-4 md:mb-0" loading="lazy" width="128" height="128" />
-    )}
-    <div class="flex-1">
-      <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">¿Te gustó este artículo?</h3>
-      <p class="text-lg text-gray-600 dark:text-gray-300 mb-2">Te recomendamos leer:</p>
-      {slug && (
-        <a href={`/blog/${slug}`} class="text-primary-700 dark:text-primary-400 text-xl font-semibold hover:underline">{title}</a>
+      <p class="description mb-5 font-light text-gray-500 dark:text-gray-400">
+        {description}
+      </p>
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+          {authorImage && (
+            <OptimizedImage
+              class="w-7 h-7 rounded-full"
+              src={authorImage}
+              alt="avatar"
+              width={32}
+              height={32}
+              sizes="32px"
+            />
+          )}
+          <span class="font-medium dark:text-white">{author}</span>
+        </div>
+        {link && (
+          <a
+            href={link}
+            class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
+          >
+            Leer más...
+          </a>
+        )}
+      </div>
+    </article>
+  )
+}
+{
+  variant === 'recommended' && (
+    <section class="my-12 py-8 px-6 bg-white dark:bg-gray-900 rounded-lg shadow-md flex flex-col md:flex-row items-center gap-6 border-t-4 border-primary-600">
+      {image && (
+        <img
+          src={image}
+          alt={title}
+          class="w-32 h-32 object-cover rounded-lg mb-4 md:mb-0"
+          loading="lazy"
+          width="128"
+          height="128"
+        />
       )}
-      <p class="text-gray-500 dark:text-gray-400 mt-2">{description}</p>
-    </div>
-  </section>
-)
-} 
+      <div class="flex-1">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          ¿Te gustó este artículo?
+        </h3>
+        <p class="text-lg text-gray-600 dark:text-gray-300 mb-2">
+          Te recomendamos leer:
+        </p>
+        {slug && (
+          <a
+            href={`/blog/${slug}`}
+            class="text-primary-700 dark:text-primary-400 text-xl font-semibold hover:underline"
+          >
+            {title}
+          </a>
+        )}
+        <p class="text-gray-500 dark:text-gray-400 mt-2">{description}</p>
+      </div>
+    </section>
+  )
+}
+

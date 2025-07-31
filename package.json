@@ -8,7 +8,9 @@
     "build": "astro build",
     "preview": "astro preview --port ${PORT:-4321}",
     "astro": "astro",
-    "format": "pnpm exec prettier --write ."
+    "format": "pnpm exec prettier --write .",
+    "optimize-images": "node scripts/optimize-images.js",
+    "optimize-images:watch": "node scripts/optimize-images.js --watch"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.1.0",

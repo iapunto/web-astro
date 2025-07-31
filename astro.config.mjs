@@ -28,7 +28,15 @@ export default defineConfig({
     mode: 'standalone',
   }),
   image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+    },
     domains: ['res.cloudinary.com'],
+    // Configuración de optimización de imágenes
+    formats: ['webp', 'avif'],
+    quality: 80,
+    // Lazy loading por defecto
+    loading: 'lazy',
   },
   vite: {
     resolve: {
