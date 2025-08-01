@@ -1,0 +1,277 @@
+---
+// src/components/common/GDPRManager.astro
+// Componente para gestionar el consentimiento GDPR de manera avanzada
+---
+
+<script>
+  // Gestión avanzada del consentimiento GDPR
+  class GDPRManager {
+    constructor() {
+      this.init();
+    }
+
+    init() {
+      // Esperar a que el DOM esté listo
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () =>
+          this.setupEventListeners()
+        );
+      } else {
+        this.setupEventListeners();
+      }
+    }
+
+    setupEventListeners() {
+      // Escuchar cambios en el consentimiento
+      document.addEventListener('cookieconsent:change', (event) => {
+        this.handleConsentChange(event.detail);
+      });
+
+      // Escuchar el primer consentimiento
+      document.addEventListener('cookieconsent:first', (event) => {
+        this.handleFirstConsent(event.detail);
+      });
+
+      // Escuchar actualizaciones de consentimiento
+      document.addEventListener('cookieconsent:update', (event) => {
+        this.handleConsentUpdate(event.detail);
+      });
+    }
+
+    handleConsentChange(detail) {
+      console.log('Cambio en consentimiento:', detail);
+
+      const { changedCategories, changedServices } = detail;
+
+      // Gestionar cambios en categorías
+      if (changedCategories) {
+        changedCategories.forEach((category) => {
+          this.handleCategoryChange(category);
+        });
+      }
+
+      // Gestionar cambios en servicios
+      if (changedServices) {
+        changedServices.forEach((service) => {
+          this.handleServiceChange(service);
+        });
+      }
+    }
+
+    handleFirstConsent(detail) {
+      console.log('Primer consentimiento:', detail);
+
+      // Enviar evento de analytics si está habilitado
+      if (detail.cookie.acceptedCategories.includes('analytics')) {
+        this.trackConsentEvent('first_consent', 'accepted');
+      }
+    }
+
+    handleConsentUpdate(detail) {
+      console.log('Actualización de consentimiento:', detail);
+
+      // Gestionar scripts basado en el consentimiento actual
+      this.updateScripts(detail.cookie);
+    }
+
+    handleCategoryChange(category) {
+      switch (category.name) {
+        case 'analytics':
+          if (category.accepted) {
+            this.enableAnalytics();
+          } else {
+            this.disableAnalytics();
+          }
+          break;
+        case 'marketing':
+          if (category.accepted) {
+            this.enableMarketing();
+          } else {
+            this.disableMarketing();
+          }
+          break;
+        default:
+          console.log(
+            `Categoría ${category.name} cambiada:`,
+            category.accepted
+          );
+      }
+    }
+
+    handleServiceChange(service) {
+      console.log(`Servicio ${service.name} cambiado:`, service.accepted);
+
+      // Gestionar servicios específicos
+      switch (service.name) {
+        case 'google_analytics':
+          if (service.accepted) {
+            this.enableGoogleAnalytics();
+          } else {
+            this.disableGoogleAnalytics();
+          }
+          break;
+        case 'ahrefs_analytics':
+          if (service.accepted) {
+            this.enableAhrefsAnalytics();
+          } else {
+            this.disableAhrefsAnalytics();
+          }
+          break;
+        default:
+          console.log(`Servicio ${service.name} no manejado`);
+      }
+    }
+
+    updateScripts(cookie) {
+      // Habilitar/deshabilitar scripts basado en el consentimiento
+      if (cookie.acceptedCategories.includes('analytics')) {
+        this.enableAnalytics();
+      } else {
+        this.disableAnalytics();
+      }
+
+      if (cookie.acceptedCategories.includes('marketing')) {
+        this.enableMarketing();
+      } else {
+        this.disableMarketing();
+      }
+    }
+
+    enableAnalytics() {
+      console.log('Habilitando analytics...');
+      // Los scripts se habilitan automáticamente por la librería
+      this.trackConsentEvent('analytics_enabled', 'accepted');
+    }
+
+    disableAnalytics() {
+      console.log('Deshabilitando analytics...');
+      // Limpiar cookies de analytics
+      this.clearAnalyticsCookies();
+      this.trackConsentEvent('analytics_disabled', 'rejected');
+    }
+
+    enableMarketing() {
+      console.log('Habilitando marketing...');
+      this.trackConsentEvent('marketing_enabled', 'accepted');
+    }
+
+    disableMarketing() {
+      console.log('Deshabilitando marketing...');
+      this.trackConsentEvent('marketing_disabled', 'rejected');
+    }
+
+    enableGoogleAnalytics() {
+      console.log('Google Analytics habilitado');
+      // El script se carga automáticamente
+    }
+
+    disableGoogleAnalytics() {
+      console.log('Google Analytics deshabilitado');
+      // Limpiar cookies específicas de GA
+      this.clearGoogleAnalyticsCookies();
+    }
+
+    enableAhrefsAnalytics() {
+      console.log('Ahrefs Analytics habilitado');
+      // El script se carga automáticamente
+    }
+
+    disableAhrefsAnalytics() {
+      console.log('Ahrefs Analytics deshabilitado');
+      // Limpiar cookies específicas de Ahrefs
+      this.clearAhrefsCookies();
+    }
+
+    clearAnalyticsCookies() {
+      // Limpiar cookies de analytics
+      const cookiesToClear = ['_ga', '_gid', '_gat', '_ga_*', 'ahrefs_*'];
+
+      cookiesToClear.forEach((cookieName) => {
+        this.clearCookie(cookieName);
+      });
+    }
+
+    clearGoogleAnalyticsCookies() {
+      const gaCookies = ['_ga', '_gid', '_gat', '_ga_*'];
+      gaCookies.forEach((cookie) => {
+        this.clearCookie(cookie);
+      });
+    }
+
+    clearAhrefsCookies() {
+      const ahrefsCookies = ['ahrefs_*'];
+      ahrefsCookies.forEach((cookie) => {
+        this.clearCookie(cookie);
+      });
+    }
+
+    clearCookie(name) {
+      // Limpiar cookie en todos los paths y dominios posibles
+      const paths = ['/', '/blog/', '/servicios/', '/acerca-de/', '/contacto/'];
+      const domains = [
+        window.location.hostname,
+        `.${window.location.hostname}`,
+      ];
+
+      paths.forEach((path) => {
+        domains.forEach((domain) => {
+          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}`;
+        });
+      });
+    }
+
+    trackConsentEvent(action, status) {
+      // Enviar evento de consentimiento (solo si analytics está habilitado)
+      if (window.gtag && this.isAnalyticsEnabled()) {
+        window.gtag('event', 'consent_update', {
+          event_category: 'gdpr',
+          event_label: action,
+          value: status === 'accepted' ? 1 : 0,
+        });
+      }
+    }
+
+    isAnalyticsEnabled() {
+      // Verificar si analytics está habilitado
+      try {
+        const cookieConsent = window.CookieConsent;
+        if (cookieConsent && cookieConsent.getUserPreferences) {
+          const preferences = cookieConsent.getUserPreferences();
+          return preferences.acceptedCategories.includes('analytics');
+        }
+      } catch (error) {
+        console.log('No se pudo verificar el estado de analytics');
+      }
+      return false;
+    }
+
+    // Método público para obtener el estado del consentimiento
+    getConsentStatus() {
+      try {
+        const cookieConsent = window.CookieConsent;
+        if (cookieConsent && cookieConsent.getUserPreferences) {
+          return cookieConsent.getUserPreferences();
+        }
+      } catch (error) {
+        console.log('No se pudo obtener el estado del consentimiento');
+      }
+      return null;
+    }
+
+    // Método público para mostrar el modal de preferencias
+    showPreferences() {
+      try {
+        const cookieConsent = window.CookieConsent;
+        if (cookieConsent && cookieConsent.showPreferences) {
+          cookieConsent.showPreferences();
+        }
+      } catch (error) {
+        console.log('No se pudo mostrar las preferencias');
+      }
+    }
+  }
+
+  // Inicializar el gestor de GDPR
+  window.GDPRManager = new GDPRManager();
+</script>
+

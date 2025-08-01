@@ -96,7 +96,30 @@ export default defineConfig({
 - **Formatos modernos** (WebP, AVIF) con fallbacks
 - **Responsive images** con srcset automático
 
-#### 3. Performance Monitoring
+#### 3. ✅ GDPR y Consentimiento de Cookies - COMPLETADO
+
+**✅ Implementado:**
+
+- **Banner de consentimiento** con vanilla-cookieconsent
+- **Configuración GDPR compliant** (modo opt-in)
+- **Scripts condicionales** para Google Analytics y Ahrefs
+- **Traducciones en español** completas
+- **Gestión avanzada** con GDPRManager
+- **Limpieza automática** de cookies rechazadas
+- **Eventos de tracking** de consentimiento
+- **Botón de preferencias** en footer
+- **Cumplimiento legal** (GDPR, CCPA, ePrivacy)
+
+**Archivos modificados:**
+
+- `astro.config.mjs` - Configuración completa de GDPR
+- `src/components/common/TrackingScripts.astro` - Scripts condicionales
+- `src/components/common/GDPRManager.astro` - Gestión avanzada
+- `src/layouts/BaseLayout.astro` - Integración del manager
+- `src/components/layout/Footer.astro` - Botón de preferencias
+- `docs/IMPLEMENTACION_GDPR.md` - Documentación completa
+
+#### 4. Performance Monitoring
 
 ```javascript
 // Agregar en BaseHead.astro
@@ -224,7 +247,15 @@ module.exports = {
 3. **✅ Optimizar imágenes** de portada del blog
 4. **✅ Implementar responsive images**
 
-### Semana 5-6: SEO y Performance
+### ✅ Semana 5-6: GDPR y Consentimiento - COMPLETADO
+
+1. **✅ Implementar banner de consentimiento** con vanilla-cookieconsent
+2. **✅ Configurar scripts condicionales** para analytics
+3. **✅ Crear gestión avanzada** con GDPRManager
+4. **✅ Integrar en BaseLayout** y Footer
+5. **✅ Documentar implementación** completa
+
+### Semana 7-8: SEO y Performance
 
 1. **Implementar structured data** (JSON-LD)
 2. **Configurar Google Analytics 4**

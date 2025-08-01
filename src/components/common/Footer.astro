@@ -1,0 +1,65 @@
+---
+// ... existing code ...
+
+export interface Props {
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaButtonText?: string;
+  ctaButtonHref?: string;
+}
+
+const {
+  ctaTitle,
+  ctaDescription,
+  ctaButtonText,
+  ctaButtonHref,
+} = Astro.props;
+---
+
+<footer class="bg-gray-900 text-white">
+  <!-- ... existing footer content ... -->
+  
+  <!-- Sección de enlaces legales y cookies -->
+  <div class="border-t border-gray-800 py-6">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+        <div class="flex flex-wrap gap-4 mb-4 md:mb-0">
+          <a href="/legal/politica-de-privacidad/" class="hover:text-white transition-colors">
+            Política de Privacidad
+          </a>
+          <a href="/legal/uso-de-cookies/" class="hover:text-white transition-colors">
+            Política de Cookies
+          </a>
+          <a href="/legal/terminos-y-condiciones/" class="hover:text-white transition-colors">
+            Términos y Condiciones
+          </a>
+          <button 
+            id="cookie-preferences-btn"
+            class="hover:text-white transition-colors cursor-pointer"
+            onclick="window.GDPRManager?.showPreferences()">
+            Gestionar Cookies
+          </button>
+        </div>
+        <div class="text-center md:text-right">
+          <p>&copy; 2024 IA Punto. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Asegurar que el botón de preferencias de cookies esté disponible
+  document.addEventListener('DOMContentLoaded', () => {
+    const cookieBtn = document.getElementById('cookie-preferences-btn');
+    if (cookieBtn) {
+      cookieBtn.addEventListener('click', () => {
+        if (window.GDPRManager) {
+          window.GDPRManager.showPreferences();
+        } else {
+          console.log('GDPR Manager no está disponible');
+        }
+      });
+    }
+  });
+</script> 
