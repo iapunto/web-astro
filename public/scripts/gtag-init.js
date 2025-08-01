@@ -1,4 +1,4 @@
-// Google Analytics con Consent Mode v2
+// Google Analytics con Consent Mode v2 y GTM
 window.dataLayer = window.dataLayer || [];
 function gtag() {
   dataLayer.push(arguments);
@@ -25,6 +25,12 @@ gtag('config', 'AW-11203509179', {
   allow_ad_personalization_signals: false
 });
 
+// Enviar evento de inicialización de consentimiento
+dataLayer.push({
+  event: 'gtm.init_consent',
+  'gtm.uniqueEventId': 1
+});
+
 // Función para actualizar consentimiento basado en las preferencias del usuario
 function updateGoogleConsentMode() {
   try {
@@ -49,11 +55,20 @@ function updateGoogleConsentMode() {
       // Log para debugging
       console.log('Google Consent Mode actualizado:', consentSettings);
       
-      // Enviar evento de consentimiento actualizado
-      gtag('event', 'consent_update', {
+      // Enviar evento de consentimiento actualizado a GTM
+      dataLayer.push({
+        event: 'consent_update',
+        consent_state: consentSettings,
         event_category: 'gdpr',
         event_label: 'consent_mode_updated',
         value: 1
+      });
+
+      // Enviar evento específico de GTM para consentimiento
+      dataLayer.push({
+        event: 'gtm.consent_update',
+        'gtm.uniqueEventId': Date.now(),
+        consent_state: consentSettings
       });
     }
   } catch (error) {
@@ -64,6 +79,7 @@ function updateGoogleConsentMode() {
 // Función para rastrear eventos de consentimiento específicos
 function trackConsentEvent(action, category, status) {
   try {
+    // Enviar evento a Google Analytics
     if (window.gtag) {
       gtag('event', 'consent_event', {
         event_category: 'gdpr',
@@ -76,11 +92,58 @@ function trackConsentEvent(action, category, status) {
         }
       });
     }
+
+    // Enviar evento a GTM
+    dataLayer.push({
+      event: 'consent_event',
+      'gtm.uniqueEventId': Date.now(),
+      consent_action: action,
+      consent_category: category,
+      consent_status: status,
+      event_category: 'gdpr',
+      event_label: `${action}_${category}`,
+      value: status === 'accepted' ? 1 : 0
+    });
   } catch (error) {
     console.log('Error rastreando evento de consentimiento:', error);
+  }
+}
+
+// Función para enviar evento de primer consentimiento
+function trackFirstConsent(preferences) {
+  try {
+    dataLayer.push({
+      event: 'gtm.first_consent',
+      'gtm.uniqueEventId': Date.now(),
+      consent_preferences: preferences,
+      event_category: 'gdpr',
+      event_label: 'first_consent',
+      value: 1
+    });
+  } catch (error) {
+    console.log('Error rastreando primer consentimiento:', error);
+  }
+}
+
+// Función para enviar evento de cambio de consentimiento
+function trackConsentChange(changedCategories, changedServices) {
+  try {
+    dataLayer.push({
+      event: 'gtm.consent_change',
+      'gtm.uniqueEventId': Date.now(),
+      changed_categories: changedCategories,
+      changed_services: changedServices,
+      event_category: 'gdpr',
+      event_label: 'consent_change',
+      value: 1
+    });
+  } catch (error) {
+    console.log('Error rastreando cambio de consentimiento:', error);
   }
 }
 
 // Exponer funciones globalmente para uso en GDPRManager
 window.updateGoogleConsentMode = updateGoogleConsentMode;
 window.trackConsentEvent = trackConsentEvent;
+window.trackFirstConsent = trackFirstConsent;
+window.trackConsentChange = trackConsentChange;

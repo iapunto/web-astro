@@ -32,6 +32,14 @@
           wait_for_update: 500
         });
       }
+
+      // Enviar evento de inicialización a GTM
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: 'gtm.init_consent',
+          'gtm.uniqueEventId': 1
+        });
+      }
     }
 
     setupEventListeners() {
@@ -76,6 +84,15 @@
             // Enviar evento de consentimiento actualizado
             this.trackConsentUpdate(consentSettings);
           }
+
+          // Enviar evento a GTM
+          if (window.dataLayer) {
+            window.dataLayer.push({
+              event: 'gtm.consent_update',
+              'gtm.uniqueEventId': Date.now(),
+              consent_state: consentSettings
+            });
+          }
         }
       } catch (error) {
         console.log('Error actualizando Google Consent Mode:', error);
@@ -95,6 +112,17 @@
           }
         });
       }
+
+      // Enviar evento a GTM
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: 'consent_update',
+          consent_state: settings,
+          event_category: 'gdpr',
+          event_label: 'consent_mode_updated',
+          value: 1
+        });
+      }
     }
 
     // Método para rastrear eventos específicos de consentimiento
@@ -109,6 +137,20 @@
             consent_category: category,
             consent_status: status
           }
+        });
+      }
+
+      // Enviar evento a GTM
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: 'consent_event',
+          'gtm.uniqueEventId': Date.now(),
+          consent_action: action,
+          consent_category: category,
+          consent_status: status,
+          event_category: 'gdpr',
+          event_label: `${action}_${category}`,
+          value: status === 'accepted' ? 1 : 0
         });
       }
     }

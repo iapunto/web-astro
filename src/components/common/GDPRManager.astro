@@ -4,7 +4,7 @@
 ---
 
 <script>
-  // Gestión avanzada del consentimiento GDPR con Google Consent Mode v2
+  // Gestión avanzada del consentimiento GDPR con Google Consent Mode v2 y GTM
   class GDPRManager {
     constructor() {
       this.init();
@@ -59,6 +59,11 @@
 
       // Actualizar Google Consent Mode
       this.updateGoogleConsentMode();
+
+      // Enviar evento de cambio a GTM
+      if (window.trackConsentChange) {
+        window.trackConsentChange(changedCategories, changedServices);
+      }
     }
 
     handleFirstConsent(detail) {
@@ -66,6 +71,11 @@
 
       // Actualizar Google Consent Mode
       this.updateGoogleConsentMode();
+
+      // Enviar evento de primer consentimiento a GTM
+      if (window.trackFirstConsent) {
+        window.trackFirstConsent(detail.cookie);
+      }
 
       // Enviar evento de analytics si está habilitado
       if (detail.cookie.acceptedCategories.includes('analytics')) {
