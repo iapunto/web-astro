@@ -1,5 +1,7 @@
 # Configuración de Strapi para IA Punto
 
+**Importante:** Strapi está instalado en una instancia separada de Coolify, completamente independiente del sitio web de IA Punto. Esta configuración es específica para la instalación de Strapi.
+
 ## 1. Configuración de Vite (vite.config.js)
 
 Crea o modifica el archivo `vite.config.js` en la raíz de tu instalación de Strapi:
@@ -37,7 +39,7 @@ export default defineConfig({
 
 ## 2. Configuración de CORS (config/middlewares.js)
 
-Modifica el archivo `config/middlewares.js` en tu instalación de Strapi:
+Modifica el archivo `config/middlewares.js` en tu instalación de Strapi para permitir conexiones desde el sitio web:
 
 ```javascript
 module.exports = [
@@ -109,9 +111,9 @@ ADMIN_JWT_SECRET=your_admin_jwt_secret_here
 JWT_SECRET=your_jwt_secret_here
 ```
 
-## 5. Configuración de Coolify
+## 5. Configuración de Coolify (Instancia de Strapi)
 
-En tu panel de Coolify, asegúrate de:
+En tu panel de Coolify donde está instalado Strapi, asegúrate de:
 
 1. **Variables de Entorno:**
    - `HOST=0.0.0.0`
@@ -126,7 +128,15 @@ En tu panel de Coolify, asegúrate de:
    - URL: `/admin`
    - Método: `GET`
 
-## 6. Reiniciar Strapi
+## 6. Integración con el Sitio Web
+
+El sitio web de IA Punto (`iapunto.com`) se conectará a Strapi a través de:
+
+- **URL de la API:** `https://strapi.iapunto.com/api`
+- **Token de autenticación:** Configurado en las variables de entorno del sitio web
+- **Endpoints disponibles:** `/articles`, `/categories`, `/tags`, etc.
+
+## 7. Reiniciar Strapi
 
 Después de hacer estos cambios:
 
@@ -134,13 +144,28 @@ Después de hacer estos cambios:
 2. Espera a que se complete el reinicio
 3. Intenta acceder a `https://strapi.iapunto.com/admin`
 
-## 7. Verificar Conexión
+## 8. Verificar Conexión
 
 Una vez configurado, puedes probar la conexión visitando:
 - `https://iapunto.com/api/strapi-test`
 
+## Arquitectura de la Integración
+
+```
+┌─────────────────┐    HTTP/HTTPS    ┌─────────────────┐
+│   iapunto.com   │ ───────────────► │ strapi.iapunto.com │
+│   (Astro Site)  │                  │   (Strapi CMS)   │
+│                 │                  │                 │
+│ - Frontend      │                  │ - Admin Panel   │
+│ - API Routes    │                  │ - Content API   │
+│ - Static Files  │                  │ - Media Files   │
+└─────────────────┘                  └─────────────────┘
+```
+
 ## Notas Importantes
 
-- Asegúrate de que el dominio `strapi.iapunto.com` esté correctamente configurado en tu DNS
-- Verifica que el certificado SSL esté instalado correctamente
-- Si usas un proxy reverso (nginx, traefik), asegúrate de que esté configurado para pasar las cabeceras correctamente 
+- **Instancias Separadas:** Strapi y el sitio web están en instancias diferentes de Coolify
+- **Dominios Diferentes:** Cada aplicación tiene su propio dominio
+- **CORS Configurado:** Strapi permite conexiones desde `iapunto.com`
+- **SSL Requerido:** Ambos dominios deben tener certificados SSL válidos
+- **DNS Configurado:** Asegúrate de que `strapi.iapunto.com` apunte a la instancia correcta 

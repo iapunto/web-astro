@@ -237,13 +237,6 @@ export default defineConfig({
         '@services': new URL('./src/services', import.meta.url).pathname,
       },
     },
-    server: {
-      headers: {
-        'Access-Control-Allow-Origin': 'https://strapi.iapunto.com',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-      },
-    },
   },
   security: {
     checkOrigin: true,
