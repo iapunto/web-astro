@@ -2,22 +2,21 @@
 // src/components/common/TrackingScripts.astro
 ---
 
-<!-- Google tag (gtag.js) - Solo se carga si el usuario acepta analytics -->
+<!-- Script de inicialización de Google Analytics y Consent Mode - DEBE CARGARSE PRIMERO -->
+<script
+  type="text/plain"
+  data-category="analytics"
+  data-service="google_analytics"
+  src="/scripts/gtag-init.js"
+  is:inline></script>
+
+<!-- Google tag (gtag.js) - Solo se carga DESPUÉS de configurar Consent Mode -->
 <script
   type="text/plain"
   data-category="analytics"
   data-service="google_analytics"
   async
   src="https://www.googletagmanager.com/gtag/js?id=AW-11203509179"></script>
-
-<!-- Script de inicialización de Google Analytics - Solo se ejecuta si se acepta analytics -->
-<script
-  type="text/plain"
-  data-category="analytics"
-  data-service="google_analytics"
-  src="/scripts/gtag-init.js"
-  async
-  is:inline></script>
 
 <!-- Ahrefs Analytics - Solo se carga si el usuario acepta analytics -->
 <script

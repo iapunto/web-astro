@@ -1,5 +1,10 @@
 // Google Analytics con Consent Mode v2 - Implementación oficial
+// Configurar Consent Mode INMEDIATAMENTE al cargar este script
+
+// Inicializar dataLayer
 window.dataLayer = window.dataLayer || [];
+
+// Función gtag que se define antes de cargar el script de Google
 function gtag() {
   dataLayer.push(arguments);
 }
@@ -16,14 +21,16 @@ gtag('consent', 'default', {
   'wait_for_update': 500 // Esperar 500ms antes de activar etiquetas
 });
 
-// Inicializar Google Analytics DESPUÉS de configurar consentimiento
-gtag('js', new Date());
-gtag('config', 'AW-11203509179', {
-  // Configuración básica que funciona sin consentimiento
-  anonymize_ip: true,
-  allow_google_signals: false,
-  allow_ad_personalization_signals: false
-});
+// Función para inicializar Google Analytics cuando se cargue el script
+function initializeGoogleAnalytics() {
+  gtag('js', new Date());
+  gtag('config', 'AW-11203509179', {
+    // Configuración básica que funciona sin consentimiento
+    anonymize_ip: true,
+    allow_google_signals: false,
+    allow_ad_personalization_signals: false
+  });
+}
 
 // Función para actualizar consentimiento basado en las preferencias del usuario
 function updateGoogleConsentMode() {
@@ -136,3 +143,20 @@ window.updateGoogleConsentMode = updateGoogleConsentMode;
 window.trackConsentEvent = trackConsentEvent;
 window.trackFirstConsent = trackFirstConsent;
 window.trackConsentChange = trackConsentChange;
+window.initializeGoogleAnalytics = initializeGoogleAnalytics;
+
+// Inicializar Google Analytics cuando se cargue el script de Google
+document.addEventListener('DOMContentLoaded', function() {
+  // Verificar si el script de Google Analytics ya se cargó
+  if (typeof window.gtag === 'function') {
+    initializeGoogleAnalytics();
+  } else {
+    // Esperar a que se cargue el script de Google Analytics
+    const checkGtag = setInterval(function() {
+      if (typeof window.gtag === 'function') {
+        initializeGoogleAnalytics();
+        clearInterval(checkGtag);
+      }
+    }, 100);
+  }
+});
