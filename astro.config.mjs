@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
@@ -120,7 +120,8 @@ export default defineConfig({
           es: {
             consentModal: {
               title: 'Usamos cookies',
-              description: 'Utilizamos cookies esenciales para el funcionamiento del sitio web y cookies de seguimiento para entender cómo interactúas con él. Estas últimas solo se establecerán después de tu consentimiento.',
+              description:
+                'Utilizamos cookies esenciales para el funcionamiento del sitio web y cookies de seguimiento para entender cómo interactúas con él. Estas últimas solo se establecerán después de tu consentimiento.',
               acceptAllBtn: 'Aceptar todas',
               acceptNecessaryBtn: 'Rechazar todas',
               showPreferencesBtn: 'Gestionar preferencias',
@@ -142,12 +143,14 @@ export default defineConfig({
                 },
                 {
                   title: 'Cookies estrictamente necesarias',
-                  description: 'Estas cookies son esenciales para el funcionamiento correcto del sitio web y no se pueden desactivar.',
+                  description:
+                    'Estas cookies son esenciales para el funcionamiento correcto del sitio web y no se pueden desactivar.',
                   linkedCategory: 'necessary',
                 },
                 {
                   title: 'Rendimiento y Analytics',
-                  description: 'Estas cookies recopilan información sobre cómo utilizas nuestro sitio web. Todos los datos están anonimizados y no se pueden utilizar para identificarte.',
+                  description:
+                    'Estas cookies recopilan información sobre cómo utilizas nuestro sitio web. Todos los datos están anonimizados y no se pueden utilizar para identificarte.',
                   linkedCategory: 'analytics',
                   cookieTable: {
                     headers: {
@@ -160,19 +163,22 @@ export default defineConfig({
                       {
                         name: '_ga',
                         domain: 'Google Analytics',
-                        description: 'Cookie establecida por <a href="https://business.safety.google/adscookies/" target="_blank">Google Analytics</a>',
+                        description:
+                          'Cookie establecida por <a href="https://business.safety.google/adscookies/" target="_blank">Google Analytics</a>',
                         expiration: 'Expira después de 2 años',
                       },
                       {
                         name: '_gid',
                         domain: 'Google Analytics',
-                        description: 'Cookie establecida por <a href="https://business.safety.google/adscookies/" target="_blank">Google Analytics</a>',
+                        description:
+                          'Cookie establecida por <a href="https://business.safety.google/adscookies/" target="_blank">Google Analytics</a>',
                         expiration: 'Sesión',
                       },
                       {
                         name: 'analytics.ahrefs.com',
                         domain: 'Ahrefs Analytics',
-                        description: 'Cookie establecida por <a href="https://ahrefs.com/analytics" target="_blank">Ahrefs Analytics</a>',
+                        description:
+                          'Cookie establecida por <a href="https://ahrefs.com/analytics" target="_blank">Ahrefs Analytics</a>',
                         expiration: '1 año',
                       },
                     ],
@@ -180,12 +186,14 @@ export default defineConfig({
                 },
                 {
                   title: 'Marketing',
-                  description: 'Estas cookies se utilizan para rastrear visitantes en sitios web para mostrar anuncios relevantes.',
+                  description:
+                    'Estas cookies se utilizan para rastrear visitantes en sitios web para mostrar anuncios relevantes.',
                   linkedCategory: 'marketing',
                 },
                 {
                   title: 'Más información',
-                  description: 'Para cualquier consulta relacionada con nuestra política de cookies y tus elecciones, por favor <a href="/contacto/" target="_blank">contáctanos</a>.',
+                  description:
+                    'Para cualquier consulta relacionada con nuestra política de cookies y tus elecciones, por favor <a href="/contacto/" target="_blank">contáctanos</a>.',
                 },
               ],
             },
@@ -201,13 +209,13 @@ export default defineConfig({
       onConsent: ({ cookie }) => {
         console.log('Consentimiento actualizado:', cookie);
         // Gestionar scripts basado en el consentimiento
-        if (cookie.acceptedCategories.includes('analytics')) {
-          // Activar scripts de analytics
-          console.log('Analytics activado');
-        }
+        console.log('Analytics activado');
       },
       onChange: ({ changedCategories, changedServices }) => {
-        console.log('Cambios en consentimiento:', { changedCategories, changedServices });
+        console.log('Cambios en consentimiento:', {
+          changedCategories,
+          changedServices,
+        });
       },
     }),
   ],
@@ -220,11 +228,6 @@ export default defineConfig({
       entrypoint: 'astro/assets/services/sharp',
     },
     domains: ['res.cloudinary.com'],
-    // Configuración de optimización de imágenes
-    formats: ['webp', 'avif'],
-    quality: 80,
-    // Lazy loading por defecto
-    loading: 'lazy',
   },
   vite: {
     resolve: {
@@ -237,27 +240,5 @@ export default defineConfig({
   },
   security: {
     checkOrigin: true,
-  },
-  env: {
-    schema: {
-      STRAPI_API_URL: envField.string({
-        context: 'client',
-        access: 'public',
-        default: process.env.STRAPI_API_URL || 'http://localhost:1337',
-        optional: false,
-      }),
-      SITE_NAME: {
-        type: 'string',
-        context: 'client',
-        access: 'public',
-        default: process.env.SITE_NAME,
-      },
-      RECAPTCHA_SITE_KEY: {
-        type: 'string',
-        context: 'client',
-        access: 'public',
-        default: process.env.RECAPTCHA_SITE_KEY,
-      },
-    },
   },
 });
