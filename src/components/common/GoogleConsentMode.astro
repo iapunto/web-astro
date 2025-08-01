@@ -1,0 +1,143 @@
+---
+// src/components/common/GoogleConsentMode.astro
+// Componente para manejar Google Consent Mode v2
+---
+
+<script>
+  // Google Consent Mode v2 Configuration
+  class GoogleConsentMode {
+    constructor() {
+      this.init();
+    }
+
+    init() {
+      // Configurar Consent Mode por defecto
+      this.setDefaultConsent();
+      
+      // Escuchar cambios en el consentimiento
+      this.setupEventListeners();
+    }
+
+    setDefaultConsent() {
+      // Configurar consentimiento por defecto (denied)
+      if (window.gtag) {
+        window.gtag('consent', 'default', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'denied',
+          functionality_storage: 'denied',
+          personalization_storage: 'denied',
+          security_storage: 'granted', // Siempre permitido para seguridad
+          wait_for_update: 500
+        });
+      }
+    }
+
+    setupEventListeners() {
+      // Escuchar cambios en el consentimiento de cookies
+      document.addEventListener('cookieconsent:change', () => {
+        this.updateConsentMode();
+      });
+
+      document.addEventListener('cookieconsent:first', () => {
+        this.updateConsentMode();
+      });
+
+      document.addEventListener('cookieconsent:update', () => {
+        this.updateConsentMode();
+      });
+    }
+
+    updateConsentMode() {
+      try {
+        // Verificar si CookieConsent está disponible
+        if (window.CookieConsent && window.CookieConsent.getUserPreferences) {
+          const preferences = window.CookieConsent.getUserPreferences();
+          
+          // Mapear categorías de consentimiento a Google Consent Mode
+          const consentSettings = {
+            ad_storage: preferences.acceptedCategories.includes('marketing') ? 'granted' : 'denied',
+            ad_user_data: preferences.acceptedCategories.includes('marketing') ? 'granted' : 'denied',
+            ad_personalization: preferences.acceptedCategories.includes('marketing') ? 'granted' : 'denied',
+            analytics_storage: preferences.acceptedCategories.includes('analytics') ? 'granted' : 'denied',
+            functionality_storage: preferences.acceptedCategories.includes('necessary') ? 'granted' : 'denied',
+            personalization_storage: preferences.acceptedCategories.includes('necessary') ? 'granted' : 'denied',
+            security_storage: 'granted' // Siempre permitido
+          };
+
+          // Actualizar consentimiento en Google Analytics
+          if (window.gtag) {
+            window.gtag('consent', 'update', consentSettings);
+            
+            // Log para debugging
+            console.log('Google Consent Mode actualizado:', consentSettings);
+            
+            // Enviar evento de consentimiento actualizado
+            this.trackConsentUpdate(consentSettings);
+          }
+        }
+      } catch (error) {
+        console.log('Error actualizando Google Consent Mode:', error);
+      }
+    }
+
+    trackConsentUpdate(settings) {
+      if (window.gtag) {
+        window.gtag('event', 'consent_update', {
+          event_category: 'gdpr',
+          event_label: 'consent_mode_updated',
+          value: 1,
+          custom_parameter: {
+            analytics_storage: settings.analytics_storage,
+            ad_storage: settings.ad_storage,
+            functionality_storage: settings.functionality_storage
+          }
+        });
+      }
+    }
+
+    // Método para rastrear eventos específicos de consentimiento
+    trackConsentEvent(action, category, status) {
+      if (window.gtag) {
+        window.gtag('event', 'consent_event', {
+          event_category: 'gdpr',
+          event_label: `${action}_${category}`,
+          value: status === 'accepted' ? 1 : 0,
+          custom_parameter: {
+            consent_action: action,
+            consent_category: category,
+            consent_status: status
+          }
+        });
+      }
+    }
+
+    // Método para obtener el estado actual del consentimiento
+    getCurrentConsent() {
+      try {
+        if (window.CookieConsent && window.CookieConsent.getUserPreferences) {
+          const preferences = window.CookieConsent.getUserPreferences();
+          return {
+            analytics: preferences.acceptedCategories.includes('analytics'),
+            marketing: preferences.acceptedCategories.includes('marketing'),
+            necessary: preferences.acceptedCategories.includes('necessary'),
+            acceptType: preferences.acceptType
+          };
+        }
+      } catch (error) {
+        console.log('Error obteniendo estado de consentimiento:', error);
+      }
+      return null;
+    }
+  }
+
+  // Inicializar Google Consent Mode cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.GoogleConsentMode = new GoogleConsentMode();
+    });
+  } else {
+    window.GoogleConsentMode = new GoogleConsentMode();
+  }
+</script> 

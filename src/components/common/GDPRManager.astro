@@ -4,7 +4,7 @@
 ---
 
 <script>
-  // Gestión avanzada del consentimiento GDPR
+  // Gestión avanzada del consentimiento GDPR con Google Consent Mode v2
   class GDPRManager {
     constructor() {
       this.init();
@@ -56,14 +56,20 @@
           this.handleServiceChange(service);
         });
       }
+
+      // Actualizar Google Consent Mode
+      this.updateGoogleConsentMode();
     }
 
     handleFirstConsent(detail) {
       console.log('Primer consentimiento:', detail);
 
+      // Actualizar Google Consent Mode
+      this.updateGoogleConsentMode();
+
       // Enviar evento de analytics si está habilitado
       if (detail.cookie.acceptedCategories.includes('analytics')) {
-        this.trackConsentEvent('first_consent', 'accepted');
+        this.trackConsentEvent('first_consent', 'analytics', 'accepted');
       }
     }
 
@@ -72,6 +78,9 @@
 
       // Gestionar scripts basado en el consentimiento actual
       this.updateScripts(detail.cookie);
+
+      // Actualizar Google Consent Mode
+      this.updateGoogleConsentMode();
     }
 
     handleCategoryChange(category) {
@@ -140,46 +149,59 @@
     enableAnalytics() {
       console.log('Habilitando analytics...');
       // Los scripts se habilitan automáticamente por la librería
-      this.trackConsentEvent('analytics_enabled', 'accepted');
+      this.trackConsentEvent('analytics_enabled', 'analytics', 'accepted');
     }
 
     disableAnalytics() {
       console.log('Deshabilitando analytics...');
       // Limpiar cookies de analytics
       this.clearAnalyticsCookies();
-      this.trackConsentEvent('analytics_disabled', 'rejected');
+      this.trackConsentEvent('analytics_disabled', 'analytics', 'rejected');
     }
 
     enableMarketing() {
       console.log('Habilitando marketing...');
-      this.trackConsentEvent('marketing_enabled', 'accepted');
+      this.trackConsentEvent('marketing_enabled', 'marketing', 'accepted');
     }
 
     disableMarketing() {
       console.log('Deshabilitando marketing...');
-      this.trackConsentEvent('marketing_disabled', 'rejected');
+      this.trackConsentEvent('marketing_disabled', 'marketing', 'rejected');
     }
 
     enableGoogleAnalytics() {
       console.log('Google Analytics habilitado');
       // El script se carga automáticamente
+      this.trackConsentEvent('google_analytics_enabled', 'google_analytics', 'accepted');
     }
 
     disableGoogleAnalytics() {
       console.log('Google Analytics deshabilitado');
       // Limpiar cookies específicas de GA
       this.clearGoogleAnalyticsCookies();
+      this.trackConsentEvent('google_analytics_disabled', 'google_analytics', 'rejected');
     }
 
     enableAhrefsAnalytics() {
       console.log('Ahrefs Analytics habilitado');
       // El script se carga automáticamente
+      this.trackConsentEvent('ahrefs_enabled', 'ahrefs_analytics', 'accepted');
     }
 
     disableAhrefsAnalytics() {
       console.log('Ahrefs Analytics deshabilitado');
       // Limpiar cookies específicas de Ahrefs
       this.clearAhrefsCookies();
+      this.trackConsentEvent('ahrefs_disabled', 'ahrefs_analytics', 'rejected');
+    }
+
+    updateGoogleConsentMode() {
+      // Usar la función global de gtag-init.js
+      if (window.updateGoogleConsentMode) {
+        window.updateGoogleConsentMode();
+      } else {
+        console.log('updateGoogleConsentMode no está disponible');
+      }
     }
 
     clearAnalyticsCookies() {
@@ -220,14 +242,24 @@
       });
     }
 
-    trackConsentEvent(action, status) {
-      // Enviar evento de consentimiento (solo si analytics está habilitado)
-      if (window.gtag && this.isAnalyticsEnabled()) {
-        window.gtag('event', 'consent_update', {
-          event_category: 'gdpr',
-          event_label: action,
-          value: status === 'accepted' ? 1 : 0,
-        });
+    trackConsentEvent(action, category, status) {
+      // Usar la función global de gtag-init.js
+      if (window.trackConsentEvent) {
+        window.trackConsentEvent(action, category, status);
+      } else {
+        // Fallback si la función global no está disponible
+        if (window.gtag && this.isAnalyticsEnabled()) {
+          window.gtag('event', 'consent_update', {
+            event_category: 'gdpr',
+            event_label: `${action}_${category}`,
+            value: status === 'accepted' ? 1 : 0,
+            custom_parameter: {
+              consent_action: action,
+              consent_category: category,
+              consent_status: status
+            }
+          });
+        }
       }
     }
 
@@ -268,6 +300,25 @@
       } catch (error) {
         console.log('No se pudo mostrar las preferencias');
       }
+    }
+
+    // Método para obtener métricas de consentimiento
+    getConsentMetrics() {
+      try {
+        const preferences = this.getConsentStatus();
+        if (preferences) {
+          return {
+            analytics_accepted: preferences.acceptedCategories.includes('analytics'),
+            marketing_accepted: preferences.acceptedCategories.includes('marketing'),
+            necessary_accepted: preferences.acceptedCategories.includes('necessary'),
+            total_categories: preferences.acceptedCategories.length,
+            accept_type: preferences.acceptType
+          };
+        }
+      } catch (error) {
+        console.log('Error obteniendo métricas de consentimiento:', error);
+      }
+      return null;
     }
   }
 

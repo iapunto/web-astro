@@ -11,6 +11,7 @@ import Breadcrumb from '../components/layout/Header/Breadcrumb.astro';
 import TrackingScripts from '../components/common/TrackingScripts.astro';
 import WhatsAppButton from '../components/layout/WhatsAppButton.astro';
 import GDPRManager from '../components/common/GDPRManager.astro';
+import GoogleConsentMode from '../components/common/GoogleConsentMode.astro';
 
 export interface Props {
   // Props básicas
@@ -19,13 +20,13 @@ export interface Props {
   image?: string;
   keywords?: string;
   robots?: string;
-  
+
   // Props para Footer
   ctaTitle?: string;
   ctaDescription?: string;
   ctaButtonText?: string;
   ctaButtonHref?: string;
-  
+
   // Variantes del layout
   variant?: 'default' | 'blog' | 'legal';
   showBreadcrumb?: boolean;
@@ -33,12 +34,12 @@ export interface Props {
   showWhatsApp?: boolean;
   showTracking?: boolean;
   showRecaptcha?: boolean;
-  
+
   // Props específicas para blog
   author?: any;
   pubDate?: Date;
   post?: any;
-  
+
   // Props específicas para legal
   content?: string;
   canonicalURL?: string;
@@ -97,7 +98,9 @@ const variantConfig = {
 const config = variantConfig[variant];
 
 // reCAPTCHA solo si está habilitado
-const RECAPTCHA_SITE_KEY = showRecaptcha ? import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY : null;
+const RECAPTCHA_SITE_KEY = showRecaptcha
+  ? import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY
+  : null;
 ---
 
 <html lang="es">
@@ -111,20 +114,23 @@ const RECAPTCHA_SITE_KEY = showRecaptcha ? import.meta.env.PUBLIC_RECAPTCHA_SITE
     />
     {showTracking && <TrackingScripts />}
     <slot name="head" />
-    {showRecaptcha && RECAPTCHA_SITE_KEY && (
-      <script
-        src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}
-        defer
-        is:inline></script>
-    )}
+    {
+      showRecaptcha && RECAPTCHA_SITE_KEY && (
+        <script
+          src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}
+          defer
+          is:inline
+        />
+      )
+    }
   </head>
   <body>
     <TopBar />
     <Navbar />
     {showBreadcrumb && <Breadcrumb pageTitle={pageTitle} />}
-    
+
     <slot />
-    
+
     <Footer
       ctaTitle={ctaTitle}
       ctaDescription={ctaDescription}
@@ -133,12 +139,16 @@ const RECAPTCHA_SITE_KEY = showRecaptcha ? import.meta.env.PUBLIC_RECAPTCHA_SITE
     />
     {showBackToTop && <BackToTop />}
     {showWhatsApp && <WhatsAppButton />}
-    
+
+    <!-- Google Consent Mode - Para rastreo avanzado de consentimiento -->
+    {showTracking && <GoogleConsentMode />}
+
     <!-- GDPR Manager - Siempre presente para gestionar consentimiento -->
     <GDPRManager />
-    
+
     <script
       src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
       defer></script>
   </body>
-</html> 
+</html>
+

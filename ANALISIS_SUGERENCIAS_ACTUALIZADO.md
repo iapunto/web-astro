@@ -119,7 +119,26 @@ export default defineConfig({
 - `src/components/layout/Footer.astro` - Botón de preferencias
 - `docs/IMPLEMENTACION_GDPR.md` - Documentación completa
 
-#### 4. Performance Monitoring
+#### 4. ✅ Google Consent Mode v2 - COMPLETADO
+
+**✅ Implementado:**
+
+- **Configuración Consent Mode v2** en gtag-init.js
+- **Componente GoogleConsentMode** para gestión avanzada
+- **Integración automática** con CookieConsent
+- **Rastreo de eventos** de consentimiento específicos
+- **Mapeo automático** de categorías de cookies
+- **Métricas detalladas** en Google Analytics
+- **Documentación completa** en docs/GOOGLE_CONSENT_MODE.md
+
+**Beneficios:**
+
+- Rastreo limitado sin consentimiento (anónimo)
+- Expansión automática cuando se da consentimiento
+- Métricas de consentimiento detalladas
+- Integración nativa con Google Analytics
+
+#### 5. Performance Monitoring
 
 ```javascript
 // Agregar en BaseHead.astro
@@ -141,7 +160,7 @@ export default defineConfig({
 
 ### 🟡 Media Prioridad (Implementar en 1-2 meses)
 
-#### 4. Mejoras de Accesibilidad
+#### 6. Mejoras de Accesibilidad
 
 ```astro
 <!-- En componentes críticos -->
@@ -164,7 +183,7 @@ export default defineConfig({
 - **Optimizar contraste** de colores críticos
 - **Implementar focus indicators** visibles
 
-#### 5. Optimización de CSS
+#### 7. Optimización de CSS
 
 ```javascript
 // En tailwind.config.mjs
@@ -194,7 +213,7 @@ module.exports = {
 - **Optimizar purga de CSS** no utilizado
 - **Implementar critical CSS** para above-the-fold
 
-#### 6. Mejoras de SEO Técnico
+#### 8. Mejoras de SEO Técnico
 
 ```astro
 <!-- En SeoMeta.astro -->
@@ -215,14 +234,14 @@ module.exports = {
 
 ### 🟢 Baja Prioridad (Implementar en 3-6 meses)
 
-#### 7. Funcionalidades Avanzadas
+#### 9. Funcionalidades Avanzadas
 
 - **Sistema de búsqueda** en el blog
 - **Related posts** automático
 - **Infinite scroll** para listas largas
 - **A/B testing framework**
 
-#### 8. Monitoreo Avanzado
+#### 10. Monitoreo Avanzado
 
 - **Error tracking** con Sentry
 - **Performance budgets**
@@ -255,14 +274,22 @@ module.exports = {
 4. **✅ Integrar en BaseLayout** y Footer
 5. **✅ Documentar implementación** completa
 
-### Semana 7-8: SEO y Performance
+### ✅ Semana 7-8: Google Consent Mode v2 - COMPLETADO
+
+1. **✅ Configurar Consent Mode v2** en gtag-init.js
+2. **✅ Crear componente GoogleConsentMode** para gestión avanzada
+3. **✅ Integrar con CookieConsent** automáticamente
+4. **✅ Implementar eventos de rastreo** específicos
+5. **✅ Documentar implementación** completa
+
+### Semana 9-10: SEO y Performance
 
 1. **Implementar structured data** (JSON-LD)
 2. **Configurar Google Analytics 4**
 3. **Optimizar Core Web Vitals**
 4. **Implementar preconnect** para recursos externos
 
-### Semana 7-8: Accesibilidad
+### Semana 11-12: Accesibilidad
 
 1. **Mejorar navegación por teclado**
 2. **Agregar skip links**
@@ -291,6 +318,13 @@ module.exports = {
 - **Tests E2E**: 100% de funcionalidades críticas
 - **CI/CD**: Build time < 5 minutos
 
+### GDPR y Consentimiento
+
+- **Tasa de Aceptación**: > 70% para cookies necesarias
+- **Tiempo de Decisión**: < 30 segundos promedio
+- **Cumplimiento Legal**: 100% GDPR, CCPA, ePrivacy
+- **Eventos de Consentimiento**: Rastreados correctamente en GA
+
 ---
 
 ## 🔗 Recursos y Referencias
@@ -300,6 +334,7 @@ module.exports = {
 - [Playwright Testing](https://playwright.dev/)
 - [Web.dev Performance](https://web.dev/performance/)
 - [MDN Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility)
+- [Google Consent Mode](https://developers.google.com/tag-platform/security/guides/consent)
 
 ---
 
