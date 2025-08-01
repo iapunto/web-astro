@@ -30,7 +30,7 @@ export default defineConfig({
       hideFromBots: true,
       disablePageInteraction: false,
       revision: 1,
-
+      
       // Configuración de cookies
       cookie: {
         name: 'iapunto_cookie_consent',
@@ -227,7 +227,7 @@ export default defineConfig({
     service: {
       entrypoint: 'astro/assets/services/sharp',
     },
-    domains: ['res.cloudinary.com'],
+    domains: ['res.cloudinary.com', 'strapi.iapunto.com'],
   },
   vite: {
     resolve: {
@@ -235,6 +235,13 @@ export default defineConfig({
         '@': new URL('./src', import.meta.url).pathname,
         '@components': new URL('./src/components', import.meta.url).pathname,
         '@services': new URL('./src/services', import.meta.url).pathname,
+      },
+    },
+    server: {
+      headers: {
+        'Access-Control-Allow-Origin': 'https://strapi.iapunto.com',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
       },
     },
   },
