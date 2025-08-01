@@ -1,10 +1,10 @@
 ---
 // src/components/common/GoogleConsentMode.astro
-// Componente para manejar Google Consent Mode v2
+// Componente para manejar Google Consent Mode v2 siguiendo las mejores prácticas oficiales
 ---
 
 <script>
-  // Google Consent Mode v2 Configuration
+  // Google Consent Mode v2 Configuration - Implementación oficial
   class GoogleConsentMode {
     constructor() {
       this.init();
@@ -19,25 +19,17 @@
     }
 
     setDefaultConsent() {
-      // Configurar consentimiento por defecto (denied)
+      // Configurar consentimiento por defecto (denied) - ANTES de cualquier comando de medición
       if (window.gtag) {
         window.gtag('consent', 'default', {
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied',
-          analytics_storage: 'denied',
-          functionality_storage: 'denied',
-          personalization_storage: 'denied',
-          security_storage: 'granted', // Siempre permitido para seguridad
-          wait_for_update: 500
-        });
-      }
-
-      // Enviar evento de inicialización a GTM
-      if (window.dataLayer) {
-        window.dataLayer.push({
-          event: 'gtm.init_consent',
-          'gtm.uniqueEventId': 1
+          'ad_storage': 'denied',
+          'ad_user_data': 'denied',
+          'ad_personalization': 'denied',
+          'analytics_storage': 'denied',
+          'functionality_storage': 'denied',
+          'personalization_storage': 'denied',
+          'security_storage': 'granted', // Siempre permitido para seguridad
+          'wait_for_update': 500 // Esperar 500ms antes de activar etiquetas
         });
       }
     }
@@ -65,13 +57,13 @@
           
           // Mapear categorías de consentimiento a Google Consent Mode
           const consentSettings = {
-            ad_storage: preferences.acceptedCategories.includes('marketing') ? 'granted' : 'denied',
-            ad_user_data: preferences.acceptedCategories.includes('marketing') ? 'granted' : 'denied',
-            ad_personalization: preferences.acceptedCategories.includes('marketing') ? 'granted' : 'denied',
-            analytics_storage: preferences.acceptedCategories.includes('analytics') ? 'granted' : 'denied',
-            functionality_storage: preferences.acceptedCategories.includes('necessary') ? 'granted' : 'denied',
-            personalization_storage: preferences.acceptedCategories.includes('necessary') ? 'granted' : 'denied',
-            security_storage: 'granted' // Siempre permitido
+            'ad_storage': preferences.acceptedCategories.includes('marketing') ? 'granted' : 'denied',
+            'ad_user_data': preferences.acceptedCategories.includes('marketing') ? 'granted' : 'denied',
+            'ad_personalization': preferences.acceptedCategories.includes('marketing') ? 'granted' : 'denied',
+            'analytics_storage': preferences.acceptedCategories.includes('analytics') ? 'granted' : 'denied',
+            'functionality_storage': preferences.acceptedCategories.includes('necessary') ? 'granted' : 'denied',
+            'personalization_storage': preferences.acceptedCategories.includes('necessary') ? 'granted' : 'denied',
+            'security_storage': 'granted' // Siempre permitido
           };
 
           // Actualizar consentimiento en Google Analytics
@@ -83,15 +75,6 @@
             
             // Enviar evento de consentimiento actualizado
             this.trackConsentUpdate(consentSettings);
-          }
-
-          // Enviar evento a GTM
-          if (window.dataLayer) {
-            window.dataLayer.push({
-              event: 'gtm.consent_update',
-              'gtm.uniqueEventId': Date.now(),
-              consent_state: consentSettings
-            });
           }
         }
       } catch (error) {
@@ -113,7 +96,7 @@
         });
       }
 
-      // Enviar evento a GTM
+      // Enviar evento a dataLayer para GTM
       if (window.dataLayer) {
         window.dataLayer.push({
           event: 'consent_update',
@@ -140,11 +123,10 @@
         });
       }
 
-      // Enviar evento a GTM
+      // Enviar evento a dataLayer para GTM
       if (window.dataLayer) {
         window.dataLayer.push({
           event: 'consent_event',
-          'gtm.uniqueEventId': Date.now(),
           consent_action: action,
           consent_category: category,
           consent_status: status,
