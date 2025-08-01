@@ -1,97 +1,62 @@
-import type { MiddlewareHandler } from 'astro';
+import { defineMiddleware } from 'astro:middleware';
+import { SessionManager } from './lib/auth/session';
+import { AuthDatabase } from './lib/auth/database';
 
-export const onRequest: MiddlewareHandler = async (context, next) => {
-  const url = new URL(context.request.url);
-  const pathname = url.pathname;
+// Inicializar base de datos
+AuthDatabase.init().catch(console.error);
 
-  // Redirecciones para evitar contenido duplicado
-  // Redirigir URLs sin barra final a URLs con barra final para páginas principales
-  if (
-    pathname === '/blog' ||
-    pathname === '/servicios' ||
-    pathname === '/acerca-de' ||
-    pathname === '/contacto'
-  ) {
-    return new Response(null, {
-      status: 301,
-      headers: {
-        Location: `${pathname}/`,
-        'Cache-Control': 'public, max-age=31536000',
-      },
-    });
+export const onRequest = defineMiddleware(async (context, next) => {
+  const { url, request } = context;
+  const pathname = new URL(url).pathname;
+
+  // Rutas que requieren autenticación
+  const protectedRoutes = ['/admin', '/api/cms'];
+  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
+
+  // Rutas de autenticación
+  const authRoutes = ['/portal-seguro', '/logout'];
+  const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
+
+  // Verificar autenticación para rutas protegidas
+  if (isProtectedRoute) {
+    try {
+      const user = SessionManager.requireAuth(context);
+      
+      // Verificar si el usuario tiene rol de admin
+      if (!SessionManager.hasRole(context, 'admin')) {
+        return new Response('Acceso denegado', { status: 403 });
+      }
+
+      // Agregar información del usuario al contexto
+      context.locals.user = user;
+      
+    } catch (error) {
+      // Redirigir a login si no está autenticado
+      return context.redirect('/portal-seguro');
+    }
   }
 
+  // Redirigir usuarios autenticados fuera de las páginas de auth
+  if (isAuthRoute && SessionManager.isAuthenticated(context)) {
+    return context.redirect('/admin');
+  }
+
+  // Configurar headers de seguridad
   const response = await next();
-
-  // Content Security Policy (CSP)
-  response.headers.set(
-    'Content-Security-Policy',
-    [
-      "default-src 'self'",
-      "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://analytics.ahrefs.com https://www.google.com https://www.gstatic.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "img-src 'self' data: https: https://res.cloudinary.com https://blog.n8n.io https://*.techcrunch.com https://*.hubspot.com https://inedif.com.co https://iapunto.com https://www.semrush.com https://semrush.com",
-      "font-src 'self' https://fonts.gstatic.com",
-      "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://api.resend.com",
-      'frame-src https://www.youtube.com https://www.facebook.com',
-      "object-src 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "frame-ancestors 'self'",
-    ].join('; ')
-  );
-
-  // HSTS: fuerza HTTPS en navegadores compatibles
-  response.headers.set(
-    'Strict-Transport-Security',
-    'max-age=63072000; includeSubDomains; preload'
-  );
-
-  // COOP: aislamiento de contexto
-  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-
-  // CORP: aislamiento de recursos
-  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
-
-  // X-Frame-Options: evita clickjacking
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
-
-  // X-Content-Type-Options: evita sniffing de tipos MIME
+  
+  // Headers de seguridad adicionales
   response.headers.set('X-Content-Type-Options', 'nosniff');
-
-  // Referrer-Policy: controla el envío del referer
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-
-  // Permissions-Policy: restringe APIs avanzadas del navegador
-  response.headers.set(
-    'Permissions-Policy',
-    [
-      'geolocation=()',
-      'microphone=()',
-      'camera=()',
-      'fullscreen=(self)',
-      'payment=()',
-    ].join(', ')
-  );
-
-  // Eliminar encabezado X-Powered-By si existe
-  response.headers.delete('X-Powered-By');
-
-  // Reglas de caché eficientes para recursos estáticos y HTML
-  if (
-    pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|webp|woff2|woff|ttf|eot)$/)
-  ) {
+  
+  // CSP para páginas de admin
+  if (pathname.startsWith('/admin')) {
     response.headers.set(
-      'Cache-Control',
-      'public, max-age=31536000, immutable'
+      'Content-Security-Policy',
+      "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:;"
     );
-  } else if (
-    pathname.endsWith('.html') ||
-    pathname === '/' ||
-    pathname.endsWith('/')
-  ) {
-    response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
   }
 
   return response;
-};
+});

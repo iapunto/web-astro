@@ -1,0 +1,79 @@
+---
+import DefaultLayout from '../../layouts/DefaultLayout.astro';
+import { getCollection } from 'astro:content';
+import { CMSLayout } from '../../components/cms/CMSLayout';
+import { Dashboard } from '../../components/cms/Dashboard';
+import { BlogArticle } from '../../lib/types/cms';
+import { SessionManager } from '../../lib/auth/session';
+
+// Verificar autenticación
+const user = SessionManager.requireAuth(Astro);
+
+// Obtener todos los artículos del blog
+const blogEntries = await getCollection('blog');
+
+// Convertir a formato BlogArticle
+const articles: BlogArticle[] = blogEntries.map(entry => ({
+  id: entry.slug,
+  title: entry.data.title,
+  slug: entry.data.slug,
+  pubDate: entry.data.pubDate,
+  description: entry.data.description,
+  cover: entry.data.cover,
+  coverAlt: entry.data.coverAlt,
+  author: entry.data.author,
+  category: entry.data.category,
+  subcategory: entry.data.subcategory,
+  tags: entry.data.tags || [],
+  quote: entry.data.quote,
+  content: entry.body,
+  status: 'published' as const,
+  createdAt: entry.data.pubDate,
+  updatedAt: entry.data.pubDate
+}));
+---
+
+<DefaultLayout
+  pageTitle="CMS - IA Punto"
+  description="Panel de administración del blog"
+  noindex={true}
+>
+  <div id="cms-root" data-articles={JSON.stringify(articles)} data-user={JSON.stringify(user)}></div>
+</DefaultLayout>
+
+<script>
+  import { createRoot } from 'react-dom/client';
+  import { CMSLayout } from '../../components/cms/CMSLayout';
+  import { Dashboard } from '../../components/cms/Dashboard';
+
+  const cmsRoot = document.getElementById('cms-root');
+  if (cmsRoot) {
+    const articles = JSON.parse(cmsRoot.dataset.articles || '[]');
+    const user = JSON.parse(cmsRoot.dataset.user || '{}');
+    const root = createRoot(cmsRoot);
+    
+    root.render(
+      <CMSLayout>
+        <div className="p-6">
+          <div className="mb-6">
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-600">
+                  Bienvenido, <span className="font-medium">{user.username}</span>
+                </span>
+                <a
+                  href="/logout"
+                  className="text-sm text-red-600 hover:text-red-800 transition-colors"
+                >
+                  Cerrar Sesión
+                </a>
+              </div>
+            </div>
+          </div>
+          <Dashboard articles={articles} />
+        </div>
+      </CMSLayout>
+    );
+  }
+</script> 
