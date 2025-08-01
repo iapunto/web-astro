@@ -30,7 +30,7 @@ export default defineConfig({
       hideFromBots: true,
       disablePageInteraction: false,
       revision: 1,
-      
+
       // Configuración de cookies
       cookie: {
         name: 'iapunto_cookie_consent',
