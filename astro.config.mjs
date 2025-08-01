@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
@@ -30,7 +30,7 @@ export default defineConfig({
       hideFromBots: true,
       disablePageInteraction: false,
       revision: 1,
-      
+
       // Configuración de cookies
       cookie: {
         name: 'iapunto_cookie_consent',
@@ -240,5 +240,21 @@ export default defineConfig({
   },
   security: {
     checkOrigin: true,
+  },
+  env: {
+    schema: {
+      STRAPI_API_URL: envField.string({
+        context: 'client',
+        access: 'public',
+        default: process.env.STRAPI_API_URL || 'https://strapi.iapunto.com',
+        optional: false,
+      }),
+      STRAPI_API_TOKEN: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: process.env.STRAPI_API_TOKEN,
+        optional: false,
+      }),
+    },
   },
 });
