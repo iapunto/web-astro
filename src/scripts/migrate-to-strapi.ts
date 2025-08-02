@@ -13,6 +13,7 @@ interface MDXArticle {
     tags?: string[];
     featured?: boolean;
     image?: string;
+    quote?: string;
     [key: string]: any;
   };
   content: string;
@@ -107,6 +108,7 @@ async function createArticleInStrapi(article: MDXArticle) {
         slug: article.slug,
         content: article.content,
         excerpt: article.frontmatter.description || '',
+        quote: article.frontmatter.quote || '',
         featured: article.frontmatter.featured || false,
         status: 'published',
         publishedAt: article.frontmatter.date,

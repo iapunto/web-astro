@@ -7,6 +7,7 @@
 - **Slug** (UID, required): URL amigable (basado en Title)
 - **Content** (Rich Text, required): Contenido del artículo
 - **Excerpt** (Text, optional): Resumen del artículo
+- **Quote** (Text, optional): Cita destacada del artículo
 - **Featured** (Boolean, default: false): Artículo destacado
 - **Status** (Enumeration, required):
   - `draft` (Borrador)
@@ -156,6 +157,7 @@ STRAPI_API_TOKEN=tu_token_aqui
     "slug": "futuro-inteligencia-artificial",
     "content": "<p>Contenido del artículo...</p>",
     "excerpt": "Descripción breve del artículo",
+    "quote": "La IA transformará la forma en que vivimos y trabajamos",
     "featured": true,
     "status": "published",
     "publishedAt": "2024-01-15T10:00:00.000Z",
