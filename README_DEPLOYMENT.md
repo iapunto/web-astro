@@ -16,25 +16,19 @@ Este proyecto está configurado para desplegar en Railway, una plataforma que pe
 ### Build
 ```bash
 # Build para Railway
-pnpm run build:railway
-
-# Build por defecto
 pnpm run build
 ```
 
 ### Preview
 ```bash
 # Preview para Railway
-pnpm run preview:railway
-
-# Preview por defecto
 pnpm run preview
 ```
 
 ### Deploy
 ```bash
 # Deploy a Railway
-pnpm run deploy:railway
+pnpm run deploy
 ```
 
 ## 🔧 Configuración de Entornos
@@ -71,7 +65,7 @@ El proyecto incluye workflow automático:
 
 1. Conectar el repositorio a Railway
 2. Configurar variables de entorno desde `env.railway.example`
-3. El build se ejecuta automáticamente con `pnpm run build:railway`
+3. El build se ejecuta automáticamente con `pnpm run build`
 4. Railway detecta automáticamente los cambios y despliega
 
 ## 📝 Notas Importantes
@@ -88,5 +82,5 @@ El proyecto incluye workflow automático:
 pnpm run dev
 
 # Desarrollo con configuración específica
-pnpm run dev --config astro.config.railway.mjs
+pnpm run dev
 ```

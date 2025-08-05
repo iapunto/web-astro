@@ -16,8 +16,8 @@ En Railway necesitarás crear los siguientes servicios:
 
 #### Servicio 1: Aplicación Web (Astro)
 - **Nombre**: `iapunto-website`
-- **Build Command**: `pnpm run build:railway`
-- **Start Command**: `pnpm run preview:railway`
+- **Build Command**: `pnpm run build`
+- **Start Command**: `pnpm run preview`
 - **Variables de entorno**: Ver `env.railway.example`
 
 #### Servicio 2: Strapi CMS
