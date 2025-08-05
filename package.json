@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "scripts": {
-    "start": "astro start",
+    "start": "node ./dist/server/entry.mjs",
     "dev": "astro dev",
     "build": "astro build --config astro.config.railway.mjs",
     "preview": "astro preview --config astro.config.railway.mjs --port ${PORT:-4321}",
