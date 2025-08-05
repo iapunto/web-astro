@@ -1,0 +1,43 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build for Cloudflare
+        run: pnpm run build:cloudflare
+        env:
+          STRAPI_API_URL: ${{ secrets.STRAPI_API_URL }}
+          STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: iapunto-website
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

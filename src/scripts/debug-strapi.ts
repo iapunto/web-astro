@@ -1,45 +1,10 @@
-import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
-import matter from 'gray-matter';
 import dotenv from 'dotenv';
 dotenv.config();
 
-interface MDXArticle {
-  frontmatter: {
-    title: string;
-    description?: string;
-    date: string;
-    author?: string;
-    category?: string;
-    tags?: string[];
-    featured?: boolean;
-    image?: string;
-    quote?: string;
-    [key: string]: any;
-  };
-  content: string;
-  slug: string;
-}
-
-interface StrapiArticle {
-  data: {
-    title: string;
-    slug: string;
-    content: string;
-    excerpt: string;
-    quote: string;
-    featured: boolean;
-    status: 'draft' | 'published';
-    publishedAt: string;
-    metaTitle?: string;
-    metaDescription?: string;
-    keywords?: string;
-    canonicalURL?: string;
-    cover?: number;
-    author?: number;
-    category?: number;
-    tags?: number[];
-  };
+interface StrapiResponse {
+  data: any;
+  meta?: any;
+  error?: any;
 }
 
 class StrapiDebugService {
@@ -61,9 +26,7 @@ class StrapiDebugService {
 
     console.log(`🔍 Haciendo petición a: ${url}`);
     console.log(`📋 Headers:`, headers);
-    if (options.body) {
-      console.log(`📦 Body:`, JSON.parse(options.body as string));
-    }
+    console.log(`📦 Body:`, options.body);
 
     try {
       const response = await fetch(url, {
@@ -71,10 +34,14 @@ class StrapiDebugService {
         headers,
       });
 
-      console.log(`📊 Status: ${response.status} ${response.statusText}`);
+      console.log(`📊 Status: ${response.status}`);
+      console.log(
+        `📋 Response Headers:`,
+        Object.fromEntries(response.headers.entries())
+      );
 
       const responseText = await response.text();
-      console.log(`📄 Response:`, responseText);
+      console.log(`📄 Response Body:`, responseText);
 
       if (!response.ok) {
         throw new Error(
@@ -84,133 +51,181 @@ class StrapiDebugService {
 
       return JSON.parse(responseText);
     } catch (error) {
-      console.error(`❌ Error en ${endpoint}:`, error);
+      console.error(`❌ Error en petición a ${endpoint}:`, error);
       throw error;
     }
   }
 
   async testConnection() {
     console.log('🔍 Probando conexión con Strapi...');
+    console.log(`🌐 URL: ${this.apiUrl}`);
+    console.log(
+      `🔑 Token: ${this.apiToken ? 'Configurado' : 'NO CONFIGURADO'}`
+    );
+
     try {
-      const response = await this.makeRequest('/articles');
+      // Probar endpoint básico
+      const response = await this.makeRequest('/');
       console.log('✅ Conexión exitosa');
       return response;
     } catch (error) {
-      console.log('❌ Error de conexión');
+      console.error('❌ Error de conexión:', error);
       return null;
     }
   }
 
-  async getContentTypes() {
-    console.log('\n🔍 Obteniendo Content Types...');
-    try {
-      const response = await this.makeRequest('/content-manager/content-types');
-      console.log('✅ Content Types obtenidos');
-      return response;
-    } catch (error) {
-      console.log('❌ Error obteniendo Content Types');
-      return null;
+  async testContentTypes() {
+    console.log('\n📋 Probando Content Types...');
+
+    const contentTypes = ['articles', 'categories', 'tags', 'authors'];
+
+    for (const contentType of contentTypes) {
+      try {
+        console.log(`\n🔍 Probando /${contentType}...`);
+        const response = await this.makeRequest(`/${contentType}`);
+        console.log(`✅ ${contentType} disponible`);
+      } catch (error) {
+        console.log(`❌ ${contentType} no disponible o error:`, error);
+      }
     }
   }
 
-  async testCreateArticle(articleData: StrapiArticle) {
-    console.log('\n🔍 Probando crear artículo...');
+  async testCreateArticle() {
+    console.log('\n📝 Probando creación de artículo...');
+
+    const testArticle = {
+      data: {
+        title: 'Artículo de Prueba',
+        slug: 'articulo-prueba',
+        content:
+          'Este es un artículo de prueba para verificar la configuración.',
+        excerpt: 'Artículo de prueba',
+        quote: '',
+        featured: false,
+        article_status: 'draft',
+        publishedAt: new Date().toISOString(),
+        metaTitle: 'Artículo de Prueba',
+        metaDescription: 'Artículo de prueba para verificar configuración',
+      },
+    };
+
     try {
       const response = await this.makeRequest('/articles', {
         method: 'POST',
-        body: JSON.stringify(articleData),
+        body: JSON.stringify(testArticle),
       });
-      console.log('✅ Artículo creado exitosamente');
+      console.log('✅ Artículo de prueba creado exitosamente');
       return response;
     } catch (error) {
-      console.log('❌ Error creando artículo');
+      console.error('❌ Error creando artículo de prueba:', error);
       return null;
     }
   }
 
-  async getArticleSchema() {
-    console.log('\n🔍 Obteniendo esquema del Content Type Article...');
+  async testCreateCategory() {
+    console.log('\n📂 Probando creación de categoría...');
+
+    const testCategory = {
+      data: {
+        name: 'Categoría de Prueba',
+        slug: 'categoria-prueba',
+        description: 'Categoría de prueba para verificar configuración',
+      },
+    };
+
     try {
-      const response = await this.makeRequest(
-        '/content-manager/content-types/api::article.article'
-      );
-      console.log('✅ Esquema obtenido');
+      const response = await this.makeRequest('/categories', {
+        method: 'POST',
+        body: JSON.stringify(testCategory),
+      });
+      console.log('✅ Categoría de prueba creada exitosamente');
       return response;
     } catch (error) {
-      console.log('❌ Error obteniendo esquema');
+      console.error('❌ Error creando categoría de prueba:', error);
       return null;
     }
   }
-}
 
-async function debugStrapi() {
-  console.log('🔧 Iniciando debug de Strapi...');
+  async testCreateTag() {
+    console.log('\n🏷️ Probando creación de tag...');
 
-  // Verificar variables de entorno
-  console.log('\n📋 Variables de entorno:');
-  console.log(
-    `- STRAPI_API_URL: ${process.env.STRAPI_API_URL || 'No configurado'}`
-  );
-  console.log(
-    `- STRAPI_API_TOKEN: ${process.env.STRAPI_API_TOKEN ? 'Configurado' : 'No configurado'}`
-  );
+    const testTag = {
+      data: {
+        name: 'Tag de Prueba',
+        slug: 'tag-prueba',
+      },
+    };
 
-  if (!process.env.STRAPI_API_TOKEN) {
-    console.error('❌ Error: STRAPI_API_TOKEN no está configurado');
-    console.log('💡 Agrega STRAPI_API_TOKEN a tu archivo .env');
-    return;
+    try {
+      const response = await this.makeRequest('/tags', {
+        method: 'POST',
+        body: JSON.stringify(testTag),
+      });
+      console.log('✅ Tag de prueba creado exitosamente');
+      return response;
+    } catch (error) {
+      console.error('❌ Error creando tag de prueba:', error);
+      return null;
+    }
   }
 
-  const debugService = new StrapiDebugService();
+  async testCreateAuthor() {
+    console.log('\n👤 Probando creación de autor...');
 
-  // 1. Probar conexión
-  await debugService.testConnection();
+    const testAuthor = {
+      data: {
+        name: 'Autor de Prueba',
+        email: 'autor.prueba@iapunto.com',
+        bio: 'Autor de prueba para verificar configuración',
+      },
+    };
 
-  // 2. Obtener Content Types
-  const contentTypes = await debugService.getContentTypes();
-  if (contentTypes) {
-    console.log('\n📋 Content Types disponibles:');
-    console.log(JSON.stringify(contentTypes, null, 2));
+    try {
+      const response = await this.makeRequest('/authors', {
+        method: 'POST',
+        body: JSON.stringify(testAuthor),
+      });
+      console.log('✅ Autor de prueba creado exitosamente');
+      return response;
+    } catch (error) {
+      console.error('❌ Error creando autor de prueba:', error);
+      return null;
+    }
   }
 
-  // 3. Obtener esquema del Article
-  const articleSchema = await debugService.getArticleSchema();
-  if (articleSchema) {
-    console.log('\n📋 Esquema del Content Type Article:');
-    console.log(JSON.stringify(articleSchema, null, 2));
+  async runFullDebug() {
+    console.log('🚀 Iniciando debug completo de Strapi...\n');
+
+    // Verificar variables de entorno
+    if (!process.env.STRAPI_API_TOKEN) {
+      console.error('❌ Error: STRAPI_API_TOKEN no está configurado');
+      console.log('💡 Agrega STRAPI_API_TOKEN a tu archivo .env');
+      return;
+    }
+
+    // Probar conexión básica
+    await this.testConnection();
+
+    // Probar content types
+    await this.testContentTypes();
+
+    // Probar creación de entidades
+    await this.testCreateCategory();
+    await this.testCreateTag();
+    await this.testCreateAuthor();
+    await this.testCreateArticle();
+
+    console.log('\n🎯 Debug completado!');
+    console.log('\n📋 Resumen de configuración necesaria:');
+    console.log('1. Verificar que STRAPI_API_TOKEN esté configurado');
+    console.log('2. Verificar que la URL de Strapi sea correcta');
+    console.log('3. Verificar que los Content Types estén creados en Strapi');
+    console.log('4. Verificar permisos de la API Token');
   }
-
-  // 4. Probar crear un artículo de ejemplo
-  const sampleArticle: StrapiArticle = {
-    data: {
-      title: 'Artículo de Prueba',
-      slug: 'articulo-de-prueba',
-      content:
-        '<p>Este es un artículo de prueba para verificar la configuración.</p>',
-      excerpt: 'Artículo de prueba',
-      quote: 'Esta es una cita de prueba',
-      featured: false,
-      status: 'published',
-      publishedAt: '2025-08-02T00:00:00.000Z',
-      metaTitle: 'Artículo de Prueba',
-      metaDescription: 'Descripción de prueba',
-      keywords: 'prueba, test, debug',
-    },
-  };
-
-  await debugService.testCreateArticle(sampleArticle);
-
-  console.log('\n✅ Debug completado');
-  console.log('\n📝 Próximos pasos:');
-  console.log('1. Verifica que los Content Types estén creados en Strapi');
-  console.log('2. Verifica que el API Token tenga permisos de escritura');
-  console.log('3. Verifica que la URL de Strapi sea correcta');
-  console.log(
-    '4. Revisa los logs anteriores para identificar el problema específico'
-  );
 }
 
 // Ejecutar debug
-debugStrapi();
+const debugService = new StrapiDebugService();
+debugService.runFullDebug();
 
-export { debugStrapi, StrapiDebugService };
+export { StrapiDebugService };

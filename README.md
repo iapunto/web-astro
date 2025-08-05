@@ -3,7 +3,7 @@
 [![CI/CD](https://github.com/iapunto/web-astro/actions/workflows/ci.yml/badge.svg)](https://github.com/iapunto/web-astro/actions/workflows/ci.yml)
 [![Dependabot](https://img.shields.io/badge/dependabot-enabled-brightgreen?logo=dependabot)](https://github.com/dependabot)
 [![License](https://img.shields.io/github/license/iapunto/web-astro?color=blue)](LICENSE)
-[![Coolify Deploy](https://img.shields.io/badge/deploy-coolify-blue?logo=docker)](https://coolify.io/)
+[![Railway Deploy](https://img.shields.io/badge/deploy-railway-blue?logo=railway)](https://railway.app/)
 [![Astro Sec](https://img.shields.io/badge/astro-secure-brightgreen?logo=astro)](https://docs.astro.build/en/guides/security/)
 
 ---
@@ -16,7 +16,7 @@ Este proyecto está desarrollado con [Astro](https://astro.build/) y utiliza tec
 
 - Generación de sitios estáticos y SSR con Astro
 - Integración con Tailwind CSS y React
-- Despliegue automatizado vía CI/CD en GitHub Actions y Coolify
+- Despliegue automatizado vía CI/CD en GitHub Actions y Railway
 - Seguridad reforzada: dependencias actualizadas automáticamente y buenas prácticas
 - Código abierto y transparente
 
@@ -44,11 +44,16 @@ pnpm run dev
 | `pnpm run preview`  | Previsualiza el sitio compilado        |
 | `pnpm run lint`     | Linter de código                       |
 
-## 🌐 Despliegue en Coolify
+## 🚀 Despliegue en Railway
 
-1. Sube el repo a tu instancia de Coolify.
-2. Configura las variables de entorno requeridas (ej: `SITE_NAME`).
-3. Coolify detecta Astro y ejecuta el build automáticamente.
+Este proyecto está configurado para desplegar en Railway, una plataforma que permite desplegar tanto la aplicación web como Strapi (CMS) en un solo lugar.
+
+### Configuración Rápida:
+1. Conectar el repositorio a Railway
+2. Configurar variables de entorno desde `env.railway.example`
+3. Railway detectará automáticamente los cambios y despliega
+4. Ver `README_DEPLOYMENT.md` para configuración detallada
+5. Ver `strapi-railway-setup.md` para configurar Strapi
 
 ## 📄 Licencia
 

@@ -95,7 +95,10 @@ class StrapiService {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(
+          `HTTP error! status: ${response.status}, body: ${errorText}`
+        );
       }
 
       return await response.json();
@@ -110,6 +113,20 @@ class StrapiService {
       method: 'POST',
       body: JSON.stringify(articleData),
     });
+  }
+
+  async updateArticle(id: number, articleData: StrapiArticle) {
+    return this.makeRequest(`/articles/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(articleData),
+    });
+  }
+
+  async findArticleBySlug(slug: string) {
+    const response = await this.makeRequest(
+      `/articles?filters[slug][$eq]=${slug}`
+    );
+    return response.data?.[0];
   }
 
   async createCategory(categoryData: StrapiCategory) {
@@ -154,7 +171,7 @@ class StrapiService {
 }
 
 async function migrateArticlesToStrapi() {
-  console.log('🚀 Iniciando migración de MDX a Strapi...');
+  console.log('🚀 Iniciando migración de MDX a Strapi (v2)...');
 
   // Verificar variables de entorno
   if (!process.env.STRAPI_API_TOKEN) {
@@ -251,15 +268,35 @@ async function migrateArticlesToStrapi() {
       await createAuthorInStrapi(authorName, strapiService);
     }
 
-    // Crear artículos
-    console.log('\n📝 Creando artículos...');
+    // Crear/actualizar artículos
+    console.log('\n📝 Procesando artículos...');
+    let createdCount = 0;
+    let updatedCount = 0;
+    let errorCount = 0;
+
     for (const article of articles) {
-      await createArticleInStrapi(article, strapiService);
+      try {
+        const result = await createOrUpdateArticleInStrapi(
+          article,
+          strapiService
+        );
+        if (result === 'created') {
+          createdCount++;
+        } else if (result === 'updated') {
+          updatedCount++;
+        }
+      } catch (error) {
+        console.error(`❌ Error procesando artículo ${article.slug}:`, error);
+        errorCount++;
+      }
     }
 
     console.log('\n✅ Migración completada exitosamente!');
     console.log('\n📋 Resumen de migración:');
-    console.log(`- Artículos: ${articles.length}`);
+    console.log(`- Artículos creados: ${createdCount}`);
+    console.log(`- Artículos actualizados: ${updatedCount}`);
+    console.log(`- Errores: ${errorCount}`);
+    console.log(`- Total procesados: ${articles.length}`);
     console.log(`- Categorías: ${categories.size}`);
     console.log(`- Tags: ${tags.size}`);
     console.log(`- Autores: ${authors.size}`);
@@ -268,83 +305,153 @@ async function migrateArticlesToStrapi() {
   }
 }
 
-// Función para crear un artículo en Strapi
-async function createArticleInStrapi(
+// Función para crear o actualizar un artículo en Strapi
+async function createOrUpdateArticleInStrapi(
   article: MDXArticle,
   strapiService: StrapiService
-) {
+): Promise<'created' | 'updated'> {
   try {
-    // Obtener IDs de relaciones
-    let authorId: number | undefined;
-    let categoryId: number | undefined;
-    let tagIds: number[] = [];
+    // Verificar si el artículo ya existe
+    const existingArticle = await strapiService.findArticleBySlug(article.slug);
 
-    if (article.frontmatter.author) {
-      // Manejar tanto string como objeto para el autor
-      let authorName: string | null = null;
-      if (typeof article.frontmatter.author === 'string') {
-        authorName = article.frontmatter.author;
-      } else if (
-        typeof article.frontmatter.author === 'object' &&
-        article.frontmatter.author &&
-        'name' in article.frontmatter.author
-      ) {
-        authorName = (article.frontmatter.author as any).name;
-      } else {
-        console.warn(
-          `⚠️ Formato de autor no reconocido en ${article.slug}:`,
-          article.frontmatter.author
-        );
-      }
-
-      if (authorName) {
-        const author = await strapiService.findAuthorByName(authorName);
-        authorId = author?.id;
-      }
-    }
-
-    if (article.frontmatter.category) {
-      const category = await strapiService.findCategoryBySlug(
-        article.frontmatter.category.toLowerCase().replace(/\s+/g, '-')
+    if (existingArticle) {
+      console.log(
+        `🔄 Actualizando artículo existente: ${article.frontmatter.title}`
       );
-      categoryId = category?.id;
-    }
 
-    if (article.frontmatter.tags) {
-      for (const tagName of article.frontmatter.tags) {
-        const tag = await strapiService.findTagBySlug(
-          tagName.toLowerCase().replace(/\s+/g, '-')
-        );
-        if (tag?.id) {
-          tagIds.push(tag.id);
+      // Obtener IDs de relaciones
+      let authorId: number | undefined;
+      let categoryId: number | undefined;
+      let tagIds: number[] = [];
+
+      if (article.frontmatter.author) {
+        let authorName: string | null = null;
+        if (typeof article.frontmatter.author === 'string') {
+          authorName = article.frontmatter.author;
+        } else if (
+          typeof article.frontmatter.author === 'object' &&
+          article.frontmatter.author &&
+          'name' in article.frontmatter.author
+        ) {
+          authorName = (article.frontmatter.author as any).name;
+        }
+
+        if (authorName) {
+          const author = await strapiService.findAuthorByName(authorName);
+          authorId = author?.id;
         }
       }
+
+      if (article.frontmatter.category) {
+        const category = await strapiService.findCategoryBySlug(
+          article.frontmatter.category.toLowerCase().replace(/\s+/g, '-')
+        );
+        categoryId = category?.id;
+      }
+
+      if (article.frontmatter.tags) {
+        for (const tagName of article.frontmatter.tags) {
+          const tag = await strapiService.findTagBySlug(
+            tagName.toLowerCase().replace(/\s+/g, '-')
+          );
+          if (tag?.id) {
+            tagIds.push(tag.id);
+          }
+        }
+      }
+
+      const articleData: StrapiArticle = {
+        data: {
+          title: article.frontmatter.title,
+          slug: article.slug,
+          content: article.content,
+          excerpt: (article.frontmatter.description || '').substring(0, 80),
+          quote: article.frontmatter.quote || '',
+          featured: article.frontmatter.featured || false,
+          article_status: 'draft',
+          publishedAt: article.frontmatter.date,
+          metaTitle: article.frontmatter.title,
+          metaDescription: article.frontmatter.description,
+          keywords: article.frontmatter.tags?.join(', '),
+          ...(authorId && { author: authorId }),
+          ...(categoryId && { category: categoryId }),
+          ...(tagIds.length > 0 && { tags: tagIds }),
+        },
+      };
+
+      await strapiService.updateArticle(existingArticle.id, articleData);
+      console.log(`✅ Artículo actualizado: ${article.frontmatter.title}`);
+      return 'updated';
+    } else {
+      console.log(`📝 Creando nuevo artículo: ${article.frontmatter.title}`);
+
+      // Obtener IDs de relaciones
+      let authorId: number | undefined;
+      let categoryId: number | undefined;
+      let tagIds: number[] = [];
+
+      if (article.frontmatter.author) {
+        let authorName: string | null = null;
+        if (typeof article.frontmatter.author === 'string') {
+          authorName = article.frontmatter.author;
+        } else if (
+          typeof article.frontmatter.author === 'object' &&
+          article.frontmatter.author &&
+          'name' in article.frontmatter.author
+        ) {
+          authorName = (article.frontmatter.author as any).name;
+        }
+
+        if (authorName) {
+          const author = await strapiService.findAuthorByName(authorName);
+          authorId = author?.id;
+        }
+      }
+
+      if (article.frontmatter.category) {
+        const category = await strapiService.findCategoryBySlug(
+          article.frontmatter.category.toLowerCase().replace(/\s+/g, '-')
+        );
+        categoryId = category?.id;
+      }
+
+      if (article.frontmatter.tags) {
+        for (const tagName of article.frontmatter.tags) {
+          const tag = await strapiService.findTagBySlug(
+            tagName.toLowerCase().replace(/\s+/g, '-')
+          );
+          if (tag?.id) {
+            tagIds.push(tag.id);
+          }
+        }
+      }
+
+      const articleData: StrapiArticle = {
+        data: {
+          title: article.frontmatter.title,
+          slug: article.slug,
+          content: article.content,
+          excerpt: (article.frontmatter.description || '').substring(0, 80),
+          quote: article.frontmatter.quote || '',
+          featured: article.frontmatter.featured || false,
+          article_status: 'draft',
+          publishedAt: article.frontmatter.date,
+          metaTitle: article.frontmatter.title,
+          metaDescription: article.frontmatter.description,
+          keywords: article.frontmatter.tags?.join(', '),
+          ...(authorId && { author: authorId }),
+          ...(categoryId && { category: categoryId }),
+          ...(tagIds.length > 0 && { tags: tagIds }),
+        },
+      };
+
+      await strapiService.createArticle(articleData);
+      console.log(`✅ Artículo creado: ${article.frontmatter.title}`);
+      return 'created';
     }
-
-    const articleData: StrapiArticle = {
-      data: {
-        title: article.frontmatter.title,
-        slug: article.slug,
-        content: article.content,
-        excerpt: (article.frontmatter.description || '').substring(0, 80),
-        quote: article.frontmatter.quote || '',
-        featured: article.frontmatter.featured || false,
-        article_status: 'draft',
-        publishedAt: article.frontmatter.date,
-        metaTitle: article.frontmatter.title,
-        metaDescription: article.frontmatter.description,
-        keywords: article.frontmatter.tags?.join(', '),
-        ...(authorId && { author: authorId }),
-        ...(categoryId && { category: categoryId }),
-        ...(tagIds.length > 0 && { tags: tagIds }),
-      },
-    };
-
-    console.log(`📝 Creando artículo: ${article.frontmatter.title}`);
-    await strapiService.createArticle(articleData);
-    console.log(`✅ Artículo creado: ${article.frontmatter.title}`);
   } catch (error) {
-    console.error(`❌ Error creando artículo ${article.slug}:`, error);
+    console.error(`❌ Error procesando artículo ${article.slug}:`, error);
+    throw error;
   }
 }
 
@@ -415,7 +522,7 @@ migrateArticlesToStrapi();
 
 export {
   migrateArticlesToStrapi,
-  createArticleInStrapi,
+  createOrUpdateArticleInStrapi,
   createCategoryInStrapi,
   createTagInStrapi,
   createAuthorInStrapi,

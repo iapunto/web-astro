@@ -6,7 +6,10 @@
     "start": "astro start",
     "dev": "astro dev",
     "build": "astro build",
+    "build:railway": "astro build --config astro.config.railway.mjs",
     "preview": "astro preview --port ${PORT:-4321}",
+    "preview:railway": "astro preview --config astro.config.railway.mjs --port ${PORT:-4321}",
+    "deploy:railway": "pnpm run build:railway",
     "astro": "astro",
     "format": "pnpm exec prettier --write .",
     "optimize-images": "node scripts/optimize-images.js",
@@ -14,6 +17,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.1.0",
+    "@astrojs/cloudflare": "^10.0.0",
     "@astrojs/node": "^9.2.2",
     "@astrojs/react": "^4.2.1",
     "@astrojs/rss": "^4.0.11",

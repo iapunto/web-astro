@@ -92,7 +92,7 @@ export interface StrapiArticle {
     content: string;
     excerpt?: string;
     featured?: boolean;
-    status: 'draft' | 'published';
+    article_status: string;
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
@@ -130,4 +130,4 @@ export interface StrapiGlobal {
     updatedAt: string;
     publishedAt: string;
   };
-} 
+}
