@@ -25,4 +25,4 @@ COPY --from=builder /app/README.md ./
 ENV PORT=4321
 EXPOSE 4321
 # Comando de inicio (usando la variable de entorno PORT si está disponible)
-CMD ["sh", "-c", "pnpm run preview --config astro.config.railway.mjs -- --port ${PORT:-4321}"]
+CMD ["pnpm", "run", "preview"]
