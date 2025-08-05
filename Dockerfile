@@ -1,5 +1,5 @@
 # Etapa 1: Build
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm
@@ -8,7 +8,7 @@ COPY . .
 RUN pnpm run build
 
 # Etapa 2: Producción
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 RUN npm install -g pnpm
 ENV NODE_ENV=production
