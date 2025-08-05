@@ -4,6 +4,7 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import node from '@astrojs/node';
 
 import astroIcon from 'astro-icon';
 import jopSoftwarecookieconsent from '@jop-software/astro-cookieconsent';
@@ -108,7 +109,10 @@ export default defineConfig({
       },
     }),
   ],
-  output: 'static',
+  output: 'server',
+  adapter: node({
+    mode: 'standalone',
+  }),
   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp',
