@@ -37,6 +37,7 @@
     "flatpickr": "^4.6.13",
     "flowbite": "^2.5.2",
     "gray-matter": "^4.0.3",
+    "node-fetch": "^3.3.2",
     "path-to-regexp": "^8.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
