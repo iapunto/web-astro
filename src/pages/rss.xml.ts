@@ -1,5 +1,15 @@
 import { getCollection } from 'astro:content';
 
+// Función para escapar caracteres especiales en XML
+function escapeXml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 export async function GET() {
   const posts = await getCollection('blog');
   const site = 'https://iapunto.com';
@@ -20,8 +30,8 @@ export async function GET() {
       }
       const categoriesString = categories.join(', ');
 
-      // Obtener el contenido completo del artículo
-      const contentHtml = post.body || '';
+      // Obtener el contenido completo del artículo y escapar caracteres especiales
+      const contentHtml = escapeXml(post.body || '');
 
       return `
       <item>
@@ -30,16 +40,16 @@ export async function GET() {
         <guid>${site}/blog/${post.data.slug || post.id}</guid>
         <pubDate>${new Date(post.data.pubDate).toUTCString()}</pubDate>
         <description><![CDATA[${post.data.description}]]></description>
-        <author>${post.data.author?.name || 'IA Punto'}</author>
-        <category>${categoriesString}</category>
-        ${tagsString ? `<tags>${tagsString}</tags>` : ''}
+        <author>${escapeXml(post.data.author?.name || 'IA Punto')}</author>
+        <category>${escapeXml(categoriesString)}</category>
+        ${tagsString ? `<tags>${escapeXml(tagsString)}</tags>` : ''}
         <enclosure url="${post.data.cover}" type="image/jpeg" />
         <media:content url="${post.data.cover}" type="image/jpeg" />
         <media:thumbnail url="${post.data.cover}" />
-        <coverAlt>${post.data.coverAlt || ''}</coverAlt>
-        <authorDescription>${post.data.author?.description || ''}</authorDescription>
+        <coverAlt>${escapeXml(post.data.coverAlt || '')}</coverAlt>
+        <authorDescription>${escapeXml(post.data.author?.description || '')}</authorDescription>
         <authorImage>${post.data.author?.image || ''}</authorImage>
-        <quote>${post.data.quote || ''}</quote>
+        <quote>${escapeXml(post.data.quote || '')}</quote>
         <date>${post.data.pubDate}</date>
         <content:encoded><![CDATA[${contentHtml}]]></content:encoded>
       </item>
