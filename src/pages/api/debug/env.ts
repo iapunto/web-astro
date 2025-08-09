@@ -13,11 +13,20 @@ export const GET: APIRoute = async () => {
       NODE_ENV: import.meta.env.NODE_ENV || 'not_set',
     };
 
+    // Debug adicional: mostrar primeros caracteres de las variables (sin exponer valores completos)
+    const debugInfo = {
+      GOOGLE_CLIENT_ID_PREFIX: import.meta.env.GOOGLE_CLIENT_ID ? import.meta.env.GOOGLE_CLIENT_ID.substring(0, 10) + '...' : 'not_found',
+      GOOGLE_CLIENT_SECRET_PREFIX: import.meta.env.GOOGLE_CLIENT_SECRET ? 'GOCSPX-...' : 'not_found',
+      GOOGLE_CALENDAR_ID_PREFIX: import.meta.env.GOOGLE_CALENDAR_ID ? import.meta.env.GOOGLE_CALENDAR_ID.substring(0, 10) + '...' : 'not_found',
+      ALL_ENV_KEYS: Object.keys(import.meta.env).filter(key => key.startsWith('GOOGLE')),
+    };
+
     return new Response(
       JSON.stringify({
         success: true,
         message: 'Environment variables status',
         variables: envVars,
+        debug: debugInfo,
         timestamp: new Date().toISOString(),
       }),
       {
