@@ -246,7 +246,7 @@ class GoogleCalendarService {
         calendarId: this.calendarId,
         requestBody: event,
         conferenceDataVersion: 1,
-        sendUpdates: 'all', // Send invitations to all attendees
+        sendUpdates: 'none', // Don't send automatic invitations (Service Account limitation)
       });
 
       const createdEvent = response.data;
