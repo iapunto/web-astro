@@ -45,12 +45,12 @@ class GoogleCalendarService {
     let auth;
 
     // Intentar Service Account primero (más simple para aplicaciones servidor)
-    if (import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && import.meta.env.GOOGLE_PRIVATE_KEY) {
+    if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
       try {
         auth = new google.auth.GoogleAuth({
           credentials: {
-            client_email: import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-            private_key: import.meta.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+            client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+            private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
           },
           scopes: [
             'https://www.googleapis.com/auth/calendar',
@@ -66,16 +66,16 @@ class GoogleCalendarService {
     // Fallback a OAuth2 si no hay Service Account
     if (!auth) {
       auth = new google.auth.OAuth2(
-        import.meta.env.GOOGLE_CLIENT_ID,
-        import.meta.env.GOOGLE_CLIENT_SECRET,
-        import.meta.env.GOOGLE_REDIRECT_URI
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        process.env.GOOGLE_REDIRECT_URI
       );
     }
 
     // Configurar el cliente de Google Calendar
     this.calendar = google.calendar({ version: 'v3', auth });
-    this.calendarId = import.meta.env.GOOGLE_CALENDAR_ID || 'primary';
-    this.timezone = import.meta.env.TIMEZONE || 'America/Mexico_City';
+    this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
+    this.timezone = process.env.TIMEZONE || 'America/Mexico_City';
   }
 
   /**
@@ -140,10 +140,10 @@ class GoogleCalendarService {
    */
   async getAvailableSlots(date: Date, durationMinutes: number = 60): Promise<AvailabilitySlot[]> {
     const startOfDay = new Date(date);
-    startOfDay.setHours(parseInt(import.meta.env.BUSINESS_HOURS_START?.split(':')[0] || '9'), 0, 0, 0);
+    startOfDay.setHours(parseInt(process.env.BUSINESS_HOURS_START?.split(':')[0] || '9'), 0, 0, 0);
     
     const endOfDay = new Date(date);
-    endOfDay.setHours(parseInt(import.meta.env.BUSINESS_HOURS_END?.split(':')[0] || '17'), 0, 0, 0);
+    endOfDay.setHours(parseInt(process.env.BUSINESS_HOURS_END?.split(':')[0] || '17'), 0, 0, 0);
 
     const slots: AvailabilitySlot[] = [];
     const slotDuration = durationMinutes * 60 * 1000; // Convert to milliseconds
@@ -401,29 +401,18 @@ let mockCalendarService: MockCalendarService;
  * Verificar si las credenciales de Google Calendar están configuradas
  */
 function hasGoogleCredentials(): boolean {
-  // TEMPORAL: Hardcode para testing - REMOVER EN PRODUCCIÓN
-  const tempHardcode = !!(
-    process.env.GOOGLE_CLIENT_ID ||
-    "457442461174-rvbc5orlon23m0dsbve1uachboo6arm1.apps.googleusercontent.com"
-  );
-  
-  if (tempHardcode && process.env.NODE_ENV === 'production') {
-    console.log('TEMPORAL: Using hardcoded credentials for testing');
-    return true;
-  }
-
   // Service Account (preferido)
   const hasServiceAccount = !!(
-    import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
-    import.meta.env.GOOGLE_PRIVATE_KEY &&
-    import.meta.env.GOOGLE_CALENDAR_ID
+    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
+    process.env.GOOGLE_PRIVATE_KEY &&
+    process.env.GOOGLE_CALENDAR_ID
   );
 
   // OAuth2 (fallback)
   const hasOAuth2 = !!(
-    import.meta.env.GOOGLE_CLIENT_ID &&
-    import.meta.env.GOOGLE_CLIENT_SECRET &&
-    import.meta.env.GOOGLE_CALENDAR_ID
+    process.env.GOOGLE_CLIENT_ID &&
+    process.env.GOOGLE_CLIENT_SECRET &&
+    process.env.GOOGLE_CALENDAR_ID
   );
 
   return hasServiceAccount || hasOAuth2;
