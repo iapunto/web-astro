@@ -11,6 +11,15 @@ class MeetingModalManager {
     this.selectedSlot = null;
     this.flatpickrInstance = null;
     
+    // Debug: verificar que los elementos existen
+    console.log('Modal elements found:', {
+      modal: !!this.modal,
+      closeBtn: !!this.closeBtn,
+      form: !!this.form,
+      formContainer: !!this.formContainer,
+      confirmationMessage: !!this.confirmationMessage
+    });
+    
     this.init();
   }
 
@@ -53,7 +62,7 @@ class MeetingModalManager {
       time_24hr: true,
       minDate: 'today',
       maxDate: new Date().fp_incr(30), // 30 días hacia adelante
-      locale: 'es', // Español
+      locale: window.flatpickr?.l10ns?.es || 'es', // Español con fallback
       disable: [
         // Deshabilitar fines de semana
         function(date) {
@@ -69,7 +78,7 @@ class MeetingModalManager {
         }
       },
       onReady: () => {
-        console.log('Flatpickr initialized');
+        console.log('Flatpickr initialized successfully');
       }
     });
   }
@@ -278,10 +287,15 @@ class MeetingModalManager {
   }
 
   openModal() {
+    console.log('Attempting to open modal...');
     if (this.modal) {
+      console.log('Modal found, opening...');
       this.modal.classList.remove('hidden');
       // Resetear formulario
       this.resetForm();
+      console.log('Modal opened successfully');
+    } else {
+      console.error('Modal element not found!');
     }
   }
 
@@ -323,6 +337,39 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Hacer disponible globalmente para otros scripts
   window.meetingModal = meetingModal;
+
+  // Conectar botones específicos al modal
+  const modalButtons = [
+    'open-modal-btn-nav',           // Botón navbar desktop
+    'open-modal-btn-nav-mobile',    // Botón navbar mobile
+    'open-modal-btn-services',      // Botón en sección de servicios
+    'open-modal-btn'                // Botón genérico
+  ];
+
+  modalButtons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        meetingModal.openModal();
+      });
+    }
+  });
+
+  // También buscar botones por clase o texto para mayor compatibilidad
+  const buttonsByText = document.querySelectorAll('button, a');
+  buttonsByText.forEach(button => {
+    const text = button.textContent?.toLowerCase() || '';
+    if (text.includes('agenda') && (text.includes('reunión') || text.includes('reunion'))) {
+      button.addEventListener('click', (e) => {
+        // Solo prevenir default si no tiene href
+        if (!button.getAttribute('href')) {
+          e.preventDefault();
+        }
+        meetingModal.openModal();
+      });
+    }
+  });
 });
 
 // Función global para abrir el modal (para botones externos)
