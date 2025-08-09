@@ -96,7 +96,8 @@ BUSINESS_HOURS_END=17:00
 TIMEZONE=America/Mexico_City
 ```
 
-**Importante**: 
+**Importante**:
+
 - `GOOGLE_CALENDAR_ID=primary` usa tu calendario principal
 - Para usar un calendario específico, obtén su ID desde Google Calendar
 
@@ -130,8 +131,14 @@ Crea un script de prueba temporal:
 
 ```javascript
 // test-config.js
-console.log('Google Client ID:', process.env.GOOGLE_CLIENT_ID ? '✅ Configurado' : '❌ Faltante');
-console.log('Google Client Secret:', process.env.GOOGLE_CLIENT_SECRET ? '✅ Configurado' : '❌ Faltante');
+console.log(
+  'Google Client ID:',
+  process.env.GOOGLE_CLIENT_ID ? '✅ Configurado' : '❌ Faltante'
+);
+console.log(
+  'Google Client Secret:',
+  process.env.GOOGLE_CLIENT_SECRET ? '✅ Configurado' : '❌ Faltante'
+);
 console.log('Calendar ID:', process.env.GOOGLE_CALENDAR_ID || 'primary');
 console.log('Redirect URI:', process.env.GOOGLE_REDIRECT_URI);
 ```
@@ -139,11 +146,13 @@ console.log('Redirect URI:', process.env.GOOGLE_REDIRECT_URI);
 ### 5.2 Probar Endpoints
 
 1. **Iniciar servidor de desarrollo**:
+
    ```bash
    pnpm run dev
    ```
 
 2. **Probar disponibilidad**:
+
    ```bash
    curl "http://localhost:4321/api/calendar/availability?date=2025-02-01"
    ```
@@ -228,6 +237,7 @@ TIMEZONE=America/Mexico_City
 ### Error: "insufficient_permissions"
 
 **Solución**: Asegúrate de que los scopes incluyan:
+
 - `https://www.googleapis.com/auth/calendar`
 - `https://www.googleapis.com/auth/calendar.events`
 
@@ -253,6 +263,6 @@ TIMEZONE=America/Mexico_City
 
 ---
 
-*Guía creada por: IA Punto - Desarrollo Digital*  
-*Fecha: Enero 2025*  
-*Versión: 1.0*
+_Guía creada por: IA Punto - Desarrollo Digital_  
+_Fecha: Enero 2025_  
+_Versión: 1.0_
