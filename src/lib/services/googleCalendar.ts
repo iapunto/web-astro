@@ -42,12 +42,35 @@ class GoogleCalendarService {
   private timezone: string;
 
   constructor() {
-    // Configuración de autenticación
-    const auth = new google.auth.OAuth2(
-      import.meta.env.GOOGLE_CLIENT_ID,
-      import.meta.env.GOOGLE_CLIENT_SECRET,
-      import.meta.env.GOOGLE_REDIRECT_URI
-    );
+    let auth;
+
+    // Intentar Service Account primero (más simple para aplicaciones servidor)
+    if (import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && import.meta.env.GOOGLE_PRIVATE_KEY) {
+      try {
+        auth = new google.auth.GoogleAuth({
+          credentials: {
+            client_email: import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+            private_key: import.meta.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+          },
+          scopes: [
+            'https://www.googleapis.com/auth/calendar',
+            'https://www.googleapis.com/auth/calendar.events'
+          ],
+        });
+      } catch (serviceAccountError) {
+        console.warn('Service Account auth failed, falling back to OAuth2:', serviceAccountError);
+        auth = null;
+      }
+    }
+
+    // Fallback a OAuth2 si no hay Service Account
+    if (!auth) {
+      auth = new google.auth.OAuth2(
+        import.meta.env.GOOGLE_CLIENT_ID,
+        import.meta.env.GOOGLE_CLIENT_SECRET,
+        import.meta.env.GOOGLE_REDIRECT_URI
+      );
+    }
 
     // Configurar el cliente de Google Calendar
     this.calendar = google.calendar({ version: 'v3', auth });
@@ -378,11 +401,21 @@ let mockCalendarService: MockCalendarService;
  * Verificar si las credenciales de Google Calendar están configuradas
  */
 function hasGoogleCredentials(): boolean {
-  return !!(
+  // Service Account (preferido)
+  const hasServiceAccount = !!(
+    import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
+    import.meta.env.GOOGLE_PRIVATE_KEY &&
+    import.meta.env.GOOGLE_CALENDAR_ID
+  );
+
+  // OAuth2 (fallback)
+  const hasOAuth2 = !!(
     import.meta.env.GOOGLE_CLIENT_ID &&
     import.meta.env.GOOGLE_CLIENT_SECRET &&
     import.meta.env.GOOGLE_CALENDAR_ID
   );
+
+  return hasServiceAccount || hasOAuth2;
 }
 
 export function getGoogleCalendarService(): GoogleCalendarService | MockCalendarService {

@@ -3,10 +3,17 @@ import type { APIRoute } from 'astro';
 export const GET: APIRoute = async () => {
   try {
     const envVars = {
+      // OAuth2 Variables
       GOOGLE_CLIENT_ID: !!import.meta.env.GOOGLE_CLIENT_ID,
       GOOGLE_CLIENT_SECRET: !!import.meta.env.GOOGLE_CLIENT_SECRET,
-      GOOGLE_CALENDAR_ID: !!import.meta.env.GOOGLE_CALENDAR_ID,
       GOOGLE_REDIRECT_URI: !!import.meta.env.GOOGLE_REDIRECT_URI,
+      
+      // Service Account Variables (preferidas)
+      GOOGLE_SERVICE_ACCOUNT_EMAIL: !!import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      GOOGLE_PRIVATE_KEY: !!import.meta.env.GOOGLE_PRIVATE_KEY,
+      
+      // Common Variables
+      GOOGLE_CALENDAR_ID: !!import.meta.env.GOOGLE_CALENDAR_ID,
       TIMEZONE: import.meta.env.TIMEZONE || 'not_set',
       BUSINESS_HOURS_START: import.meta.env.BUSINESS_HOURS_START || 'not_set',
       BUSINESS_HOURS_END: import.meta.env.BUSINESS_HOURS_END || 'not_set',
@@ -18,7 +25,10 @@ export const GET: APIRoute = async () => {
       GOOGLE_CLIENT_ID_PREFIX: import.meta.env.GOOGLE_CLIENT_ID ? import.meta.env.GOOGLE_CLIENT_ID.substring(0, 10) + '...' : 'not_found',
       GOOGLE_CLIENT_SECRET_PREFIX: import.meta.env.GOOGLE_CLIENT_SECRET ? 'GOCSPX-...' : 'not_found',
       GOOGLE_CALENDAR_ID_PREFIX: import.meta.env.GOOGLE_CALENDAR_ID ? import.meta.env.GOOGLE_CALENDAR_ID.substring(0, 10) + '...' : 'not_found',
+      GOOGLE_SERVICE_ACCOUNT_EMAIL_PREFIX: import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ? import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL.split('@')[0] + '@...' : 'not_found',
+      GOOGLE_PRIVATE_KEY_PREFIX: import.meta.env.GOOGLE_PRIVATE_KEY ? '-----BEGIN PRIVATE KEY-----...' : 'not_found',
       ALL_ENV_KEYS: Object.keys(import.meta.env).filter(key => key.startsWith('GOOGLE')),
+      AUTH_TYPE: import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ? 'Service Account' : import.meta.env.GOOGLE_CLIENT_ID ? 'OAuth2' : 'None',
     };
 
     return new Response(
