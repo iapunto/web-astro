@@ -6,6 +6,7 @@ import ReadingTime from '../../components/common/ReadingTime.astro';
 import OptimizedImage from '../../components/common/OptimizedImage.astro';
 import { Image } from 'astro:assets';
 import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
+import SmartPaginator from '../../components/common/SmartPaginator.astro';
 
 const blogEntries = (await getCollection('blog')).sort(
   (a, b) =>
@@ -201,91 +202,11 @@ const latestPosts = blogEntries.slice(0, 5);
               </div>
             )
           }
-          {/* Paginación */}
-          <nav aria-label="navigation" class="mt-8">
-            <ul
-              class="flex items-center -space-x-px h-10 text-base justify-center"
-            >
-              {/* Centrar la paginación */}
-              {
-                currentPage > 1 && (
-                  <li>
-                    <a
-                      href={`?${new URLSearchParams({ ...Object.fromEntries(url.searchParams.entries()), page: (currentPage - 1).toString() })}`}
-                      class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      <span class="sr-only">Anterior</span>
-                      <svg
-                        class="w-3 h-3 rtl:rotate-180"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 6 10"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 1 1 5l4 4"
-                        />
-                      </svg>
-                    </a>
-                  </li>
-                )
-              }
-
-              {
-                [...Array(totalPages)].map((_, i) => {
-                  const pageNumber = i + 1;
-                  const params = new URLSearchParams(url.searchParams);
-                  params.set('page', pageNumber.toString());
-                  return (
-                    <li data-key={pageNumber}>
-                      <a
-                        href={`?${params.toString()}`}
-                        class={`flex items-center justify-center px-4 h-10 leading-tight ${
-                          pageNumber === currentPage
-                            ? 'z-10 text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
-                            : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
-                        }`}
-                      >
-                        {pageNumber}
-                      </a>
-                    </li>
-                  );
-                })
-              }
-
-              {
-                currentPage < totalPages && (
-                  <li>
-                    <a
-                      href={`?${new URLSearchParams({ ...Object.fromEntries(url.searchParams.entries()), page: (currentPage + 1).toString() })}`}
-                      class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      <span class="sr-only">Siguiente</span>
-                      <svg
-                        class="w-3 h-3 rtl:rotate-180"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 6 10"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m1 9 4-4-4-4"
-                        />
-                      </svg>
-                    </a>
-                  </li>
-                )
-              }
-            </ul>
-          </nav>
+          <SmartPaginator
+            currentPage={currentPage}
+            totalPages={totalPages}
+            searchParams={url.searchParams}
+          />
         </div>
         <div class="lg:col-span-1">
           <SidebarFilters

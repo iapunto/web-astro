@@ -1,0 +1,125 @@
+---
+export interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl?: string;
+  searchParams?: URLSearchParams;
+}
+
+const { currentPage, totalPages, baseUrl = '', searchParams = new URLSearchParams() } = Astro.props;
+
+// Lógica del paginador simplificado
+function getSimplePagination(current: number, total: number) {
+  const maxVisiblePages = 10;
+  const halfVisible = Math.floor(maxVisiblePages / 2);
+  
+  let startPage = Math.max(1, current - halfVisible);
+  let endPage = Math.min(total, current + halfVisible);
+  
+  // Ajustar el rango si estamos cerca del inicio o final
+  if (current <= halfVisible) {
+    endPage = Math.min(total, maxVisiblePages);
+  }
+  if (current > total - halfVisible) {
+    startPage = Math.max(1, total - maxVisiblePages + 1);
+  }
+
+  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+
+  return { pageNumbers };
+}
+
+const pagination = getSimplePagination(currentPage, totalPages);
+
+function getPageUrl(pageNumber: number): string {
+  const params = new URLSearchParams(searchParams);
+  params.set('page', pageNumber.toString());
+  return `${baseUrl}?${params.toString()}`;
+}
+---
+
+{totalPages > 1 && (
+  <nav aria-label="navigation" class="mt-8">
+    <ul class="flex items-center -space-x-px h-10 text-base justify-center">
+      <!-- Primera página -->
+      {currentPage > 2 && (
+        <li>
+          <a
+            href={getPageUrl(1)}
+            class="flex items-center justify-center px-3 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            title="Primera página"
+          >
+            <span class="sr-only">Primera</span>
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"/>
+            </svg>
+          </a>
+        </li>
+      )}
+
+      <!-- Página anterior -->
+      {currentPage > 1 && (
+        <li>
+          <a
+            href={getPageUrl(currentPage - 1)}
+            class={`flex items-center justify-center px-3 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${currentPage <= 2 ? 'rounded-s-lg' : ''}`}
+            title="Página anterior"
+          >
+            <span class="sr-only">Anterior</span>
+            <svg class="w-3 h-3 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 6 10">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+            </svg>
+          </a>
+        </li>
+      )}
+
+      <!-- Páginas numeradas -->
+      {pagination.pageNumbers.map((pageNumber) => (
+        <li>
+          <a
+            href={getPageUrl(pageNumber)}
+            class={`flex items-center justify-center px-3 h-10 leading-tight ${
+              pageNumber === currentPage
+                ? 'z-10 text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+            }`}
+          >
+            {pageNumber}
+          </a>
+        </li>
+      ))}
+
+      <!-- Página siguiente -->
+      {currentPage < totalPages && (
+        <li>
+          <a
+            href={getPageUrl(currentPage + 1)}
+            class={`flex items-center justify-center px-3 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${currentPage >= totalPages - 1 ? 'rounded-e-lg' : ''}`}
+            title="Página siguiente"
+          >
+            <span class="sr-only">Siguiente</span>
+            <svg class="w-3 h-3 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 6 10">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            </svg>
+          </a>
+        </li>
+      )}
+
+      <!-- Última página -->
+      {currentPage < totalPages - 1 && (
+        <li>
+          <a
+            href={getPageUrl(totalPages)}
+            class="flex items-center justify-center px-3 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            title="Última página"
+          >
+            <span class="sr-only">Última</span>
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M11.555 14.832A1 1 0 0010 14v-2.798l-5.445 3.63A1 1 0 003 14V6a1 1 0 011.555-.832L10 8.798V6a1 1 0 011.555-.832l6 4a1 1 0 010 1.664l-6 4z"/>
+            </svg>
+          </a>
+        </li>
+      )}
+    </ul>
+  </nav>
+)}
