@@ -45,7 +45,10 @@ class GoogleCalendarService {
     let auth;
 
     // Intentar Service Account primero (más simple para aplicaciones servidor)
-    if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
+    if (
+      process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
+      process.env.GOOGLE_PRIVATE_KEY
+    ) {
       try {
         auth = new google.auth.GoogleAuth({
           credentials: {
@@ -54,11 +57,14 @@ class GoogleCalendarService {
           },
           scopes: [
             'https://www.googleapis.com/auth/calendar',
-            'https://www.googleapis.com/auth/calendar.events'
+            'https://www.googleapis.com/auth/calendar.events',
           ],
         });
       } catch (serviceAccountError) {
-        console.warn('Service Account auth failed, falling back to OAuth2:', serviceAccountError);
+        console.warn(
+          'Service Account auth failed, falling back to OAuth2:',
+          serviceAccountError
+        );
         auth = null;
       }
     }
@@ -70,9 +76,11 @@ class GoogleCalendarService {
         process.env.GOOGLE_CLIENT_SECRET,
         process.env.GOOGLE_REDIRECT_URI
       );
-      
+
       // TEMPORAL: Para OAuth2 sin tokens, volver al mock
-      console.warn('OAuth2 configured but no tokens available. Consider using Service Account for production.');
+      console.warn(
+        'OAuth2 configured but no tokens available. Consider using Service Account for production.'
+      );
     }
 
     // Configurar el cliente de Google Calendar
@@ -98,7 +106,7 @@ class GoogleCalendarService {
     const auth = this.calendar.options?.auth as any;
     const scopes = [
       'https://www.googleapis.com/auth/calendar',
-      'https://www.googleapis.com/auth/calendar.events'
+      'https://www.googleapis.com/auth/calendar.events',
     ];
 
     return auth.generateAuthUrl({
@@ -141,12 +149,25 @@ class GoogleCalendarService {
   /**
    * Obtener slots de disponibilidad para un día específico
    */
-  async getAvailableSlots(date: Date, durationMinutes: number = 60): Promise<AvailabilitySlot[]> {
+  async getAvailableSlots(
+    date: Date,
+    durationMinutes: number = 60
+  ): Promise<AvailabilitySlot[]> {
     const startOfDay = new Date(date);
-    startOfDay.setHours(parseInt(process.env.BUSINESS_HOURS_START?.split(':')[0] || '9'), 0, 0, 0);
-    
+    startOfDay.setHours(
+      parseInt(process.env.BUSINESS_HOURS_START?.split(':')[0] || '9'),
+      0,
+      0,
+      0
+    );
+
     const endOfDay = new Date(date);
-    endOfDay.setHours(parseInt(process.env.BUSINESS_HOURS_END?.split(':')[0] || '17'), 0, 0, 0);
+    endOfDay.setHours(
+      parseInt(process.env.BUSINESS_HOURS_END?.split(':')[0] || '17'),
+      0,
+      0,
+      0
+    );
 
     const slots: AvailabilitySlot[] = [];
     const slotDuration = durationMinutes * 60 * 1000; // Convert to milliseconds
@@ -163,7 +184,7 @@ class GoogleCalendarService {
       });
 
       const busyTimes = response.data.calendars?.[this.calendarId]?.busy || [];
-      
+
       // Generar slots cada 30 minutos
       const slotInterval = 30 * 60 * 1000; // 30 minutes in milliseconds
       let currentTime = startOfDay.getTime();
@@ -176,8 +197,8 @@ class GoogleCalendarService {
         const isAvailable = !busyTimes.some((busy: any) => {
           const busyStart = new Date(busy.start).getTime();
           const busyEnd = new Date(busy.end).getTime();
-          
-          return (slotStart.getTime() < busyEnd && slotEnd.getTime() > busyStart);
+
+          return slotStart.getTime() < busyEnd && slotEnd.getTime() > busyStart;
         });
 
         slots.push({
@@ -199,18 +220,25 @@ class GoogleCalendarService {
   /**
    * Crear una nueva cita en Google Calendar
    */
-  async createAppointment(appointment: AppointmentRequest): Promise<CalendarEvent> {
+  async createAppointment(
+    appointment: AppointmentRequest
+  ): Promise<CalendarEvent> {
     try {
       // Verificar disponibilidad antes de crear
-      const isAvailable = await this.checkAvailability(appointment.startTime, appointment.endTime);
-      
+      const isAvailable = await this.checkAvailability(
+        appointment.startTime,
+        appointment.endTime
+      );
+
       if (!isAvailable) {
         throw new Error('El horario seleccionado no está disponible');
       }
 
       const event: calendar_v3.Schema$Event = {
         summary: `Consulta con ${appointment.name}`,
-        description: appointment.description || `Reunión agendada con ${appointment.name}\\n\\nTipo: ${appointment.meetingType || 'Consulta general'}`,
+        description:
+          appointment.description ||
+          `Reunión agendada con ${appointment.name}\\n\\nEmail: ${appointment.email}\\n\\nTipo: ${appointment.meetingType || 'Consulta general'}\\n\\nNota: Para invitar al cliente, comparte manualmente el enlace de Google Meet desde el evento.`,
         start: {
           dateTime: appointment.startTime.toISOString(),
           timeZone: this.timezone,
@@ -219,12 +247,8 @@ class GoogleCalendarService {
           dateTime: appointment.endTime.toISOString(),
           timeZone: this.timezone,
         },
-        attendees: [
-          {
-            email: appointment.email,
-            displayName: appointment.name,
-          },
-        ],
+        // REMOVIDO: attendees - Service Account no puede crear eventos con asistentes
+        // El email del cliente se incluye en la descripción para referencia
         reminders: {
           useDefault: false,
           overrides: [
@@ -250,24 +274,21 @@ class GoogleCalendarService {
       });
 
       const createdEvent = response.data;
-      
-      return {
-        id: createdEvent.id!,
-        summary: createdEvent.summary!,
-        description: createdEvent.description,
-        start: {
-          dateTime: createdEvent.start!.dateTime!,
-          timeZone: createdEvent.start!.timeZone!,
-        },
-        end: {
-          dateTime: createdEvent.end!.dateTime!,
-          timeZone: createdEvent.end!.timeZone!,
-        },
-        attendees: createdEvent.attendees?.map(attendee => ({
-          email: attendee.email!,
-          displayName: attendee.displayName,
-          responseStatus: attendee.responseStatus,
-        })),
+
+              return {
+          id: createdEvent.id!,
+          summary: createdEvent.summary!,
+          description: createdEvent.description,
+          start: {
+            dateTime: createdEvent.start!.dateTime!,
+            timeZone: createdEvent.start!.timeZone!,
+          },
+          end: {
+            dateTime: createdEvent.end!.dateTime!,
+            timeZone: createdEvent.end!.timeZone!,
+          },
+          // No hay attendees porque el Service Account no puede crearlos
+          attendees: [],
       };
     } catch (error) {
       console.error('Error creating appointment:', error);
@@ -278,7 +299,10 @@ class GoogleCalendarService {
   /**
    * Actualizar una cita existente
    */
-  async updateAppointment(eventId: string, updates: Partial<AppointmentRequest>): Promise<CalendarEvent> {
+  async updateAppointment(
+    eventId: string,
+    updates: Partial<AppointmentRequest>
+  ): Promise<CalendarEvent> {
     try {
       const event: calendar_v3.Schema$Event = {};
 
@@ -318,7 +342,7 @@ class GoogleCalendarService {
       });
 
       const updatedEvent = response.data;
-      
+
       return {
         id: updatedEvent.id!,
         summary: updatedEvent.summary!,
@@ -331,7 +355,7 @@ class GoogleCalendarService {
           dateTime: updatedEvent.end!.dateTime!,
           timeZone: updatedEvent.end!.timeZone!,
         },
-        attendees: updatedEvent.attendees?.map(attendee => ({
+        attendees: updatedEvent.attendees?.map((attendee) => ({
           email: attendee.email!,
           displayName: attendee.displayName,
           responseStatus: attendee.responseStatus,
@@ -370,7 +394,7 @@ class GoogleCalendarService {
       });
 
       const event = response.data;
-      
+
       return {
         id: event.id!,
         summary: event.summary!,
@@ -383,7 +407,7 @@ class GoogleCalendarService {
           dateTime: event.end!.dateTime!,
           timeZone: event.end!.timeZone!,
         },
-        attendees: event.attendees?.map(attendee => ({
+        attendees: event.attendees?.map((attendee) => ({
           email: attendee.email!,
           displayName: attendee.displayName,
           responseStatus: attendee.responseStatus,
@@ -424,14 +448,18 @@ function hasGoogleCredentials(): boolean {
 
   // TODO: Implementar verificación de tokens OAuth2 o configurar Service Account
   if (hasOAuth2Basic) {
-    console.warn('OAuth2 credentials found but tokens not configured. Using mock service until Service Account is set up.');
+    console.warn(
+      'OAuth2 credentials found but tokens not configured. Using mock service until Service Account is set up.'
+    );
     return false; // Usar mock hasta configurar tokens
   }
 
   return false;
 }
 
-export function getGoogleCalendarService(): GoogleCalendarService | MockCalendarService {
+export function getGoogleCalendarService():
+  | GoogleCalendarService
+  | MockCalendarService {
   // Si no hay credenciales configuradas, usar el mock service
   if (!hasGoogleCredentials()) {
     console.warn('Google Calendar credentials not found, using mock service');
