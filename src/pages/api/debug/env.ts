@@ -1,0 +1,44 @@
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async () => {
+  try {
+    const envVars = {
+      GOOGLE_CLIENT_ID: !!import.meta.env.GOOGLE_CLIENT_ID,
+      GOOGLE_CLIENT_SECRET: !!import.meta.env.GOOGLE_CLIENT_SECRET,
+      GOOGLE_CALENDAR_ID: !!import.meta.env.GOOGLE_CALENDAR_ID,
+      GOOGLE_REDIRECT_URI: !!import.meta.env.GOOGLE_REDIRECT_URI,
+      TIMEZONE: import.meta.env.TIMEZONE || 'not_set',
+      BUSINESS_HOURS_START: import.meta.env.BUSINESS_HOURS_START || 'not_set',
+      BUSINESS_HOURS_END: import.meta.env.BUSINESS_HOURS_END || 'not_set',
+      NODE_ENV: import.meta.env.NODE_ENV || 'not_set',
+    };
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'Environment variables status',
+        variables: envVars,
+        timestamp: new Date().toISOString(),
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({
+        error: 'Debug endpoint error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+};

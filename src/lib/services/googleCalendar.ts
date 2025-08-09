@@ -1,5 +1,6 @@
 import { google } from 'googleapis';
 import type { calendar_v3 } from 'googleapis';
+import { MockCalendarService } from './mockCalendarService';
 
 export interface AppointmentRequest {
   name: string;
@@ -369,10 +370,32 @@ class GoogleCalendarService {
   }
 }
 
-// Singleton instance
+// Singleton instances
 let googleCalendarService: GoogleCalendarService;
+let mockCalendarService: MockCalendarService;
 
-export function getGoogleCalendarService(): GoogleCalendarService {
+/**
+ * Verificar si las credenciales de Google Calendar están configuradas
+ */
+function hasGoogleCredentials(): boolean {
+  return !!(
+    import.meta.env.GOOGLE_CLIENT_ID &&
+    import.meta.env.GOOGLE_CLIENT_SECRET &&
+    import.meta.env.GOOGLE_CALENDAR_ID
+  );
+}
+
+export function getGoogleCalendarService(): GoogleCalendarService | MockCalendarService {
+  // Si no hay credenciales configuradas, usar el mock service
+  if (!hasGoogleCredentials()) {
+    console.warn('Google Calendar credentials not found, using mock service');
+    if (!mockCalendarService) {
+      mockCalendarService = new MockCalendarService();
+    }
+    return mockCalendarService;
+  }
+
+  // Si hay credenciales, usar el servicio real
   if (!googleCalendarService) {
     googleCalendarService = new GoogleCalendarService();
   }
