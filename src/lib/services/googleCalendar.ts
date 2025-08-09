@@ -70,6 +70,9 @@ class GoogleCalendarService {
         process.env.GOOGLE_CLIENT_SECRET,
         process.env.GOOGLE_REDIRECT_URI
       );
+      
+      // TEMPORAL: Para OAuth2 sin tokens, volver al mock
+      console.warn('OAuth2 configured but no tokens available. Consider using Service Account for production.');
     }
 
     // Configurar el cliente de Google Calendar
@@ -401,21 +404,31 @@ let mockCalendarService: MockCalendarService;
  * Verificar si las credenciales de Google Calendar están configuradas
  */
 function hasGoogleCredentials(): boolean {
-  // Service Account (preferido)
+  // Service Account (preferido) - Funciona sin tokens adicionales
   const hasServiceAccount = !!(
     process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
     process.env.GOOGLE_PRIVATE_KEY &&
     process.env.GOOGLE_CALENDAR_ID
   );
 
-  // OAuth2 (fallback)
-  const hasOAuth2 = !!(
+  if (hasServiceAccount) {
+    return true;
+  }
+
+  // OAuth2 (requiere tokens) - Por ahora devolver false hasta configurar tokens
+  const hasOAuth2Basic = !!(
     process.env.GOOGLE_CLIENT_ID &&
     process.env.GOOGLE_CLIENT_SECRET &&
     process.env.GOOGLE_CALENDAR_ID
   );
 
-  return hasServiceAccount || hasOAuth2;
+  // TODO: Implementar verificación de tokens OAuth2 o configurar Service Account
+  if (hasOAuth2Basic) {
+    console.warn('OAuth2 credentials found but tokens not configured. Using mock service until Service Account is set up.');
+    return false; // Usar mock hasta configurar tokens
+  }
+
+  return false;
 }
 
 export function getGoogleCalendarService(): GoogleCalendarService | MockCalendarService {
