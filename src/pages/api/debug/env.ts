@@ -34,7 +34,7 @@ export const GET: APIRoute = async () => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'Environment variables status',
+        message: 'Environment variables status (updated)',
         variables: envVars,
         debug: debugInfo,
         timestamp: new Date().toISOString(),
