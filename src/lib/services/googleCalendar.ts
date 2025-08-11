@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import type { calendar_v3 } from 'googleapis';
 import { MockCalendarService } from './mockCalendarService';
+import EmailService from './emailService';
 
 export interface AppointmentRequest {
   name: string;
@@ -40,6 +41,7 @@ class GoogleCalendarService {
   private calendar: calendar_v3.Calendar;
   private calendarId: string;
   private timezone: string;
+  private emailService: EmailService;
 
   constructor() {
     let auth;
@@ -87,6 +89,7 @@ class GoogleCalendarService {
     this.calendar = google.calendar({ version: 'v3', auth });
     this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
     this.timezone = process.env.TIMEZONE || 'America/Mexico_City';
+    this.emailService = new EmailService();
   }
 
   /**
@@ -275,20 +278,56 @@ class GoogleCalendarService {
 
       const createdEvent = response.data;
 
-              return {
-          id: createdEvent.id!,
-          summary: createdEvent.summary!,
-          description: createdEvent.description,
-          start: {
-            dateTime: createdEvent.start!.dateTime!,
-            timeZone: createdEvent.start!.timeZone!,
-          },
-          end: {
-            dateTime: createdEvent.end!.dateTime!,
-            timeZone: createdEvent.end!.timeZone!,
-          },
-          // No hay attendees porque el Service Account no puede crearlos
-          attendees: [],
+      // Extraer enlace de Google Meet si existe
+      const meetLink = createdEvent.conferenceData?.entryPoints?.find(
+        (entry) => entry.entryPointType === 'video'
+      )?.uri;
+
+      // Enviar notificaciones por email
+      try {
+        await this.emailService.sendAppointmentConfirmation({
+          clientName: appointment.name,
+          clientEmail: appointment.email,
+          appointmentDate: appointment.startTime,
+          appointmentTime: appointment.startTime.toLocaleTimeString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+          meetLink,
+          eventId: createdEvent.id!,
+        });
+
+        // Notificación interna
+        await this.emailService.sendInternalNotification({
+          clientName: appointment.name,
+          clientEmail: appointment.email,
+          appointmentDate: appointment.startTime,
+          appointmentTime: appointment.startTime.toLocaleTimeString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+          eventId: createdEvent.id!,
+        });
+      } catch (emailError) {
+        console.error('Error sending email notifications:', emailError);
+        // No fallar la creación del evento por problemas de email
+      }
+
+      return {
+        id: createdEvent.id!,
+        summary: createdEvent.summary!,
+        description: createdEvent.description,
+        start: {
+          dateTime: createdEvent.start!.dateTime!,
+          timeZone: createdEvent.start!.timeZone!,
+        },
+        end: {
+          dateTime: createdEvent.end!.dateTime!,
+          timeZone: createdEvent.end!.timeZone!,
+        },
+        // No hay attendees porque el Service Account no puede crearlos
+        attendees: [],
+        meetLink, // Incluir enlace de Meet en la respuesta
       };
     } catch (error) {
       console.error('Error creating appointment:', error);

@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manual de Marca - IA Punto</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #ffffff;
+        color: #111827;
+        overflow: hidden;
+      }
+      .slide {
+        width: 1280px;
+        min-height: 720px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+      }
+      .cover {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        position: relative;
+        z-index: 10;
+      }
+      .left-content {
+        width: 60%;
+        height: 100%;
+        padding: 70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .right-content {
+        width: 40%;
+        height: 100%;
+        padding: 70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        margin-bottom: 40px;
+      }
+      .logo-icon {
+        width: 70px;
+        height: 70px;
+        background-color: #e51f52;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        box-shadow: 0 8px 20px rgba(229, 31, 82, 0.3);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(229, 31, 82, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 15px rgba(229, 31, 82, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(229, 31, 82, 0);
+        }
+      }
+      .logo-text {
+        font-size: 36px;
+        font-weight: 900;
+        color: #111827;
+        letter-spacing: -0.5px;
+      }
+      .title {
+        font-size: 72px;
+        font-weight: 900;
+        color: #111827;
+        line-height: 1.1;
+        margin-bottom: 30px;
+        letter-spacing: -1px;
+      }
+      .accent-line {
+        width: 100px;
+        height: 8px;
+        background-color: #e51f52;
+        margin-bottom: 30px;
+        border-radius: 4px;
+      }
+      .subtitle {
+        font-size: 22px;
+        font-weight: 400;
+        color: #4b5563;
+        max-width: 90%;
+        line-height: 1.5;
+      }
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 25px;
+        width: 100%;
+        height: 420px;
+      }
+      .bento-item {
+        background-color: #ffffff;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .bento-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      }
+      .bento-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 8px;
+        height: 100%;
+        background-color: #e51f52;
+        border-radius: 4px 0 0 4px;
+      }
+      .bento-icon {
+        font-size: 36px;
+        color: #e51f52;
+        margin-bottom: 15px;
+      }
+      .bento-title {
+        font-size: 26px;
+        font-weight: 900;
+        color: #111827;
+        margin-bottom: 8px;
+        line-height: 1.2;
+      }
+      .bento-text {
+        font-size: 18px;
+        color: #4b5563;
+        line-height: 1.4;
+      }
+      .background-circle {
+        position: absolute;
+        border-radius: 50%;
+        background-color: rgba(229, 31, 82, 0.05);
+        z-index: 1;
+      }
+      .circle-1 {
+        width: 500px;
+        height: 500px;
+        top: -200px;
+        right: -150px;
+      }
+      .circle-2 {
+        width: 400px;
+        height: 400px;
+        bottom: -150px;
+        left: -150px;
+      }
+      .circle-3 {
+        width: 250px;
+        height: 250px;
+        top: 50%;
+        right: 10%;
+        background-color: rgba(229, 31, 82, 0.08);
+      }
+      .floating-shapes {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        overflow: hidden;
+      }
+      .shape {
+        position: absolute;
+        border-radius: 50%;
+        background-color: rgba(229, 31, 82, 0.1);
+      }
+      .shape-1 {
+        width: 80px;
+        height: 80px;
+        top: 20%;
+        left: 10%;
+        animation: float 8s infinite ease-in-out;
+      }
+      .shape-2 {
+        width: 50px;
+        height: 50px;
+        top: 70%;
+        left: 20%;
+        animation: float 6s infinite ease-in-out;
+      }
+      .shape-3 {
+        width: 60px;
+        height: 60px;
+        top: 40%;
+        right: 15%;
+        animation: float 7s infinite ease-in-out;
+      }
+      .shape-4 {
+        width: 40px;
+        height: 40px;
+        top: 80%;
+        right: 25%;
+        animation: float 9s infinite ease-in-out;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide">
+      <div class="background-circle circle-1"></div>
+      <div class="background-circle circle-2"></div>
+      <div class="background-circle circle-3"></div>
+
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+      </div>
+
+      <div class="cover">
+        <div class="left-content">
+          <div class="logo">
+            <div class="logo-icon">
+              <i class="fas fa-robot text-white text-3xl"></i>
+            </div>
+            <div class="logo-text">IA Punto</div>
+          </div>
+
+          <h1 class="title">MANUAL<br />DE MARCA</h1>
+          <div class="accent-line"></div>
+          <p class="subtitle">
+            Directrices para mantener la coherencia visual y comunicacional en
+            todos los puntos de contacto
+          </p>
+        </div>
+
+        <div class="right-content">
+          <div class="bento-grid">
+            <div class="bento-item">
+              <i class="fas fa-palette bento-icon"></i>
+              <h3 class="bento-title">IDENTIDAD VISUAL</h3>
+              <p class="bento-text">Colores, tipografía y elementos gráficos</p>
+            </div>
+
+            <div class="bento-item">
+              <i class="fas fa-certificate bento-icon"></i>
+              <h3 class="bento-title">LOGO</h3>
+              <p class="bento-text">Variantes y aplicaciones correctas</p>
+            </div>
+
+            <div class="bento-item">
+              <i class="fas fa-file-alt bento-icon"></i>
+              <h3 class="bento-title">APLICACIONES</h3>
+              <p class="bento-text">Digital, impresos y redes sociales</p>
+            </div>
+
+            <div class="bento-item">
+              <i class="fas fa-ban bento-icon"></i>
+              <h3 class="bento-title">USO INCORRECTO</h3>
+              <p class="bento-text">Qué evitar al usar la marca</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Identidad de Marca - IA Punto</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #ffffff;
+        color: #111827;
+      }
+      .slide {
+        width: 1280px;
+        min-height: 720px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+        display: flex;
+        flex-direction: column;
+      }
+      .header {
+        padding: 40px 70px 20px;
+        position: relative;
+        z-index: 2;
+      }
+      .title {
+        font-size: 56px;
+        font-weight: 900;
+        color: #111827;
+        margin-bottom: 10px;
+        position: relative;
+        display: inline-block;
+        line-height: 1.1;
+      }
+      .title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 80px;
+        height: 6px;
+        background-color: #e51f52;
+        border-radius: 3px;
+      }
+      .content {
+        flex-grow: 1;
+        padding: 0 70px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        position: relative;
+        z-index: 2;
+      }
+      .identity-section {
+        display: flex;
+        gap: 40px;
+      }
+      .mission,
+      .vision {
+        flex: 1;
+        background-color: #ffffff;
+        border-radius: 16px;
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+      }
+      .mission:hover,
+      .vision:hover {
+        transform: translateY(-5px);
+      }
+      .mission::before,
+      .vision::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 8px;
+        height: 100%;
+        background-color: #e51f52;
+        border-radius: 4px 0 0 4px;
+      }
+      .section-title {
+        font-size: 28px;
+        font-weight: 900;
+        color: #111827;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        line-height: 1.2;
+      }
+      .section-title i {
+        color: #e51f52;
+        margin-right: 15px;
+        font-size: 32px;
+      }
+      .section-content {
+        font-size: 22px;
+        line-height: 1.5;
+        color: #4b5563;
+      }
+      .highlight {
+        color: #e51f52;
+        font-weight: 700;
+      }
+      .values {
+        background-color: #ffffff;
+        border-radius: 16px;
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      }
+      .values::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 8px;
+        height: 100%;
+        background-color: #e51f52;
+        border-radius: 4px 0 0 4px;
+      }
+      .values-title {
+        font-size: 28px;
+        font-weight: 900;
+        color: #111827;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        line-height: 1.2;
+      }
+      .values-title i {
+        color: #e51f52;
+        margin-right: 15px;
+        font-size: 32px;
+      }
+      .values-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+      }
+      .value-item {
+        background-color: #f9fafb;
+        border-radius: 12px;
+        padding: 25px;
+        display: flex;
+        align-items: flex-start;
+        transition: transform 0.3s ease;
+        border-left: 4px solid #e51f52;
+      }
+      .value-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+      .value-icon {
+        background-color: rgba(229, 31, 82, 0.15);
+        color: #e51f52;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        flex-shrink: 0;
+      }
+      .value-icon i {
+        font-size: 28px;
+      }
+      .value-content {
+        flex-grow: 1;
+      }
+      .value-title {
+        font-size: 24px;
+        font-weight: 900;
+        color: #111827;
+        margin-bottom: 8px;
+        line-height: 1.2;
+      }
+      .value-description {
+        font-size: 20px;
+        color: #4b5563;
+        line-height: 1.4;
+      }
+      .background-circle {
+        position: absolute;
+        border-radius: 50%;
+        background-color: rgba(229, 31, 82, 0.05);
+        z-index: 1;
+      }
+      .circle-1 {
+        width: 400px;
+        height: 400px;
+        top: -150px;
+        right: -100px;
+      }
+      .circle-2 {
+        width: 300px;
+        height: 300px;
+        bottom: -100px;
+        left: -100px;
+      }
+      .floating-shapes {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        overflow: hidden;
+      }
+      .shape {
+        position: absolute;
+        border-radius: 50%;
+        background-color: rgba(229, 31, 82, 0.08);
+      }
+      .shape-1 {
+        width: 60px;
+        height: 60px;
+        top: 20%;
+        left: 15%;
+        animation: float 8s infinite ease-in-out;
+      }
+      .shape-2 {
+        width: 40px;
+        height: 40px;
+        top: 70%;
+        left: 10%;
+        animation: float 6s infinite ease-in-out;
+      }
+      .shape-3 {
+        width: 50px;
+        height: 50px;
+        top: 40%;
+        right: 20%;
+        animation: float 7s infinite ease-in-out;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide">
+      <div class="background-circle circle-1"></div>
+      <div class="background-circle circle-2"></div>
+
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+
+      <div class="header">
+        <h1 class="title">IDENTIDAD DE MARCA</h1>
+      </div>
+      <div class="content">
+        <div class="identity-section">
+          <div class="mission">
+            <h2 class="section-title">
+              <i class="fas fa-rocket"></i>
+              MISIÓN
+            </h2>
+            <p class="section-content">
+              Fusionar <span class="highlight">creatividad</span>,
+              <span class="highlight">tecnología</span> e
+              <span class="highlight">innovación</span> para generar
+              experiencias digitales memorables que conecten marcas con
+              audiencias y generen crecimiento tangible.
+            </p>
+          </div>
+          <div class="vision">
+            <h2 class="section-title">
+              <i class="fas fa-eye"></i>
+              VISIÓN
+            </h2>
+            <p class="section-content">
+              Ser líderes en la
+              <span class="highlight">transformación digital</span> de empresas
+              mediante soluciones inteligentes que impulsen el éxito sostenible.
+            </p>
+          </div>
+        </div>
+
+        <div class="values">
+          <h2 class="values-title">
+            <i class="fas fa-gem"></i>
+            VALORES
+          </h2>
+          <div class="values-grid">
+            <div class="value-item">
+              <div class="value-icon">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <div class="value-content">
+                <h3 class="value-title">INNOVACIÓN CONSTANTE</h3>
+                <p class="value-description">
+                  Uso de IA para entregar soluciones más inteligentes y
+                  eficientes
+                </p>
+              </div>
+            </div>
+            <div class="value-item">
+              <div class="value-icon">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="value-content">
+                <h3 class="value-title">EXPERIENCIA PROBADA</h3>
+                <p class="value-description">
+                  18 años y +600 proyectos exitosos
+                </p>
+              </div>
+            </div>
+            <div class="value-item">
+              <div class="value-icon">
+                <i class="fas fa-handshake"></i>
+              </div>
+              <div class="value-content">
+                <h3 class="value-title">TRANSPARENCIA Y PASIÓN</h3>
+                <p class="value-description">
+                  Trabajo colaborativo, claro y comprometido
+                </p>
+              </div>
+            </div>
+            <div class="value-item">
+              <div class="value-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="value-content">
+                <h3 class="value-title">RESULTADOS MEDIBLES</h3>
+                <p class="value-description">
+                  Estrategias con datos reales y crecimiento sostenible
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
