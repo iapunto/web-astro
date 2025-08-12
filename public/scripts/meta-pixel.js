@@ -12,7 +12,7 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 
 // Configurar Meta Pixel ID (reemplazar con tu ID real)
-const META_PIXEL_ID = 'YOUR_META_PIXEL_ID'; // Reemplazar con el ID real
+const META_PIXEL_ID = '1119835639006965'; // Meta Pixel ID de IA Punto
 
 // Inicializar Meta Pixel
 fbq('init', META_PIXEL_ID);
