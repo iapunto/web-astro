@@ -255,6 +255,57 @@ export default defineConfig({
         default: process.env.STRAPI_API_TOKEN,
         optional: false,
       }),
+      // Google Calendar API
+      GOOGLE_CALENDAR_ID: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: process.env.GOOGLE_CALENDAR_ID || 'primary',
+        optional: true,
+      }),
+      GOOGLE_SERVICE_ACCOUNT_EMAIL: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        optional: true,
+      }),
+      GOOGLE_PRIVATE_KEY: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: process.env.GOOGLE_PRIVATE_KEY,
+        optional: true,
+      }),
+      // Email Service
+      SMTP_USER: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: process.env.SMTP_USER,
+        optional: true,
+      }),
+      SMTP_PASSWORD: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: process.env.SMTP_PASSWORD,
+        optional: true,
+      }),
+      INTERNAL_NOTIFICATION_EMAIL: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: process.env.INTERNAL_NOTIFICATION_EMAIL,
+        optional: true,
+      }),
+      // Application Configuration
+      TIMEZONE: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: process.env.TIMEZONE || 'America/Bogota',
+        optional: true,
+      }),
+      APP_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: process.env.APP_URL || 'https://iapunto.com',
+        optional: true,
+      }),
     },
   },
 });
