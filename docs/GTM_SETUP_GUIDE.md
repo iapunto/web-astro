@@ -31,11 +31,11 @@ gtag('config', 'G-XXXXXXXXXX', {
 
 #### **B. Actualizar `public/scripts/gtm-init.js`**
 ```javascript
-// Línea 12: Reemplazar GTM-XXXXXXX con tu GTM ID real
-gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-XXXXXXX';
+// Línea 12: GTM ID configurado
+gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-PJS922TG';
 
-// Línea 85: Descomentar la línea
-initializeGTM(); // Descomentar cuando tengas el GTM ID
+// Línea 85: GTM inicializado automáticamente
+initializeGTM(); // GTM se inicializa automáticamente
 ```
 
 ### **4. Configurar GTM en el Sitio Web**
@@ -47,11 +47,11 @@ initializeGTM(); // Descomentar cuando tengas el GTM ID
 ```
 
 #### **B. Agregar GTM noscript al Layout**
-En `src/components/layout/Layout.astro`, agregar antes del `</body>`:
+En `src/layouts/BaseLayout.astro`, agregado antes del `</body>`:
 ```html
 <!-- Google Tag Manager (noscript) -->
 <noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PJS922TG"
           height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
@@ -160,7 +160,7 @@ window.testGTM()
 ## 🎯 **Estado Actual**
 
 - ✅ Meta Pixel configurado y funcionando
-- ❌ GTM necesita configuración de IDs
+- ✅ GTM configurado con ID: GTM-PJS922TG
 - ❌ GA4 necesita configuración de ID
 - ✅ Scripts de debug disponibles
 - ✅ Funciones de tracking implementadas

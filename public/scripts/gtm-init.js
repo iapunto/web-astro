@@ -9,12 +9,12 @@ function initializeGTM() {
   // Crear script de GTM
   const gtmScript = document.createElement('script');
   gtmScript.async = true;
-  gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-XXXXXXX'; // Reemplazar con tu GTM ID
+  gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-PJS922TG'; // GTM ID de IA Punto
   
   // Insertar script en el head
   document.head.appendChild(gtmScript);
   
-  console.log('GTM script cargado');
+  console.log('GTM script cargado con ID: GTM-PJS922TG');
 }
 
 // Función para enviar eventos a GTM
@@ -92,7 +92,7 @@ window.trackEngagementGTM = trackEngagementGTM;
 // Inicializar GTM cuando se cargue la página
 document.addEventListener('DOMContentLoaded', function() {
   console.log('GTM initialization script loaded');
-  // initializeGTM(); // Descomentar cuando tengas el GTM ID
+  initializeGTM(); // Inicializar GTM con ID real
 });
 
 console.log('GTM initialization script ready');
