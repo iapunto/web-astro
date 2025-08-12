@@ -68,15 +68,34 @@ class MeetingModalManager {
     // Validación en tiempo real de la fecha/hora
     const timeInput = this.form?.querySelector('#appointment-time');
     timeInput?.addEventListener('change', () => {
-      this.validateField('time', timeInput.value);
+      this.validateField('appointment-time', timeInput.value);
     });
   }
 
   validateField(fieldName, value) {
     console.log(`🔍 Validating field: ${fieldName} with value: "${value}"`);
-
-    const errorElement = document.getElementById(`${fieldName}-error`);
+    
+    // Mapear nombres de campos a IDs de elementos de error
+    const errorIdMap = {
+      'name': 'name-error',
+      'email': 'email-error',
+      'appointment-time': 'time-error'
+    };
+    
+    const errorElementId = errorIdMap[fieldName] || `${fieldName}-error`;
+    const errorElement = document.getElementById(errorElementId);
     const inputElement = this.form?.querySelector(`#${fieldName}`);
+
+    // Verificar que los elementos existan antes de continuar
+    if (!errorElement || !inputElement) {
+      console.warn(`⚠️ Missing DOM elements for field ${fieldName}:`, {
+        errorElement: !!errorElement,
+        inputElement: !!inputElement,
+        errorElementId,
+        fieldName
+      });
+      return false;
+    }
 
     let isValid = true;
     let errorMessage = '';
@@ -105,7 +124,7 @@ class MeetingModalManager {
         }
         break;
 
-      case 'time':
+      case 'appointment-time':
         if (!value) {
           isValid = false;
           errorMessage = 'Por favor selecciona una fecha y hora';
@@ -132,34 +151,34 @@ class MeetingModalManager {
 
   validateForm() {
     console.log('🔍 ===== VALIDATE FORM START =====');
-
+    
     const nameValue = this.form?.querySelector('#name')?.value.trim();
     const emailValue = this.form?.querySelector('#email')?.value.trim();
     const timeValue = this.form?.querySelector('#appointment-time')?.value;
-
+    
     console.log('📝 Form values:', {
       name: nameValue,
       email: emailValue,
       time: timeValue,
       selectedSlot: !!this.selectedSlot,
     });
-
+    
     const nameValid = this.validateField('name', nameValue);
     console.log('✅ Name validation:', nameValid);
-
+    
     const emailValid = this.validateField('email', emailValue);
     console.log('✅ Email validation:', emailValid);
-
-    const timeValid = this.validateField('time', timeValue);
+    
+    const timeValid = this.validateField('appointment-time', timeValue);
     console.log('✅ Time validation:', timeValid);
-
+    
     const slotValid = !!this.selectedSlot;
     console.log('✅ Slot validation:', slotValid);
-
+    
     const overallValid = nameValid && emailValid && timeValid && slotValid;
     console.log('🎯 Overall form validation:', overallValid);
     console.log('🏁 ===== VALIDATE FORM END =====');
-
+    
     return overallValid;
   }
 
@@ -201,7 +220,7 @@ class MeetingModalManager {
       // Validar que la fecha sea válida
       if (!selectedDate || selectedDate < new Date()) {
         this.showFieldError(
-          'time',
+          'appointment-time',
           'Por favor selecciona una fecha y hora válida.'
         );
         return;
@@ -211,7 +230,7 @@ class MeetingModalManager {
       const hour = selectedDate.getHours();
       if (hour < 9 || hour >= 17) {
         this.showFieldError(
-          'time',
+          'appointment-time',
           'Por favor selecciona un horario entre 9:00 AM y 5:00 PM.'
         );
         return;
@@ -221,7 +240,7 @@ class MeetingModalManager {
       const day = selectedDate.getDay();
       if (day === 0 || day === 6) {
         this.showFieldError(
-          'time',
+          'appointment-time',
           'No se pueden agendar citas los fines de semana.'
         );
         return;
@@ -233,21 +252,29 @@ class MeetingModalManager {
       };
 
       // Limpiar error de tiempo si todo está bien
-      this.clearFieldError('time');
+      this.clearFieldError('appointment-time');
 
       // Verificar disponibilidad
       await this.checkAvailability(selectedDate);
     } catch (error) {
       console.error('Error selecting date/time:', error);
       this.showFieldError(
-        'time',
+        'appointment-time',
         'Error al verificar disponibilidad. Inténtalo de nuevo.'
       );
     }
   }
 
   showFieldError(fieldName, message) {
-    const errorElement = document.getElementById(`${fieldName}-error`);
+    // Mapear nombres de campos a IDs de elementos de error
+    const errorIdMap = {
+      'name': 'name-error',
+      'email': 'email-error',
+      'appointment-time': 'time-error'
+    };
+    
+    const errorElementId = errorIdMap[fieldName] || `${fieldName}-error`;
+    const errorElement = document.getElementById(errorElementId);
     const inputElement = this.form?.querySelector(`#${fieldName}`);
 
     if (errorElement) {
@@ -259,7 +286,15 @@ class MeetingModalManager {
   }
 
   clearFieldError(fieldName) {
-    const errorElement = document.getElementById(`${fieldName}-error`);
+    // Mapear nombres de campos a IDs de elementos de error
+    const errorIdMap = {
+      'name': 'name-error',
+      'email': 'email-error',
+      'appointment-time': 'time-error'
+    };
+    
+    const errorElementId = errorIdMap[fieldName] || `${fieldName}-error`;
+    const errorElement = document.getElementById(errorElementId);
     const inputElement = this.form?.querySelector(`#${fieldName}`);
 
     if (errorElement) {
@@ -297,18 +332,18 @@ class MeetingModalManager {
 
       if (!isAvailable) {
         this.showFieldError(
-          'time',
+          'appointment-time',
           'El horario seleccionado no está disponible. Por favor elige otro horario.'
         );
         this.flatpickrInstance?.clear();
         this.selectedSlot = null;
       } else {
-        this.clearFieldError('time');
+        this.clearFieldError('appointment-time');
       }
     } catch (error) {
       console.error('Error checking availability:', error);
       this.showFieldError(
-        'time',
+        'appointment-time',
         'Error verificando disponibilidad. Inténtalo más tarde.'
       );
     }
@@ -538,7 +573,7 @@ class MeetingModalManager {
     this.clearError();
     this.clearFieldError('name');
     this.clearFieldError('email');
-    this.clearFieldError('time');
+    this.clearFieldError('appointment-time');
 
     // Resetear estado de carga
     this.setLoadingState(false);

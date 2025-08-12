@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getGoogleCalendarService } from '../../../lib/services/googleCalendar';
+import { getGoogleCalendarService } from '../../../lib/services/googleCalendar.ts';
 
 export const GET: APIRoute = async () => {
   try {
