@@ -131,10 +131,6 @@ class GoogleCalendarService {
 
       console.log('✅ Verificación de disponibilidad: DISPONIBLE');
 
-      // Generar ID único para la conferencia
-      const conferenceId = `meet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      console.log(`🎥 Creando conferencia Google Meet con ID: ${conferenceId}`);
-
       // Crear el evento sin attendees (para evitar problemas de Domain-Wide Delegation)
       const event = {
         summary: `Consulta con ${appointment.name}`,
@@ -146,15 +142,6 @@ class GoogleCalendarService {
         end: {
           dateTime: endDate.toISOString(),
           timeZone: this.timezone,
-        },
-        // Configurar Google Meet automáticamente
-        conferenceData: {
-          createRequest: {
-            requestId: conferenceId,
-            conferenceSolutionKey: {
-              type: 'hangoutsMeet',
-            },
-          },
         },
         reminders: {
           useDefault: false,
@@ -168,7 +155,6 @@ class GoogleCalendarService {
       const response = await this.calendar.events.insert({
         calendarId: this.calendarId,
         requestBody: event,
-        conferenceDataVersion: 1,
         sendUpdates: 'none', // No enviar actualizaciones ya que no hay attendees
       });
 
