@@ -135,10 +135,10 @@ class GoogleCalendarService {
       const conferenceId = `meet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       console.log(`🎥 Creando conferencia Google Meet con ID: ${conferenceId}`);
 
-      // Crear el evento
+      // Crear el evento sin attendees (para evitar problemas de Domain-Wide Delegation)
       const event = {
         summary: `Consulta con ${appointment.name}`,
-        description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}`,
+        description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}\n\nCliente: ${appointment.name} (${appointment.email})`,
         start: {
           dateTime: startDate.toISOString(),
           timeZone: this.timezone,
@@ -147,9 +147,6 @@ class GoogleCalendarService {
           dateTime: endDate.toISOString(),
           timeZone: this.timezone,
         },
-        attendees: [
-          { email: appointment.email, displayName: appointment.name },
-        ],
         // Configurar Google Meet automáticamente
         conferenceData: {
           createRequest: {
@@ -172,7 +169,7 @@ class GoogleCalendarService {
         calendarId: this.calendarId,
         requestBody: event,
         conferenceDataVersion: 1,
-        sendUpdates: 'all',
+        sendUpdates: 'none', // No enviar actualizaciones ya que no hay attendees
       });
 
       const createdEvent = response.data;
