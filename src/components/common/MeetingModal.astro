@@ -27,66 +27,71 @@ import Button from '../common/Button.astro';
         </div>
 
         <form id="appointment-form">
-          <div class="form-group">
-            <label for="name">👤 Nombre Completo *</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              placeholder="Tu nombre completo"
-            />
-            <div class="field-error" id="name-error"></div>
-          </div>
-
-          <div class="form-group">
-            <label for="email">📧 Correo Electrónico *</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              placeholder="tu@email.com"
-            />
-            <div class="field-error" id="email-error"></div>
-          </div>
-
-          <div class="form-group">
-            <label for="meeting-type">💼 Tipo de Consulta</label>
-            <select id="meeting-type" name="meeting-type">
-              <option value="Consulta General">Consulta General</option>
-              <option value="Marketing Digital">Marketing Digital</option>
-              <option value="Inteligencia Artificial"
-                >Inteligencia Artificial</option
-              >
-              <option value="Desarrollo Web">Desarrollo Web</option>
-              <option value="SEO y Posicionamiento"
-                >SEO y Posicionamiento</option
-              >
-              <option value="Publicidad Digital">Publicidad Digital</option>
-              <option value="Automatización">Automatización</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="appointment-time">🕐 Fecha y Hora *</label>
-            <input
-              type="text"
-              id="appointment-time"
-              name="appointment-time"
-              required
-              placeholder="Selecciona un horario disponible..."
-            />
-            <div class="field-error" id="time-error"></div>
-            <div class="time-info">
-              <p class="text-sm text-gray-600 mt-2">
-                <strong>Horarios disponibles:</strong> Lunes a Viernes, 9:00 AM -
-                5:00 PM (Hora de México)
-              </p>
-              <p class="text-sm text-gray-600">
-                <strong>Duración:</strong> 60 minutos
-              </p>
+          <div class="form-row">
+            <div class="form-group form-col">
+              <label for="name">👤 Nombre Completo *</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                placeholder="Tu nombre completo"
+              />
+              <div class="field-error" id="name-error"></div>
             </div>
+
+            <div class="form-group form-col">
+              <label for="email">📧 Correo Electrónico *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="tu@email.com"
+              />
+              <div class="field-error" id="email-error"></div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-col">
+              <label for="meeting-type">💼 Tipo de Consulta</label>
+              <select id="meeting-type" name="meeting-type">
+                <option value="Consulta General">Consulta General</option>
+                <option value="Marketing Digital">Marketing Digital</option>
+                <option value="Inteligencia Artificial"
+                  >Inteligencia Artificial</option
+                >
+                <option value="Desarrollo Web">Desarrollo Web</option>
+                <option value="SEO y Posicionamiento"
+                  >SEO y Posicionamiento</option
+                >
+                <option value="Publicidad Digital">Publicidad Digital</option>
+                <option value="Automatización">Automatización</option>
+              </select>
+            </div>
+
+            <div class="form-group form-col">
+              <label for="appointment-time">🕐 Fecha y Hora *</label>
+              <input
+                type="text"
+                id="appointment-time"
+                name="appointment-time"
+                required
+                placeholder="Selecciona un horario disponible..."
+              />
+              <div class="field-error" id="time-error"></div>
+            </div>
+          </div>
+
+          <div class="time-info">
+            <p class="text-sm text-gray-600">
+              <strong>Horarios disponibles:</strong> Lunes a Viernes, 9:00 AM - 5:00
+              PM (Hora de México)
+            </p>
+            <p class="text-sm text-gray-600">
+              <strong>Duración:</strong> 60 minutos
+            </p>
           </div>
 
           <div class="form-group">
@@ -100,12 +105,7 @@ import Button from '../common/Button.astro';
           </div>
 
           <div class="form-actions">
-            <Button
-              text="📅 Confirmar Cita"
-              variant="primary"
-              type="submit"
-              class="w-full"
-            />
+            <Button text="📅 Confirmar Cita" variant="primary" type="submit" />
           </div>
         </form>
       </div>
@@ -201,6 +201,17 @@ import Button from '../common/Button.astro';
     margin-bottom: 1.5rem;
   }
 
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-col {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
   .form-group label {
     display: block;
     margin-bottom: 0.5rem;
@@ -253,6 +264,10 @@ import Button from '../common/Button.astro';
 
   .form-actions {
     margin-top: 2rem;
+  }
+
+  .form-actions button {
+    width: 100%;
   }
 
   .confirmation-container {
@@ -359,6 +374,19 @@ import Button from '../common/Button.astro';
 
     .modal-header h2 {
       font-size: 1.5rem;
+    }
+
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .form-col {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-col:last-child {
+      margin-bottom: 0;
     }
   }
 </style>
