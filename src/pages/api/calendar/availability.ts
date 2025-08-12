@@ -59,8 +59,13 @@ export const GET: APIRoute = async ({ request, url }) => {
       );
     }
 
+    console.log('🔍 Getting calendar service...');
     const calendarService = getGoogleCalendarService();
+    console.log('📅 Calendar service type:', calendarService.constructor.name);
+    
+    console.log('🔍 Getting available slots...');
     const availableSlots = await calendarService.getAvailableSlots(date, duration);
+    console.log('✅ Available slots retrieved:', availableSlots.length);
 
     // Filtrar solo los slots disponibles para la respuesta
     const availableOnly = availableSlots.filter(slot => slot.available);

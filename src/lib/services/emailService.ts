@@ -14,7 +14,7 @@ class EmailService {
   private transporter: nodemailer.Transporter;
 
   constructor() {
-    this.transporter = nodemailer.createTransporter({
+    this.transporter = nodemailer.createTransport({
       host: 'mail.iapunto.com',
       port: 587, // Puerto SMTP estándar para TLS
       secure: false, // true para 465, false para otros puertos

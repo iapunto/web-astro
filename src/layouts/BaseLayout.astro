@@ -99,7 +99,7 @@ const config = variantConfig[variant];
 
 // reCAPTCHA solo si está habilitado
 const RECAPTCHA_SITE_KEY = showRecaptcha
-  ? import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY
+  ? import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY || null
   : null;
 ---
 

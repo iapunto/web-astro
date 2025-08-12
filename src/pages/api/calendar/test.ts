@@ -129,9 +129,13 @@ export const GET: APIRoute = async () => {
     };
 
     try {
-      // Probar endpoint de disponibilidad
+      // Probar endpoint de disponibilidad con una fecha válida (mañana)
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const dateStr = tomorrow.toISOString().split('T')[0];
+      
       const availabilityUrl = new URL(
-        '/api/calendar/availability?date=2025-02-01',
+        `/api/calendar/availability?date=${dateStr}`,
         process.env.APP_URL || 'http://localhost:4321'
       );
       const availabilityResponse = await fetch(availabilityUrl.toString());
