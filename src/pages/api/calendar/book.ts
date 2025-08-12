@@ -365,7 +365,7 @@ export const POST: APIRoute = async ({ request }) => {
     // Enviar emails de confirmación
     console.log('📧 Enviando emails de confirmación...');
     const emailService = new EmailService();
-    
+
     const emailData = {
       name: appointmentData.name,
       email: appointmentData.email,
@@ -377,7 +377,8 @@ export const POST: APIRoute = async ({ request }) => {
     };
 
     // Enviar email al cliente
-    const clientEmailSent = await emailService.sendAppointmentConfirmation(emailData);
+    const clientEmailSent =
+      await emailService.sendAppointmentConfirmation(emailData);
     if (clientEmailSent) {
       console.log('✅ Email de confirmación enviado al cliente');
     } else {
@@ -385,7 +386,8 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Enviar notificación al administrador
-    const adminEmailSent = await emailService.sendNotificationToAdmin(emailData);
+    const adminEmailSent =
+      await emailService.sendNotificationToAdmin(emailData);
     if (adminEmailSent) {
       console.log('✅ Notificación enviada al administrador');
     } else {

@@ -26,7 +26,9 @@ class EmailService {
     });
   }
 
-  async sendAppointmentConfirmation(data: AppointmentEmailData): Promise<boolean> {
+  async sendAppointmentConfirmation(
+    data: AppointmentEmailData
+  ): Promise<boolean> {
     try {
       console.log('📧 Enviando email de confirmación...');
       console.log(`📧 Para: ${data.email}`);
@@ -34,7 +36,7 @@ class EmailService {
 
       const startDate = new Date(data.startTime);
       const endDate = new Date(data.endTime);
-      
+
       // Formatear fecha y hora en español
       const options: Intl.DateTimeFormatOptions = {
         weekday: 'long',
@@ -49,7 +51,7 @@ class EmailService {
       const startFormatted = startDate.toLocaleDateString('es-CO', options);
       const endFormatted = endDate.toLocaleDateString('es-CO', options);
 
-      const meetLinkHtml = data.meetLink 
+      const meetLinkHtml = data.meetLink
         ? `<p><strong>🔗 Enlace de Google Meet:</strong> <a href="${data.meetLink}" target="_blank">${data.meetLink}</a></p>`
         : '<p><strong>📞 Modalidad:</strong> Presencial o por teléfono</p>';
 
@@ -131,7 +133,7 @@ class EmailService {
       const result = await this.transporter.sendMail(mailOptions);
       console.log('✅ Email enviado exitosamente');
       console.log('📧 Message ID:', result.messageId);
-      
+
       return true;
     } catch (error) {
       console.error('❌ Error enviando email:', error);
@@ -145,7 +147,7 @@ class EmailService {
 
       const startDate = new Date(data.startTime);
       const endDate = new Date(data.endTime);
-      
+
       const options: Intl.DateTimeFormatOptions = {
         weekday: 'long',
         year: 'numeric',
@@ -216,7 +218,7 @@ class EmailService {
 
       const result = await this.transporter.sendMail(mailOptions);
       console.log('✅ Notificación al admin enviada exitosamente');
-      
+
       return true;
     } catch (error) {
       console.error('❌ Error enviando notificación al admin:', error);
