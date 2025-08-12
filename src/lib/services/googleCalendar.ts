@@ -1,8 +1,7 @@
 import { google } from 'googleapis';
 import type { calendar_v3 } from 'googleapis';
-import { MockCalendarService } from './mockCalendarService.js';
-import EmailService from './emailService.js';
 import * as dotenv from 'dotenv';
+import EmailService from './emailService.js';
 
 export interface AppointmentRequest {
   name: string;
@@ -31,12 +30,6 @@ export interface CalendarEvent {
     responseStatus?: string;
   }>;
   meetLink?: string;
-}
-
-export interface AvailabilitySlot {
-  start: Date;
-  end: Date;
-  available: boolean;
 }
 
 class GoogleCalendarService {
@@ -98,180 +91,133 @@ class GoogleCalendarService {
     this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
     this.timezone = process.env.TIMEZONE || 'America/Mexico_City';
     this.emailService = new EmailService();
-
-    console.log(`📅 Calendar service initialized with ID: ${this.calendarId}`);
   }
 
   /**
-   * Configurar tokens de acceso para el usuario autenticado
+   * Verificar la conexión con Google Calendar
    */
-  setCredentials(tokens: any) {
-    const auth = (this.calendar as any).options?.auth as any;
-    if (auth && auth.setCredentials) {
-      auth.setCredentials(tokens);
+  async verifyConnection(): Promise<boolean> {
+    try {
+      console.log('🔍 Verifying Google Calendar connection...');
+      
+      // Usar el endpoint de calendarios para verificar conexión
+      const response = await this.calendar.calendars.get({
+        calendarId: this.calendarId,
+      });
+
+      if (response.data) {
+        console.log('✅ Google Calendar connection verified');
+        console.log('📅 Calendar:', response.data.summary || 'Primary Calendar');
+        return true;
+      } else {
+        console.error('❌ Google Calendar connection failed: No calendar data');
+        return false;
+      }
+    } catch (error) {
+      console.error('❌ Google Calendar connection error:', error);
+      return false;
     }
   }
 
   /**
-   * Obtener URL de autorización para OAuth2
+   * Obtener slots disponibles para una fecha
    */
-  getAuthUrl(): string {
-    const auth = (this.calendar as any).options?.auth as any;
-    const scopes = [
-      'https://www.googleapis.com/auth/calendar',
-      'https://www.googleapis.com/auth/calendar.events',
-    ];
+  async getAvailableSlots(date: Date): Promise<any[]> {
+    try {
+      console.log('🔍 Getting available slots from Google Calendar...');
+      
+      // Convertir fecha a formato ISO
+      const startTime = new Date(date);
+      startTime.setHours(0, 0, 0, 0);
+      
+      const endTime = new Date(date);
+      endTime.setHours(23, 59, 59, 999);
 
-    return auth.generateAuthUrl({
-      access_type: 'offline',
-      scope: scopes,
-    });
+      // Obtener eventos existentes para la fecha
+      const response = await this.calendar.events.list({
+        calendarId: this.calendarId,
+        timeMin: startTime.toISOString(),
+        timeMax: endTime.toISOString(),
+        singleEvents: true,
+        orderBy: 'startTime',
+      });
+
+      const events = response.data.items || [];
+      console.log(`📅 Found ${events.length} existing events for ${date.toDateString()}`);
+
+      // Generar slots disponibles (9 AM a 6 PM, cada hora)
+      const availableSlots = [];
+      const workStartHour = 9;
+      const workEndHour = 18;
+      const slotDuration = 60; // minutos
+
+      for (let hour = workStartHour; hour < workEndHour; hour++) {
+        const slotStart = new Date(date);
+        slotStart.setHours(hour, 0, 0, 0);
+        
+        const slotEnd = new Date(slotStart.getTime() + slotDuration * 60 * 1000);
+        
+        // Verificar si el slot está disponible
+        const isAvailable = !events.some(event => {
+          const eventStart = new Date(event.start?.dateTime || event.start?.date || '');
+          const eventEnd = new Date(event.end?.dateTime || event.end?.date || '');
+          
+          return (
+            (slotStart >= eventStart && slotStart < eventEnd) ||
+            (slotEnd > eventStart && slotEnd <= eventEnd) ||
+            (slotStart <= eventStart && slotEnd >= eventEnd)
+          );
+        });
+
+        if (isAvailable) {
+          availableSlots.push({
+            start_time: slotStart.toISOString(),
+            end_time: slotEnd.toISOString(),
+            status: 'available'
+          });
+        }
+      }
+
+      console.log(`✅ Found ${availableSlots.length} available slots`);
+      return availableSlots;
+    } catch (error) {
+      console.error('❌ Error getting available slots:', error);
+      return [];
+    }
   }
 
   /**
-   * Intercambiar código de autorización por tokens
-   */
-  async getTokensFromCode(code: string) {
-    const auth = (this.calendar as any).options?.auth as any;
-    const { tokens } = await auth.getToken(code);
-    return tokens;
-  }
-
-  /**
-   * Verificar disponibilidad en un rango de tiempo
+   * Verificar disponibilidad para un horario específico
    */
   async checkAvailability(startTime: Date, endTime: Date): Promise<boolean> {
     try {
-      console.log('🔍 ===== CHECK AVAILABILITY START =====');
-      console.log(
-        `🔍 Checking availability: ${startTime.toISOString()} - ${endTime.toISOString()}`
-      );
-      console.log(`📅 Calendar ID: ${this.calendarId}`);
-      console.log(`🌍 Timezone: ${this.timezone}`);
+      console.log('🔍 Checking availability...');
+      console.log(`🔍 Checking availability: ${startTime.toISOString()} - ${endTime.toISOString()}`);
 
-      const requestBody = {
-        timeMin: startTime.toISOString(),
-        timeMax: endTime.toISOString(),
-        items: [{ id: this.calendarId }],
-        timeZone: this.timezone,
-      };
-
-      console.log(
-        '📤 Sending freebusy query with:',
-        JSON.stringify(requestBody, null, 2)
-      );
-
-      const response = await this.calendar.freebusy.query({
-        requestBody,
-      });
-
-      console.log('📥 Freebusy response received');
-      console.log('📊 Response data:', JSON.stringify(response.data, null, 2));
-
-      const busyTimes = response.data.calendars?.[this.calendarId]?.busy || [];
-      const isAvailable = busyTimes.length === 0;
-
-      console.log(
-        `📊 Availability check result: ${isAvailable ? 'AVAILABLE' : 'BUSY'} (${busyTimes.length} conflicts)`
-      );
-      if (busyTimes.length > 0) {
-        console.log('🚫 Busy times found:', JSON.stringify(busyTimes, null, 2));
-      }
-      console.log('🔍 ===== CHECK AVAILABILITY END =====');
-
-      return isAvailable;
-    } catch (error) {
-      console.error('❌ ===== CHECK AVAILABILITY ERROR =====');
-      console.error('❌ Error checking availability:', error);
-      console.error(
-        '❌ Error details:',
-        error instanceof Error ? error.message : 'Unknown error'
-      );
-      console.error('❌ ===== CHECK AVAILABILITY ERROR END =====');
-      throw new Error('No se pudo verificar la disponibilidad');
-    }
-  }
-
-  /**
-   * Obtener slots de disponibilidad para un día específico
-   */
-  async getAvailableSlots(
-    date: Date,
-    durationMinutes: number = 60
-  ): Promise<AvailabilitySlot[]> {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(
-      parseInt(process.env.BUSINESS_HOURS_START?.split(':')[0] || '9'),
-      0,
-      0,
-      0
-    );
-
-    const endOfDay = new Date(date);
-    endOfDay.setHours(
-      parseInt(process.env.BUSINESS_HOURS_END?.split(':')[0] || '17'),
-      0,
-      0,
-      0
-    );
-
-    const slots: AvailabilitySlot[] = [];
-    const slotDuration = durationMinutes * 60 * 1000; // Convert to milliseconds
-
-    try {
-      console.log(`📅 Getting available slots for ${date.toDateString()}`);
-
-      // Obtener eventos ocupados del día
       const response = await this.calendar.freebusy.query({
         requestBody: {
-          timeMin: startOfDay.toISOString(),
-          timeMax: endOfDay.toISOString(),
+          timeMin: startTime.toISOString(),
+          timeMax: endTime.toISOString(),
           items: [{ id: this.calendarId }],
           timeZone: this.timezone,
         },
       });
 
-      const busyTimes = response.data.calendars?.[this.calendarId]?.busy || [];
+      const calendarData = response.data.calendars?.[this.calendarId];
+      const busyPeriods = calendarData?.busy || [];
 
-      // Generar slots cada 30 minutos
-      const slotInterval = 30 * 60 * 1000; // 30 minutes in milliseconds
-      let currentTime = startOfDay.getTime();
+      console.log(`📊 Response data:`, response.data);
+      console.log(`📊 Availability check result: ${busyPeriods.length === 0 ? 'AVAILABLE' : 'BUSY'} (${busyPeriods.length} conflicts)`);
 
-      while (currentTime + slotDuration <= endOfDay.getTime()) {
-        const slotStart = new Date(currentTime);
-        const slotEnd = new Date(currentTime + slotDuration);
-
-        // Verificar si el slot está ocupado
-        const isAvailable = !busyTimes.some((busy: any) => {
-          const busyStart = new Date(busy.start).getTime();
-          const busyEnd = new Date(busy.end).getTime();
-
-          return slotStart.getTime() < busyEnd && slotEnd.getTime() > busyStart;
-        });
-
-        slots.push({
-          start: slotStart,
-          end: slotEnd,
-          available: isAvailable,
-        });
-
-        currentTime += slotInterval;
-      }
-
-      const availableCount = slots.filter((slot) => slot.available).length;
-      console.log(
-        `✅ Found ${availableCount} available slots out of ${slots.length} total slots`
-      );
-
-      return slots;
+      return busyPeriods.length === 0;
     } catch (error) {
-      console.error('❌ Error getting available slots:', error);
-      throw new Error('No se pudieron obtener los horarios disponibles');
+      console.error('❌ Error checking availability:', error);
+      return false;
     }
   }
 
   /**
-   * Crear una nueva cita en Google Calendar
+   * Crear una cita en Google Calendar
    */
   async createAppointment(
     appointment: AppointmentRequest
@@ -280,35 +226,32 @@ class GoogleCalendarService {
       console.log('🚀 ===== CREATE APPOINTMENT START =====');
       console.log(`📝 Creating appointment for ${appointment.name}`);
       console.log(`📅 Date: ${appointment.startTime.toISOString()}`);
-      console.log(
-        `⏰ Duration: ${Math.round((appointment.endTime.getTime() - appointment.startTime.getTime()) / (1000 * 60))} minutes`
-      );
+      console.log(`⏰ Duration: ${Math.round((appointment.endTime.getTime() - appointment.startTime.getTime()) / (1000 * 60))} minutes`);
       console.log(`📧 Email: ${appointment.email}`);
       console.log(`📋 Description: ${appointment.description}`);
       console.log(`🎯 Meeting Type: ${appointment.meetingType}`);
 
-      // Verificar disponibilidad antes de crear
+      // Verificar disponibilidad
       console.log('🔍 Checking availability...');
       const isAvailable = await this.checkAvailability(
         appointment.startTime,
         appointment.endTime
       );
 
-      console.log(
-        `✅ Availability check result: ${isAvailable ? 'AVAILABLE' : 'NOT AVAILABLE'}`
-      );
-
       if (!isAvailable) {
-        console.error('❌ Selected time is not available');
         throw new Error('El horario seleccionado no está disponible');
       }
 
+      console.log('✅ Availability check result: AVAILABLE');
+
       // Generar ID único para la conferencia
       const conferenceId = `meet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      console.log(`🎥 Creating Google Meet conference with ID: ${conferenceId}`);
 
-      const event: calendar_v3.Schema$Event = {
+      // Crear el evento
+      const event = {
         summary: `Consulta con ${appointment.name}`,
-        description: this.generateEventDescription(appointment),
+        description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}`,
         start: {
           dateTime: appointment.startTime.toISOString(),
           timeZone: this.timezone,
@@ -317,13 +260,9 @@ class GoogleCalendarService {
           dateTime: appointment.endTime.toISOString(),
           timeZone: this.timezone,
         },
-        reminders: {
-          useDefault: false,
-          overrides: [
-            { method: 'email', minutes: 24 * 60 }, // 24 hours before
-            { method: 'popup', minutes: 30 }, // 30 minutes before
-          ],
-        },
+        attendees: [
+          { email: appointment.email, displayName: appointment.name },
+        ],
         // Configurar Google Meet automáticamente
         conferenceData: {
           createRequest: {
@@ -333,28 +272,24 @@ class GoogleCalendarService {
             },
           },
         },
-        // Configurar permisos del evento
-        guestsCanModify: false,
-        guestsCanInviteOthers: false,
-        guestsCanSeeOtherGuests: false,
-        // Configurar visibilidad
-        transparency: 'opaque', // Muestra como ocupado
-        // Configurar ubicación virtual
-        location: 'Reunión Virtual - Google Meet',
+        reminders: {
+          useDefault: false,
+          overrides: [
+            { method: 'email', minutes: 24 * 60 }, // 24 horas antes
+            { method: 'popup', minutes: 30 }, // 30 minutos antes
+          ],
+        },
       };
-
-      console.log(
-        `🎥 Creating Google Meet conference with ID: ${conferenceId}`
-      );
 
       const response = await this.calendar.events.insert({
         calendarId: this.calendarId,
         requestBody: event,
         conferenceDataVersion: 1,
-        sendUpdates: this.isServiceAccount ? 'none' : 'all', // Service Account no puede enviar invitaciones automáticas
+        sendUpdates: 'all',
       });
 
       const createdEvent = response.data;
+
       console.log(`✅ Event created successfully: ${createdEvent.id}`);
       console.log(`📅 Event summary: ${createdEvent.summary}`);
       console.log(`🕐 Event start: ${createdEvent.start?.dateTime}`);
@@ -388,7 +323,7 @@ class GoogleCalendarService {
           }),
           meetLink,
           eventId: createdEvent.id!,
-          meetingType: appointment.meetingType,
+          meetingType: appointment.meetingType || 'Consulta General',
         });
 
         // Notificación interna
@@ -401,7 +336,7 @@ class GoogleCalendarService {
             minute: '2-digit',
           }),
           eventId: createdEvent.id!,
-          meetingType: appointment.meetingType,
+          meetingType: appointment.meetingType || 'Consulta General',
         });
 
         console.log(`📧 Email notifications sent successfully`);
@@ -410,7 +345,9 @@ class GoogleCalendarService {
         // No fallar la creación del evento por problemas de email
       }
 
-      const result = {
+      console.log('🏁 ===== CREATE APPOINTMENT END =====');
+
+      return {
         id: createdEvent.id!,
         summary: createdEvent.summary!,
         description: createdEvent.description || undefined,
@@ -422,149 +359,16 @@ class GoogleCalendarService {
           dateTime: createdEvent.end!.dateTime!,
           timeZone: createdEvent.end!.timeZone!,
         },
-        attendees:
-          createdEvent.attendees?.map((attendee) => ({
-            email: attendee.email!,
-            displayName: attendee.displayName || undefined,
-            responseStatus: attendee.responseStatus || undefined,
-          })) || [],
-        meetLink: meetLink || undefined,
-      };
-
-      console.log('🎉 ===== CREATE APPOINTMENT SUCCESS =====');
-      console.log(`✅ Final result:`, JSON.stringify(result, null, 2));
-      console.log('🎉 ===== CREATE APPOINTMENT END =====');
-
-      return result;
-    } catch (error) {
-      console.error('❌ ===== CREATE APPOINTMENT ERROR =====');
-      console.error('❌ Error creating appointment:', error);
-      console.error(
-        '❌ Error details:',
-        error instanceof Error ? error.message : 'Unknown error'
-      );
-      console.error(
-        '❌ Error stack:',
-        error instanceof Error ? error.stack : 'No stack trace'
-      );
-      console.error('❌ ===== CREATE APPOINTMENT ERROR END =====');
-      throw new Error('No se pudo crear la cita');
-    }
-  }
-
-  /**
-   * Generar descripción del evento
-   */
-  private generateEventDescription(appointment: AppointmentRequest): string {
-    const lines = [
-      `Reunión agendada con ${appointment.name}`,
-      '',
-      `📧 Email: ${appointment.email}`,
-      `💼 Tipo: ${appointment.meetingType || 'Consulta general'}`,
-      `⏰ Duración: ${Math.round((appointment.endTime.getTime() - appointment.startTime.getTime()) / (1000 * 60))} minutos`,
-      '',
-      appointment.description ||
-        'Consulta sobre marketing digital e inteligencia artificial',
-      '',
-      '---',
-      'Agendado automáticamente desde iapunto.com',
-      'Para cancelar o reprogramar, contacta a info@iapunto.com',
-    ];
-
-    return lines.join('\n');
-  }
-
-  /**
-   * Actualizar una cita existente
-   */
-  async updateAppointment(
-    eventId: string,
-    updates: Partial<AppointmentRequest>
-  ): Promise<CalendarEvent> {
-    try {
-      console.log(`📝 Updating appointment: ${eventId}`);
-
-      const event: calendar_v3.Schema$Event = {};
-
-      if (updates.name) {
-        event.summary = `Consulta con ${updates.name}`;
-      }
-
-      if (updates.startTime && updates.endTime) {
-        event.start = {
-          dateTime: updates.startTime.toISOString(),
-          timeZone: this.timezone,
-        };
-        event.end = {
-          dateTime: updates.endTime.toISOString(),
-          timeZone: this.timezone,
-        };
-      }
-
-      if (updates.description) {
-        event.description = updates.description;
-      }
-
-      if (updates.email) {
-        event.attendees = [
-          {
-            email: updates.email,
-            displayName: updates.name,
-          },
-        ];
-      }
-
-      const response = await this.calendar.events.patch({
-        calendarId: this.calendarId,
-        eventId: eventId,
-        requestBody: event,
-        sendUpdates: 'all',
-      });
-
-      const updatedEvent = response.data;
-      console.log(`✅ Appointment updated successfully`);
-
-      return {
-        id: updatedEvent.id!,
-        summary: updatedEvent.summary!,
-        description: updatedEvent.description,
-        start: {
-          dateTime: updatedEvent.start!.dateTime!,
-          timeZone: updatedEvent.start!.timeZone!,
-        },
-        end: {
-          dateTime: updatedEvent.end!.dateTime!,
-          timeZone: updatedEvent.end!.timeZone!,
-        },
-        attendees: updatedEvent.attendees?.map((attendee) => ({
+        attendees: createdEvent.attendees?.map((attendee) => ({
           email: attendee.email!,
           displayName: attendee.displayName || undefined,
           responseStatus: attendee.responseStatus || undefined,
         })),
+        meetLink: meetLink || undefined,
       };
     } catch (error) {
-      console.error('❌ Error updating appointment:', error);
-      throw new Error('No se pudo actualizar la cita');
-    }
-  }
-
-  /**
-   * Cancelar una cita
-   */
-  async cancelAppointment(eventId: string): Promise<void> {
-    try {
-      console.log(`❌ Canceling appointment: ${eventId}`);
-
-      await this.calendar.events.delete({
-        calendarId: this.calendarId,
-        eventId: eventId,
-        sendUpdates: 'all',
-      });
-
-      console.log(`✅ Appointment canceled successfully`);
-    } catch (error) {
-      console.error('❌ Error canceling appointment:', error);
-      throw new Error('No se pudo cancelar la cita');
+      console.error('❌ Error creating appointment:', error);
+      throw error;
     }
   }
 
@@ -590,7 +394,7 @@ class GoogleCalendarService {
       return {
         id: event.id!,
         summary: event.summary!,
-        description: event.description,
+        description: event.description || undefined,
         start: {
           dateTime: event.start!.dateTime!,
           timeZone: event.start!.timeZone!,
@@ -604,7 +408,7 @@ class GoogleCalendarService {
           displayName: attendee.displayName || undefined,
           responseStatus: attendee.responseStatus || undefined,
         })),
-        meetLink,
+        meetLink: meetLink || undefined,
       };
     } catch (error) {
       console.error('❌ Error getting appointment:', error);
@@ -613,26 +417,109 @@ class GoogleCalendarService {
   }
 
   /**
-   * Verificar el estado de la conexión con Google Calendar
+   * Cancelar una cita
    */
-  async testConnection(): Promise<boolean> {
+  async cancelAppointment(eventId: string, reason?: string): Promise<boolean> {
     try {
-      console.log('🔍 Testing Google Calendar connection...');
+      console.log(`❌ Canceling appointment: ${eventId}`);
 
-      const response = await this.calendar.calendarList.list({
-        maxResults: 1,
+      await this.calendar.events.delete({
+        calendarId: this.calendarId,
+        eventId: eventId,
+        sendUpdates: 'all',
       });
 
-      const hasAccess = response.data.items && response.data.items.length > 0;
-      console.log(
-        `✅ Calendar connection test: ${hasAccess ? 'SUCCESS' : 'FAILED'}`
-      );
-
-      return hasAccess;
+      console.log('✅ Appointment canceled successfully');
+      return true;
     } catch (error) {
-      console.error('❌ Calendar connection test failed:', error);
+      console.error('❌ Error canceling appointment:', error);
       return false;
     }
+  }
+
+  /**
+   * Obtener información del calendario
+   */
+  async getCalendarInfo(): Promise<any> {
+    try {
+      const response = await this.calendar.calendars.get({
+        calendarId: this.calendarId,
+      });
+
+      return {
+        id: response.data.id,
+        summary: response.data.summary,
+        description: response.data.description,
+        timeZone: response.data.timeZone,
+        accessRole: (response.data as any).accessRole,
+      };
+    } catch (error) {
+      console.error('❌ Error getting calendar info:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Listar próximos eventos
+   */
+  async listUpcomingEvents(maxResults: number = 10): Promise<CalendarEvent[]> {
+    try {
+      const response = await this.calendar.events.list({
+        calendarId: this.calendarId,
+        timeMin: new Date().toISOString(),
+        maxResults: maxResults,
+        singleEvents: true,
+        orderBy: 'startTime',
+      });
+
+      const events = response.data.items || [];
+
+      return events.map((event) => ({
+        id: event.id!,
+        summary: event.summary!,
+        description: event.description || undefined,
+        start: {
+          dateTime: event.start!.dateTime!,
+          timeZone: event.start!.timeZone!,
+        },
+        end: {
+          dateTime: event.end!.dateTime!,
+          timeZone: event.end!.timeZone!,
+        },
+        attendees: event.attendees?.map((attendee) => ({
+          email: attendee.email!,
+          displayName: attendee.displayName || undefined,
+          responseStatus: attendee.responseStatus || undefined,
+        })),
+        meetLink: event.conferenceData?.entryPoints?.find(
+          (entry) => entry.entryPointType === 'video'
+        )?.uri || undefined,
+      }));
+    } catch (error) {
+      console.error('❌ Error listing upcoming events:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Configurar tokens de acceso para el usuario autenticado
+   */
+  setCredentials(tokens: any) {
+    const auth = (this.calendar as any).options?.auth as any;
+    if (auth && auth.setCredentials) {
+      auth.setCredentials(tokens);
+    }
+  }
+
+  /**
+   * Obtener tokens desde un código de autorización
+   */
+  async getTokensFromCode(code: string): Promise<any> {
+    const auth = (this.calendar as any).options?.auth as any;
+    if (auth && auth.getToken) {
+      return await auth.getToken(code);
+    }
+    throw new Error('OAuth2 client not configured');
   }
 }
 
@@ -690,35 +577,136 @@ function hasGoogleCredentials(): boolean {
   return false;
 }
 
-export function getGoogleCalendarService():
-  | GoogleCalendarService
-  | MockCalendarService {
+/**
+ * Servicio mock para desarrollo y pruebas
+ */
+class MockCalendarService {
+  async verifyConnection(): Promise<boolean> {
+    console.log('🤖 Mock: Connection verified');
+    return true;
+  }
+
+  async getAvailableSlots(date: Date): Promise<any[]> {
+    console.log('🤖 Mock: Getting available slots');
+    
+    // Generar slots mock (9 AM a 6 PM)
+    const slots = [];
+    for (let hour = 9; hour < 18; hour++) {
+      const slotStart = new Date(date);
+      slotStart.setHours(hour, 0, 0, 0);
+      
+      const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000);
+      
+      slots.push({
+        start_time: slotStart.toISOString(),
+        end_time: slotEnd.toISOString(),
+        status: 'available'
+      });
+    }
+    
+    console.log(`🤖 Mock: Generated ${slots.length} available slots`);
+    return slots;
+  }
+
+  async createAppointment(appointment: AppointmentRequest): Promise<CalendarEvent> {
+    console.log('🤖 Mock: Creating appointment');
+    
+    const mockEvent: CalendarEvent = {
+      id: `mock-${Date.now()}`,
+      summary: `Consulta con ${appointment.name}`,
+      description: appointment.description,
+      start: {
+        dateTime: appointment.startTime.toISOString(),
+        timeZone: 'America/Mexico_City',
+      },
+      end: {
+        dateTime: appointment.endTime.toISOString(),
+        timeZone: 'America/Mexico_City',
+      },
+      attendees: [
+        {
+          email: appointment.email,
+          displayName: appointment.name,
+          responseStatus: 'accepted',
+        },
+      ],
+      meetLink: `https://meet.google.com/mock-${Date.now()}`,
+    };
+
+    console.log('🤖 Mock: Appointment created successfully');
+    return mockEvent;
+  }
+
+  async getAppointment(eventId: string): Promise<CalendarEvent> {
+    console.log('🤖 Mock: Getting appointment');
+    throw new Error('Mock service does not support getting appointments');
+  }
+
+  async cancelAppointment(eventId: string): Promise<boolean> {
+    console.log('🤖 Mock: Canceling appointment');
+    return true;
+  }
+
+  async getCalendarInfo(): Promise<any> {
+    console.log('🤖 Mock: Getting calendar info');
+    return {
+      id: 'mock-calendar',
+      summary: 'Mock Calendar',
+      timeZone: 'America/Mexico_City',
+    };
+  }
+
+  async listUpcomingEvents(): Promise<CalendarEvent[]> {
+    console.log('🤖 Mock: Listing upcoming events');
+    return [];
+  }
+
+  setCredentials(tokens: any) {
+    console.log('🤖 Mock: Setting credentials');
+  }
+
+  async getTokensFromCode(code: string): Promise<any> {
+    console.log('🤖 Mock: Getting tokens from code');
+    throw new Error('Mock service does not support OAuth2');
+  }
+}
+
+/**
+ * Obtener instancia del servicio de Google Calendar
+ */
+export function getGoogleCalendarService(): GoogleCalendarService | MockCalendarService {
   console.log('🚀 getGoogleCalendarService() called');
 
-  // FORZAR USO DEL SERVICIO REAL - DESACTIVAR MOCK
-  console.log('🔧 FORCING REAL SERVICE - MOCK DISABLED');
-
-  // Si no hay credenciales configuradas, LANZAR ERROR en lugar de usar mock
+  // Verificar si las credenciales están configuradas
   if (!hasGoogleCredentials()) {
-    console.error('❌ CRITICAL: No Google Calendar credentials found');
-    console.error('❌ Cannot use mock service - forcing real service only');
-    throw new Error(
-      'Google Calendar credentials not configured. Please check environment variables.'
-    );
+    console.log('❌ No Google Calendar credentials found, using mock service');
+    if (!mockCalendarService) {
+      mockCalendarService = new MockCalendarService();
+    }
+    return mockCalendarService;
   }
 
-  // Si hay credenciales, usar el servicio real
-  if (!googleCalendarService) {
-    console.log('🔄 Creating new GoogleCalendarService instance...');
-    googleCalendarService = new GoogleCalendarService();
-  } else {
-    console.log('✅ Using existing GoogleCalendarService instance');
+  // Usar Service Account (preferido)
+  if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
+    console.log('🔧 FORCING REAL SERVICE - MOCK DISABLED');
+    
+    if (!googleCalendarService) {
+      console.log('🔄 Creating new GoogleCalendarService instance...');
+      googleCalendarService = new GoogleCalendarService();
+      console.log('✅ Service Account authentication configured');
+      console.log(`📅 Calendar service initialized with ID: ${process.env.GOOGLE_CALENDAR_ID || 'primary'}`);
+    }
+    
+    console.log('📅 Returning service type: GoogleCalendarService');
+    return googleCalendarService;
   }
 
-  console.log(
-    `📅 Returning service type: ${googleCalendarService.constructor.name}`
-  );
-  return googleCalendarService;
+  // Fallback a OAuth2 (requiere configuración adicional)
+  console.log('⚠️ OAuth2 configuration detected but tokens not available');
+  if (!mockCalendarService) {
+    mockCalendarService = new MockCalendarService();
+  }
+  return mockCalendarService;
 }
 
 export default GoogleCalendarService;

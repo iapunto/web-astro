@@ -1,9 +1,9 @@
-import type { AppointmentRequest } from './googleCalendar';
-import GoogleCalendarService from './googleCalendar';
-import CalendlyService from './calendlyService';
-import EmailService from './emailService';
+import type { AppointmentRequest } from './googleCalendar.js';
+import GoogleCalendarService from './googleCalendar.js';
+import CalendlyService from './calendlyService.js';
+import EmailService from './emailService.js';
 
-export type ServiceType = 'calendly' | 'google-calendar';
+export type ServiceType = 'google-calendar' | 'calendly';
 
 class AppointmentService {
   private calendlyService: CalendlyService;
@@ -15,196 +15,208 @@ class AppointmentService {
     this.calendlyService = new CalendlyService();
     this.googleCalendarService = new GoogleCalendarService();
     this.emailService = new EmailService();
-    
-    // Determinar qué servicio usar basado en las variables de entorno
     this.preferredService = this.determinePreferredService();
-    
     console.log(`🎯 Using ${this.preferredService} as primary appointment service`);
   }
 
-  /**
-   * Determinar qué servicio usar basado en la configuración
-   */
   private determinePreferredService(): ServiceType {
-    const hasCalendlyConfig = process.env.CALENDLY_API_KEY && process.env.CALENDLY_EVENT_TYPE_URI;
     const hasGoogleConfig = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY;
+    const hasCalendlyConfig = process.env.CALENDLY_API_KEY && process.env.CALENDLY_EVENT_TYPE_URI;
     
-    if (hasCalendlyConfig) {
-      console.log('✅ Calendly configuration found - using Calendly as primary service');
-      return 'calendly';
-    } else if (hasGoogleConfig) {
+    if (hasGoogleConfig) {
       console.log('✅ Google Calendar configuration found - using Google Calendar as primary service');
       return 'google-calendar';
-    } else {
-      console.warn('⚠️ No appointment service configuration found - defaulting to Calendly');
+    } else if (hasCalendlyConfig) {
+      console.log('✅ Calendly configuration found - using Calendly as fallback service');
       return 'calendly';
+    } else {
+      console.warn('⚠️ No appointment service configuration found - defaulting to Google Calendar');
+      return 'google-calendar';
     }
   }
 
-  /**
-   * Verificar la conexión del servicio activo
-   */
-  async verifyConnection(): Promise<boolean> {
+  async createAppointment(appointmentData: AppointmentRequest): Promise<any> {
+    console.log(`🚀 Creating appointment using ${this.preferredService}...`);
+    let result;
+    
     try {
-      if (this.preferredService === 'calendly') {
-        return await this.calendlyService.verifyConnection();
+      if (this.preferredService === 'google-calendar') {
+        result = await this.googleCalendarService.createAppointment(appointmentData);
       } else {
+        result = await this.calendlyService.createAppointment(appointmentData);
+      }
+      
+      // Enviar emails de confirmación
+      await this.sendConfirmationEmails(appointmentData, result);
+      return result;
+    } catch (error) {
+      console.error(`❌ Error creating appointment with ${this.preferredService}:`, error);
+      
+      // Si falla el servicio principal, intentar con el servicio alternativo
+      if (this.preferredService === 'google-calendar' && this.hasCalendlyConfig()) {
+        console.log('🔄 Falling back to Calendly service...');
+        try {
+          result = await this.calendlyService.createAppointment(appointmentData);
+          await this.sendConfirmationEmails(appointmentData, result);
+          return result;
+        } catch (fallbackError) {
+          console.error('❌ Fallback service also failed:', fallbackError);
+          throw error; // Lanzar el error original
+        }
+      } else if (this.preferredService === 'calendly' && this.hasGoogleConfig()) {
+        console.log('🔄 Falling back to Google Calendar service...');
+        try {
+          result = await this.googleCalendarService.createAppointment(appointmentData);
+          await this.sendConfirmationEmails(appointmentData, result);
+          return result;
+        } catch (fallbackError) {
+          console.error('❌ Fallback service also failed:', fallbackError);
+          throw error; // Lanzar el error original
+        }
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  async verifyConnection(): Promise<boolean> {
+    console.log(`🔍 Verifying connection with ${this.preferredService}...`);
+    
+    try {
+      if (this.preferredService === 'google-calendar') {
         return await this.googleCalendarService.verifyConnection();
+      } else {
+        return await this.calendlyService.verifyConnection();
       }
     } catch (error) {
-      console.error('❌ Connection verification failed:', error);
+      console.error(`❌ Connection verification failed for ${this.preferredService}:`, error);
       return false;
     }
   }
 
-  /**
-   * Obtener slots disponibles
-   */
   async getAvailableSlots(date: Date): Promise<any[]> {
+    console.log(`📅 Getting available slots from ${this.preferredService}...`);
+    
     try {
-      if (this.preferredService === 'calendly') {
-        return await this.calendlyService.getAvailableSlots(date);
-      } else {
+      if (this.preferredService === 'google-calendar') {
         return await this.googleCalendarService.getAvailableSlots(date);
+      } else {
+        return await this.calendlyService.getAvailableSlots(date);
       }
     } catch (error) {
-      console.error('❌ Error getting available slots:', error);
+      console.error(`❌ Error getting available slots from ${this.preferredService}:`, error);
       return [];
     }
   }
 
-  /**
-   * Crear una cita
-   */
-  async createAppointment(appointmentData: AppointmentRequest): Promise<any> {
-    try {
-      console.log(`🚀 Creating appointment using ${this.preferredService}...`);
-      
-      let result;
-      
-      if (this.preferredService === 'calendly') {
-        result = await this.calendlyService.createAppointment(appointmentData);
-      } else {
-        result = await this.googleCalendarService.createAppointment(appointmentData);
-      }
-
-      // Enviar emails de confirmación
-      await this.sendConfirmationEmails(appointmentData, result);
-      
-      return result;
-    } catch (error) {
-      console.error('❌ Error creating appointment:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Enviar emails de confirmación
-   */
-  private async sendConfirmationEmails(appointmentData: AppointmentRequest, result: any): Promise<void> {
-    try {
-      const {
-        name,
-        email,
-        startTime,
-        endTime,
-        meetingType,
-        description
-      } = appointmentData;
-
-      const appointmentTime = startTime.toLocaleTimeString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'America/Mexico_City'
-      });
-
-      const emailData = {
-        clientName: name,
-        clientEmail: email,
-        appointmentDate: startTime,
-        appointmentTime: appointmentTime,
-        meetLink: result.meetLink,
-        eventId: result.id,
-        meetingType: meetingType || 'Consulta General'
-      };
-
-      // Enviar confirmación al cliente
-      await this.emailService.sendAppointmentConfirmation(emailData);
-      
-      // Enviar notificación interna
-      await this.emailService.sendInternalNotification(emailData);
-      
-      console.log('✅ Confirmation emails sent successfully');
-    } catch (error) {
-      console.error('❌ Error sending confirmation emails:', error);
-      // No lanzar error para no afectar la creación de la cita
-    }
-  }
-
-  /**
-   * Cancelar una cita
-   */
   async cancelAppointment(eventId: string, reason?: string): Promise<boolean> {
+    console.log(`❌ Canceling appointment using ${this.preferredService}...`);
+    
     try {
-      if (this.preferredService === 'calendly') {
-        return await this.calendlyService.cancelAppointment(eventId, reason);
-      } else {
+      if (this.preferredService === 'google-calendar') {
         return await this.googleCalendarService.cancelAppointment(eventId, reason);
+      } else {
+        return await this.calendlyService.cancelAppointment(eventId, reason);
       }
     } catch (error) {
-      console.error('❌ Error canceling appointment:', error);
+      console.error(`❌ Error canceling appointment with ${this.preferredService}:`, error);
       return false;
     }
   }
 
-  /**
-   * Obtener detalles de un evento
-   */
   async getEventDetails(eventId: string): Promise<any> {
+    console.log(`📋 Getting event details from ${this.preferredService}...`);
+    
     try {
-      if (this.preferredService === 'calendly') {
-        return await this.calendlyService.getEventDetails(eventId);
+      if (this.preferredService === 'google-calendar') {
+        return await this.googleCalendarService.getAppointment(eventId);
       } else {
-        return await this.googleCalendarService.getEventDetails(eventId);
+        return await this.calendlyService.getEventDetails(eventId);
       }
     } catch (error) {
-      console.error('❌ Error getting event details:', error);
+      console.error(`❌ Error getting event details from ${this.preferredService}:`, error);
       return null;
     }
   }
 
-  /**
-   * Obtener información del servicio activo
-   */
-  getServiceInfo(): { type: ServiceType; name: string; features: string[] } {
-    if (this.preferredService === 'calendly') {
-      return {
-        type: 'calendly',
-        name: 'Calendly',
-        features: [
-          'Gestión automática de zonas horarias',
-          'Integración automática con Google Meet',
-          'Notificaciones automáticas',
-          'Gestión de conflictos',
-          'Formularios personalizables'
-        ]
-      };
-    } else {
-      return {
-        type: 'google-calendar',
-        name: 'Google Calendar',
-        features: [
-          'Integración directa con Google Calendar',
-          'Creación de eventos nativos',
-          'Sincronización automática',
-          'Gestión de disponibilidad'
-        ]
-      };
+  private async sendConfirmationEmails(appointmentData: AppointmentRequest, result: any): Promise<void> {
+    try {
+      console.log('📧 Sending confirmation emails...');
+      
+      // Email de confirmación al cliente
+      await this.emailService.sendAppointmentConfirmation({
+        clientName: appointmentData.name,
+        clientEmail: appointmentData.email,
+        appointmentDate: appointmentData.startTime,
+        appointmentTime: appointmentData.startTime.toLocaleTimeString('es-ES', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+        meetLink: result.meetLink,
+        eventId: result.id,
+        meetingType: appointmentData.meetingType || 'Consulta General',
+      });
+
+      // Notificación interna
+      await this.emailService.sendInternalNotification({
+        clientName: appointmentData.name,
+        clientEmail: appointmentData.email,
+        appointmentDate: appointmentData.startTime,
+        appointmentTime: appointmentData.startTime.toLocaleTimeString('es-ES', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+        eventId: result.id,
+        meetingType: appointmentData.meetingType || 'Consulta General',
+      });
+
+      console.log('✅ Confirmation emails sent successfully');
+    } catch (error) {
+      console.error('❌ Error sending confirmation emails:', error);
+      // No fallar la creación del evento por problemas de email
     }
+  }
+
+  private hasGoogleConfig(): boolean {
+    return !!(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY);
+  }
+
+  private hasCalendlyConfig(): boolean {
+    return !!(process.env.CALENDLY_API_KEY && process.env.CALENDLY_EVENT_TYPE_URI);
+  }
+
+  getServiceInfo(): any {
+    const serviceName = this.preferredService === 'google-calendar' ? 'Google Calendar' : 'Calendly';
+    const serviceType = this.preferredService;
+    
+    const features = {
+      'google-calendar': [
+        'Creación directa de eventos',
+        'Integración con Google Meet',
+        'Notificaciones automáticas',
+        'Gestión de disponibilidad',
+        'Sincronización con Google Calendar'
+      ],
+      'calendly': [
+        'Scheduling links personalizados',
+        'Gestión automática de zonas horarias',
+        'Formularios personalizables',
+        'Integración con múltiples calendarios'
+      ]
+    };
+
+    return {
+      name: serviceName,
+      type: serviceType,
+      features: features[serviceType] || [],
+      config: {
+        hasGoogleConfig: this.hasGoogleConfig(),
+        hasCalendlyConfig: this.hasCalendlyConfig()
+      }
+    };
   }
 }
 
-// Instancia singleton
 let appointmentServiceInstance: AppointmentService | null = null;
 
 export function getAppointmentService(): AppointmentService {
