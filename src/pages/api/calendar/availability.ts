@@ -3,15 +3,18 @@ import { getAppointmentService } from '../../../lib/services/appointmentService.
 
 export const GET: APIRoute = async ({ url }) => {
   try {
-    console.log('🔍 ===== GET AVAILABLE SLOTS START =====');
-    
-    const dateParam = url.searchParams.get('date');
-    
+    console.log('📅 ===== GET AVAILABLE SLOTS =====');
+
+    // Obtener parámetros de la URL
+    const searchParams = url.searchParams;
+    const dateParam = searchParams.get('date');
+
     if (!dateParam) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Parámetro "date" es requerido'
+          error: 'Fecha requerida',
+          message: 'Proporciona un parámetro "date" en formato YYYY-MM-DD',
         }),
         {
           status: 400,
@@ -22,13 +25,14 @@ export const GET: APIRoute = async ({ url }) => {
       );
     }
 
+    // Validar formato de fecha
     const date = new Date(dateParam);
-    
     if (isNaN(date.getTime())) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Formato de fecha inválido'
+          error: 'Formato de fecha inválido',
+          message: 'La fecha debe estar en formato YYYY-MM-DD',
         }),
         {
           status: 400,
@@ -39,26 +43,21 @@ export const GET: APIRoute = async ({ url }) => {
       );
     }
 
-    console.log('📅 Getting available slots for:', date.toDateString());
+    console.log(`📅 Getting available slots for: ${date.toISOString()}`);
 
+    // Obtener slots disponibles
     const appointmentService = getAppointmentService();
-    const serviceInfo = appointmentService.getServiceInfo();
-    
-    console.log(`📅 Using service: ${serviceInfo.name}`);
-
     const availableSlots = await appointmentService.getAvailableSlots(date);
 
     console.log(`✅ Found ${availableSlots.length} available slots`);
-    console.log('🏁 ===== GET AVAILABLE SLOTS END =====');
 
     return new Response(
       JSON.stringify({
         success: true,
-        date: date.toISOString(),
-        slots: availableSlots,
-        service: serviceInfo.name,
-        serviceType: serviceInfo.type,
-        totalSlots: availableSlots.length
+        date: dateParam,
+        availableSlots,
+        count: availableSlots.length,
+        timestamp: new Date().toISOString(),
       }),
       {
         status: 200,
@@ -67,15 +66,15 @@ export const GET: APIRoute = async ({ url }) => {
         },
       }
     );
-
   } catch (error) {
     console.error('❌ Error getting available slots:', error);
-    
+
     return new Response(
       JSON.stringify({
         success: false,
-        error: 'Error al obtener slots disponibles',
-        details: error instanceof Error ? error.message : 'Error desconocido'
+        error: 'Error interno del servidor',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString(),
       }),
       {
         status: 500,

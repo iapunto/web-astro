@@ -1,23 +1,230 @@
 import type { APIRoute } from 'astro';
-import { getAppointmentService } from '../../../lib/services/appointmentService.js';
-import type { AppointmentRequest } from '../../../lib/services/googleCalendar.js';
+import { google } from 'googleapis';
+import * as dotenv from 'dotenv';
+
+// Cargar variables de entorno
+dotenv.config();
+
+interface AppointmentRequest {
+  name: string;
+  email: string;
+  startTime: string;
+  endTime: string;
+  description?: string;
+  meetingType?: string;
+}
+
+interface CalendarEvent {
+  id: string;
+  summary: string;
+  start: {
+    dateTime: string;
+    timeZone: string;
+  };
+  end: {
+    dateTime: string;
+    timeZone: string;
+  };
+  attendees?: Array<{
+    email: string;
+    displayName?: string;
+  }>;
+  meetLink?: string;
+}
+
+class GoogleCalendarService {
+  private calendar: any;
+  private calendarId: string;
+  private timezone: string;
+
+  constructor() {
+    // Configurar autenticación con Service Account
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      },
+      scopes: [
+        'https://www.googleapis.com/auth/calendar',
+        'https://www.googleapis.com/auth/calendar.events',
+      ],
+    });
+
+    this.calendar = google.calendar({ version: 'v3', auth });
+    this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
+    this.timezone = process.env.TIMEZONE || 'America/Bogota';
+  }
+
+  async verifyConnection(): Promise<boolean> {
+    try {
+      console.log('🔍 Verificando conexión con Google Calendar...');
+      
+      const response = await this.calendar.calendars.get({
+        calendarId: this.calendarId,
+      });
+
+      if (response.data) {
+        console.log('✅ Conexión con Google Calendar verificada');
+        console.log('📅 Calendario:', response.data.summary || 'Calendario Principal');
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('❌ Error verificando conexión con Google Calendar:', error);
+      return false;
+    }
+  }
+
+  async checkAvailability(startTime: Date, endTime: Date): Promise<boolean> {
+    try {
+      console.log('🔍 Verificando disponibilidad...');
+      
+      const response = await this.calendar.freebusy.query({
+        requestBody: {
+          timeMin: startTime.toISOString(),
+          timeMax: endTime.toISOString(),
+          items: [{ id: this.calendarId }],
+          timeZone: this.timezone,
+        },
+      });
+
+      const calendarData = response.data.calendars?.[this.calendarId];
+      const busyPeriods = calendarData?.busy || [];
+
+      console.log(`📊 Resultado de verificación: ${busyPeriods.length === 0 ? 'DISPONIBLE' : 'OCUPADO'} (${busyPeriods.length} conflictos)`);
+      
+      return busyPeriods.length === 0;
+    } catch (error) {
+      console.error('❌ Error verificando disponibilidad:', error);
+      return false;
+    }
+  }
+
+  async createAppointment(appointment: AppointmentRequest): Promise<CalendarEvent> {
+    try {
+      console.log('🚀 ===== CREANDO CITA =====');
+      console.log(`📝 Creando cita para ${appointment.name}`);
+      console.log(`📅 Fecha: ${appointment.startTime}`);
+      console.log(`📧 Email: ${appointment.email}`);
+
+      const startDate = new Date(appointment.startTime);
+      const endDate = new Date(appointment.endTime);
+
+      // Verificar disponibilidad
+      console.log('🔍 Verificando disponibilidad...');
+      const isAvailable = await this.checkAvailability(startDate, endDate);
+
+      if (!isAvailable) {
+        throw new Error('El horario seleccionado no está disponible');
+      }
+
+      console.log('✅ Verificación de disponibilidad: DISPONIBLE');
+
+      // Generar ID único para la conferencia
+      const conferenceId = `meet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      console.log(`🎥 Creando conferencia Google Meet con ID: ${conferenceId}`);
+
+      // Crear el evento
+      const event = {
+        summary: `Consulta con ${appointment.name}`,
+        description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}`,
+        start: {
+          dateTime: startDate.toISOString(),
+          timeZone: this.timezone,
+        },
+        end: {
+          dateTime: endDate.toISOString(),
+          timeZone: this.timezone,
+        },
+        attendees: [
+          { email: appointment.email, displayName: appointment.name },
+        ],
+        // Configurar Google Meet automáticamente
+        conferenceData: {
+          createRequest: {
+            requestId: conferenceId,
+            conferenceSolutionKey: {
+              type: 'hangoutsMeet',
+            },
+          },
+        },
+        reminders: {
+          useDefault: false,
+          overrides: [
+            { method: 'email', minutes: 24 * 60 }, // 24 horas antes
+            { method: 'popup', minutes: 30 }, // 30 minutos antes
+          ],
+        },
+      };
+
+      const response = await this.calendar.events.insert({
+        calendarId: this.calendarId,
+        requestBody: event,
+        conferenceDataVersion: 1,
+        sendUpdates: 'all',
+      });
+
+      const createdEvent = response.data;
+
+      console.log(`✅ Evento creado exitosamente: ${createdEvent.id}`);
+      console.log(`📅 Resumen del evento: ${createdEvent.summary}`);
+      console.log(`🕐 Inicio: ${createdEvent.start?.dateTime}`);
+      console.log(`🕐 Fin: ${createdEvent.end?.dateTime}`);
+
+      // Extraer enlace de Google Meet
+      const meetLink = createdEvent.conferenceData?.entryPoints?.find(
+        (entry: any) => entry.entryPointType === 'video'
+      )?.uri;
+
+      if (meetLink) {
+        console.log(`🔗 Enlace de Google Meet generado: ${meetLink}`);
+      } else {
+        console.warn('⚠️ No se encontró enlace de Google Meet en la respuesta del evento');
+      }
+
+      console.log('🏁 ===== CITA CREADA =====');
+
+      return {
+        id: createdEvent.id!,
+        summary: createdEvent.summary!,
+        start: {
+          dateTime: createdEvent.start!.dateTime!,
+          timeZone: createdEvent.start!.timeZone!,
+        },
+        end: {
+          dateTime: createdEvent.end!.dateTime!,
+          timeZone: createdEvent.end!.timeZone!,
+        },
+        attendees: createdEvent.attendees?.map((attendee: any) => ({
+          email: attendee.email!,
+          displayName: attendee.displayName || undefined,
+        })),
+        meetLink: meetLink || undefined,
+      };
+    } catch (error) {
+      console.error('❌ Error creando cita:', error);
+      throw error;
+    }
+  }
+}
 
 export const POST: APIRoute = async ({ request }) => {
-  console.log('🚀 ===== BOOK APPOINTMENT ENDPOINT START =====');
-  console.log('📥 Request received at /api/calendar/book');
+  console.log('🚀 ===== ENDPOINT DE AGENDAMIENTO INICIADO =====');
+  console.log('📥 Solicitud recibida en /api/calendar/book');
 
   try {
-    console.log('📋 Parsing request body...');
+    console.log('📋 Parseando cuerpo de la solicitud...');
     const body = await request.json();
-    console.log('✅ Request body parsed successfully');
-    console.log('📝 Request data:', JSON.stringify(body, null, 2));
+    console.log('✅ Cuerpo de la solicitud parseado exitosamente');
+    console.log('📝 Datos de la solicitud:', JSON.stringify(body, null, 2));
 
     // Validación de datos requeridos
     const { name, email, startTime, endTime, description, meetingType } = body;
 
-    console.log('🔍 Validating required fields...');
+    console.log('🔍 Validando campos requeridos...');
     if (!name || !email || !startTime || !endTime) {
-      console.error('❌ Missing required fields');
+      console.error('❌ Faltan campos requeridos');
       return new Response(
         JSON.stringify({
           success: false,
@@ -35,7 +242,7 @@ export const POST: APIRoute = async ({ request }) => {
     // Validar formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      console.error('❌ Invalid email format');
+      console.error('❌ Formato de email inválido');
       return new Response(
         JSON.stringify({
           success: false,
@@ -56,7 +263,7 @@ export const POST: APIRoute = async ({ request }) => {
     const now = new Date();
 
     if (startDate < now) {
-      console.error('❌ Start time is in the past');
+      console.error('❌ La fecha de inicio está en el pasado');
       return new Response(
         JSON.stringify({
           success: false,
@@ -72,7 +279,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     if (endDate <= startDate) {
-      console.error('❌ End time must be after start time');
+      console.error('❌ La fecha de fin debe ser posterior a la fecha de inicio');
       return new Response(
         JSON.stringify({
           success: false,
@@ -87,26 +294,23 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    console.log('✅ All validations passed');
+    console.log('✅ Todas las validaciones pasaron');
 
-    // Obtener el servicio de agendamiento
-    console.log('🔍 Getting appointment service...');
-    const appointmentService = getAppointmentService();
-    const serviceInfo = appointmentService.getServiceInfo();
-
-    console.log(`📅 Using service: ${serviceInfo.name}`);
-    console.log('🎯 Service features:', serviceInfo.features);
+    // Crear instancia del servicio de Google Calendar
+    console.log('🔍 Creando servicio de Google Calendar...');
+    const calendarService = new GoogleCalendarService();
 
     // Verificar conexión del servicio
-    console.log('🔍 Verifying service connection...');
-    const isConnected = await appointmentService.verifyConnection();
+    console.log('🔍 Verificando conexión del servicio...');
+    const isConnected = await calendarService.verifyConnection();
 
     if (!isConnected) {
-      console.error('❌ Service connection failed');
+      console.error('❌ Falló la conexión del servicio');
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'No se pudo conectar con el servicio de agendamiento',
+          error: 'No se pudo conectar con Google Calendar',
+          details: 'Verifica las credenciales de Google Calendar',
         }),
         {
           status: 500,
@@ -117,24 +321,23 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    console.log('✅ Service connection verified');
+    console.log('✅ Conexión del servicio verificada');
 
     // Crear la cita
-    console.log('🚀 Creating appointment...');
+    console.log('🚀 Creando cita...');
     const appointmentData: AppointmentRequest = {
       name,
       email,
-      startTime: startDate,
-      endTime: endDate,
+      startTime,
+      endTime,
       description: description || '',
       meetingType: meetingType || 'Consulta General',
     };
 
-    const createdAppointment =
-      await appointmentService.createAppointment(appointmentData);
+    const createdAppointment = await calendarService.createAppointment(appointmentData);
 
-    console.log('✅ Appointment created successfully');
-    console.log('📅 Appointment details:', {
+    console.log('✅ Cita creada exitosamente');
+    console.log('📅 Detalles de la cita:', {
       id: createdAppointment.id,
       summary: createdAppointment.summary,
       start: createdAppointment.start,
@@ -153,8 +356,8 @@ export const POST: APIRoute = async ({ request }) => {
           end: createdAppointment.end,
           meetLink: createdAppointment.meetLink,
         },
-        service: serviceInfo.name,
-        serviceType: serviceInfo.type,
+        service: 'Google Calendar',
+        serviceType: 'google-calendar',
       }),
       {
         status: 200,
@@ -164,13 +367,13 @@ export const POST: APIRoute = async ({ request }) => {
       }
     );
   } catch (error) {
-    console.error('❌ ===== BOOK APPOINTMENT ENDPOINT ERROR =====');
-    console.error('❌ Error details:', error);
+    console.error('❌ ===== ERROR EN ENDPOINT DE AGENDAMIENTO =====');
+    console.error('❌ Detalles del error:', error);
     console.error(
-      '❌ Error stack:',
-      error instanceof Error ? error.stack : 'No stack trace'
+      '❌ Stack del error:',
+      error instanceof Error ? error.stack : 'Sin stack trace'
     );
-    console.error('🏁 ===== BOOK APPOINTMENT ENDPOINT END =====');
+    console.error('🏁 ===== FIN DEL ENDPOINT DE AGENDAMIENTO =====');
 
     return new Response(
       JSON.stringify({

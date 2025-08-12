@@ -99,7 +99,7 @@ class GoogleCalendarService {
   async verifyConnection(): Promise<boolean> {
     try {
       console.log('🔍 Verifying Google Calendar connection...');
-      
+
       // Usar el endpoint de calendarios para verificar conexión
       const response = await this.calendar.calendars.get({
         calendarId: this.calendarId,
@@ -107,7 +107,10 @@ class GoogleCalendarService {
 
       if (response.data) {
         console.log('✅ Google Calendar connection verified');
-        console.log('📅 Calendar:', response.data.summary || 'Primary Calendar');
+        console.log(
+          '📅 Calendar:',
+          response.data.summary || 'Primary Calendar'
+        );
         return true;
       } else {
         console.error('❌ Google Calendar connection failed: No calendar data');
@@ -125,11 +128,11 @@ class GoogleCalendarService {
   async getAvailableSlots(date: Date): Promise<any[]> {
     try {
       console.log('🔍 Getting available slots from Google Calendar...');
-      
+
       // Convertir fecha a formato ISO
       const startTime = new Date(date);
       startTime.setHours(0, 0, 0, 0);
-      
+
       const endTime = new Date(date);
       endTime.setHours(23, 59, 59, 999);
 
@@ -143,7 +146,9 @@ class GoogleCalendarService {
       });
 
       const events = response.data.items || [];
-      console.log(`📅 Found ${events.length} existing events for ${date.toDateString()}`);
+      console.log(
+        `📅 Found ${events.length} existing events for ${date.toDateString()}`
+      );
 
       // Generar slots disponibles (9 AM a 6 PM, cada hora)
       const availableSlots = [];
@@ -154,14 +159,20 @@ class GoogleCalendarService {
       for (let hour = workStartHour; hour < workEndHour; hour++) {
         const slotStart = new Date(date);
         slotStart.setHours(hour, 0, 0, 0);
-        
-        const slotEnd = new Date(slotStart.getTime() + slotDuration * 60 * 1000);
-        
+
+        const slotEnd = new Date(
+          slotStart.getTime() + slotDuration * 60 * 1000
+        );
+
         // Verificar si el slot está disponible
-        const isAvailable = !events.some(event => {
-          const eventStart = new Date(event.start?.dateTime || event.start?.date || '');
-          const eventEnd = new Date(event.end?.dateTime || event.end?.date || '');
-          
+        const isAvailable = !events.some((event) => {
+          const eventStart = new Date(
+            event.start?.dateTime || event.start?.date || ''
+          );
+          const eventEnd = new Date(
+            event.end?.dateTime || event.end?.date || ''
+          );
+
           return (
             (slotStart >= eventStart && slotStart < eventEnd) ||
             (slotEnd > eventStart && slotEnd <= eventEnd) ||
@@ -173,7 +184,7 @@ class GoogleCalendarService {
           availableSlots.push({
             start_time: slotStart.toISOString(),
             end_time: slotEnd.toISOString(),
-            status: 'available'
+            status: 'available',
           });
         }
       }
@@ -192,7 +203,9 @@ class GoogleCalendarService {
   async checkAvailability(startTime: Date, endTime: Date): Promise<boolean> {
     try {
       console.log('🔍 Checking availability...');
-      console.log(`🔍 Checking availability: ${startTime.toISOString()} - ${endTime.toISOString()}`);
+      console.log(
+        `🔍 Checking availability: ${startTime.toISOString()} - ${endTime.toISOString()}`
+      );
 
       const response = await this.calendar.freebusy.query({
         requestBody: {
@@ -207,7 +220,9 @@ class GoogleCalendarService {
       const busyPeriods = calendarData?.busy || [];
 
       console.log(`📊 Response data:`, response.data);
-      console.log(`📊 Availability check result: ${busyPeriods.length === 0 ? 'AVAILABLE' : 'BUSY'} (${busyPeriods.length} conflicts)`);
+      console.log(
+        `📊 Availability check result: ${busyPeriods.length === 0 ? 'AVAILABLE' : 'BUSY'} (${busyPeriods.length} conflicts)`
+      );
 
       return busyPeriods.length === 0;
     } catch (error) {
@@ -226,7 +241,9 @@ class GoogleCalendarService {
       console.log('🚀 ===== CREATE APPOINTMENT START =====');
       console.log(`📝 Creating appointment for ${appointment.name}`);
       console.log(`📅 Date: ${appointment.startTime.toISOString()}`);
-      console.log(`⏰ Duration: ${Math.round((appointment.endTime.getTime() - appointment.startTime.getTime()) / (1000 * 60))} minutes`);
+      console.log(
+        `⏰ Duration: ${Math.round((appointment.endTime.getTime() - appointment.startTime.getTime()) / (1000 * 60))} minutes`
+      );
       console.log(`📧 Email: ${appointment.email}`);
       console.log(`📋 Description: ${appointment.description}`);
       console.log(`🎯 Meeting Type: ${appointment.meetingType}`);
@@ -246,7 +263,9 @@ class GoogleCalendarService {
 
       // Generar ID único para la conferencia
       const conferenceId = `meet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      console.log(`🎥 Creating Google Meet conference with ID: ${conferenceId}`);
+      console.log(
+        `🎥 Creating Google Meet conference with ID: ${conferenceId}`
+      );
 
       // Crear el evento
       const event = {
@@ -491,9 +510,10 @@ class GoogleCalendarService {
           displayName: attendee.displayName || undefined,
           responseStatus: attendee.responseStatus || undefined,
         })),
-        meetLink: event.conferenceData?.entryPoints?.find(
-          (entry) => entry.entryPointType === 'video'
-        )?.uri || undefined,
+        meetLink:
+          event.conferenceData?.entryPoints?.find(
+            (entry) => entry.entryPointType === 'video'
+          )?.uri || undefined,
       }));
     } catch (error) {
       console.error('❌ Error listing upcoming events:', error);
@@ -588,29 +608,31 @@ class MockCalendarService {
 
   async getAvailableSlots(date: Date): Promise<any[]> {
     console.log('🤖 Mock: Getting available slots');
-    
+
     // Generar slots mock (9 AM a 6 PM)
     const slots = [];
     for (let hour = 9; hour < 18; hour++) {
       const slotStart = new Date(date);
       slotStart.setHours(hour, 0, 0, 0);
-      
+
       const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000);
-      
+
       slots.push({
         start_time: slotStart.toISOString(),
         end_time: slotEnd.toISOString(),
-        status: 'available'
+        status: 'available',
       });
     }
-    
+
     console.log(`🤖 Mock: Generated ${slots.length} available slots`);
     return slots;
   }
 
-  async createAppointment(appointment: AppointmentRequest): Promise<CalendarEvent> {
+  async createAppointment(
+    appointment: AppointmentRequest
+  ): Promise<CalendarEvent> {
     console.log('🤖 Mock: Creating appointment');
-    
+
     const mockEvent: CalendarEvent = {
       id: `mock-${Date.now()}`,
       summary: `Consulta con ${appointment.name}`,
@@ -674,7 +696,9 @@ class MockCalendarService {
 /**
  * Obtener instancia del servicio de Google Calendar
  */
-export function getGoogleCalendarService(): GoogleCalendarService | MockCalendarService {
+export function getGoogleCalendarService():
+  | GoogleCalendarService
+  | MockCalendarService {
   console.log('🚀 getGoogleCalendarService() called');
 
   // Verificar si las credenciales están configuradas
@@ -687,16 +711,21 @@ export function getGoogleCalendarService(): GoogleCalendarService | MockCalendar
   }
 
   // Usar Service Account (preferido)
-  if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
+  if (
+    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
+    process.env.GOOGLE_PRIVATE_KEY
+  ) {
     console.log('🔧 FORCING REAL SERVICE - MOCK DISABLED');
-    
+
     if (!googleCalendarService) {
       console.log('🔄 Creating new GoogleCalendarService instance...');
       googleCalendarService = new GoogleCalendarService();
       console.log('✅ Service Account authentication configured');
-      console.log(`📅 Calendar service initialized with ID: ${process.env.GOOGLE_CALENDAR_ID || 'primary'}`);
+      console.log(
+        `📅 Calendar service initialized with ID: ${process.env.GOOGLE_CALENDAR_ID || 'primary'}`
+      );
     }
-    
+
     console.log('📅 Returning service type: GoogleCalendarService');
     return googleCalendarService;
   }

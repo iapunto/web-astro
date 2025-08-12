@@ -82,7 +82,8 @@ RESEND_API_KEY=tu_api_key_de_resend
 TIMEZONE=America/Mexico_City
 ```
 
-**Importante**: 
+**Importante**:
+
 - El `GOOGLE_PRIVATE_KEY` debe incluir los saltos de línea (`\n`)
 - El `GOOGLE_CALENDAR_ID` puede ser tu email o "primary" para el calendario principal
 
@@ -163,6 +164,7 @@ curl https://iapunto.com/api/calendar/test-google-setup
 ### Error: "Google Calendar configuration incomplete"
 
 **Solución**: Verifica que las variables de entorno estén configuradas:
+
 - `GOOGLE_SERVICE_ACCOUNT_EMAIL`
 - `GOOGLE_PRIVATE_KEY`
 - `GOOGLE_CALENDAR_ID`
@@ -170,6 +172,7 @@ curl https://iapunto.com/api/calendar/test-google-setup
 ### Error: "Failed to connect to Google Calendar API"
 
 **Solución**: Verifica que:
+
 1. La API de Google Calendar esté habilitada
 2. Las credenciales del Service Account sean correctas
 3. El Service Account tenga permisos en el calendario
@@ -178,6 +181,7 @@ curl https://iapunto.com/api/calendar/test-google-setup
 ### Error: "insufficient_permissions"
 
 **Solución**: Asegúrate de que:
+
 1. El Service Account tenga permisos de **Editor** en el calendario
 2. El calendario esté compartido con el email del Service Account
 3. La API de Google Calendar esté habilitada en el proyecto
@@ -185,6 +189,7 @@ curl https://iapunto.com/api/calendar/test-google-setup
 ### Error: "calendar_not_found"
 
 **Solución**: Verifica que:
+
 1. El `GOOGLE_CALENDAR_ID` sea correcto
 2. El calendario esté compartido con el Service Account
 3. El calendario exista y sea accesible
@@ -192,6 +197,7 @@ curl https://iapunto.com/api/calendar/test-google-setup
 ### Error: "No Google Meet link generated"
 
 **Solución**: Verifica que:
+
 1. El calendario tenga habilitada la integración con Google Meet
 2. El Service Account tenga permisos para crear conferencias
 3. La configuración de conferencias esté habilitada
