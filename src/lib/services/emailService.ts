@@ -51,8 +51,10 @@ class EmailService {
       const startFormatted = startDate.toLocaleDateString('es-CO', options);
       const endFormatted = endDate.toLocaleDateString('es-CO', options);
 
-            // Generar enlace de Google Meet manual
-      const meetLink = data.meetLink || `https://meet.google.com/${Math.random().toString(36).substr(2, 9)}-${Math.random().toString(36).substr(2, 4)}`;
+      // Generar enlace de Google Meet manual
+      const meetLink =
+        data.meetLink ||
+        `https://meet.google.com/${Math.random().toString(36).substr(2, 9)}-${Math.random().toString(36).substr(2, 4)}`;
       const meetLinkHtml = `<p><strong>🔗 Enlace de Google Meet:</strong> <a href="${meetLink}" target="_blank">${meetLink}</a></p>`;
 
       const emailHtml = `
