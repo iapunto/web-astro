@@ -58,20 +58,26 @@ class GoogleCalendarService {
   async verifyConnection(): Promise<boolean> {
     try {
       console.log('🔍 Verificando conexión con Google Calendar...');
-      
+
       const response = await this.calendar.calendars.get({
         calendarId: this.calendarId,
       });
 
       if (response.data) {
         console.log('✅ Conexión con Google Calendar verificada');
-        console.log('📅 Calendario:', response.data.summary || 'Calendario Principal');
+        console.log(
+          '📅 Calendario:',
+          response.data.summary || 'Calendario Principal'
+        );
         return true;
       }
-      
+
       return false;
     } catch (error) {
-      console.error('❌ Error verificando conexión con Google Calendar:', error);
+      console.error(
+        '❌ Error verificando conexión con Google Calendar:',
+        error
+      );
       return false;
     }
   }
@@ -79,7 +85,7 @@ class GoogleCalendarService {
   async checkAvailability(startTime: Date, endTime: Date): Promise<boolean> {
     try {
       console.log('🔍 Verificando disponibilidad...');
-      
+
       const response = await this.calendar.freebusy.query({
         requestBody: {
           timeMin: startTime.toISOString(),
@@ -92,8 +98,10 @@ class GoogleCalendarService {
       const calendarData = response.data.calendars?.[this.calendarId];
       const busyPeriods = calendarData?.busy || [];
 
-      console.log(`📊 Resultado de verificación: ${busyPeriods.length === 0 ? 'DISPONIBLE' : 'OCUPADO'} (${busyPeriods.length} conflictos)`);
-      
+      console.log(
+        `📊 Resultado de verificación: ${busyPeriods.length === 0 ? 'DISPONIBLE' : 'OCUPADO'} (${busyPeriods.length} conflictos)`
+      );
+
       return busyPeriods.length === 0;
     } catch (error) {
       console.error('❌ Error verificando disponibilidad:', error);
@@ -101,7 +109,9 @@ class GoogleCalendarService {
     }
   }
 
-  async createAppointment(appointment: AppointmentRequest): Promise<CalendarEvent> {
+  async createAppointment(
+    appointment: AppointmentRequest
+  ): Promise<CalendarEvent> {
     try {
       console.log('🚀 ===== CREANDO CITA =====');
       console.log(`📝 Creando cita para ${appointment.name}`);
@@ -180,7 +190,9 @@ class GoogleCalendarService {
       if (meetLink) {
         console.log(`🔗 Enlace de Google Meet generado: ${meetLink}`);
       } else {
-        console.warn('⚠️ No se encontró enlace de Google Meet en la respuesta del evento');
+        console.warn(
+          '⚠️ No se encontró enlace de Google Meet en la respuesta del evento'
+        );
       }
 
       console.log('🏁 ===== CITA CREADA =====');
@@ -279,7 +291,9 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     if (endDate <= startDate) {
-      console.error('❌ La fecha de fin debe ser posterior a la fecha de inicio');
+      console.error(
+        '❌ La fecha de fin debe ser posterior a la fecha de inicio'
+      );
       return new Response(
         JSON.stringify({
           success: false,
@@ -334,7 +348,8 @@ export const POST: APIRoute = async ({ request }) => {
       meetingType: meetingType || 'Consulta General',
     };
 
-    const createdAppointment = await calendarService.createAppointment(appointmentData);
+    const createdAppointment =
+      await calendarService.createAppointment(appointmentData);
 
     console.log('✅ Cita creada exitosamente');
     console.log('📅 Detalles de la cita:', {

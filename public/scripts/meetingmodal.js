@@ -74,14 +74,14 @@ class MeetingModalManager {
 
   validateField(fieldName, value) {
     console.log(`🔍 Validating field: ${fieldName} with value: "${value}"`);
-    
+
     // Mapear nombres de campos a IDs de elementos de error
     const errorIdMap = {
-      'name': 'name-error',
-      'email': 'email-error',
-      'appointment-time': 'time-error'
+      name: 'name-error',
+      email: 'email-error',
+      'appointment-time': 'time-error',
     };
-    
+
     const errorElementId = errorIdMap[fieldName] || `${fieldName}-error`;
     const errorElement = document.getElementById(errorElementId);
     const inputElement = this.form?.querySelector(`#${fieldName}`);
@@ -92,7 +92,7 @@ class MeetingModalManager {
         errorElement: !!errorElement,
         inputElement: !!inputElement,
         errorElementId,
-        fieldName
+        fieldName,
       });
       return false;
     }
@@ -151,34 +151,34 @@ class MeetingModalManager {
 
   validateForm() {
     console.log('🔍 ===== VALIDATE FORM START =====');
-    
+
     const nameValue = this.form?.querySelector('#name')?.value.trim();
     const emailValue = this.form?.querySelector('#email')?.value.trim();
     const timeValue = this.form?.querySelector('#appointment-time')?.value;
-    
+
     console.log('📝 Form values:', {
       name: nameValue,
       email: emailValue,
       time: timeValue,
       selectedSlot: !!this.selectedSlot,
     });
-    
+
     const nameValid = this.validateField('name', nameValue);
     console.log('✅ Name validation:', nameValid);
-    
+
     const emailValid = this.validateField('email', emailValue);
     console.log('✅ Email validation:', emailValid);
-    
+
     const timeValid = this.validateField('appointment-time', timeValue);
     console.log('✅ Time validation:', timeValid);
-    
+
     const slotValid = !!this.selectedSlot;
     console.log('✅ Slot validation:', slotValid);
-    
+
     const overallValid = nameValid && emailValid && timeValid && slotValid;
     console.log('🎯 Overall form validation:', overallValid);
     console.log('🏁 ===== VALIDATE FORM END =====');
-    
+
     return overallValid;
   }
 
@@ -268,11 +268,11 @@ class MeetingModalManager {
   showFieldError(fieldName, message) {
     // Mapear nombres de campos a IDs de elementos de error
     const errorIdMap = {
-      'name': 'name-error',
-      'email': 'email-error',
-      'appointment-time': 'time-error'
+      name: 'name-error',
+      email: 'email-error',
+      'appointment-time': 'time-error',
     };
-    
+
     const errorElementId = errorIdMap[fieldName] || `${fieldName}-error`;
     const errorElement = document.getElementById(errorElementId);
     const inputElement = this.form?.querySelector(`#${fieldName}`);
@@ -288,11 +288,11 @@ class MeetingModalManager {
   clearFieldError(fieldName) {
     // Mapear nombres de campos a IDs de elementos de error
     const errorIdMap = {
-      'name': 'name-error',
-      'email': 'email-error',
-      'appointment-time': 'time-error'
+      name: 'name-error',
+      email: 'email-error',
+      'appointment-time': 'time-error',
     };
-    
+
     const errorElementId = errorIdMap[fieldName] || `${fieldName}-error`;
     const errorElement = document.getElementById(errorElementId);
     const inputElement = this.form?.querySelector(`#${fieldName}`);
@@ -307,28 +307,37 @@ class MeetingModalManager {
 
   async checkAvailability(date) {
     try {
+      console.log('🔍 Checking availability for date:', date);
       const dateStr = date.toISOString().split('T')[0]; // YYYY-MM-DD format
       const response = await fetch(
-        `/api/calendar/availability?date=${dateStr}&duration=60`
+        `/api/calendar/availability?date=${dateStr}`
       );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          errorData.message || 'Error verificando disponibilidad'
-        );
+        throw new Error(errorData.error || 'Error verificando disponibilidad');
       }
 
       const data = await response.json();
-      this.availableSlots = data.availableSlots;
+      console.log('📅 Availability data received:', data);
+
+      if (!data.success) {
+        throw new Error(data.error || 'Error verificando disponibilidad');
+      }
+
+      this.availableSlots = data.slots || [];
 
       // Verificar si el slot seleccionado está disponible
       const selectedTime = date.toISOString();
       const isAvailable = this.availableSlots.some((slot) => {
-        const slotStart = new Date(slot.start);
-        const slotEnd = new Date(slot.end);
-        return date >= slotStart && date < slotEnd;
+        const slotStart = new Date(slot.start_time);
+        const slotEnd = new Date(slot.end_time);
+        return (
+          date >= slotStart && date < slotEnd && slot.status === 'available'
+        );
       });
+
+      console.log('✅ Availability check result:', isAvailable);
 
       if (!isAvailable) {
         this.showFieldError(
@@ -341,7 +350,7 @@ class MeetingModalManager {
         this.clearFieldError('appointment-time');
       }
     } catch (error) {
-      console.error('Error checking availability:', error);
+      console.error('❌ Error checking availability:', error);
       this.showFieldError(
         'appointment-time',
         'Error verificando disponibilidad. Inténtalo más tarde.'
@@ -438,7 +447,9 @@ class MeetingModalManager {
 
       if (!response.ok) {
         console.error('❌ Response not ok:', response.status, result);
-        throw new Error(result.message || 'Error al agendar la cita');
+        throw new Error(
+          result.error || result.message || 'Error al agendar la cita'
+        );
       }
 
       console.log('✅ Appointment created successfully');
@@ -484,10 +495,13 @@ class MeetingModalManager {
           <p><strong>Cliente:</strong> ${appointmentData.name}</p>
           <p><strong>Email:</strong> ${appointmentData.email}</p>
           <p><strong>Fecha:</strong> ${formattedDate}</p>
-          <p><strong>Hora:</strong> ${formattedTime} (Hora de México)</p>
+          <p><strong>Hora:</strong> ${formattedTime} (Hora de Colombia)</p>
           <p><strong>Tipo:</strong> ${appointmentData.meetingType}</p>
           <p><strong>ID de evento:</strong> ${appointment.id}</p>
-          ${appointment.meetLink ? `<p><strong>Enlace Meet:</strong> <a href="${appointment.meetLink}" target="_blank">Ver enlace</a></p>` : ''}
+          ${appointment.meetLink ? `<p><strong>Enlace Meet:</strong> <a href="${appointment.meetLink}" target="_blank" style="color: #3b82f6; text-decoration: underline;">Unirse a la reunión</a></p>` : ''}
+          <p style="margin-top: 20px; padding: 10px; background-color: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 4px;">
+            <strong>📧 Confirmación:</strong> Hemos enviado un email de confirmación a ${appointmentData.email} con todos los detalles de tu cita.
+          </p>
         `;
       }
     }
