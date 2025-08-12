@@ -2,6 +2,7 @@ import { google } from 'googleapis';
 import type { calendar_v3 } from 'googleapis';
 import { MockCalendarService } from './mockCalendarService.js';
 import EmailService from './emailService.js';
+import * as dotenv from 'dotenv';
 
 export interface AppointmentRequest {
   name: string;
@@ -48,6 +49,9 @@ class GoogleCalendarService {
   constructor() {
     let auth;
     this.isServiceAccount = false;
+
+    // Cargar variables de entorno usando dotenv
+    dotenv.config();
 
     // Intentar Service Account primero (más simple para aplicaciones servidor)
     if (
@@ -138,29 +142,52 @@ class GoogleCalendarService {
    */
   async checkAvailability(startTime: Date, endTime: Date): Promise<boolean> {
     try {
+      console.log('🔍 ===== CHECK AVAILABILITY START =====');
       console.log(
         `🔍 Checking availability: ${startTime.toISOString()} - ${endTime.toISOString()}`
       );
+      console.log(`📅 Calendar ID: ${this.calendarId}`);
+      console.log(`🌍 Timezone: ${this.timezone}`);
+
+      const requestBody = {
+        timeMin: startTime.toISOString(),
+        timeMax: endTime.toISOString(),
+        items: [{ id: this.calendarId }],
+        timeZone: this.timezone,
+      };
+
+      console.log(
+        '📤 Sending freebusy query with:',
+        JSON.stringify(requestBody, null, 2)
+      );
 
       const response = await this.calendar.freebusy.query({
-        requestBody: {
-          timeMin: startTime.toISOString(),
-          timeMax: endTime.toISOString(),
-          items: [{ id: this.calendarId }],
-          timeZone: this.timezone,
-        },
+        requestBody,
       });
+
+      console.log('📥 Freebusy response received');
+      console.log('📊 Response data:', JSON.stringify(response.data, null, 2));
 
       const busyTimes = response.data.calendars?.[this.calendarId]?.busy || [];
       const isAvailable = busyTimes.length === 0;
 
       console.log(
-        `📊 Availability check result: ${isAvailable ? 'Available' : 'Busy'} (${busyTimes.length} conflicts)`
+        `📊 Availability check result: ${isAvailable ? 'AVAILABLE' : 'BUSY'} (${busyTimes.length} conflicts)`
       );
+      if (busyTimes.length > 0) {
+        console.log('🚫 Busy times found:', JSON.stringify(busyTimes, null, 2));
+      }
+      console.log('🔍 ===== CHECK AVAILABILITY END =====');
 
       return isAvailable;
     } catch (error) {
+      console.error('❌ ===== CHECK AVAILABILITY ERROR =====');
       console.error('❌ Error checking availability:', error);
+      console.error(
+        '❌ Error details:',
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+      console.error('❌ ===== CHECK AVAILABILITY ERROR END =====');
       throw new Error('No se pudo verificar la disponibilidad');
     }
   }
@@ -250,17 +277,29 @@ class GoogleCalendarService {
     appointment: AppointmentRequest
   ): Promise<CalendarEvent> {
     try {
+      console.log('🚀 ===== CREATE APPOINTMENT START =====');
+      console.log(`📝 Creating appointment for ${appointment.name}`);
+      console.log(`📅 Date: ${appointment.startTime.toISOString()}`);
       console.log(
-        `📝 Creating appointment for ${appointment.name} at ${appointment.startTime.toISOString()}`
+        `⏰ Duration: ${Math.round((appointment.endTime.getTime() - appointment.startTime.getTime()) / (1000 * 60))} minutes`
       );
+      console.log(`📧 Email: ${appointment.email}`);
+      console.log(`📋 Description: ${appointment.description}`);
+      console.log(`🎯 Meeting Type: ${appointment.meetingType}`);
 
       // Verificar disponibilidad antes de crear
+      console.log('🔍 Checking availability...');
       const isAvailable = await this.checkAvailability(
         appointment.startTime,
         appointment.endTime
       );
 
+      console.log(
+        `✅ Availability check result: ${isAvailable ? 'AVAILABLE' : 'NOT AVAILABLE'}`
+      );
+
       if (!isAvailable) {
+        console.error('❌ Selected time is not available');
         throw new Error('El horario seleccionado no está disponible');
       }
 
@@ -312,6 +351,10 @@ class GoogleCalendarService {
 
       const createdEvent = response.data;
       console.log(`✅ Event created successfully: ${createdEvent.id}`);
+      console.log(`📅 Event summary: ${createdEvent.summary}`);
+      console.log(`🕐 Event start: ${createdEvent.start?.dateTime}`);
+      console.log(`🕐 Event end: ${createdEvent.end?.dateTime}`);
+      console.log(`📧 Event attendees: ${createdEvent.attendees?.length || 0}`);
 
       // Extraer enlace de Google Meet
       const meetLink = createdEvent.conferenceData?.entryPoints?.find(
@@ -322,6 +365,10 @@ class GoogleCalendarService {
         console.log(`🔗 Google Meet link generated: ${meetLink}`);
       } else {
         console.warn('⚠️ No Google Meet link found in event response');
+        console.log(
+          '🔍 Conference data:',
+          JSON.stringify(createdEvent.conferenceData, null, 2)
+        );
       }
 
       // Enviar notificaciones por email
@@ -358,10 +405,10 @@ class GoogleCalendarService {
         // No fallar la creación del evento por problemas de email
       }
 
-      return {
+      const result = {
         id: createdEvent.id!,
         summary: createdEvent.summary!,
-        description: createdEvent.description,
+        description: createdEvent.description || undefined,
         start: {
           dateTime: createdEvent.start!.dateTime!,
           timeZone: createdEvent.start!.timeZone!,
@@ -376,10 +423,26 @@ class GoogleCalendarService {
             displayName: attendee.displayName || undefined,
             responseStatus: attendee.responseStatus || undefined,
           })) || [],
-        meetLink,
+        meetLink: meetLink || undefined,
       };
+
+      console.log('🎉 ===== CREATE APPOINTMENT SUCCESS =====');
+      console.log(`✅ Final result:`, JSON.stringify(result, null, 2));
+      console.log('🎉 ===== CREATE APPOINTMENT END =====');
+
+      return result;
     } catch (error) {
+      console.error('❌ ===== CREATE APPOINTMENT ERROR =====');
       console.error('❌ Error creating appointment:', error);
+      console.error(
+        '❌ Error details:',
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+      console.error(
+        '❌ Error stack:',
+        error instanceof Error ? error.stack : 'No stack trace'
+      );
+      console.error('❌ ===== CREATE APPOINTMENT ERROR END =====');
       throw new Error('No se pudo crear la cita');
     }
   }
@@ -576,11 +639,27 @@ let mockCalendarService: MockCalendarService;
  * Verificar si las credenciales de Google Calendar están configuradas
  */
 function hasGoogleCredentials(): boolean {
+  console.log('🔍 Checking Google Calendar credentials...');
+
+  // Cargar variables de entorno usando dotenv
+  dotenv.config();
+
   // Service Account (preferido) - Funciona sin tokens adicionales
   const hasServiceAccount = !!(
     process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
     process.env.GOOGLE_PRIVATE_KEY &&
     process.env.GOOGLE_CALENDAR_ID
+  );
+
+  console.log('📋 Credentials check:');
+  console.log(
+    `  - GOOGLE_SERVICE_ACCOUNT_EMAIL: ${process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ? '✅ SET' : '❌ NOT SET'}`
+  );
+  console.log(
+    `  - GOOGLE_PRIVATE_KEY: ${process.env.GOOGLE_PRIVATE_KEY ? '✅ SET' : '❌ NOT SET'}`
+  );
+  console.log(
+    `  - GOOGLE_CALENDAR_ID: ${process.env.GOOGLE_CALENDAR_ID ? '✅ SET' : '❌ NOT SET'}`
   );
 
   if (hasServiceAccount) {
@@ -609,21 +688,31 @@ function hasGoogleCredentials(): boolean {
 export function getGoogleCalendarService():
   | GoogleCalendarService
   | MockCalendarService {
-  // Si no hay credenciales configuradas, usar el mock service
+  console.log('🚀 getGoogleCalendarService() called');
+
+  // FORZAR USO DEL SERVICIO REAL - DESACTIVAR MOCK
+  console.log('🔧 FORCING REAL SERVICE - MOCK DISABLED');
+
+  // Si no hay credenciales configuradas, LANZAR ERROR en lugar de usar mock
   if (!hasGoogleCredentials()) {
-    console.warn(
-      '⚠️ Google Calendar credentials not found, using mock service'
+    console.error('❌ CRITICAL: No Google Calendar credentials found');
+    console.error('❌ Cannot use mock service - forcing real service only');
+    throw new Error(
+      'Google Calendar credentials not configured. Please check environment variables.'
     );
-    if (!mockCalendarService) {
-      mockCalendarService = new MockCalendarService();
-    }
-    return mockCalendarService;
   }
 
   // Si hay credenciales, usar el servicio real
   if (!googleCalendarService) {
+    console.log('🔄 Creating new GoogleCalendarService instance...');
     googleCalendarService = new GoogleCalendarService();
+  } else {
+    console.log('✅ Using existing GoogleCalendarService instance');
   }
+
+  console.log(
+    `📅 Returning service type: ${googleCalendarService.constructor.name}`
+  );
   return googleCalendarService;
 }
 
