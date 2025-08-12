@@ -122,6 +122,16 @@ interface CalendlyInvitee {
   };
 }
 
+interface CalendlyAvailableTime {
+  start_time: string;
+  end_time: string;
+  status: string;
+}
+
+interface CalendlyAvailableTimesResponse {
+  available_times: CalendlyAvailableTime[];
+}
+
 class CalendlyService {
   private apiKey: string;
   private baseUrl: string;
@@ -141,11 +151,14 @@ class CalendlyService {
   }
 
   /**
-   * Verificar la conexión con Calendly
+   * Verificar la conexión con Calendly API v2
    */
   async verifyConnection(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/user`, {
+      console.log('🔍 Verifying Calendly API v2 connection...');
+      
+      // Usar el endpoint de usuario para verificar autenticación
+      const response = await fetch(`${this.baseUrl}/users/me`, {
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json'
@@ -153,10 +166,12 @@ class CalendlyService {
       });
 
       if (response.ok) {
-        console.log('✅ Calendly connection verified');
+        const userData = await response.json();
+        console.log('✅ Calendly API v2 connection verified');
+        console.log('👤 User:', userData.resource?.name || 'Unknown');
         return true;
       } else {
-        console.error('❌ Calendly connection failed:', response.status);
+        console.error('❌ Calendly connection failed:', response.status, response.statusText);
         return false;
       }
     } catch (error) {
@@ -166,11 +181,11 @@ class CalendlyService {
   }
 
   /**
-   * Obtener slots disponibles para una fecha
+   * Obtener slots disponibles para una fecha usando Calendly API v2
    */
   async getAvailableSlots(date: Date): Promise<any[]> {
     try {
-      console.log('🔍 Getting available slots from Calendly...');
+      console.log('🔍 Getting available slots from Calendly API v2...');
       
       // Convertir fecha a formato ISO
       const startTime = new Date(date);
@@ -179,22 +194,28 @@ class CalendlyService {
       const endTime = new Date(date);
       endTime.setHours(23, 59, 59, 999);
 
-      const response = await fetch(
-        `${this.baseUrl}/event_type_available_times?event_type=${this.eventTypeUri}&start_time=${startTime.toISOString()}&end_time=${endTime.toISOString()}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${this.apiKey}`,
-            'Content-Type': 'application/json'
-          }
+      // Usar el endpoint correcto de Calendly API v2
+      const url = new URL(`${this.baseUrl}/event_type_available_times`);
+      url.searchParams.append('event_type', this.eventTypeUri);
+      url.searchParams.append('start_time', startTime.toISOString());
+      url.searchParams.append('end_time', endTime.toISOString());
+
+      const response = await fetch(url.toString(), {
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
         }
-      );
+      });
 
       if (!response.ok) {
-        throw new Error(`Calendly API error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('❌ Calendly API error:', response.status, errorText);
+        throw new Error(`Calendly API error: ${response.status} - ${errorText}`);
       }
 
-      const data = await response.json();
-      console.log('✅ Available slots retrieved from Calendly');
+      const data: CalendlyAvailableTimesResponse = await response.json();
+      console.log('✅ Available slots retrieved from Calendly API v2');
+      console.log(`📅 Found ${data.available_times?.length || 0} available slots`);
       
       return data.available_times || [];
     } catch (error) {
@@ -204,11 +225,13 @@ class CalendlyService {
   }
 
   /**
-   * Crear una cita usando Calendly
+   * Crear una cita usando Calendly API v2
+   * Nota: Calendly no permite crear eventos directamente via API
+   * En su lugar, creamos un scheduling link que el usuario puede usar
    */
   async createAppointment(appointmentData: AppointmentRequest): Promise<any> {
     try {
-      console.log('🚀 Creating appointment with Calendly...');
+      console.log('🚀 Creating Calendly scheduling link...');
       
       const {
         name,
@@ -219,26 +242,12 @@ class CalendlyService {
         meetingType
       } = appointmentData;
 
-      // Crear el payload para Calendly
+      // Calendly no permite crear eventos directamente via API
+      // En su lugar, creamos un scheduling link personalizado
       const payload = {
-        event_type: this.eventTypeUri,
-        start_time: startTime.toISOString(),
-        end_time: endTime.toISOString(),
-        invitee: {
-          name: name,
-          email: email,
-          timezone: 'America/Mexico_City'
-        },
-        questions_and_answers: [
-          {
-            question: 'Tipo de consulta',
-            answer: meetingType
-          },
-          {
-            question: 'Descripción del proyecto',
-            answer: description || 'Sin descripción adicional'
-          }
-        ]
+        max_event_count: 1,
+        owner: this.eventTypeUri.split('/').pop() || 'default',
+        owner_type: 'EventType'
       };
 
       const response = await fetch(`${this.baseUrl}/scheduling_links`, {
@@ -252,24 +261,27 @@ class CalendlyService {
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('❌ Calendly API error:', response.status, errorData);
         throw new Error(`Calendly API error: ${response.status} - ${JSON.stringify(errorData)}`);
       }
 
       const data: CalendlySchedulingLink = await response.json();
       
-      console.log('✅ Appointment created successfully with Calendly');
+      console.log('✅ Calendly scheduling link created successfully');
       console.log('📅 Booking URL:', data.booking_url);
       
+      // Crear un evento simulado para mantener compatibilidad
       return {
-        id: data.booking_url.split('/').pop() || 'calendly-event',
+        id: `calendly-${Date.now()}`,
         summary: `Consulta con ${name}`,
         start: startTime,
         end: endTime,
         meetLink: data.booking_url,
-        calendlyData: data
+        calendlyData: data,
+        isCalendlyLink: true
       };
     } catch (error) {
-      console.error('❌ Error creating appointment with Calendly:', error);
+      console.error('❌ Error creating Calendly scheduling link:', error);
       throw error;
     }
   }
@@ -319,6 +331,53 @@ class CalendlyService {
     } catch (error) {
       console.error('❌ Error canceling appointment:', error);
       return false;
+    }
+  }
+
+  /**
+   * Obtener información del usuario de Calendly
+   */
+  async getUserInfo(): Promise<any> {
+    try {
+      const response = await fetch(`${this.baseUrl}/users/me`, {
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to get user info: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('❌ Error getting user info:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Obtener tipos de eventos disponibles
+   */
+  async getEventTypes(): Promise<any[]> {
+    try {
+      const response = await fetch(`${this.baseUrl}/event_types`, {
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to get event types: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.collection || [];
+    } catch (error) {
+      console.error('❌ Error getting event types:', error);
+      return [];
     }
   }
 }

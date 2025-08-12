@@ -5,13 +5,13 @@ import type { AppointmentRequest } from '../../../lib/services/googleCalendar.js
 export const POST: APIRoute = async ({ request }) => {
   console.log('🚀 ===== BOOK APPOINTMENT ENDPOINT START =====');
   console.log('📥 Request received at /api/calendar/book');
-  
+
   try {
     console.log('📋 Parsing request body...');
     const body = await request.json();
     console.log('✅ Request body parsed successfully');
     console.log('📝 Request data:', JSON.stringify(body, null, 2));
-    
+
     // Validación de datos requeridos
     const { name, email, startTime, endTime, description, meetingType } = body;
 
@@ -21,7 +21,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Faltan campos requeridos: name, email, startTime, endTime'
+          error: 'Faltan campos requeridos: name, email, startTime, endTime',
         }),
         {
           status: 400,
@@ -39,7 +39,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Formato de email inválido'
+          error: 'Formato de email inválido',
         }),
         {
           status: 400,
@@ -60,7 +60,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'La fecha de inicio no puede estar en el pasado'
+          error: 'La fecha de inicio no puede estar en el pasado',
         }),
         {
           status: 400,
@@ -76,7 +76,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'La fecha de fin debe ser posterior a la fecha de inicio'
+          error: 'La fecha de fin debe ser posterior a la fecha de inicio',
         }),
         {
           status: 400,
@@ -93,20 +93,20 @@ export const POST: APIRoute = async ({ request }) => {
     console.log('🔍 Getting appointment service...');
     const appointmentService = getAppointmentService();
     const serviceInfo = appointmentService.getServiceInfo();
-    
+
     console.log(`📅 Using service: ${serviceInfo.name}`);
     console.log('🎯 Service features:', serviceInfo.features);
 
     // Verificar conexión del servicio
     console.log('🔍 Verifying service connection...');
     const isConnected = await appointmentService.verifyConnection();
-    
+
     if (!isConnected) {
       console.error('❌ Service connection failed');
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'No se pudo conectar con el servicio de agendamiento'
+          error: 'No se pudo conectar con el servicio de agendamiento',
         }),
         {
           status: 500,
@@ -127,10 +127,11 @@ export const POST: APIRoute = async ({ request }) => {
       startTime: startDate,
       endTime: endDate,
       description: description || '',
-      meetingType: meetingType || 'Consulta General'
+      meetingType: meetingType || 'Consulta General',
     };
 
-    const createdAppointment = await appointmentService.createAppointment(appointmentData);
+    const createdAppointment =
+      await appointmentService.createAppointment(appointmentData);
 
     console.log('✅ Appointment created successfully');
     console.log('📅 Appointment details:', {
@@ -138,7 +139,7 @@ export const POST: APIRoute = async ({ request }) => {
       summary: createdAppointment.summary,
       start: createdAppointment.start,
       end: createdAppointment.end,
-      meetLink: createdAppointment.meetLink
+      meetLink: createdAppointment.meetLink,
     });
 
     return new Response(
@@ -150,10 +151,10 @@ export const POST: APIRoute = async ({ request }) => {
           summary: createdAppointment.summary,
           start: createdAppointment.start,
           end: createdAppointment.end,
-          meetLink: createdAppointment.meetLink
+          meetLink: createdAppointment.meetLink,
         },
         service: serviceInfo.name,
-        serviceType: serviceInfo.type
+        serviceType: serviceInfo.type,
       }),
       {
         status: 200,
@@ -162,18 +163,20 @@ export const POST: APIRoute = async ({ request }) => {
         },
       }
     );
-
   } catch (error) {
     console.error('❌ ===== BOOK APPOINTMENT ENDPOINT ERROR =====');
     console.error('❌ Error details:', error);
-    console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    console.error(
+      '❌ Error stack:',
+      error instanceof Error ? error.stack : 'No stack trace'
+    );
     console.error('🏁 ===== BOOK APPOINTMENT ENDPOINT END =====');
 
     return new Response(
       JSON.stringify({
         success: false,
         error: 'Error interno del servidor',
-        details: error instanceof Error ? error.message : 'Error desconocido'
+        details: error instanceof Error ? error.message : 'Error desconocido',
       }),
       {
         status: 500,
