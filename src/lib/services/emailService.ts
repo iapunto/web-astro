@@ -14,6 +14,9 @@ class EmailService {
   private transporter: nodemailer.Transporter;
 
   constructor() {
+    // Cargar variables de entorno usando dotenv
+    import('dotenv').then((dotenv) => dotenv.config());
+
     this.transporter = nodemailer.createTransport({
       host: 'mail.iapunto.com',
       port: 587, // Puerto SMTP estándar para TLS

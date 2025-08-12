@@ -324,18 +324,23 @@ class GoogleCalendarService {
             { method: 'popup', minutes: 30 }, // 30 minutes before
           ],
         },
+        // Configurar Google Meet automáticamente
         conferenceData: {
           createRequest: {
             requestId: conferenceId,
             conferenceSolutionKey: {
-              type: 'hangoutsMeet',
+              type: 'addOn',
             },
           },
         },
-        // Configurar notificaciones automáticas
+        // Configurar permisos del evento
         guestsCanModify: false,
         guestsCanInviteOthers: false,
         guestsCanSeeOtherGuests: false,
+        // Configurar visibilidad
+        transparency: 'opaque', // Muestra como ocupado
+        // Configurar ubicación virtual
+        location: 'Reunión Virtual - Google Meet',
       };
 
       console.log(
