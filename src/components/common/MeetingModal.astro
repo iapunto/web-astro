@@ -22,13 +22,14 @@ import Button from '../common/Button.astro';
           </h2>
           <p class="text-gray-600 mb-2">
             Elige una fecha y hora para que conversemos sobre tu proyecto de
-            marketing digital e IA.
+            marketing digital e IA. <strong>Horarios disponibles:</strong> Lunes
+            a Viernes, 9:00 AM - 5:00 PM (Hora de Colombia)
           </p>
         </div>
 
         <form id="appointment-form">
           <div class="form-row">
-            <div class="form-group form-col">
+            <div class="form-group form-col mb-2">
               <label for="name">👤 Nombre Completo *</label>
               <input
                 type="text"
@@ -40,7 +41,7 @@ import Button from '../common/Button.astro';
               <div class="field-error" id="name-error"></div>
             </div>
 
-            <div class="form-group form-col">
+            <div class="form-group form-col mb-2">
               <label for="email">📧 Correo Electrónico *</label>
               <input
                 type="email"
@@ -53,7 +54,7 @@ import Button from '../common/Button.astro';
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="form-row mb-2">
             <div class="form-group form-col">
               <label for="meeting-type">💼 Tipo de Consulta</label>
               <select id="meeting-type" name="meeting-type">
@@ -71,7 +72,7 @@ import Button from '../common/Button.astro';
               </select>
             </div>
 
-            <div class="form-group form-col">
+            <div class="form-group form-col mb-2">
               <label for="appointment-time">🕐 Fecha y Hora *</label>
               <input
                 type="text"
@@ -84,17 +85,7 @@ import Button from '../common/Button.astro';
             </div>
           </div>
 
-          <div class="time-info mb-2">
-            <p class="text-sm text-gray-600">
-              <strong>Horarios disponibles:</strong> Lunes a Viernes, 9:00 AM - 5:00
-              PM (Hora de México)
-            </p>
-            <p class="text-sm text-gray-600">
-              <strong>Duración:</strong> 60 minutos
-            </p>
-          </div>
-
-          <div class="form-group">
+          <div class="form-group mb-2">
             <label for="description">📝 Descripción (Opcional)</label>
             <textarea
               id="description"
