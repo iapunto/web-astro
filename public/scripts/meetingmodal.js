@@ -325,11 +325,11 @@ class MeetingModalManager {
         throw new Error(data.error || 'Error verificando disponibilidad');
       }
 
-      this.availableSlots = data.slots || [];
+      this.availableSlots = Array.isArray(data.slots) ? data.slots : [];
 
       // Verificar si el slot seleccionado está disponible
       const selectedTime = date.toISOString();
-      const isAvailable = this.availableSlots.some((slot) => {
+      const isAvailable = Array.isArray(this.availableSlots) && this.availableSlots.some((slot) => {
         const slotStart = new Date(slot.start_time);
         const slotEnd = new Date(slot.end_time);
         return (
