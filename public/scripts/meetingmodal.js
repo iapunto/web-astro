@@ -453,6 +453,10 @@ class MeetingModalManager {
       }
 
       console.log('✅ Appointment created successfully');
+      
+      // Track conversion for appointment booking
+      this.trackAppointmentConversion(appointmentData);
+      
       // Mostrar confirmación
       this.showConfirmation(result.appointment, appointmentData);
     } catch (error) {
@@ -591,6 +595,34 @@ class MeetingModalManager {
 
     // Resetear estado de carga
     this.setLoadingState(false);
+  }
+
+  // Método para rastrear conversión de cita
+  trackAppointmentConversion(appointmentData) {
+    try {
+      console.log('📊 Tracking appointment conversion...');
+      
+      // Preparar datos para tracking
+      const trackingData = {
+        meetingType: appointmentData.meetingType || 'General',
+        appointmentDate: appointmentData.startTime,
+        source: 'calendar_modal'
+      };
+
+      // Track con Google Analytics
+      if (typeof window.trackAppointmentConversion === 'function') {
+        window.trackAppointmentConversion(trackingData);
+      }
+
+      // Track con Meta Pixel
+      if (typeof window.trackAppointmentConversion === 'function') {
+        window.trackAppointmentConversion(trackingData);
+      }
+
+      console.log('✅ Appointment conversion tracked successfully');
+    } catch (error) {
+      console.error('❌ Error tracking appointment conversion:', error);
+    }
   }
 }
 

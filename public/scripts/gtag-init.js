@@ -145,6 +145,145 @@ window.trackFirstConsent = trackFirstConsent;
 window.trackConsentChange = trackConsentChange;
 window.initializeGoogleAnalytics = initializeGoogleAnalytics;
 
+// Funciones de tracking de conversiones para Google Analytics
+function trackWhatsAppConversion(action = 'Contact') {
+  try {
+    // Enviar evento a Google Analytics
+    gtag('event', 'conversion', {
+      send_to: 'AW-11203509179/lead',
+      value: 1.00,
+      currency: 'COP',
+      transaction_id: 'whatsapp_' + Date.now()
+    });
+
+    // Evento personalizado para WhatsApp
+    gtag('event', 'whatsapp_click', {
+      event_category: 'Contact',
+      event_label: 'WhatsApp Contact',
+      value: 1,
+      custom_parameter: {
+        source: 'whatsapp',
+        action: action
+      }
+    });
+
+    // Enviar evento a dataLayer para GTM
+    dataLayer.push({
+      event: 'whatsapp_click',
+      event_category: 'Contact',
+      event_label: 'WhatsApp Contact',
+      value: 1,
+      source: 'whatsapp',
+      action: action
+    });
+
+    console.log('Google Analytics: WhatsApp conversion tracked');
+  } catch (error) {
+    console.error('Error tracking WhatsApp conversion:', error);
+  }
+}
+
+function trackAppointmentConversion(appointmentData = {}) {
+  try {
+    // Enviar evento de conversión
+    gtag('event', 'conversion', {
+      send_to: 'AW-11203509179/lead',
+      value: 5.00,
+      currency: 'COP',
+      transaction_id: 'appointment_' + Date.now()
+    });
+
+    // Evento personalizado para citas
+    gtag('event', 'appointment_booked', {
+      event_category: 'Appointment',
+      event_label: 'Appointment Booking',
+      value: 5,
+      custom_parameter: {
+        meeting_type: appointmentData.meetingType || 'General',
+        source: 'calendar_modal'
+      }
+    });
+
+    // Enviar evento a dataLayer para GTM
+    dataLayer.push({
+      event: 'appointment_booked',
+      event_category: 'Appointment',
+      event_label: 'Appointment Booking',
+      value: 5,
+      meeting_type: appointmentData.meetingType || 'General',
+      source: 'calendar_modal'
+    });
+
+    console.log('Google Analytics: Appointment conversion tracked');
+  } catch (error) {
+    console.error('Error tracking appointment conversion:', error);
+  }
+}
+
+function trackContactFormConversion(formData = {}) {
+  try {
+    // Enviar evento de conversión
+    gtag('event', 'conversion', {
+      send_to: 'AW-11203509179/lead',
+      value: 2.00,
+      currency: 'COP',
+      transaction_id: 'contact_form_' + Date.now()
+    });
+
+    // Evento personalizado para formularios
+    gtag('event', 'contact_form_submitted', {
+      event_category: 'Contact',
+      event_label: 'Contact Form Submission',
+      value: 2,
+      custom_parameter: {
+        has_company: !!formData.company,
+        has_phone: !!formData.phone,
+        source: 'website_form'
+      }
+    });
+
+    // Enviar evento a dataLayer para GTM
+    dataLayer.push({
+      event: 'contact_form_submitted',
+      event_category: 'Contact',
+      event_label: 'Contact Form Submission',
+      value: 2,
+      has_company: !!formData.company,
+      has_phone: !!formData.phone,
+      source: 'website_form'
+    });
+
+    console.log('Google Analytics: Contact form conversion tracked');
+  } catch (error) {
+    console.error('Error tracking contact form conversion:', error);
+  }
+}
+
+function trackEngagement(action, value = 1) {
+  try {
+    gtag('event', 'engagement', {
+      event_category: 'Engagement',
+      event_label: action,
+      value: value
+    });
+
+    dataLayer.push({
+      event: 'engagement',
+      event_category: 'Engagement',
+      event_label: action,
+      value: value
+    });
+  } catch (error) {
+    console.error('Error tracking engagement:', error);
+  }
+}
+
+// Exponer funciones de conversión globalmente
+window.trackWhatsAppConversion = trackWhatsAppConversion;
+window.trackAppointmentConversion = trackAppointmentConversion;
+window.trackContactFormConversion = trackContactFormConversion;
+window.trackEngagement = trackEngagement;
+
 // Inicializar Google Analytics cuando se cargue el script de Google
 document.addEventListener('DOMContentLoaded', function() {
   // Verificar si el script de Google Analytics ya se cargó

@@ -62,6 +62,27 @@ const RECAPTCHA_SITE_KEY =
   const errorMsg = document.getElementById('form-error');
   const recaptchaSiteKey = '6LdwOI4rAAAAAAjwdKf9iMJ1lWkpg3W1nbDFQkxw';
 
+  // Función para rastrear conversión del formulario de contacto
+  function trackContactFormConversion(formData) {
+    try {
+      console.log('📊 Tracking contact form conversion...');
+      
+      // Track con Google Analytics
+      if (typeof window.trackContactFormConversion === 'function') {
+        window.trackContactFormConversion(formData);
+      }
+
+      // Track con Meta Pixel
+      if (typeof window.trackContactFormConversion === 'function') {
+        window.trackContactFormConversion(formData);
+      }
+
+      console.log('✅ Contact form conversion tracked successfully');
+    } catch (error) {
+      console.error('❌ Error tracking contact form conversion:', error);
+    }
+  }
+
   contactForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     console.log('Iniciando envío del formulario');
@@ -100,6 +121,9 @@ const RECAPTCHA_SITE_KEY =
       console.log('Datos de respuesta:', responseData);
 
       if (res.ok) {
+        // Track conversion for contact form submission
+        trackContactFormConversion(data);
+        
         contactForm.reset();
         successMsg?.classList.remove('hidden');
       } else {

@@ -90,23 +90,42 @@ const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
 <script>
   const button = document.getElementById('whatsapp-button');
 
-  // Función para crear el efecto de vibración
-  function vibrateButton() {
-    button.style.transform = 'translateX(5px)'; // Mover a la derecha
-    setTimeout(() => {
-      button.style.transform = 'translateX(-5px)'; // Mover a la izquierda
+  if (button) {
+    // Función para crear el efecto de vibración
+    function vibrateButton() {
+      button.style.transform = 'translateX(5px)';
       setTimeout(() => {
-        button.style.transform = 'translateY(-5px)'; // Mover hacia arriba
+        button.style.transform = 'translateX(-5px)';
         setTimeout(() => {
-          button.style.transform = 'translateY(5px)'; // Mover hacia abajo
+          button.style.transform = 'translateY(-5px)';
           setTimeout(() => {
-            button.style.transform = 'translate(0, 0)'; // Volver a la posición original
+            button.style.transform = 'translateY(5px)';
+            setTimeout(() => {
+              button.style.transform = 'translate(0, 0)';
+            }, 50);
           }, 50);
         }, 50);
       }, 50);
-    }, 50);
-  }
+    }
 
-  // Repetir la vibración cada 10 segundos
-  setInterval(vibrateButton, 10000);
+    // Función para rastrear conversión de WhatsApp
+    function trackWhatsAppClick() {
+      try {
+        // Verificar si las funciones de tracking están disponibles
+        if (typeof window.trackWhatsAppConversion === 'function') {
+          window.trackWhatsAppConversion('Contact');
+        }
+        
+        console.log('WhatsApp conversion tracked');
+      } catch (error) {
+        console.error('Error tracking WhatsApp conversion:', error);
+      }
+    }
+
+    // Agregar evento de click para tracking
+    button.addEventListener('click', trackWhatsAppClick);
+
+    // Repetir la vibración cada 10 segundos
+    setInterval(vibrateButton, 10000);
+  }
 </script>
