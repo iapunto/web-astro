@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { google } from 'googleapis';
 import * as dotenv from 'dotenv';
+import EmailService from '../../../lib/services/emailService.js';
 
 // Cargar variables de entorno
 dotenv.config();
@@ -131,7 +132,11 @@ class GoogleCalendarService {
 
       console.log('✅ Verificación de disponibilidad: DISPONIBLE');
 
-      // Crear el evento sin attendees (para evitar problemas de Domain-Wide Delegation)
+      // Generar ID único para la conferencia
+      const conferenceId = `meet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      console.log(`🎥 Creando conferencia Google Meet con ID: ${conferenceId}`);
+
+      // Crear el evento con Google Meet y attendees
       const event = {
         summary: `Consulta con ${appointment.name}`,
         description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}\n\nCliente: ${appointment.name} (${appointment.email})`,
@@ -142,6 +147,19 @@ class GoogleCalendarService {
         end: {
           dateTime: endDate.toISOString(),
           timeZone: this.timezone,
+        },
+        // Agregar attendees (intentaremos esta opción)
+        attendees: [
+          { email: appointment.email, displayName: appointment.name },
+        ],
+        // Configurar Google Meet automáticamente
+        conferenceData: {
+          createRequest: {
+            requestId: conferenceId,
+            conferenceSolutionKey: {
+              type: 'hangoutsMeet',
+            },
+          },
         },
         reminders: {
           useDefault: false,
@@ -155,7 +173,8 @@ class GoogleCalendarService {
       const response = await this.calendar.events.insert({
         calendarId: this.calendarId,
         requestBody: event,
-        sendUpdates: 'none', // No enviar actualizaciones ya que no hay attendees
+        conferenceDataVersion: 1, // Habilitar Google Meet
+        sendUpdates: 'all', // Enviar notificaciones a los attendees
       });
 
       const createdEvent = response.data;
@@ -342,6 +361,36 @@ export const POST: APIRoute = async ({ request }) => {
       end: createdAppointment.end,
       meetLink: createdAppointment.meetLink,
     });
+
+    // Enviar emails de confirmación
+    console.log('📧 Enviando emails de confirmación...');
+    const emailService = new EmailService();
+    
+    const emailData = {
+      name: appointmentData.name,
+      email: appointmentData.email,
+      startTime: appointmentData.startTime,
+      endTime: appointmentData.endTime,
+      meetingType: appointmentData.meetingType || 'Consulta General',
+      description: appointmentData.description,
+      meetLink: createdAppointment.meetLink,
+    };
+
+    // Enviar email al cliente
+    const clientEmailSent = await emailService.sendAppointmentConfirmation(emailData);
+    if (clientEmailSent) {
+      console.log('✅ Email de confirmación enviado al cliente');
+    } else {
+      console.warn('⚠️ No se pudo enviar email de confirmación al cliente');
+    }
+
+    // Enviar notificación al administrador
+    const adminEmailSent = await emailService.sendNotificationToAdmin(emailData);
+    if (adminEmailSent) {
+      console.log('✅ Notificación enviada al administrador');
+    } else {
+      console.warn('⚠️ No se pudo enviar notificación al administrador');
+    }
 
     return new Response(
       JSON.stringify({

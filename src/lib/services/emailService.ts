@@ -1,466 +1,226 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
-interface EmailNotificationData {
-  clientName: string;
-  clientEmail: string;
-  appointmentDate: Date;
-  appointmentTime: string;
+// Configuración de email usando Gmail SMTP
+
+interface AppointmentEmailData {
+  name: string;
+  email: string;
+  startTime: string;
+  endTime: string;
+  meetingType: string;
+  description?: string;
   meetLink?: string;
-  eventId: string;
-  meetingType?: string;
 }
 
 class EmailService {
-  private resend: Resend;
+  private transporter: nodemailer.Transporter;
 
   constructor() {
-    // Cargar variables de entorno usando dotenv
-    import('dotenv').then((dotenv) => dotenv.config());
-
-    this.resend = new Resend(process.env.RESEND_API_KEY);
+    // Configurar el transporter de email usando Gmail SMTP
+    this.transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER || 'tuytecnologia@gmail.com',
+        pass: process.env.EMAIL_PASSWORD || '', // App password de Gmail
+      },
+    });
   }
 
-  /**
-   * Verificar la conexión del servidor de email
-   */
-  async verifyConnection(): Promise<boolean> {
+  async sendAppointmentConfirmation(data: AppointmentEmailData): Promise<boolean> {
     try {
-      // Resend no tiene un método de verificación directo, pero podemos probar enviando un email de prueba
-      console.log('✅ Resend email service initialized');
+      console.log('📧 Enviando email de confirmación...');
+      console.log(`📧 Para: ${data.email}`);
+      console.log(`📧 Nombre: ${data.name}`);
+
+      const startDate = new Date(data.startTime);
+      const endDate = new Date(data.endTime);
+      
+      // Formatear fecha y hora en español
+      const options: Intl.DateTimeFormatOptions = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'America/Bogota',
+      };
+
+      const startFormatted = startDate.toLocaleDateString('es-CO', options);
+      const endFormatted = endDate.toLocaleDateString('es-CO', options);
+
+      const meetLinkHtml = data.meetLink 
+        ? `<p><strong>🔗 Enlace de Google Meet:</strong> <a href="${data.meetLink}" target="_blank">${data.meetLink}</a></p>`
+        : '<p><strong>📞 Modalidad:</strong> Presencial o por teléfono</p>';
+
+      const emailHtml = `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Confirmación de Cita - IA Punto</title>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+            .appointment-details { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea; }
+            .button { display: inline-block; background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+            .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>🎉 ¡Cita Confirmada!</h1>
+              <p>Tu consulta ha sido agendada exitosamente</p>
+            </div>
+            
+            <div class="content">
+              <h2>Hola ${data.name},</h2>
+              
+              <p>Tu cita ha sido confirmada exitosamente. Aquí están los detalles:</p>
+              
+              <div class="appointment-details">
+                <h3>📅 Detalles de la Cita</h3>
+                <p><strong>Fecha y Hora:</strong> ${startFormatted}</p>
+                <p><strong>Duración:</strong> 1 hora</p>
+                <p><strong>Tipo de Consulta:</strong> ${data.meetingType}</p>
+                ${data.description ? `<p><strong>Descripción:</strong> ${data.description}</p>` : ''}
+                ${meetLinkHtml}
+              </div>
+              
+              <h3>📋 Preparación para la Cita</h3>
+              <ul>
+                <li>Ten listos tus documentos o preguntas</li>
+                <li>Si es virtual, asegúrate de tener una conexión estable a internet</li>
+                <li>Llega 5 minutos antes de la hora programada</li>
+              </ul>
+              
+              <h3>🔄 Cambios o Cancelaciones</h3>
+              <p>Si necesitas cambiar o cancelar tu cita, por favor contáctanos con al menos 24 horas de anticipación.</p>
+              
+              <p><strong>Contacto:</strong></p>
+              <ul>
+                <li>📧 Email: info@iapunto.com</li>
+                <li>📱 WhatsApp: +57 300 XXX XXXX</li>
+                <li>🌐 Web: https://iapunto.com</li>
+              </ul>
+              
+              <p>¡Nos vemos pronto!</p>
+              <p><strong>El equipo de IA Punto</strong></p>
+            </div>
+            
+            <div class="footer">
+              <p>Este es un email automático, por favor no respondas a este mensaje.</p>
+              <p>© 2024 IA Punto. Todos los derechos reservados.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+      const mailOptions = {
+        from: `"IA Punto" <${process.env.EMAIL_USER || 'tuytecnologia@gmail.com'}>`,
+        to: data.email,
+        subject: `✅ Cita Confirmada - ${data.meetingType} - ${startFormatted}`,
+        html: emailHtml,
+      };
+
+      const result = await this.transporter.sendMail(mailOptions);
+      console.log('✅ Email enviado exitosamente');
+      console.log('📧 Message ID:', result.messageId);
+      
       return true;
     } catch (error) {
-      console.error('❌ Resend email service failed:', error);
+      console.error('❌ Error enviando email:', error);
       return false;
     }
   }
 
-  /**
-   * Enviar confirmación de cita al cliente
-   */
-  async sendAppointmentConfirmation(
-    data: EmailNotificationData
-  ): Promise<void> {
-    const {
-      clientName,
-      clientEmail,
-      appointmentDate,
-      appointmentTime,
-      meetLink,
-      eventId,
-      meetingType = 'Consulta de Marketing Digital e IA',
-    } = data;
-
-    const htmlContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cita Confirmada - IA Punto</title>
-        <style>
-            body { 
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-                line-height: 1.6; 
-                color: #333; 
-                margin: 0; 
-                padding: 0; 
-                background-color: #f8fafc;
-            }
-            .container { 
-                max-width: 600px; 
-                margin: 0 auto; 
-                background: white;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
-            .header { 
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white; 
-                padding: 30px 20px; 
-                text-align: center; 
-            }
-            .header h1 {
-                margin: 0;
-                font-size: 28px;
-                font-weight: 600;
-            }
-            .content { 
-                padding: 30px 20px; 
-                background: white; 
-            }
-            .appointment-details {
-                background: #f8fafc;
-                border-left: 4px solid #667eea;
-                padding: 20px;
-                margin: 20px 0;
-                border-radius: 0 8px 8px 0;
-            }
-            .meet-button {
-                display: inline-block;
-                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                color: white;
-                padding: 15px 30px;
-                text-decoration: none;
-                border-radius: 8px;
-                font-weight: 600;
-                margin: 20px 0;
-                box-shadow: 0 4px 6px rgba(16, 185, 129, 0.25);
-                transition: transform 0.2s;
-            }
-            .meet-button:hover {
-                transform: translateY(-2px);
-            }
-            .footer { 
-                text-align: center; 
-                padding: 20px; 
-                background: #f8fafc;
-                color: #64748b;
-                font-size: 14px;
-            }
-            .steps {
-                background: #f0f9ff;
-                border: 1px solid #bae6fd;
-                border-radius: 8px;
-                padding: 20px;
-                margin: 20px 0;
-            }
-            .steps h3 {
-                color: #0369a1;
-                margin-top: 0;
-            }
-            .steps ul {
-                margin: 10px 0;
-                padding-left: 20px;
-            }
-            .steps li {
-                margin: 8px 0;
-                color: #0c4a6e;
-            }
-            .contact-info {
-                background: #fef3c7;
-                border: 1px solid #f59e0b;
-                border-radius: 8px;
-                padding: 15px;
-                margin: 20px 0;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>🎉 ¡Cita Confirmada!</h1>
-                <p style="margin: 10px 0 0 0; opacity: 0.9;">IA Punto - Marketing Digital e IA</p>
-            </div>
-            
-            <div class="content">
-                <p>Hola <strong>${clientName}</strong>,</p>
-                
-                <p>¡Excelente! Tu cita ha sido <strong>confirmada exitosamente</strong>. Estamos emocionados de ayudarte con tu proyecto de marketing digital e inteligencia artificial.</p>
-                
-                <div class="appointment-details">
-                    <h3 style="margin-top: 0; color: #1e293b;">📅 Detalles de tu cita:</h3>
-                    <p><strong>Fecha:</strong> ${appointmentDate.toLocaleDateString(
-                      'es-ES',
-                      {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      }
-                    )}</p>
-                    <p><strong>Hora:</strong> ${appointmentTime} (Hora de México)</p>
-                    <p><strong>Tipo de consulta:</strong> ${meetingType}</p>
-                    <p><strong>Duración:</strong> 60 minutos</p>
-                    <p><strong>ID de evento:</strong> ${eventId}</p>
-                </div>
-                
-                ${
-                  meetLink
-                    ? `
-                <div style="text-align: center; margin: 30px 0;">
-                    <h3 style="color: #1e293b; margin-bottom: 15px;">🔗 Enlace de la reunión virtual:</h3>
-                    <a href="${meetLink}" class="meet-button">
-                        🎥 Unirse a Google Meet
-                    </a>
-                    <p style="font-size: 14px; color: #64748b; margin-top: 10px;">
-                        El enlace estará activo 5 minutos antes de la hora programada
-                    </p>
-                </div>
-                `
-                    : `
-                <div class="contact-info">
-                    <p><strong>⚠️ Importante:</strong> Recibirás el enlace de Google Meet en un email separado.</p>
-                </div>
-                `
-                }
-                
-                <div class="steps">
-                    <h3>📋 ¿Qué sigue?</h3>
-                    <ul>
-                        <li><strong>Recibirás recordatorios automáticos</strong> 24 horas y 30 minutos antes de la cita</li>
-                        <li><strong>Prepara información sobre tu negocio:</strong> objetivos, público objetivo, presupuesto</li>
-                        <li><strong>Ten listas tus preguntas</strong> sobre marketing digital e IA</li>
-                        <li><strong>Prueba tu conexión</strong> y micrófono antes de la reunión</li>
-                    </ul>
-                </div>
-                
-                <p><strong>¿Necesitas cancelar o reprogramar?</strong></p>
-                <p>Responde a este email o contáctanos directamente:</p>
-                <ul>
-                    <li>📧 <a href="mailto:hola@iapunto.com">hola@iapunto.com</a></li>
-                    <li>🌐 <a href="https://iapunto.com">iapunto.com</a></li>
-                </ul>
-                
-                <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                    <strong>¡Nos vemos pronto!</strong><br>
-                    El equipo de IA Punto
-                </p>
-            </div>
-            
-            <div class="footer">
-                <p><strong>IA Punto</strong> - Expertos en Marketing Digital e Inteligencia Artificial</p>
-                <p>📧 hola@iapunto.com | 🌐 iapunto.com</p>
-                <p style="font-size: 12px; margin-top: 15px;">
-                    Este email fue enviado automáticamente. Por favor no respondas a este mensaje.
-                </p>
-            </div>
-        </div>
-    </body>
-    </html>
-    `;
-
-    const textContent = `
-¡Cita Confirmada - IA Punto!
-
-Hola ${clientName},
-
-Tu cita ha sido confirmada exitosamente para el ${appointmentDate.toLocaleDateString('es-ES')} a las ${appointmentTime}.
-
-DETALLES DE LA CITA:
-- Fecha: ${appointmentDate.toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })}
-- Hora: ${appointmentTime} (Hora de México)
-- Tipo: ${meetingType}
-- Duración: 60 minutos
-- ID de evento: ${eventId}
-
-${meetLink ? `ENLACE DE GOOGLE MEET: ${meetLink}` : 'Recibirás el enlace de Google Meet en un email separado.'}
-
-¿QUÉ SIGUE?
-- Recibirás recordatorios automáticos 24 horas y 30 minutos antes
-- Prepara información sobre tu negocio y objetivos
-- Ten listas tus preguntas sobre marketing digital e IA
-- Prueba tu conexión antes de la reunión
-
-¿Necesitas cancelar o reprogramar?
-Responde a este email o contáctanos:
-- Email: hola@iapunto.com
-- Web: iapunto.com
-
-¡Nos vemos pronto!
-El equipo de IA Punto
-    `.trim();
-
-    const mailOptions = {
-      from: 'IA Punto <hola@iapunto.com>',
-      to: [clientEmail],
-      subject: `✅ Cita Confirmada - ${appointmentDate.toLocaleDateString('es-ES')} a las ${appointmentTime}`,
-      html: htmlContent,
-      text: textContent,
-    };
-
+  async sendNotificationToAdmin(data: AppointmentEmailData): Promise<boolean> {
     try {
-      await this.resend.emails.send(mailOptions);
-      console.log(`✅ Email confirmation sent to ${clientEmail}`);
-    } catch (error) {
-      console.error('❌ Error sending email:', error);
-      throw new Error('No se pudo enviar el email de confirmación');
-    }
-  }
+      console.log('📧 Enviando notificación al administrador...');
 
-  /**
-   * Enviar notificación interna al equipo
-   */
-  async sendInternalNotification(data: EmailNotificationData): Promise<void> {
-    const {
-      clientName,
-      clientEmail,
-      appointmentDate,
-      appointmentTime,
-      eventId,
-      meetingType = 'Consulta General',
-    } = data;
+      const startDate = new Date(data.startTime);
+      const endDate = new Date(data.endTime);
+      
+      const options: Intl.DateTimeFormatOptions = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'America/Bogota',
+      };
 
-    const htmlContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <style>
+      const startFormatted = startDate.toLocaleDateString('es-CO', options);
+
+      const emailHtml = `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Nueva Cita Agendada - IA Punto</title>
+          <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: #1f2937; color: white; padding: 20px; text-align: center; }
-            .content { padding: 20px; background: #f9fafb; }
-            .appointment-card { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3b82f6; }
-            .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
+            .header { background: #ff6b6b; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+            .appointment-details { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ff6b6b; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
             <div class="header">
-                <h1>🔔 Nueva Cita Agendada</h1>
-                <p>Sistema Automático - IA Punto</p>
+              <h1>📅 Nueva Cita Agendada</h1>
+              <p>Se ha agendado una nueva consulta</p>
             </div>
             
             <div class="content">
-                <div class="appointment-card">
-                    <h3>📋 Detalles del Cliente</h3>
-                    <p><strong>Nombre:</strong> ${clientName}</p>
-                    <p><strong>Email:</strong> <a href="mailto:${clientEmail}">${clientEmail}</a></p>
-                    <p><strong>Tipo de consulta:</strong> ${meetingType}</p>
-                    
-                    <h3>📅 Detalles de la Cita</h3>
-                    <p><strong>Fecha:</strong> ${appointmentDate.toLocaleDateString(
-                      'es-ES',
-                      {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      }
-                    )}</p>
-                    <p><strong>Hora:</strong> ${appointmentTime}</p>
-                    <p><strong>ID de evento:</strong> ${eventId}</p>
-                    <p><strong>Duración:</strong> 60 minutos</p>
-                </div>
+              <h2>Detalles de la Nueva Cita</h2>
+              
+              <div class="appointment-details">
+                <h3>👤 Cliente</h3>
+                <p><strong>Nombre:</strong> ${data.name}</p>
+                <p><strong>Email:</strong> ${data.email}</p>
                 
-                <p><strong>Acciones recomendadas:</strong></p>
-                <ul>
-                    <li>Revisar el perfil del cliente en Google Calendar</li>
-                    <li>Preparar información relevante sobre IA Punto</li>
-                    <li>Verificar que el enlace de Google Meet esté funcionando</li>
-                    <li>Enviar email de seguimiento después de la cita</li>
-                </ul>
+                <h3>📅 Cita</h3>
+                <p><strong>Fecha y Hora:</strong> ${startFormatted}</p>
+                <p><strong>Tipo de Consulta:</strong> ${data.meetingType}</p>
+                ${data.description ? `<p><strong>Descripción:</strong> ${data.description}</p>` : ''}
+                ${data.meetLink ? `<p><strong>Google Meet:</strong> <a href="${data.meetLink}">${data.meetLink}</a></p>` : ''}
+              </div>
+              
+              <p><strong>Acciones recomendadas:</strong></p>
+              <ul>
+                <li>Revisar la información del cliente</li>
+                <li>Preparar materiales para la consulta</li>
+                <li>Confirmar disponibilidad en el calendario</li>
+              </ul>
             </div>
-            
-            <div class="footer">
-                <p>Notificación automática del sistema de citas de IA Punto</p>
-                <p>📧 hola@iapunto.com | 🌐 iapunto.com</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    `;
+          </div>
+        </body>
+        </html>
+      `;
 
-    const mailOptions = {
-      from: 'Sistema IA Punto <hola@iapunto.com>',
-      to: [process.env.INTERNAL_NOTIFICATION_EMAIL || 'hola@iapunto.com'],
-      subject: `🔔 Nueva Cita - ${clientName} - ${appointmentDate.toLocaleDateString('es-ES')} ${appointmentTime}`,
-      html: htmlContent,
-    };
+      const mailOptions = {
+        from: `"IA Punto - Sistema" <${process.env.EMAIL_USER || 'tuytecnologia@gmail.com'}>`,
+        to: process.env.ADMIN_EMAIL || 'tuytecnologia@gmail.com',
+        subject: `📅 Nueva Cita: ${data.name} - ${data.meetingType} - ${startFormatted}`,
+        html: emailHtml,
+      };
 
-    try {
-      await this.resend.emails.send(mailOptions);
-      console.log('✅ Internal notification sent');
+      const result = await this.transporter.sendMail(mailOptions);
+      console.log('✅ Notificación al admin enviada exitosamente');
+      
+      return true;
     } catch (error) {
-      console.error('❌ Error sending internal notification:', error);
-    }
-  }
-
-  /**
-   * Enviar recordatorio de cita (24 horas antes)
-   */
-  async sendAppointmentReminder(data: EmailNotificationData): Promise<void> {
-    const {
-      clientName,
-      clientEmail,
-      appointmentDate,
-      appointmentTime,
-      meetLink,
-      meetingType = 'Consulta de Marketing Digital e IA',
-    } = data;
-
-    const htmlContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <style>
-            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; background: white; }
-            .header { background: #f59e0b; color: white; padding: 20px; text-align: center; }
-            .content { padding: 30px 20px; }
-            .reminder-box { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0; }
-            .meet-button { display: inline-block; background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 10px 0; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>⏰ Recordatorio de Cita</h1>
-                <p>Tu cita es mañana</p>
-            </div>
-            
-            <div class="content">
-                <p>Hola <strong>${clientName}</strong>,</p>
-                
-                <div class="reminder-box">
-                    <h3>📅 Tu cita es mañana:</h3>
-                    <p><strong>Fecha:</strong> ${appointmentDate.toLocaleDateString(
-                      'es-ES',
-                      {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      }
-                    )}</p>
-                    <p><strong>Hora:</strong> ${appointmentTime}</p>
-                    <p><strong>Tipo:</strong> ${meetingType}</p>
-                </div>
-                
-                ${
-                  meetLink
-                    ? `
-                <div style="text-align: center; margin: 30px 0;">
-                    <a href="${meetLink}" class="meet-button">🔗 Unirse a Google Meet</a>
-                </div>
-                `
-                    : ''
-                }
-                
-                <p><strong>Preparación recomendada:</strong></p>
-                <ul>
-                    <li>Prueba tu conexión a internet</li>
-                    <li>Verifica que tu micrófono y cámara funcionen</li>
-                    <li>Ten lista información sobre tu negocio</li>
-                    <li>Prepara tus preguntas sobre marketing digital e IA</li>
-                </ul>
-                
-                <p>¡Nos vemos mañana!</p>
-                <p>El equipo de IA Punto</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    `;
-
-    const mailOptions = {
-      from: 'IA Punto <hola@iapunto.com>',
-      to: [clientEmail],
-      subject: `⏰ Recordatorio: Tu cita es mañana a las ${appointmentTime}`,
-      html: htmlContent,
-    };
-
-    try {
-      await this.resend.emails.send(mailOptions);
-      console.log(`✅ Reminder sent to ${clientEmail}`);
-    } catch (error) {
-      console.error('❌ Error sending reminder:', error);
+      console.error('❌ Error enviando notificación al admin:', error);
+      return false;
     }
   }
 }
