@@ -122,6 +122,12 @@ document.addEventListener('DOMContentLoaded', function() {
 // También ejecutar después de un tiempo adicional
 setTimeout(checkGTMStatus, 3000);
 
+// Verificar cuando GTM esté listo
+window.addEventListener('load', function() {
+  console.log('🌐 Página completamente cargada, verificando GTM...');
+  setTimeout(checkGTMStatus, 2000);
+});
+
 // Función para verificar el estado en cualquier momento
 window.checkGTM = checkGTMStatus;
 

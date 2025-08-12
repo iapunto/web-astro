@@ -43,17 +43,20 @@ initializeGTM(); // GTM se inicializa automáticamente
 #### **A. Agregar GTM al TrackingScripts.astro**
 ```astro
 <!-- Google Tag Manager -->
-<script src="/scripts/gtm-init.js" is:inline></script>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PJS922TG');</script>
+<!-- End Google Tag Manager -->
 ```
 
 #### **B. Agregar GTM noscript al Layout**
-En `src/layouts/BaseLayout.astro`, agregado antes del `</body>`:
+En `src/layouts/BaseLayout.astro`, agregado justo después de la apertura de `<body>`:
 ```html
 <!-- Google Tag Manager (noscript) -->
-<noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PJS922TG"
-          height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PJS922TG"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 ```
 
