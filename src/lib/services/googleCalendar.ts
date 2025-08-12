@@ -329,7 +329,7 @@ class GoogleCalendarService {
           createRequest: {
             requestId: conferenceId,
             conferenceSolutionKey: {
-              type: 'addOn',
+              type: 'hangoutsMeet',
             },
           },
         },

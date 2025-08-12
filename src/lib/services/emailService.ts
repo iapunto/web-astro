@@ -28,7 +28,11 @@ class EmailService {
       tls: {
         rejectUnauthorized: false, // Para evitar problemas de certificados
       },
-    });
+      // Configuraciones para evitar timeouts
+      connectionTimeout: 10000, // 10 segundos
+      greetingTimeout: 10000, // 10 segundos
+      socketTimeout: 15000, // 15 segundos
+    } as any);
   }
 
   /**
