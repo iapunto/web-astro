@@ -3,13 +3,26 @@ import { getGoogleCalendarService } from '../../../lib/services/googleCalendar';
 import type { AppointmentRequest } from '../../../lib/services/googleCalendar';
 
 export const POST: APIRoute = async ({ request }) => {
+  console.log('🚀 ===== BOOK APPOINTMENT ENDPOINT START =====');
+  console.log('📥 Request received at /api/calendar/book');
+
   try {
+    console.log('📋 Parsing request body...');
     const body = await request.json();
-    
+    console.log('✅ Request body parsed successfully');
+    console.log('📝 Request data:', JSON.stringify(body, null, 2));
+
     // Validación de datos requeridos
     const { name, email, startTime, endTime, description, meetingType } = body;
 
+    console.log('🔍 Validating required fields...');
     if (!name || !email || !startTime || !endTime) {
+      console.error('❌ Missing required fields:', {
+        name: !!name,
+        email: !!email,
+        startTime: !!startTime,
+        endTime: !!endTime,
+      });
       return new Response(
         JSON.stringify({
           error: 'Datos incompletos',
@@ -23,10 +36,13 @@ export const POST: APIRoute = async ({ request }) => {
         }
       );
     }
+    console.log('✅ Required fields validation passed');
 
     // Validación de email
+    console.log('🔍 Validating email format...');
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
+      console.error('❌ Invalid email format:', email);
       return new Response(
         JSON.stringify({
           error: 'Email inválido',
@@ -40,12 +56,20 @@ export const POST: APIRoute = async ({ request }) => {
         }
       );
     }
+    console.log('✅ Email validation passed');
 
     // Validación de fechas
+    console.log('🔍 Validating dates...');
     const start = new Date(startTime);
     const end = new Date(endTime);
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      console.error('❌ Invalid dates:', {
+        startTime,
+        endTime,
+        start: start.getTime(),
+        end: end.getTime(),
+      });
       return new Response(
         JSON.stringify({
           error: 'Fechas inválidas',
@@ -61,6 +85,10 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     if (start >= end) {
+      console.error('❌ Invalid time range:', {
+        start: start.toISOString(),
+        end: end.toISOString(),
+      });
       return new Response(
         JSON.stringify({
           error: 'Horario inválido',
@@ -77,6 +105,10 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Validar que la cita no sea en el pasado
     if (start < new Date()) {
+      console.error('❌ Appointment in the past:', {
+        start: start.toISOString(),
+        now: new Date().toISOString(),
+      });
       return new Response(
         JSON.stringify({
           error: 'Fecha en el pasado',
@@ -90,6 +122,7 @@ export const POST: APIRoute = async ({ request }) => {
         }
       );
     }
+    console.log('✅ Date validation passed');
 
     const appointmentRequest: AppointmentRequest = {
       name,
@@ -100,9 +133,21 @@ export const POST: APIRoute = async ({ request }) => {
       meetingType,
     };
 
-    const calendarService = getGoogleCalendarService();
-    const createdEvent = await calendarService.createAppointment(appointmentRequest);
+    console.log(
+      '📅 Creating appointment request:',
+      JSON.stringify(appointmentRequest, null, 2)
+    );
+    console.log('🔧 Getting calendar service...');
 
+    const calendarService = getGoogleCalendarService();
+    console.log('✅ Calendar service obtained');
+
+    console.log('🚀 Calling createAppointment...');
+    const createdEvent =
+      await calendarService.createAppointment(appointmentRequest);
+    console.log('✅ Appointment created successfully:', createdEvent.id);
+
+    console.log('📤 Sending success response...');
     return new Response(
       JSON.stringify({
         success: true,
@@ -123,10 +168,18 @@ export const POST: APIRoute = async ({ request }) => {
         },
       }
     );
-
   } catch (error) {
-    console.error('Error booking appointment:', error);
-    
+    console.error('❌ ===== BOOK APPOINTMENT ENDPOINT ERROR =====');
+    console.error('❌ Error booking appointment:', error);
+    console.error(
+      '❌ Error details:',
+      error instanceof Error ? error.message : 'Unknown error'
+    );
+    console.error(
+      '❌ Error stack:',
+      error instanceof Error ? error.stack : 'No stack trace'
+    );
+
     // Manejar errores específicos de Google Calendar
     let errorMessage = 'No se pudo agendar la cita. Inténtelo más tarde.';
     let statusCode = 500;
@@ -134,23 +187,29 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (error instanceof Error) {
       if (error.message.includes('no está disponible')) {
-        errorMessage = 'El horario seleccionado ya no está disponible. Por favor seleccione otro horario.';
+        errorMessage =
+          'El horario seleccionado ya no está disponible. Por favor seleccione otro horario.';
         statusCode = 409; // Conflict
-        
+
         // Proporcionar horarios alternativos
         try {
           const calendarService = getGoogleCalendarService();
           const start = new Date(startTime);
           const alternativeDate = new Date(start);
           alternativeDate.setDate(alternativeDate.getDate() + 1); // Probar el día siguiente
-          
-          const slots = await calendarService.getAvailableSlots(alternativeDate, 60);
-          const availableSlots = slots.filter(slot => slot.available).slice(0, 5); // Primeros 5 slots disponibles
-          
-          alternativeSlots = availableSlots.map(slot => ({
+
+          const slots = await calendarService.getAvailableSlots(
+            alternativeDate,
+            60
+          );
+          const availableSlots = slots
+            .filter((slot) => slot.available)
+            .slice(0, 5); // Primeros 5 slots disponibles
+
+          alternativeSlots = availableSlots.map((slot) => ({
             start: slot.start.toISOString(),
             end: slot.end.toISOString(),
-            formatted: `${slot.start.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} - ${slot.end.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`
+            formatted: `${slot.start.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} - ${slot.end.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`,
           }));
         } catch (slotError) {
           console.warn('Could not get alternative slots:', slotError);
@@ -159,14 +218,20 @@ export const POST: APIRoute = async ({ request }) => {
         errorMessage = 'Límite de API alcanzado. Inténtelo más tarde.';
         statusCode = 429; // Too Many Requests
       } else if (error.message.includes('credentials')) {
-        errorMessage = 'Error de configuración del sistema. Contacte al administrador.';
+        errorMessage =
+          'Error de configuración del sistema. Contacte al administrador.';
         statusCode = 500;
-      } else if (error.message.includes('network') || error.message.includes('timeout')) {
-        errorMessage = 'Error de conexión. Verifique su conexión a internet e inténtelo nuevamente.';
+      } else if (
+        error.message.includes('network') ||
+        error.message.includes('timeout')
+      ) {
+        errorMessage =
+          'Error de conexión. Verifique su conexión a internet e inténtelo nuevamente.';
         statusCode = 503; // Service Unavailable
       }
     }
 
+    console.log('📤 Sending error response...');
     return new Response(
       JSON.stringify({
         error: 'Error al agendar',
@@ -183,6 +248,8 @@ export const POST: APIRoute = async ({ request }) => {
         },
       }
     );
+  } finally {
+    console.log('🏁 ===== BOOK APPOINTMENT ENDPOINT END =====');
   }
 };
 

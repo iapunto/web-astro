@@ -73,10 +73,10 @@ class MeetingModalManager {
   }
 
   validateField(fieldName, value) {
+    console.log(`🔍 Validating field: ${fieldName} with value: "${value}"`);
+
     const errorElement = document.getElementById(`${fieldName}-error`);
     const inputElement = this.form?.querySelector(`#${fieldName}`);
-
-    if (!errorElement || !inputElement) return;
 
     let isValid = true;
     let errorMessage = '';
@@ -113,6 +113,11 @@ class MeetingModalManager {
         break;
     }
 
+    console.log(`✅ Field ${fieldName} validation result:`, {
+      isValid,
+      errorMessage,
+    });
+
     // Actualizar UI
     if (isValid) {
       errorElement.textContent = '';
@@ -126,20 +131,36 @@ class MeetingModalManager {
   }
 
   validateForm() {
-    const nameValid = this.validateField(
-      'name',
-      this.form?.querySelector('#name')?.value.trim()
-    );
-    const emailValid = this.validateField(
-      'email',
-      this.form?.querySelector('#email')?.value.trim()
-    );
-    const timeValid = this.validateField(
-      'time',
-      this.form?.querySelector('#appointment-time')?.value
-    );
+    console.log('🔍 ===== VALIDATE FORM START =====');
 
-    return nameValid && emailValid && timeValid && this.selectedSlot;
+    const nameValue = this.form?.querySelector('#name')?.value.trim();
+    const emailValue = this.form?.querySelector('#email')?.value.trim();
+    const timeValue = this.form?.querySelector('#appointment-time')?.value;
+
+    console.log('📝 Form values:', {
+      name: nameValue,
+      email: emailValue,
+      time: timeValue,
+      selectedSlot: !!this.selectedSlot,
+    });
+
+    const nameValid = this.validateField('name', nameValue);
+    console.log('✅ Name validation:', nameValid);
+
+    const emailValid = this.validateField('email', emailValue);
+    console.log('✅ Email validation:', emailValid);
+
+    const timeValid = this.validateField('time', timeValue);
+    console.log('✅ Time validation:', timeValid);
+
+    const slotValid = !!this.selectedSlot;
+    console.log('✅ Slot validation:', slotValid);
+
+    const overallValid = nameValid && emailValid && timeValid && slotValid;
+    console.log('🎯 Overall form validation:', overallValid);
+    console.log('🏁 ===== VALIDATE FORM END =====');
+
+    return overallValid;
   }
 
   initializeFlatpickr() {
@@ -294,21 +315,28 @@ class MeetingModalManager {
   }
 
   async handleFormSubmit(event) {
+    console.log('🚀 ===== HANDLE FORM SUBMIT START =====');
     event.preventDefault();
+    console.log('✅ Form submission prevented');
 
     if (this.isSubmitting) {
+      console.log('⚠️ Form is already submitting, returning early');
       return; // Evitar envíos múltiples
     }
 
     try {
+      console.log('🔍 Validating form...');
       // Validar formulario
       if (!this.validateForm()) {
+        console.error('❌ Form validation failed');
         this.showError(
           'Por favor completa todos los campos requeridos correctamente.'
         );
         return;
       }
+      console.log('✅ Form validation passed');
 
+      console.log('📋 Getting form data...');
       const formData = new FormData(this.form);
       const name = formData.get('name')?.toString().trim();
       const email = formData.get('email')?.toString().trim();
@@ -316,7 +344,23 @@ class MeetingModalManager {
         formData.get('meeting-type')?.toString() || 'Consulta General';
       const description = formData.get('description')?.toString().trim();
 
+      console.log('📝 Form data extracted:', {
+        name,
+        email,
+        meetingType,
+        description,
+      });
+
+      // Verificar que se haya seleccionado un slot
+      if (!this.selectedSlot) {
+        console.error('❌ No slot selected');
+        this.showError('Por favor selecciona un horario disponible.');
+        return;
+      }
+      console.log('✅ Slot selected:', this.selectedSlot);
+
       // Mostrar estado de carga
+      console.log('⏳ Setting loading state...');
       this.setLoadingState(true);
       this.isSubmitting = true;
 
@@ -333,6 +377,7 @@ class MeetingModalManager {
       };
 
       console.log('📝 Sending appointment data:', appointmentData);
+      console.log('🌐 Making fetch request to /api/calendar/book...');
 
       // Enviar solicitud a la API
       const response = await fetch('/api/calendar/book', {
@@ -343,20 +388,37 @@ class MeetingModalManager {
         body: JSON.stringify(appointmentData),
       });
 
+      console.log(
+        '📥 Response received:',
+        response.status,
+        response.statusText
+      );
+      console.log(
+        '📋 Response headers:',
+        Object.fromEntries(response.headers.entries())
+      );
+
       const result = await response.json();
+      console.log('📄 Response body:', result);
 
       if (!response.ok) {
+        console.error('❌ Response not ok:', response.status, result);
         throw new Error(result.message || 'Error al agendar la cita');
       }
 
+      console.log('✅ Appointment created successfully');
       // Mostrar confirmación
       this.showConfirmation(result.appointment, appointmentData);
     } catch (error) {
-      console.error('Error booking appointment:', error);
+      console.error('❌ ===== HANDLE FORM SUBMIT ERROR =====');
+      console.error('❌ Error booking appointment:', error);
+      console.error('❌ Error details:', error.message);
+      console.error('❌ Error stack:', error.stack);
       this.showError(
         error.message || 'Error al agendar la cita. Inténtalo más tarde.'
       );
     } finally {
+      console.log('🏁 ===== HANDLE FORM SUBMIT END =====');
       this.setLoadingState(false);
       this.isSubmitting = false;
     }
