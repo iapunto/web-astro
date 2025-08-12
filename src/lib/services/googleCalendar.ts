@@ -1,7 +1,7 @@
 import { google } from 'googleapis';
 import type { calendar_v3 } from 'googleapis';
-import { MockCalendarService } from './mockCalendarService';
-import EmailService from './emailService';
+import { MockCalendarService } from './mockCalendarService.js';
+import EmailService from './emailService.js';
 
 export interface AppointmentRequest {
   name: string;
@@ -29,6 +29,7 @@ export interface CalendarEvent {
     displayName?: string;
     responseStatus?: string;
   }>;
+  meetLink?: string;
 }
 
 export interface AvailabilitySlot {
@@ -42,9 +43,11 @@ class GoogleCalendarService {
   private calendarId: string;
   private timezone: string;
   private emailService: EmailService;
+  private isServiceAccount: boolean;
 
   constructor() {
     let auth;
+    this.isServiceAccount = false;
 
     // Intentar Service Account primero (más simple para aplicaciones servidor)
     if (
@@ -62,9 +65,11 @@ class GoogleCalendarService {
             'https://www.googleapis.com/auth/calendar.events',
           ],
         });
+        this.isServiceAccount = true;
+        console.log('✅ Service Account authentication configured');
       } catch (serviceAccountError) {
         console.warn(
-          'Service Account auth failed, falling back to OAuth2:',
+          '⚠️ Service Account auth failed, falling back to OAuth2:',
           serviceAccountError
         );
         auth = null;
@@ -79,9 +84,8 @@ class GoogleCalendarService {
         process.env.GOOGLE_REDIRECT_URI
       );
 
-      // TEMPORAL: Para OAuth2 sin tokens, volver al mock
       console.warn(
-        'OAuth2 configured but no tokens available. Consider using Service Account for production.'
+        '⚠️ OAuth2 configured but no tokens available. Consider using Service Account for production.'
       );
     }
 
@@ -90,13 +94,15 @@ class GoogleCalendarService {
     this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
     this.timezone = process.env.TIMEZONE || 'America/Mexico_City';
     this.emailService = new EmailService();
+
+    console.log(`📅 Calendar service initialized with ID: ${this.calendarId}`);
   }
 
   /**
    * Configurar tokens de acceso para el usuario autenticado
    */
   setCredentials(tokens: any) {
-    const auth = this.calendar.options?.auth as any;
+    const auth = (this.calendar as any).options?.auth as any;
     if (auth && auth.setCredentials) {
       auth.setCredentials(tokens);
     }
@@ -106,7 +112,7 @@ class GoogleCalendarService {
    * Obtener URL de autorización para OAuth2
    */
   getAuthUrl(): string {
-    const auth = this.calendar.options?.auth as any;
+    const auth = (this.calendar as any).options?.auth as any;
     const scopes = [
       'https://www.googleapis.com/auth/calendar',
       'https://www.googleapis.com/auth/calendar.events',
@@ -122,7 +128,7 @@ class GoogleCalendarService {
    * Intercambiar código de autorización por tokens
    */
   async getTokensFromCode(code: string) {
-    const auth = this.calendar.options?.auth as any;
+    const auth = (this.calendar as any).options?.auth as any;
     const { tokens } = await auth.getToken(code);
     return tokens;
   }
@@ -132,6 +138,10 @@ class GoogleCalendarService {
    */
   async checkAvailability(startTime: Date, endTime: Date): Promise<boolean> {
     try {
+      console.log(
+        `🔍 Checking availability: ${startTime.toISOString()} - ${endTime.toISOString()}`
+      );
+
       const response = await this.calendar.freebusy.query({
         requestBody: {
           timeMin: startTime.toISOString(),
@@ -142,9 +152,15 @@ class GoogleCalendarService {
       });
 
       const busyTimes = response.data.calendars?.[this.calendarId]?.busy || [];
-      return busyTimes.length === 0;
+      const isAvailable = busyTimes.length === 0;
+
+      console.log(
+        `📊 Availability check result: ${isAvailable ? 'Available' : 'Busy'} (${busyTimes.length} conflicts)`
+      );
+
+      return isAvailable;
     } catch (error) {
-      console.error('Error checking availability:', error);
+      console.error('❌ Error checking availability:', error);
       throw new Error('No se pudo verificar la disponibilidad');
     }
   }
@@ -176,6 +192,8 @@ class GoogleCalendarService {
     const slotDuration = durationMinutes * 60 * 1000; // Convert to milliseconds
 
     try {
+      console.log(`📅 Getting available slots for ${date.toDateString()}`);
+
       // Obtener eventos ocupados del día
       const response = await this.calendar.freebusy.query({
         requestBody: {
@@ -213,9 +231,14 @@ class GoogleCalendarService {
         currentTime += slotInterval;
       }
 
+      const availableCount = slots.filter((slot) => slot.available).length;
+      console.log(
+        `✅ Found ${availableCount} available slots out of ${slots.length} total slots`
+      );
+
       return slots;
     } catch (error) {
-      console.error('Error getting available slots:', error);
+      console.error('❌ Error getting available slots:', error);
       throw new Error('No se pudieron obtener los horarios disponibles');
     }
   }
@@ -227,6 +250,10 @@ class GoogleCalendarService {
     appointment: AppointmentRequest
   ): Promise<CalendarEvent> {
     try {
+      console.log(
+        `📝 Creating appointment for ${appointment.name} at ${appointment.startTime.toISOString()}`
+      );
+
       // Verificar disponibilidad antes de crear
       const isAvailable = await this.checkAvailability(
         appointment.startTime,
@@ -237,11 +264,12 @@ class GoogleCalendarService {
         throw new Error('El horario seleccionado no está disponible');
       }
 
+      // Generar ID único para la conferencia
+      const conferenceId = `meet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
       const event: calendar_v3.Schema$Event = {
         summary: `Consulta con ${appointment.name}`,
-        description:
-          appointment.description ||
-          `Reunión agendada con ${appointment.name}\\n\\nEmail: ${appointment.email}\\n\\nTipo: ${appointment.meetingType || 'Consulta general'}\\n\\nNota: Para invitar al cliente, comparte manualmente el enlace de Google Meet desde el evento.`,
+        description: this.generateEventDescription(appointment),
         start: {
           dateTime: appointment.startTime.toISOString(),
           timeZone: this.timezone,
@@ -250,8 +278,6 @@ class GoogleCalendarService {
           dateTime: appointment.endTime.toISOString(),
           timeZone: this.timezone,
         },
-        // REMOVIDO: attendees - Service Account no puede crear eventos con asistentes
-        // El email del cliente se incluye en la descripción para referencia
         reminders: {
           useDefault: false,
           overrides: [
@@ -261,27 +287,42 @@ class GoogleCalendarService {
         },
         conferenceData: {
           createRequest: {
-            requestId: `meet-${Date.now()}`,
+            requestId: conferenceId,
             conferenceSolutionKey: {
               type: 'hangoutsMeet',
             },
           },
         },
+        // Configurar notificaciones automáticas
+        guestsCanModify: false,
+        guestsCanInviteOthers: false,
+        guestsCanSeeOtherGuests: false,
       };
+
+      console.log(
+        `🎥 Creating Google Meet conference with ID: ${conferenceId}`
+      );
 
       const response = await this.calendar.events.insert({
         calendarId: this.calendarId,
         requestBody: event,
         conferenceDataVersion: 1,
-        sendUpdates: 'none', // Don't send automatic invitations (Service Account limitation)
+        sendUpdates: this.isServiceAccount ? 'none' : 'all', // Service Account no puede enviar invitaciones automáticas
       });
 
       const createdEvent = response.data;
+      console.log(`✅ Event created successfully: ${createdEvent.id}`);
 
-      // Extraer enlace de Google Meet si existe
+      // Extraer enlace de Google Meet
       const meetLink = createdEvent.conferenceData?.entryPoints?.find(
         (entry) => entry.entryPointType === 'video'
       )?.uri;
+
+      if (meetLink) {
+        console.log(`🔗 Google Meet link generated: ${meetLink}`);
+      } else {
+        console.warn('⚠️ No Google Meet link found in event response');
+      }
 
       // Enviar notificaciones por email
       try {
@@ -295,6 +336,7 @@ class GoogleCalendarService {
           }),
           meetLink,
           eventId: createdEvent.id!,
+          meetingType: appointment.meetingType,
         });
 
         // Notificación interna
@@ -307,9 +349,12 @@ class GoogleCalendarService {
             minute: '2-digit',
           }),
           eventId: createdEvent.id!,
+          meetingType: appointment.meetingType,
         });
+
+        console.log(`📧 Email notifications sent successfully`);
       } catch (emailError) {
-        console.error('Error sending email notifications:', emailError);
+        console.error('❌ Error sending email notifications:', emailError);
         // No fallar la creación del evento por problemas de email
       }
 
@@ -325,14 +370,40 @@ class GoogleCalendarService {
           dateTime: createdEvent.end!.dateTime!,
           timeZone: createdEvent.end!.timeZone!,
         },
-        // No hay attendees porque el Service Account no puede crearlos
-        attendees: [],
-        meetLink, // Incluir enlace de Meet en la respuesta
+        attendees:
+          createdEvent.attendees?.map((attendee) => ({
+            email: attendee.email!,
+            displayName: attendee.displayName || undefined,
+            responseStatus: attendee.responseStatus || undefined,
+          })) || [],
+        meetLink,
       };
     } catch (error) {
-      console.error('Error creating appointment:', error);
+      console.error('❌ Error creating appointment:', error);
       throw new Error('No se pudo crear la cita');
     }
+  }
+
+  /**
+   * Generar descripción del evento
+   */
+  private generateEventDescription(appointment: AppointmentRequest): string {
+    const lines = [
+      `Reunión agendada con ${appointment.name}`,
+      '',
+      `📧 Email: ${appointment.email}`,
+      `💼 Tipo: ${appointment.meetingType || 'Consulta general'}`,
+      `⏰ Duración: ${Math.round((appointment.endTime.getTime() - appointment.startTime.getTime()) / (1000 * 60))} minutos`,
+      '',
+      appointment.description ||
+        'Consulta sobre marketing digital e inteligencia artificial',
+      '',
+      '---',
+      'Agendado automáticamente desde iapunto.com',
+      'Para cancelar o reprogramar, contacta a info@iapunto.com',
+    ];
+
+    return lines.join('\n');
   }
 
   /**
@@ -343,6 +414,8 @@ class GoogleCalendarService {
     updates: Partial<AppointmentRequest>
   ): Promise<CalendarEvent> {
     try {
+      console.log(`📝 Updating appointment: ${eventId}`);
+
       const event: calendar_v3.Schema$Event = {};
 
       if (updates.name) {
@@ -381,6 +454,7 @@ class GoogleCalendarService {
       });
 
       const updatedEvent = response.data;
+      console.log(`✅ Appointment updated successfully`);
 
       return {
         id: updatedEvent.id!,
@@ -396,12 +470,12 @@ class GoogleCalendarService {
         },
         attendees: updatedEvent.attendees?.map((attendee) => ({
           email: attendee.email!,
-          displayName: attendee.displayName,
-          responseStatus: attendee.responseStatus,
+          displayName: attendee.displayName || undefined,
+          responseStatus: attendee.responseStatus || undefined,
         })),
       };
     } catch (error) {
-      console.error('Error updating appointment:', error);
+      console.error('❌ Error updating appointment:', error);
       throw new Error('No se pudo actualizar la cita');
     }
   }
@@ -411,13 +485,17 @@ class GoogleCalendarService {
    */
   async cancelAppointment(eventId: string): Promise<void> {
     try {
+      console.log(`❌ Canceling appointment: ${eventId}`);
+
       await this.calendar.events.delete({
         calendarId: this.calendarId,
         eventId: eventId,
         sendUpdates: 'all',
       });
+
+      console.log(`✅ Appointment canceled successfully`);
     } catch (error) {
-      console.error('Error canceling appointment:', error);
+      console.error('❌ Error canceling appointment:', error);
       throw new Error('No se pudo cancelar la cita');
     }
   }
@@ -427,12 +505,19 @@ class GoogleCalendarService {
    */
   async getAppointment(eventId: string): Promise<CalendarEvent> {
     try {
+      console.log(`📋 Getting appointment details: ${eventId}`);
+
       const response = await this.calendar.events.get({
         calendarId: this.calendarId,
         eventId: eventId,
       });
 
       const event = response.data;
+
+      // Extraer enlace de Meet
+      const meetLink = event.conferenceData?.entryPoints?.find(
+        (entry) => entry.entryPointType === 'video'
+      )?.uri;
 
       return {
         id: event.id!,
@@ -448,13 +533,37 @@ class GoogleCalendarService {
         },
         attendees: event.attendees?.map((attendee) => ({
           email: attendee.email!,
-          displayName: attendee.displayName,
-          responseStatus: attendee.responseStatus,
+          displayName: attendee.displayName || undefined,
+          responseStatus: attendee.responseStatus || undefined,
         })),
+        meetLink,
       };
     } catch (error) {
-      console.error('Error getting appointment:', error);
+      console.error('❌ Error getting appointment:', error);
       throw new Error('No se pudo obtener la información de la cita');
+    }
+  }
+
+  /**
+   * Verificar el estado de la conexión con Google Calendar
+   */
+  async testConnection(): Promise<boolean> {
+    try {
+      console.log('🔍 Testing Google Calendar connection...');
+
+      const response = await this.calendar.calendarList.list({
+        maxResults: 1,
+      });
+
+      const hasAccess = response.data.items && response.data.items.length > 0;
+      console.log(
+        `✅ Calendar connection test: ${hasAccess ? 'SUCCESS' : 'FAILED'}`
+      );
+
+      return hasAccess;
+    } catch (error) {
+      console.error('❌ Calendar connection test failed:', error);
+      return false;
     }
   }
 }
@@ -475,6 +584,7 @@ function hasGoogleCredentials(): boolean {
   );
 
   if (hasServiceAccount) {
+    console.log('✅ Service Account credentials found');
     return true;
   }
 
@@ -485,14 +595,14 @@ function hasGoogleCredentials(): boolean {
     process.env.GOOGLE_CALENDAR_ID
   );
 
-  // TODO: Implementar verificación de tokens OAuth2 o configurar Service Account
   if (hasOAuth2Basic) {
     console.warn(
-      'OAuth2 credentials found but tokens not configured. Using mock service until Service Account is set up.'
+      '⚠️ OAuth2 credentials found but tokens not configured. Using mock service until Service Account is set up.'
     );
     return false; // Usar mock hasta configurar tokens
   }
 
+  console.warn('❌ No Google Calendar credentials found');
   return false;
 }
 
@@ -501,7 +611,9 @@ export function getGoogleCalendarService():
   | MockCalendarService {
   // Si no hay credenciales configuradas, usar el mock service
   if (!hasGoogleCredentials()) {
-    console.warn('Google Calendar credentials not found, using mock service');
+    console.warn(
+      '⚠️ Google Calendar credentials not found, using mock service'
+    );
     if (!mockCalendarService) {
       mockCalendarService = new MockCalendarService();
     }

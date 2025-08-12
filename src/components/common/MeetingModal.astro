@@ -1,6 +1,6 @@
 ---
 import Button from '../common/Button.astro';
-// No se necesita lógica de servidor aquí por ahora 
+// No se necesita lógica de servidor aquí por ahora
 ---
 
 <!-- Estilos de Flatpickr (necesarios para que el calendario se vea bien) -->
@@ -16,35 +16,123 @@ import Button from '../common/Button.astro';
 
     <div class="modal-body">
       <div class="form-container">
-        <h2 class="text-2xl font-bold mb-2 text-gray-800">Agendar una Reunión</h2>
-        <p class="text-gray-600 mb-6">Elige una fecha y hora para que conversemos sobre tu proyecto.</p>
-        
+        <div class="modal-header">
+          <h2 class="text-2xl font-bold mb-2 text-gray-800">
+            📅 Agendar una Reunión
+          </h2>
+          <p class="text-gray-600 mb-6">
+            Elige una fecha y hora para que conversemos sobre tu proyecto de
+            marketing digital e IA.
+          </p>
+        </div>
+
         <form id="appointment-form">
           <div class="form-group">
-            <label for="name">Nombre Completo</label>
-            <input type="text" id="name" name="name" required />
+            <label for="name">👤 Nombre Completo *</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Tu nombre completo"
+            />
+            <div class="field-error" id="name-error"></div>
           </div>
 
           <div class="form-group">
-            <label for="email">Correo Electrónico</label>
-            <input type="email" id="email" name="email" required />
+            <label for="email">📧 Correo Electrónico *</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="tu@email.com"
+            />
+            <div class="field-error" id="email-error"></div>
           </div>
 
           <div class="form-group">
-            <label for="appointment-time">Fecha y Hora</label>
-            <input type="text" id="appointment-time" name="appointment-time" required placeholder="Selecciona un horario..." />
+            <label for="meeting-type">💼 Tipo de Consulta</label>
+            <select id="meeting-type" name="meeting-type">
+              <option value="Consulta General">Consulta General</option>
+              <option value="Marketing Digital">Marketing Digital</option>
+              <option value="Inteligencia Artificial"
+                >Inteligencia Artificial</option
+              >
+              <option value="Desarrollo Web">Desarrollo Web</option>
+              <option value="SEO y Posicionamiento"
+                >SEO y Posicionamiento</option
+              >
+              <option value="Publicidad Digital">Publicidad Digital</option>
+              <option value="Automatización">Automatización</option>
+            </select>
           </div>
 
-          <Button text="Confirmar Cita" variant="primary" type="submit" /> 
+          <div class="form-group">
+            <label for="appointment-time">🕐 Fecha y Hora *</label>
+            <input
+              type="text"
+              id="appointment-time"
+              name="appointment-time"
+              required
+              placeholder="Selecciona un horario disponible..."
+            />
+            <div class="field-error" id="time-error"></div>
+            <div class="time-info">
+              <p class="text-sm text-gray-600 mt-2">
+                <strong>Horarios disponibles:</strong> Lunes a Viernes, 9:00 AM -
+                5:00 PM (Hora de México)
+              </p>
+              <p class="text-sm text-gray-600">
+                <strong>Duración:</strong> 60 minutos
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description">📝 Descripción (Opcional)</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="3"
+              placeholder="Cuéntanos brevemente sobre tu proyecto o consulta..."
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <Button
+              text="📅 Confirmar Cita"
+              variant="primary"
+              type="submit"
+              class="w-full"
+            />
+          </div>
         </form>
       </div>
 
       <div id="confirmation-message" class="confirmation-container hidden">
-        <h2 class="text-2xl font-bold text-green-600">¡Cita Agendada!</h2>
-        <p class="text-gray-700">Hemos recibido tus datos. Recibirás una invitación de Google Calendar en tu correo en los próximos minutos.</p>
-        <p class="text-gray-600 mt-4">Puedes cerrar esta ventana.</p>
+        <div class="success-icon">✅</div>
+        <h2 class="text-2xl font-bold text-green-600">
+          ¡Cita Agendada Exitosamente!
+        </h2>
+        <div id="appointment-details" class="appointment-summary">
+          <!-- Los detalles se llenarán dinámicamente -->
+        </div>
+        <div class="next-steps">
+          <h3>📋 Próximos pasos:</h3>
+          <ul>
+            <li>
+              📧 Recibirás una confirmación por email con el enlace de Google
+              Meet
+            </li>
+            <li>⏰ Recibirás recordatorios 24 horas y 30 minutos antes</li>
+            <li>🎥 Prepara tu conexión y micrófono para la reunión virtual</li>
+          </ul>
+        </div>
+        <button onclick="meetingModal.closeModal()" class="close-button">
+          Cerrar
+        </button>
       </div>
-
     </div>
   </div>
 </div>
@@ -74,12 +162,15 @@ import Button from '../common/Button.astro';
   .modal-content {
     background-color: white;
     padding: 2.5rem;
-    border-radius: 12px;
+    border-radius: 16px;
     width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     position: relative;
     transform: scale(0.95);
     transition: transform 0.3s ease;
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 
   .modal:not(.hidden) .modal-content {
@@ -94,10 +185,16 @@ import Button from '../common/Button.astro';
     color: #aaa;
     cursor: pointer;
     line-height: 1;
+    transition: color 0.2s;
   }
 
   .close:hover {
     color: #333;
+  }
+
+  .modal-header {
+    text-align: center;
+    margin-bottom: 2rem;
   }
 
   .form-group {
@@ -109,38 +206,53 @@ import Button from '../common/Button.astro';
     margin-bottom: 0.5rem;
     font-weight: 600;
     color: #4a5568;
+    font-size: 0.95rem;
   }
 
-  .form-group input {
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1px solid #cbd5e0;
+    border: 2px solid #e2e8f0;
     border-radius: 8px;
     font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.2s;
+    background-color: #fff;
   }
 
-  .form-group input:focus {
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
     outline: none;
-    border-color: #4299e1;
-    box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
   }
 
-  .submit-button {
-    width: 100%;
-    padding: 0.875rem;
-    background-color: #4F46E5; /* Indigo-600 */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  .form-group input.error,
+  .form-group select.error,
+  .form-group textarea.error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
   }
 
-  .submit-button:hover {
-    background-color: #4338CA; /* Indigo-700 */
+  .field-error {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    min-height: 1.25rem;
+  }
+
+  .time-info {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .form-actions {
+    margin-top: 2rem;
   }
 
   .confirmation-container {
@@ -148,26 +260,112 @@ import Button from '../common/Button.astro';
     padding: 2rem;
   }
 
+  .success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .appointment-summary {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: left;
+  }
+
+  .next-steps {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: left;
+  }
+
+  .next-steps h3 {
+    color: #92400e;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  .next-steps ul {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  .next-steps li {
+    margin: 0.5rem 0;
+    color: #92400e;
+  }
+
+  .close-button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+  }
+
+  .close-button:hover {
+    background: #5a67d8;
+  }
+
   /* Estilos para Flatpickr */
   .flatpickr-calendar {
     font-family: 'Inter', sans-serif;
-    border-radius: 8px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
   }
+
   .flatpickr-day.selected {
-    background: #4F46E5;
-    border-color: #4F46E5;
+    background: #667eea;
+    border-color: #667eea;
   }
-  .flatpickr-time .flatpickr-hour:hover, .flatpickr-time .flatpickr-minute:hover {
-    background: #E0E7FF; /* Indigo-100 */
+
+  .flatpickr-day.selected:hover {
+    background: #5a67d8;
   }
+
+  .flatpickr-time .flatpickr-hour:hover,
+  .flatpickr-time .flatpickr-minute:hover {
+    background: #e0e7ff;
+  }
+
   .flatpickr-day.today {
-    border-color: #4F46E5;
+    border-color: #667eea;
+    color: #667eea;
+  }
+
+  .flatpickr-day.disabled {
+    color: #cbd5e0;
+    background: #f7fafc;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .modal-content {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+
+    .modal-header h2 {
+      font-size: 1.5rem;
+    }
   }
 </style>
 
 <!-- Cargar Flatpickr JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr" is:inline></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js" is:inline></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js" is:inline
+></script>
 
 <script src="/scripts/meetingmodal.js" is:inline></script>
