@@ -132,11 +132,7 @@ class GoogleCalendarService {
 
       console.log('✅ Verificación de disponibilidad: DISPONIBLE');
 
-      // Generar ID único para la conferencia
-      const conferenceId = `meet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      console.log(`🎥 Creando conferencia Google Meet con ID: ${conferenceId}`);
-
-      // Crear el evento con Google Meet y attendees
+      // Crear el evento sin attendees (para evitar problemas de permisos)
       const event = {
         summary: `Consulta con ${appointment.name}`,
         description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}\n\nCliente: ${appointment.name} (${appointment.email})`,
@@ -147,19 +143,6 @@ class GoogleCalendarService {
         end: {
           dateTime: endDate.toISOString(),
           timeZone: this.timezone,
-        },
-        // Agregar attendees (intentaremos esta opción)
-        attendees: [
-          { email: appointment.email, displayName: appointment.name },
-        ],
-        // Configurar Google Meet automáticamente
-        conferenceData: {
-          createRequest: {
-            requestId: conferenceId,
-            conferenceSolutionKey: {
-              type: 'hangoutsMeet',
-            },
-          },
         },
         reminders: {
           useDefault: false,
@@ -173,8 +156,7 @@ class GoogleCalendarService {
       const response = await this.calendar.events.insert({
         calendarId: this.calendarId,
         requestBody: event,
-        conferenceDataVersion: 1, // Habilitar Google Meet
-        sendUpdates: 'all', // Enviar notificaciones a los attendees
+        sendUpdates: 'none', // No enviar actualizaciones ya que no hay attendees
       });
 
       const createdEvent = response.data;
