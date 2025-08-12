@@ -4,7 +4,7 @@ import { google } from 'googleapis';
 export const GET: APIRoute = async () => {
   try {
     console.log('🧪 Testing direct event creation...');
-    
+
     // Credenciales hardcodeadas para prueba
     const serviceAccountEmail = 'services-web@ia-punto.iam.gserviceaccount.com';
     const privateKey = `-----BEGIN PRIVATE KEY-----
@@ -19,10 +19,10 @@ f1LLOHdbZghnn8bO6Zj5xmHst83bVs3uxMXrnSMSlecTbTNTtyW/cwejWJ9x832u
 ZW1hhfSTS62fpgYA4bJ0VWtg8UIHWk0wQ7HbWafIZHUDpJt/NANFsesblND3TrZG
 MaEvf4f8s0so9ufwgmEhOw==
 -----END PRIVATE KEY-----`;
-    const calendarId = 'primary';
-    
+    const calendarId = 'tuytecnologia@gmail.com';
+
     console.log('🔑 Using hardcoded credentials...');
-    
+
     // Crear autenticación con GoogleAuth
     const auth = new google.auth.GoogleAuth({
       credentials: {
@@ -34,24 +34,28 @@ MaEvf4f8s0so9ufwgmEhOw==
         'https://www.googleapis.com/auth/calendar.events',
       ],
     });
-    
+
     console.log('🔐 Auth created, getting calendar...');
-    
+
     // Crear cliente de calendar
-    const calendar = google.calendar({ version: 'v3', auth: await auth.getClient() });
-    
+    const calendar = google.calendar({
+      version: 'v3',
+      auth: await auth.getClient(),
+    });
+
     console.log('📅 Calendar client created, creating test event...');
-    
+
     // Crear un evento de prueba
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(10, 0, 0, 0);
-    
+
     const endTime = new Date(tomorrow.getTime() + 60 * 60 * 1000); // +1 hora
-    
+
     const event = {
       summary: 'Prueba de Integración - IA Punto',
-      description: 'Evento de prueba para verificar la integración con Google Calendar',
+      description:
+        'Evento de prueba para verificar la integración con Google Calendar',
       start: {
         dateTime: tomorrow.toISOString(),
         timeZone: 'America/Bogota',
@@ -60,9 +64,7 @@ MaEvf4f8s0so9ufwgmEhOw==
         dateTime: endTime.toISOString(),
         timeZone: 'America/Bogota',
       },
-      attendees: [
-        { email: 'test@example.com' },
-      ],
+      attendees: [{ email: 'test@example.com' }],
       reminders: {
         useDefault: false,
         overrides: [
@@ -71,18 +73,18 @@ MaEvf4f8s0so9ufwgmEhOw==
         ],
       },
     };
-    
+
     console.log('📝 Creating event with data:', JSON.stringify(event, null, 2));
-    
+
     const response = await calendar.events.insert({
       calendarId: calendarId,
       requestBody: event,
       sendUpdates: 'none', // No enviar invitaciones automáticas
     });
-    
+
     console.log('✅ Event created successfully!');
     console.log('📊 Event details:', JSON.stringify(response.data, null, 2));
-    
+
     return new Response(
       JSON.stringify(
         {
@@ -106,7 +108,7 @@ MaEvf4f8s0so9ufwgmEhOw==
     );
   } catch (error) {
     console.error('❌ Direct event creation failed:', error);
-    
+
     return new Response(
       JSON.stringify(
         {

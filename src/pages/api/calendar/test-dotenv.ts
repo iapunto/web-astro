@@ -5,29 +5,29 @@ import * as dotenv from 'dotenv';
 export const GET: APIRoute = async () => {
   try {
     console.log('🧪 Testing with dotenv library...');
-    
+
     // Cargar variables de entorno usando dotenv
     const result = dotenv.config();
-    
+
     if (result.error) {
       throw new Error(`Error loading .env file: ${result.error.message}`);
     }
-    
+
     const serviceAccountEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
     const privateKey = process.env.GOOGLE_PRIVATE_KEY;
     const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
-    
+
     console.log('📋 Credentials from dotenv:');
     console.log(`  - Email: ${serviceAccountEmail ? 'SET' : 'NOT SET'}`);
     console.log(`  - Private Key: ${privateKey ? 'SET' : 'NOT SET'}`);
     console.log(`  - Calendar ID: ${calendarId}`);
-    
+
     if (!serviceAccountEmail || !privateKey) {
       throw new Error('Missing Google Calendar credentials in .env file');
     }
-    
+
     console.log('🔑 Using dotenv credentials...');
-    
+
     // Crear autenticación con GoogleAuth
     const auth = new google.auth.GoogleAuth({
       credentials: {
@@ -39,21 +39,24 @@ export const GET: APIRoute = async () => {
         'https://www.googleapis.com/auth/calendar.events',
       ],
     });
-    
+
     console.log('🔐 Auth created, getting calendar...');
-    
+
     // Crear cliente de calendar
-    const calendar = google.calendar({ version: 'v3', auth: await auth.getClient() });
-    
+    const calendar = google.calendar({
+      version: 'v3',
+      auth: await auth.getClient(),
+    });
+
     console.log('📅 Calendar client created, creating test event...');
-    
+
     // Crear un evento de prueba
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(10, 0, 0, 0);
-    
+
     const endTime = new Date(tomorrow.getTime() + 60 * 60 * 1000); // +1 hora
-    
+
     const event = {
       summary: 'Prueba de Integración - IA Punto (dotenv)',
       description: 'Evento de prueba usando dotenv para cargar credenciales',
@@ -75,18 +78,18 @@ export const GET: APIRoute = async () => {
         ],
       },
     };
-    
+
     console.log('📝 Creating event with data:', JSON.stringify(event, null, 2));
-    
+
     const response = await calendar.events.insert({
       calendarId: calendarId,
       requestBody: event,
       sendUpdates: 'none', // No enviar invitaciones automáticas
     });
-    
+
     console.log('✅ Event created successfully!');
     console.log('📊 Event details:', JSON.stringify(response.data, null, 2));
-    
+
     return new Response(
       JSON.stringify(
         {
@@ -110,7 +113,7 @@ export const GET: APIRoute = async () => {
     );
   } catch (error) {
     console.error('❌ Event creation with dotenv failed:', error);
-    
+
     return new Response(
       JSON.stringify(
         {

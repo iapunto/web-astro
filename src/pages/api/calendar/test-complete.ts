@@ -124,7 +124,7 @@ export const GET: APIRoute = async () => {
     
     const emailData = {
       clientName: 'Cliente de Prueba Completa',
-      clientEmail: 'test@example.com',
+      clientEmail: 'sl.rondon.m@gmail.com',
       appointmentDate: tomorrow,
       appointmentTime: tomorrow.toLocaleTimeString('es-ES', {
         hour: '2-digit',

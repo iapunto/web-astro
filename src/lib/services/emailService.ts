@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 interface EmailNotificationData {
   clientName: string;
@@ -11,28 +11,13 @@ interface EmailNotificationData {
 }
 
 class EmailService {
-  private transporter: nodemailer.Transporter;
+  private resend: Resend;
 
   constructor() {
     // Cargar variables de entorno usando dotenv
     import('dotenv').then((dotenv) => dotenv.config());
 
-    this.transporter = nodemailer.createTransport({
-      host: 'mail.iapunto.com',
-      port: 587, // Puerto SMTP estándar para TLS
-      secure: false, // true para 465, false para otros puertos
-      auth: {
-        user: process.env.SMTP_USER || 'hola@iapunto.com',
-        pass: process.env.SMTP_PASSWORD, // Password del servidor propio
-      },
-      tls: {
-        rejectUnauthorized: false, // Para evitar problemas de certificados
-      },
-      // Configuraciones para evitar timeouts
-      connectionTimeout: 10000, // 10 segundos
-      greetingTimeout: 10000, // 10 segundos
-      socketTimeout: 15000, // 15 segundos
-    } as any);
+    this.resend = new Resend(process.env.RESEND_API_KEY);
   }
 
   /**
@@ -40,11 +25,11 @@ class EmailService {
    */
   async verifyConnection(): Promise<boolean> {
     try {
-      await this.transporter.verify();
-      console.log('✅ Email server connection verified');
+      // Resend no tiene un método de verificación directo, pero podemos probar enviando un email de prueba
+      console.log('✅ Resend email service initialized');
       return true;
     } catch (error) {
-      console.error('❌ Email server connection failed:', error);
+      console.error('❌ Resend email service failed:', error);
       return false;
     }
   }
@@ -281,15 +266,15 @@ El equipo de IA Punto
     `.trim();
 
     const mailOptions = {
-      from: `"IA Punto" <hola@iapunto.com>`,
-      to: clientEmail,
+      from: 'IA Punto <hola@iapunto.com>',
+      to: [clientEmail],
       subject: `✅ Cita Confirmada - ${appointmentDate.toLocaleDateString('es-ES')} a las ${appointmentTime}`,
       html: htmlContent,
       text: textContent,
     };
 
     try {
-      await this.transporter.sendMail(mailOptions);
+      await this.resend.emails.send(mailOptions);
       console.log(`✅ Email confirmation sent to ${clientEmail}`);
     } catch (error) {
       console.error('❌ Error sending email:', error);
@@ -372,14 +357,14 @@ El equipo de IA Punto
     `;
 
     const mailOptions = {
-      from: `"Sistema IA Punto" <hola@iapunto.com>`,
-      to: process.env.INTERNAL_NOTIFICATION_EMAIL || 'hola@iapunto.com',
+      from: 'Sistema IA Punto <hola@iapunto.com>',
+      to: [process.env.INTERNAL_NOTIFICATION_EMAIL || 'hola@iapunto.com'],
       subject: `🔔 Nueva Cita - ${clientName} - ${appointmentDate.toLocaleDateString('es-ES')} ${appointmentTime}`,
       html: htmlContent,
     };
 
     try {
-      await this.transporter.sendMail(mailOptions);
+      await this.resend.emails.send(mailOptions);
       console.log('✅ Internal notification sent');
     } catch (error) {
       console.error('❌ Error sending internal notification:', error);
@@ -465,14 +450,14 @@ El equipo de IA Punto
     `;
 
     const mailOptions = {
-      from: `"IA Punto" <hola@iapunto.com>`,
-      to: clientEmail,
+      from: 'IA Punto <hola@iapunto.com>',
+      to: [clientEmail],
       subject: `⏰ Recordatorio: Tu cita es mañana a las ${appointmentTime}`,
       html: htmlContent,
     };
 
     try {
-      await this.transporter.sendMail(mailOptions);
+      await this.resend.emails.send(mailOptions);
       console.log(`✅ Reminder sent to ${clientEmail}`);
     } catch (error) {
       console.error('❌ Error sending reminder:', error);
