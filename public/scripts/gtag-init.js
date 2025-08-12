@@ -24,12 +24,21 @@ gtag('consent', 'default', {
 // Función para inicializar Google Analytics cuando se cargue el script
 function initializeGoogleAnalytics() {
   gtag('js', new Date());
-  gtag('config', 'AW-11203509179', {
+  
+  // Configurar Google Analytics 4 (GA4)
+  gtag('config', 'G-XXXXXXXXXX', { // Reemplazar con tu GA4 ID
     // Configuración básica que funciona sin consentimiento
     anonymize_ip: true,
     allow_google_signals: false,
     allow_ad_personalization_signals: false
   });
+  
+  // Configurar Google Ads (si tienes un ID de Google Ads)
+  // gtag('config', 'AW-11203509179', {
+  //   anonymize_ip: true,
+  //   allow_google_signals: false,
+  //   allow_ad_personalization_signals: false
+  // });
 }
 
 // Función para actualizar consentimiento basado en las preferencias del usuario
@@ -148,23 +157,13 @@ window.initializeGoogleAnalytics = initializeGoogleAnalytics;
 // Funciones de tracking de conversiones para Google Analytics
 function trackWhatsAppConversion(action = 'Contact') {
   try {
-    // Enviar evento a Google Analytics
-    gtag('event', 'conversion', {
-      send_to: 'AW-11203509179/lead',
-      value: 1.00,
-      currency: 'COP',
-      transaction_id: 'whatsapp_' + Date.now()
-    });
-
-    // Evento personalizado para WhatsApp
+    // Enviar evento personalizado para WhatsApp
     gtag('event', 'whatsapp_click', {
       event_category: 'Contact',
       event_label: 'WhatsApp Contact',
       value: 1,
-      custom_parameter: {
-        source: 'whatsapp',
-        action: action
-      }
+      source: 'whatsapp',
+      action: action
     });
 
     // Enviar evento a dataLayer para GTM
@@ -185,23 +184,13 @@ function trackWhatsAppConversion(action = 'Contact') {
 
 function trackAppointmentConversion(appointmentData = {}) {
   try {
-    // Enviar evento de conversión
-    gtag('event', 'conversion', {
-      send_to: 'AW-11203509179/lead',
-      value: 5.00,
-      currency: 'COP',
-      transaction_id: 'appointment_' + Date.now()
-    });
-
     // Evento personalizado para citas
     gtag('event', 'appointment_booked', {
       event_category: 'Appointment',
       event_label: 'Appointment Booking',
       value: 5,
-      custom_parameter: {
-        meeting_type: appointmentData.meetingType || 'General',
-        source: 'calendar_modal'
-      }
+      meeting_type: appointmentData.meetingType || 'General',
+      source: 'calendar_modal'
     });
 
     // Enviar evento a dataLayer para GTM
@@ -222,24 +211,14 @@ function trackAppointmentConversion(appointmentData = {}) {
 
 function trackContactFormConversion(formData = {}) {
   try {
-    // Enviar evento de conversión
-    gtag('event', 'conversion', {
-      send_to: 'AW-11203509179/lead',
-      value: 2.00,
-      currency: 'COP',
-      transaction_id: 'contact_form_' + Date.now()
-    });
-
     // Evento personalizado para formularios
     gtag('event', 'contact_form_submitted', {
       event_category: 'Contact',
       event_label: 'Contact Form Submission',
       value: 2,
-      custom_parameter: {
-        has_company: !!formData.company,
-        has_phone: !!formData.phone,
-        source: 'website_form'
-      }
+      has_company: !!formData.company,
+      has_phone: !!formData.phone,
+      source: 'website_form'
     });
 
     // Enviar evento a dataLayer para GTM
