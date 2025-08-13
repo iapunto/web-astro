@@ -261,6 +261,24 @@ class MeetingWizard {
     if (currentStepElement) {
       currentStepElement.classList.add('active');
       console.log(`✅ Paso ${this.currentStep} activado`);
+      
+      // Verificar visibilidad del paso actual
+      const computedStyle = window.getComputedStyle(currentStepElement);
+      console.log(`👁️ Paso ${this.currentStep} display:`, computedStyle.display);
+      console.log(`👁️ Paso ${this.currentStep} visibility:`, computedStyle.visibility);
+      console.log(`👁️ Paso ${this.currentStep} opacity:`, computedStyle.opacity);
+      
+      // Verificar contenido del paso
+      if (this.currentStep === 2) {
+        const datePicker = document.getElementById('wizard-date-picker');
+        const timeSlotsContainer = document.getElementById('time-slots-container');
+        console.log('📅 Date picker encontrado:', !!datePicker);
+        console.log('🕐 Time slots container encontrado:', !!timeSlotsContainer);
+        
+        if (datePicker) {
+          console.log('📅 Date picker visible:', window.getComputedStyle(datePicker).display !== 'none');
+        }
+      }
     } else {
       console.error(`❌ No se encontró el elemento del paso ${this.currentStep}`);
     }
