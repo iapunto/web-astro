@@ -39,38 +39,60 @@ class GoogleCalendarService {
   private timezone: string;
 
   constructor() {
-    // Configurar autenticación con Service Account
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: [
-        'https://www.googleapis.com/auth/calendar',
-        'https://www.googleapis.com/auth/calendar.events',
-      ],
-    });
-
-    // Configurar impersonación del usuario de Google Workspace (requerido para Google Meet)
-    if (process.env.GOOGLE_WORKSPACE_USER) {
-      console.log(
-        '🔐 Configurada impersonación para:',
-        process.env.GOOGLE_WORKSPACE_USER
-      );
-    } else {
-      console.warn(
-        '⚠️ GOOGLE_WORKSPACE_USER no configurado. Google Meet puede no funcionar.'
-      );
-    }
-
-    this.calendar = google.calendar({ version: 'v3', auth });
     this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
     this.timezone = process.env.TIMEZONE || 'America/Bogota';
+  }
+
+  private async initializeCalendar() {
+    // Intentar usar OAuth2 primero, fallback a Service Account
+    try {
+      // Intentar configurar OAuth2
+      const oauth2Service = new (await import('../../../lib/services/oauth2Service.js')).default();
+      const tokensLoaded = oauth2Service.setTokensFromEnv();
+      
+      if (tokensLoaded) {
+        console.log('🔑 Usando autenticación OAuth2');
+        this.calendar = oauth2Service.getCalendarClient();
+        return;
+      } else {
+        throw new Error('No hay tokens OAuth2 configurados');
+      }
+    } catch (error) {
+      console.log('⚠️ OAuth2 no disponible, usando Service Account');
+      
+      // Fallback a Service Account
+      const auth = new google.auth.GoogleAuth({
+        credentials: {
+          client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+          private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        },
+        scopes: [
+          'https://www.googleapis.com/auth/calendar',
+          'https://www.googleapis.com/auth/calendar.events',
+        ],
+      });
+
+      // Configurar impersonación del usuario de Google Workspace (requerido para Google Meet)
+      if (process.env.GOOGLE_WORKSPACE_USER) {
+        console.log(
+          '🔐 Configurada impersonación para:',
+          process.env.GOOGLE_WORKSPACE_USER
+        );
+      } else {
+        console.warn(
+          '⚠️ GOOGLE_WORKSPACE_USER no configurado. Google Meet puede no funcionar.'
+        );
+      }
+
+      this.calendar = google.calendar({ version: 'v3', auth });
+    }
   }
 
   async verifyConnection(): Promise<boolean> {
     try {
       console.log('🔍 Verificando conexión con Google Calendar...');
+      
+      await this.initializeCalendar();
 
       const response = await this.calendar.calendars.get({
         calendarId: this.calendarId,
@@ -98,6 +120,8 @@ class GoogleCalendarService {
   async checkAvailability(startTime: Date, endTime: Date): Promise<boolean> {
     try {
       console.log('🔍 Verificando disponibilidad...');
+      
+      await this.initializeCalendar();
 
       const response = await this.calendar.freebusy.query({
         requestBody: {
@@ -131,6 +155,8 @@ class GoogleCalendarService {
       console.log(`📅 Fecha: ${appointment.startTime}`);
       console.log(`📧 Email: ${appointment.email}`);
 
+      await this.initializeCalendar();
+
       const startDate = new Date(appointment.startTime);
       const endDate = new Date(appointment.endTime);
 
@@ -144,10 +170,13 @@ class GoogleCalendarService {
 
       console.log('✅ Verificación de disponibilidad: DISPONIBLE');
 
-      // Crear el evento sin attendees (para evitar problemas de Domain-Wide Delegation)
-      const event = {
+      // Determinar si estamos usando OAuth2 o Service Account
+      const isUsingOAuth2 = process.env.GOOGLE_ACCESS_TOKEN && process.env.GOOGLE_REFRESH_TOKEN;
+      
+      // Crear el evento con configuración según el tipo de autenticación
+      const event: any = {
         summary: `Consulta con ${appointment.name}`,
-        description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}\n\nCliente: ${appointment.name} (${appointment.email})\n\nNota: Puedes agregar Google Meet manualmente desde Google Calendar`,
+        description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}\n\nCliente: ${appointment.name} (${appointment.email})`,
         start: {
           dateTime: startDate.toISOString(),
           timeZone: this.timezone,
@@ -165,11 +194,44 @@ class GoogleCalendarService {
         },
       };
 
-      const response = await this.calendar.events.insert({
+      // Si usamos OAuth2, agregar attendees y Google Meet
+      if (isUsingOAuth2) {
+        event.attendees = [
+          {
+            email: appointment.email,
+            displayName: appointment.name,
+          },
+        ];
+        
+        // Agregar Google Meet automáticamente
+        event.conferenceData = {
+          createRequest: {
+            requestId: `meet-${Date.now()}`,
+            conferenceSolutionKey: {
+              type: 'hangoutsMeet'
+            }
+          }
+        };
+        
+        console.log('🔗 Configurando Google Meet automático con OAuth2');
+      } else {
+        console.log('ℹ️ Usando Service Account - Google Meet se agrega manualmente');
+      }
+
+      const insertOptions: any = {
         calendarId: this.calendarId,
         requestBody: event,
-        sendUpdates: 'none', // No enviar actualizaciones ya que no hay attendees
-      });
+      };
+
+      // Configurar opciones según el tipo de autenticación
+      if (isUsingOAuth2) {
+        insertOptions.sendUpdates = 'all'; // Enviar invitaciones automáticamente
+        insertOptions.conferenceDataVersion = 1; // Requerido para Google Meet
+      } else {
+        insertOptions.sendUpdates = 'none'; // No enviar actualizaciones sin attendees
+      }
+
+      const response = await this.calendar.events.insert(insertOptions);
 
       const createdEvent = response.data;
 
@@ -177,9 +239,20 @@ class GoogleCalendarService {
       console.log(`📅 Resumen del evento: ${createdEvent.summary}`);
       console.log(`🕐 Inicio: ${createdEvent.start?.dateTime}`);
       console.log(`🕐 Fin: ${createdEvent.end?.dateTime}`);
+      console.log(`👥 Invitados: ${createdEvent.attendees?.length || 0}`);
 
-      // Nota sobre Google Meet manual
-      console.log('ℹ️ Google Meet no se crea automáticamente. Puedes agregarlo manualmente desde Google Calendar.');
+      // Extraer enlace de Google Meet si existe
+      const meetLink = createdEvent.conferenceData?.entryPoints?.find(
+        (entry: any) => entry.entryPointType === 'video'
+      )?.uri;
+
+      if (meetLink) {
+        console.log(`🔗 Enlace de Google Meet: ${meetLink}`);
+      } else if (isUsingOAuth2) {
+        console.log('ℹ️ Google Meet no se creó automáticamente. Puede requerir Google Workspace.');
+      } else {
+        console.log('ℹ️ Google Meet se agrega manualmente desde Google Calendar.');
+      }
 
       console.log('🏁 ===== CITA CREADA =====');
 
@@ -194,8 +267,11 @@ class GoogleCalendarService {
           dateTime: createdEvent.end!.dateTime!,
           timeZone: createdEvent.end!.timeZone!,
         },
-        attendees: [], // No hay attendees en la creación inicial
-        meetLink: undefined, // Google Meet se agrega manualmente
+        attendees: createdEvent.attendees?.map((attendee: any) => ({
+          email: attendee.email!,
+          displayName: attendee.displayName || undefined,
+        })) || [],
+        meetLink: meetLink || undefined,
       };
     } catch (error) {
       console.error('❌ Error creando cita:', error);
