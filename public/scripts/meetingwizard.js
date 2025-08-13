@@ -657,8 +657,21 @@ class MeetingWizard {
     console.log('🎉 Mostrando mensaje de éxito');
     const successMessage = document.getElementById('wizard-success-message');
     const appointmentDetails = document.getElementById('wizard-appointment-details');
+    const wizardBody = document.querySelector('.wizard-modal-body');
     
-    if (successMessage && appointmentDetails) {
+    if (successMessage && appointmentDetails && wizardBody) {
+      // Ocultar progress bar y todos los pasos
+      const progressBar = document.querySelector('.wizard-progress');
+      const allSteps = document.querySelectorAll('.wizard-step');
+      
+      if (progressBar) progressBar.style.display = 'none';
+      allSteps.forEach(step => {
+        step.style.display = 'none';
+        step.style.visibility = 'hidden';
+        step.style.opacity = '0';
+      });
+      
+      // Preparar contenido del mensaje de éxito
       appointmentDetails.innerHTML = `
         <div class="confirmation-row">
           <span class="confirmation-label">📅 Fecha:</span>
@@ -678,7 +691,13 @@ class MeetingWizard {
         </div>
       `;
       
+      // Mostrar mensaje de éxito
       successMessage.classList.remove('hidden');
+      successMessage.style.display = 'block';
+      successMessage.style.visibility = 'visible';
+      successMessage.style.opacity = '1';
+      
+      console.log('✅ Mensaje de éxito mostrado correctamente');
     }
   }
 

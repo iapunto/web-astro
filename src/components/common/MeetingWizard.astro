@@ -548,6 +548,10 @@ import Button from '../common/Button.astro';
   .wizard-success {
     text-align: center;
     padding: 2rem;
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
   }
 
   .success-icon {
@@ -599,7 +603,9 @@ import Button from '../common/Button.astro';
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
-    margin-top: 1rem;
+    margin-top: 2rem;
+    display: inline-block;
+    min-width: 120px;
   }
 
   .close-button:hover {
