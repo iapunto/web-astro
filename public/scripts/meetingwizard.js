@@ -277,7 +277,21 @@ class MeetingWizard {
         
         if (datePicker) {
           console.log('📅 Date picker visible:', window.getComputedStyle(datePicker).display !== 'none');
+          console.log('📅 Date picker value:', datePicker.value);
+          console.log('📅 Date picker placeholder:', datePicker.placeholder);
         }
+        
+        // Verificar si Flatpickr está funcionando
+        if (this.datePicker) {
+          console.log('📅 Flatpickr instance:', !!this.datePicker);
+          console.log('📅 Flatpickr isOpen:', this.datePicker.isOpen);
+        }
+        
+        // Verificar el contenido del paso 2
+        const step2Content = currentStepElement.innerHTML;
+        console.log('📋 Paso 2 contenido length:', step2Content.length);
+        console.log('📋 Paso 2 contiene date-picker:', step2Content.includes('wizard-date-picker'));
+        console.log('📋 Paso 2 contiene time-slots:', step2Content.includes('time-slots-container'));
       }
     } else {
       console.error(`❌ No se encontró el elemento del paso ${this.currentStep}`);
