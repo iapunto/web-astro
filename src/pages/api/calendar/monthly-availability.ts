@@ -105,20 +105,25 @@ class MonthlyAvailabilityService {
 
   private generateBaseTimeSlots(date: string): any[] {
     const slots: any[] = [];
-    const startHour = 9; // 9:00 AM
-    const endHour = 17; // 5:00 PM
+    // Horarios específicos según la imagen de Google Calendar
+    const timeSlots = [
+      { hour: 9, label: '09:00 a. m.' },
+      { hour: 10, label: '10:00 a. m.' },
+      { hour: 11, label: '11:00 a. m.' },
+      { hour: 12, label: '12:00 p. m.' },
+      { hour: 13, label: '01:00 p. m.' },
+      { hour: 14, label: '02:00 p. m.' },
+      { hour: 15, label: '03:00 p. m.' },
+      { hour: 16, label: '04:00 p. m.' }
+    ];
     
-    for (let hour = startHour; hour < endHour; hour++) {
-      const time = new Date(`${date}T${hour.toString().padStart(2, '0')}:00:00`);
+    for (const slot of timeSlots) {
+      const time = new Date(`${date}T${slot.hour.toString().padStart(2, '0')}:00:00`);
       time.setMinutes(0, 0, 0);
       
       slots.push({
         time: time.toISOString(),
-        formatted: time.toLocaleTimeString('es-CO', { 
-          hour: '2-digit', 
-          minute: '2-digit',
-          hour12: true 
-        })
+        formatted: slot.label
       });
     }
     

@@ -43,22 +43,28 @@ class AvailabilityService {
     try {
       console.log(`🔍 Verificando disponibilidad para: ${date}`);
 
-      // Generar horarios base (9:00 AM - 5:00 PM)
+      // Generar horarios base
       const timeSlots = this.generateBaseTimeSlots(date);
+      console.log(`📅 Horarios base generados: ${timeSlots.length}`);
       
       // Verificar conflictos en Google Calendar
       const busySlots = await this.getBusySlots(date);
+      console.log(`📅 Slots ocupados encontrados: ${busySlots.length}`);
+      console.log(`📅 Detalles de slots ocupados:`, busySlots);
       
       // Marcar slots como disponibles/no disponibles
       const availableSlots = timeSlots.map(slot => {
         const isBusy = this.isSlotBusy(slot.time, busySlots);
+        console.log(`🕐 ${slot.formatted}: ${isBusy ? 'OCUPADO' : 'DISPONIBLE'}`);
         return {
           ...slot,
           available: !isBusy
         };
       });
 
-      console.log(`✅ Disponibilidad verificada: ${availableSlots.filter(s => s.available).length}/${availableSlots.length} horarios disponibles`);
+      const availableCount = availableSlots.filter(s => s.available).length;
+      console.log(`✅ Disponibilidad verificada: ${availableCount}/${availableSlots.length} horarios disponibles`);
+      console.log(`📋 Horarios disponibles:`, availableSlots.filter(s => s.available).map(s => s.formatted));
 
       return availableSlots;
     } catch (error) {
@@ -69,20 +75,25 @@ class AvailabilityService {
 
   private generateBaseTimeSlots(date: string): TimeSlot[] {
     const slots: TimeSlot[] = [];
-    const startHour = 9; // 9:00 AM
-    const endHour = 17; // 5:00 PM
+    // Horarios específicos según la imagen de Google Calendar
+    const timeSlots = [
+      { hour: 9, label: '09:00 a. m.' },
+      { hour: 10, label: '10:00 a. m.' },
+      { hour: 11, label: '11:00 a. m.' },
+      { hour: 12, label: '12:00 p. m.' },
+      { hour: 13, label: '01:00 p. m.' },
+      { hour: 14, label: '02:00 p. m.' },
+      { hour: 15, label: '03:00 p. m.' },
+      { hour: 16, label: '04:00 p. m.' }
+    ];
     
-    for (let hour = startHour; hour < endHour; hour++) {
-      const time = new Date(`${date}T${hour.toString().padStart(2, '0')}:00:00`);
+    for (const slot of timeSlots) {
+      const time = new Date(`${date}T${slot.hour.toString().padStart(2, '0')}:00:00`);
       time.setMinutes(0, 0, 0);
       
       slots.push({
         time: time.toISOString(),
-        formatted: time.toLocaleTimeString('es-CO', { 
-          hour: '2-digit', 
-          minute: '2-digit',
-          hour12: true 
-        }),
+        formatted: slot.label,
         available: true
       });
     }
@@ -116,12 +127,20 @@ class AvailabilityService {
     const slotStart = new Date(slotTime);
     const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000); // +1 hora
 
+    console.log(`🔍 Verificando slot: ${slotStart.toISOString()} - ${slotEnd.toISOString()}`);
+
     return busySlots.some(busySlot => {
       const busyStart = new Date(busySlot.start);
       const busyEnd = new Date(busySlot.end);
       
-      // Verificar si hay conflicto
-      return (slotStart < busyEnd && slotEnd > busyStart);
+      // Verificar si hay conflicto (cualquier superposición)
+      const hasConflict = (slotStart < busyEnd && slotEnd > busyStart);
+      
+      if (hasConflict) {
+        console.log(`❌ Conflicto detectado: ${busyStart.toISOString()} - ${busyEnd.toISOString()}`);
+      }
+      
+      return hasConflict;
     });
   }
 }
