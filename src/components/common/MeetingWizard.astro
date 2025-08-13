@@ -309,7 +309,7 @@ import Button from '../common/Button.astro';
   }
 
   .progress-step.active:not(:last-child)::after {
-    background-color: #667eea;
+    background: linear-gradient(90deg, #E51F52 0%, #d41a4a 100%);
   }
 
   .step-number {
@@ -317,7 +317,7 @@ import Button from '../common/Button.astro';
     height: 40px;
     border-radius: 50%;
     background-color: #e2e8f0;
-    color: #718096;
+    color: #878C9C;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -326,29 +326,39 @@ import Button from '../common/Button.astro';
     position: relative;
     z-index: 2;
     transition: all 0.3s ease;
+    border: 2px solid transparent;
   }
 
   .progress-step.active .step-number {
-    background-color: #667eea;
+    background: linear-gradient(135deg, #E51F52 0%, #d41a4a 100%);
     color: white;
+    border-color: #E51F52;
+    box-shadow: 0 2px 8px rgba(229, 31, 82, 0.3);
   }
 
   .progress-step.completed .step-number {
-    background-color: #48bb78;
+    background: linear-gradient(135deg, #E51F52 0%, #d41a4a 100%);
     color: white;
+    border-color: #E51F52;
   }
 
   .step-label {
     margin-top: 0.5rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #718096;
+    color: #878C9C;
     text-align: center;
+    transition: all 0.3s ease;
   }
 
   .progress-step.active .step-label {
-    color: #667eea;
+    color: #E51F52;
     font-weight: 600;
+  }
+
+  .progress-step.completed .step-label {
+    color: #E51F52;
+    font-weight: 500;
   }
 
   /* Wizard Steps */
@@ -444,7 +454,7 @@ import Button from '../common/Button.astro';
     border-radius: 8px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     background-color: white;
     font-weight: 500;
     min-height: 80px;
@@ -452,35 +462,97 @@ import Button from '../common/Button.astro';
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .time-slot::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(229, 31, 82, 0.05) 0%, rgba(229, 31, 82, 0.02) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
   }
 
   .time-slot-label {
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.25rem;
+    color: #27282D;
+    position: relative;
+    z-index: 1;
   }
 
   .time-slot-duration {
     font-size: 0.75rem;
     opacity: 0.8;
+    color: #4B5563;
+    position: relative;
+    z-index: 1;
   }
 
   .time-slot:hover {
-    border-color: #667eea;
-    background-color: #f0f4ff;
+    border-color: #E51F52;
+    background-color: rgba(229, 31, 82, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(229, 31, 82, 0.15);
+  }
+
+  .time-slot:hover::before {
+    opacity: 1;
   }
 
   .time-slot.selected {
-    border-color: #667eea;
-    background-color: #667eea;
+    border-color: #E51F52;
+    background: linear-gradient(135deg, #E51F52 0%, #d41a4a 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(229, 31, 82, 0.3);
+  }
+
+  .time-slot.selected .time-slot-label,
+  .time-slot.selected .time-slot-duration {
     color: white;
   }
 
   .time-slot.disabled {
-    background-color: #f7fafc;
-    color: #cbd5e0;
+    background: linear-gradient(135deg, #f7fafc 0%, #f1f5f9 100%);
+    color: #878C9C;
     cursor: not-allowed;
     border-color: #e2e8f0;
+    opacity: 0.6;
+    position: relative;
+  }
+
+  .time-slot.disabled::after {
+    content: '❌';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+
+  .time-slot.disabled .time-slot-label {
+    color: #878C9C;
+    text-decoration: line-through;
+  }
+
+  .time-slot.disabled .time-slot-duration {
+    color: #878C9C;
+    opacity: 0.5;
+  }
+
+  .time-slot.disabled:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #e2e8f0;
+    background: linear-gradient(135deg, #f7fafc 0%, #f1f5f9 100%);
   }
 
   .info-card {
@@ -522,26 +594,36 @@ import Button from '../common/Button.astro';
   }
 
   .wizard-next-btn {
-    background-color: #667eea;
+    background: linear-gradient(135deg, #E51F52 0%, #d41a4a 100%);
     color: white;
+    border: none;
+    box-shadow: 0 2px 8px rgba(229, 31, 82, 0.2);
   }
 
   .wizard-next-btn:hover:not(:disabled) {
-    background-color: #5a67d8;
+    background: linear-gradient(135deg, #d41a4a 0%, #c41742 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(229, 31, 82, 0.3);
   }
 
   .wizard-next-btn:disabled {
-    background-color: #cbd5e0;
+    background: linear-gradient(135deg, #878C9C 0%, #6b7280 100%);
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 
   .wizard-confirm-btn {
-    background-color: #48bb78;
+    background: linear-gradient(135deg, #E51F52 0%, #d41a4a 100%);
     color: white;
+    border: none;
+    box-shadow: 0 2px 8px rgba(229, 31, 82, 0.2);
   }
 
   .wizard-confirm-btn:hover {
-    background-color: #38a169;
+    background: linear-gradient(135deg, #d41a4a 0%, #c41742 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(229, 31, 82, 0.3);
   }
 
   /* Success Message */
@@ -603,7 +685,7 @@ import Button from '../common/Button.astro';
   }
 
   .close-button {
-    background: #667eea;
+    background: linear-gradient(135deg, #E51F52 0%, #d41a4a 100%);
     color: white;
     border: none;
     padding: 0.75rem 2rem;
@@ -611,14 +693,17 @@ import Button from '../common/Button.astro';
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
     margin-top: 2rem;
     display: inline-block;
     min-width: 120px;
+    box-shadow: 0 2px 8px rgba(229, 31, 82, 0.2);
   }
 
   .close-button:hover {
-    background: #5a67d8;
+    background: linear-gradient(135deg, #d41a4a 0%, #c41742 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(229, 31, 82, 0.3);
   }
 
   /* Confirmation Details */
