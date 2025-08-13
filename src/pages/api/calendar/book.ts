@@ -144,7 +144,7 @@ class GoogleCalendarService {
 
       console.log('✅ Verificación de disponibilidad: DISPONIBLE');
 
-      // Crear el evento sin Google Meet (para cuentas sin Workspace)
+      // Crear el evento con el cliente como attendee
       const event = {
         summary: `Consulta con ${appointment.name}`,
         description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}\n\nCliente: ${appointment.name} (${appointment.email})\n\nNota: Puedes agregar Google Meet manualmente desde Google Calendar`,
@@ -156,6 +156,12 @@ class GoogleCalendarService {
           dateTime: endDate.toISOString(),
           timeZone: this.timezone,
         },
+        attendees: [
+          {
+            email: appointment.email,
+            displayName: appointment.name,
+          },
+        ],
         reminders: {
           useDefault: false,
           overrides: [
@@ -168,7 +174,7 @@ class GoogleCalendarService {
       const response = await this.calendar.events.insert({
         calendarId: this.calendarId,
         requestBody: event,
-        sendUpdates: 'none', // No enviar actualizaciones ya que no hay attendees
+        sendUpdates: 'all', // Enviar actualizaciones al cliente
       });
 
       const createdEvent = response.data;

@@ -13,22 +13,55 @@ interface AppointmentEmailData {
 }
 
 class EmailService {
-  private transporter: nodemailer.Transporter;
+  private transporter: nodemailer.Transporter | null = null;
 
   constructor() {
+    // Verificar que las credenciales estén configuradas
+    const emailUser = process.env.EMAIL_USER || import.meta.env.EMAIL_USER;
+    const emailPassword = process.env.EMAIL_PASSWORD || import.meta.env.EMAIL_PASSWORD;
+    
+    if (!emailUser || !emailPassword) {
+      console.warn('⚠️ Credenciales de email no configuradas. Los emails no se enviarán.');
+      console.warn('📧 Configure EMAIL_USER y EMAIL_PASSWORD en las variables de entorno.');
+      return;
+    }
+
     // Configurar el transporter de email usando Gmail SMTP
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER || 'tuytecnologia@gmail.com',
-        pass: process.env.EMAIL_PASSWORD || '', // App password de Gmail
+        user: emailUser,
+        pass: emailPassword, // App password de Gmail
       },
     });
+
+    // Verificar la conexión
+    this.verifyConnection();
+  }
+
+  private async verifyConnection() {
+    if (!this.transporter) {
+      console.warn('⚠️ Transporter no inicializado');
+      return;
+    }
+    
+    try {
+      await this.transporter.verify();
+      console.log('✅ Conexión de email verificada correctamente');
+    } catch (error) {
+      console.error('❌ Error verificando conexión de email:', error);
+      console.error('📧 Verifique las credenciales EMAIL_USER y EMAIL_PASSWORD');
+    }
   }
 
   async sendAppointmentConfirmation(
     data: AppointmentEmailData
   ): Promise<boolean> {
+    if (!this.transporter) {
+      console.warn('⚠️ Transporter no inicializado. No se puede enviar email.');
+      return false;
+    }
+    
     try {
       console.log('📧 Enviando email de confirmación...');
       console.log(`📧 Para: ${data.email}`);
@@ -144,6 +177,11 @@ class EmailService {
   }
 
   async sendNotificationToAdmin(data: AppointmentEmailData): Promise<boolean> {
+    if (!this.transporter) {
+      console.warn('⚠️ Transporter no inicializado. No se puede enviar email.');
+      return false;
+    }
+    
     try {
       console.log('📧 Enviando notificación al administrador...');
 
