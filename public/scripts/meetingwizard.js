@@ -61,34 +61,184 @@ class MeetingWizard {
   }
 
   initDatePicker() {
-    console.log('📅 Inicializando Flatpickr...');
-    const dateInput = document.getElementById('wizard-date-picker');
-    if (!dateInput) {
-      console.error('❌ No se encontró el input de fecha');
+    console.log('📅 Inicializando calendario personalizado...');
+    
+    // Configurar estado del calendario
+    this.currentYear = new Date().getFullYear();
+    this.currentMonth = new Date().getMonth();
+    this.monthlyAvailability = [];
+    
+    // Cargar disponibilidad del mes actual
+    this.loadMonthlyAvailability();
+    
+    // Configurar navegación del calendario
+    this.setupCalendarNavigation();
+    
+    console.log('✅ Calendario personalizado inicializado correctamente');
+  }
+
+  setupCalendarNavigation() {
+    const prevBtn = document.getElementById('prev-month');
+    const nextBtn = document.getElementById('next-month');
+    
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        this.currentMonth--;
+        if (this.currentMonth < 0) {
+          this.currentMonth = 11;
+          this.currentYear--;
+        }
+        this.loadMonthlyAvailability();
+      });
+    }
+    
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        this.currentMonth++;
+        if (this.currentMonth > 11) {
+          this.currentMonth = 0;
+          this.currentYear++;
+        }
+        this.loadMonthlyAvailability();
+      });
+    }
+  }
+
+  async loadMonthlyAvailability() {
+    console.log('📅 Cargando disponibilidad mensual...');
+    try {
+      const response = await fetch('/api/calendar/monthly-availability', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          year: this.currentYear,
+          month: this.currentMonth
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        this.monthlyAvailability = result.days;
+        this.renderCalendar();
+        this.updateMonthTitle();
+      } else {
+        console.error('❌ Error cargando disponibilidad mensual:', result.error);
+      }
+    } catch (error) {
+      console.error('❌ Error cargando disponibilidad mensual:', error);
+    }
+  }
+
+  updateMonthTitle() {
+    const monthTitle = document.getElementById('current-month');
+    if (monthTitle) {
+      const monthNames = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      ];
+      monthTitle.textContent = `${monthNames[this.currentMonth]} ${this.currentYear}`;
+    }
+  }
+
+  renderCalendar() {
+    console.log('🎨 Renderizando calendario...');
+    const calendarGrid = document.getElementById('calendar-grid');
+    if (!calendarGrid) {
+      console.error('❌ No se encontró el grid del calendario');
       return;
     }
 
-    // Configurar Flatpickr para fechas disponibles
-    this.datePicker = flatpickr(dateInput, {
-      locale: 'es',
-      dateFormat: 'Y-m-d',
-      minDate: 'today',
-      maxDate: new Date().fp_incr(30), // 30 días desde hoy
-      disable: [
-        function(date) {
-          // Deshabilitar fines de semana
-          return date.getDay() === 0 || date.getDay() === 6;
-        }
-      ],
-      onChange: (selectedDates) => {
-        console.log('📅 Fecha seleccionada:', selectedDates[0]);
-        if (selectedDates.length > 0) {
-          this.selectedDate = selectedDates[0];
-          this.loadTimeSlots(this.selectedDate);
-        }
-      }
+    // Obtener el primer día del mes y el número de días
+    const firstDay = new Date(this.currentYear, this.currentMonth, 1);
+    const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
+    const startDayOfWeek = firstDay.getDay();
+    const daysInMonth = lastDay.getDate();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Crear encabezados de días
+    const dayHeaders = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    
+    let calendarHTML = '';
+    
+    // Agregar encabezados
+    dayHeaders.forEach(header => {
+      calendarHTML += `<div class="calendar-day-header">${header}</div>`;
     });
-    console.log('✅ Flatpickr inicializado correctamente');
+
+    // Agregar días vacíos al inicio si es necesario
+    for (let i = 0; i < startDayOfWeek; i++) {
+      calendarHTML += '<div class="calendar-day empty"></div>';
+    }
+
+    // Agregar días del mes
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(this.currentYear, this.currentMonth, day);
+      const dateString = date.toISOString().split('T')[0];
+      const dayOfWeek = date.getDay();
+      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+      const isPast = date < today;
+      const isToday = date.getTime() === today.getTime();
+      
+      // Buscar disponibilidad para este día
+      const dayAvailability = this.monthlyAvailability.find(d => d.date === dateString);
+      
+      let dayClasses = ['calendar-day'];
+      
+      if (isPast) {
+        dayClasses.push('past');
+      } else if (isWeekend) {
+        dayClasses.push('weekend');
+      } else if (dayAvailability && dayAvailability.hasAvailability) {
+        dayClasses.push('available');
+      } else {
+        dayClasses.push('unavailable');
+      }
+      
+      if (isToday) {
+        dayClasses.push('today');
+      }
+      
+      if (this.selectedDate && dateString === this.selectedDate.toISOString().split('T')[0]) {
+        dayClasses.push('selected');
+      }
+      
+      const isClickable = !isPast && !isWeekend && dayAvailability && dayAvailability.hasAvailability;
+      
+      calendarHTML += `
+        <div class="${dayClasses.join(' ')}" 
+             data-date="${dateString}"
+             ${isClickable ? 'onclick="meetingWizard.selectDate(this)"' : ''}>
+          ${day}
+        </div>
+      `;
+    }
+
+    calendarGrid.innerHTML = calendarHTML;
+    console.log('✅ Calendario renderizado correctamente');
+  }
+
+  selectDate(element) {
+    console.log('🎯 Fecha seleccionada:', element.dataset.date);
+    
+    // Remover selección anterior
+    document.querySelectorAll('.calendar-day').forEach(day => {
+      day.classList.remove('selected');
+    });
+    
+    // Seleccionar el nuevo día
+    element.classList.add('selected');
+    
+    // Guardar fecha seleccionada
+    this.selectedDate = new Date(element.dataset.date);
+    
+    // Cargar horarios para la fecha seleccionada
+    this.loadTimeSlots(this.selectedDate);
   }
 
   setupStep1Validation() {
@@ -381,60 +531,12 @@ class MeetingWizard {
       timeSlotsContainer.style.display = 'block';
       timeSlotsGrid.innerHTML = '<div class="loading">Cargando horarios disponibles...</div>';
 
-      // Generar horarios disponibles
-      const timeSlots = this.generateTimeSlots(date);
-      
-      // Verificar disponibilidad
-      const availableSlots = await this.checkAvailability(date, timeSlots);
-      
-      this.renderTimeSlots(availableSlots);
-      
-    } catch (error) {
-      console.error('❌ Error cargando horarios:', error);
-      this.showStepError('Error cargando horarios disponibles. Intenta de nuevo.');
-    }
-  }
-
-  generateTimeSlots(date) {
-    const slots = [];
-    // Solo horas específicas: 9, 10, 11, 13, 14, 15, 16
-    const timeSlots = [
-      { hour: 9, label: '09:00' },
-      { hour: 10, label: '10:00' },
-      { hour: 11, label: '11:00' },
-      { hour: 13, label: '13:00' },
-      { hour: 14, label: '14:00' },
-      { hour: 15, label: '15:00' },
-      { hour: 16, label: '16:00' }
-    ];
-
-    timeSlots.forEach(slot => {
-      const startTime = new Date(date);
-      startTime.setHours(slot.hour, 0, 0, 0);
-
-      const endTime = new Date(date);
-      endTime.setHours(slot.hour + 1, 0, 0, 0);
-
-      slots.push({
-        startTime: startTime,
-        endTime: endTime,
-        time: startTime,
-        formatted: slot.label,
-        available: true
-      });
-    });
-
-    console.log('✅ Horarios generados:', slots.length);
-    return slots;
-  }
-
-  async checkAvailability(date, timeSlots) {
-    console.log('🔍 Verificando disponibilidad...');
-    try {
+      // Obtener disponibilidad real de Google Calendar
+      const dateString = date.toISOString().split('T')[0];
       const response = await fetch('/api/calendar/availability', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ date: date.toISOString().split('T')[0] }),
+        body: JSON.stringify({ date: dateString }),
       });
       
       if (!response.ok) {
@@ -442,31 +544,20 @@ class MeetingWizard {
       }
       
       const result = await response.json();
-      console.log('📊 Resultado de disponibilidad:', result);
       
-      // Mapear los resultados del API a nuestro formato
-      return timeSlots.map(slot => {
-        // Buscar slots ocupados que se superpongan con nuestro rango
-        const conflictingSlot = result.timeSlots.find(apiSlot => {
-          const apiStart = new Date(apiSlot.time);
-          const apiEnd = new Date(apiStart.getTime() + 60 * 60 * 1000); // +1 hora
-
-          // Verificar si hay superposición
-          return !apiSlot.available &&
-                 (slot.startTime < apiEnd && slot.endTime > apiStart);
-        });
-
-        return {
-          ...slot,
-          available: !conflictingSlot
-        };
-      });
+      if (result.success) {
+        this.renderTimeSlots(result.timeSlots);
+      } else {
+        throw new Error(result.error || 'Error obteniendo disponibilidad');
+      }
+      
     } catch (error) {
-      console.error('❌ Error verificando disponibilidad:', error);
-      // En caso de error, asumir que todos están disponibles
-      return timeSlots.map(slot => ({ ...slot, available: true }));
+      console.error('❌ Error cargando horarios:', error);
+      this.showStepError('Error cargando horarios disponibles. Intenta de nuevo.');
     }
   }
+
+
 
   renderTimeSlots(slots) {
     console.log('🎨 Renderizando horarios...');
@@ -476,14 +567,24 @@ class MeetingWizard {
       return;
     }
 
-    timeSlotsGrid.innerHTML = slots.map(slot => `
-      <div class="time-slot ${slot.available ? '' : 'disabled'}"
-          data-start-time="${slot.startTime.toISOString()}"
-          data-end-time="${slot.endTime.toISOString()}"
-          ${slot.available ? 'onclick="meetingWizard.selectTimeSlot(this)"' : ''}>
-       <div class="time-slot-label">${slot.formatted}</div>
-      </div>
-    `).join('');
+    if (slots.length === 0) {
+      timeSlotsGrid.innerHTML = '<div class="loading">No hay horarios disponibles para esta fecha.</div>';
+      return;
+    }
+
+    timeSlotsGrid.innerHTML = slots.map(slot => {
+      const startTime = new Date(slot.time);
+      const endTime = new Date(startTime.getTime() + 60 * 60 * 1000); // +1 hora
+      
+      return `
+        <div class="time-slot ${slot.available ? '' : 'disabled'}"
+            data-start-time="${startTime.toISOString()}"
+            data-end-time="${endTime.toISOString()}"
+            ${slot.available ? 'onclick="meetingWizard.selectTimeSlot(this)"' : ''}>
+         <div class="time-slot-label">${slot.formatted}</div>
+        </div>
+      `;
+    }).join('');
     
     console.log('✅ Horarios renderizados:', slots.length);
   }

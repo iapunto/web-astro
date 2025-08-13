@@ -128,32 +128,48 @@ import Button from '../common/Button.astro';
            </p>
          </div>
 
-         <div class="availability-container">
-           <div class="calendar-time-layout">
-             <!-- Calendario de fechas disponibles -->
-             <div class="calendar-section">
-               <h3 class="text-lg font-semibold mb-3">📆 Fechas Disponibles</h3>
-               <div class="calendar-wrapper">
-                 <input
-                   type="text"
-                   id="wizard-date-picker"
-                   placeholder="Selecciona una fecha..."
-                   readonly
-                 />
-               </div>
-             </div>
+                   <div class="availability-container">
+            <div class="calendar-time-layout">
+              <!-- Calendario de fechas disponibles -->
+              <div class="calendar-section">
+                <h3 class="text-lg font-semibold mb-3">📆 Calendario de Disponibilidad</h3>
+                <div class="calendar-wrapper">
+                  <div class="calendar-header">
+                    <button id="prev-month" class="calendar-nav-btn">‹</button>
+                    <h4 id="current-month" class="calendar-month-title">Diciembre 2024</h4>
+                    <button id="next-month" class="calendar-nav-btn">›</button>
+                  </div>
+                  <div class="calendar-grid" id="calendar-grid">
+                    <!-- El calendario se renderizará dinámicamente -->
+                  </div>
+                  <div class="calendar-legend">
+                    <div class="legend-item">
+                      <span class="legend-dot available"></span>
+                      <span>Disponible</span>
+                    </div>
+                    <div class="legend-item">
+                      <span class="legend-dot unavailable"></span>
+                      <span>No disponible</span>
+                    </div>
+                    <div class="legend-item">
+                      <span class="legend-dot selected"></span>
+                      <span>Seleccionado</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-             <!-- Horarios disponibles para la fecha seleccionada -->
-             <div class="time-slots-section" id="time-slots-container">
-               <h3 class="text-lg font-semibold mb-3">🕐 Horarios Disponibles</h3>
-               <p class="text-sm text-gray-600 mb-3">
-                 Selecciona un horario disponible para tu reunión.
-               </p>
-               <div class="time-slots-grid" id="time-slots-grid">
-                 <!-- Los horarios se cargarán dinámicamente -->
-               </div>
-             </div>
-           </div>
+              <!-- Horarios disponibles para la fecha seleccionada -->
+              <div class="time-slots-section" id="time-slots-container">
+                <h3 class="text-lg font-semibold mb-3">🕐 Horarios Disponibles</h3>
+                <p class="text-sm text-gray-600 mb-3">
+                  Selecciona un horario disponible para tu reunión.
+                </p>
+                <div class="time-slots-grid" id="time-slots-grid">
+                  <!-- Los horarios se cargarán dinámicamente -->
+                </div>
+              </div>
+            </div>
 
            <!-- Información de la selección -->
            <div class="selection-info" id="selection-info" style="display: none;">
@@ -444,12 +460,154 @@ import Button from '../common/Button.astro';
      margin-bottom: 2rem;
    }
 
-   .calendar-wrapper {
-     background: #f7fafc;
-     border: 1px solid #e2e8f0;
-     border-radius: 8px;
-     padding: 1rem;
-   }
+       .calendar-wrapper {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    /* Calendar Header */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .calendar-nav-btn {
+      background: #E51F52;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    .calendar-nav-btn:hover {
+      background: #d41a4a;
+      transform: scale(1.1);
+    }
+
+    .calendar-month-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #374151;
+      margin: 0;
+    }
+
+    /* Calendar Grid */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .calendar-day-header {
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #6b7280;
+      padding: 0.5rem 0;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      position: relative;
+      border: 2px solid transparent;
+    }
+
+    .calendar-day.available {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #22c55e;
+    }
+
+    .calendar-day.available:hover {
+      background: #bbf7d0;
+      transform: scale(1.05);
+    }
+
+    .calendar-day.unavailable {
+      background: #f3f4f6;
+      color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .calendar-day.selected {
+      background: #E51F52;
+      color: white;
+      border-color: #E51F52;
+      transform: scale(1.05);
+    }
+
+    .calendar-day.today {
+      border-color: #3b82f6;
+      font-weight: bold;
+    }
+
+    .calendar-day.weekend {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .calendar-day.past {
+      background: #f9fafb;
+      color: #d1d5db;
+      cursor: not-allowed;
+    }
+
+    /* Calendar Legend */
+    .calendar-legend {
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid #d1d5db;
+    }
+
+    .legend-dot.available {
+      background: #22c55e;
+    }
+
+    .legend-dot.unavailable {
+      background: #9ca3af;
+    }
+
+    .legend-dot.selected {
+      background: #E51F52;
+    }
 
    .time-slots-grid {
      display: grid;
@@ -749,12 +907,27 @@ import Button from '../common/Button.astro';
   }
 
      /* Responsive */
-   @media (max-width: 768px) {
-     .calendar-time-layout {
-       grid-template-columns: 1fr;
-       gap: 1.5rem;
-     }
-   }
+       @media (max-width: 768px) {
+      .calendar-time-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .calendar-grid {
+        gap: 1px;
+      }
+
+      .calendar-day {
+        font-size: 0.8rem;
+        min-height: 35px;
+      }
+
+      .calendar-legend {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+      }
+    }
 
    @media (max-width: 640px) {
      .wizard-modal-content {
