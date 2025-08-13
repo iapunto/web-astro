@@ -638,6 +638,42 @@ class MeetingWizard {
 // Inicializar wizard cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
   window.meetingWizard = new MeetingWizard();
+
+  // Conectar botones específicos al wizard
+  const wizardButtons = [
+    'open-wizard-btn-nav', // Botón navbar desktop
+    'open-wizard-btn-nav-mobile', // Botón navbar mobile
+    'open-wizard-btn-services', // Botón en sección de servicios
+    'open-wizard-btn', // Botón genérico
+  ];
+
+  wizardButtons.forEach((buttonId) => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.meetingWizard.openModal();
+      });
+    }
+  });
+
+  // También buscar botones por clase o texto para mayor compatibilidad
+  const buttonsByText = document.querySelectorAll('button, a');
+  buttonsByText.forEach((button) => {
+    const text = button.textContent?.toLowerCase() || '';
+    if (
+      text.includes('agenda') &&
+      (text.includes('reunión') || text.includes('reunion'))
+    ) {
+      button.addEventListener('click', (e) => {
+        // Solo prevenir default si no tiene href
+        if (!button.getAttribute('href')) {
+          e.preventDefault();
+        }
+        window.meetingWizard.openModal();
+      });
+    }
+  });
 });
 
 // Función global para abrir el wizard

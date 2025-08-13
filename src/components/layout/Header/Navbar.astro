@@ -3,7 +3,7 @@
 import Logo from '../Logo.astro';
 import NavLink from './NavLink.astro';
 import DropdownMenu from './DropdownMenu.astro';
-import MeetingModal from '../../common/MeetingModal.astro';
+
 import { servicesMenuData } from '../../../lib/constants/services';
 import Button from '../../common/Button.astro';
 ---
@@ -50,7 +50,7 @@ import Button from '../../common/Button.astro';
           </form>
         </li>
         <li>
-          <Button text="Agenda una Reunión" id="open-modal-btn-nav" variant="primary" />
+          <Button text="Agenda una Reunión" id="open-wizard-btn-nav" variant="primary" />
         </li>
       </ul>
 
@@ -103,13 +103,11 @@ import Button from '../../common/Button.astro';
       <li><NavLink href="/blog" text="IDEAS 360" /></li>
       <li><NavLink href="/contacto" text="CONTACTO" /></li>
       <li>
-        <Button text="Agenda una Reunión" id="open-modal-btn-nav-mobile" variant="primary" />
+        <Button text="Agenda una Reunión" id="open-wizard-btn-nav-mobile" variant="primary" />
       </li>
     </ul>
   </div>
 </nav>
-
-<MeetingModal />
 
 <style>
   /* Clases para tamaño reducido */
