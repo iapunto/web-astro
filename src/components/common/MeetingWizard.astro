@@ -533,45 +533,45 @@ import Button from '../common/Button.astro';
       border: 2px solid transparent;
     }
 
-    .calendar-day.available {
-      background: #dcfce7;
-      color: #166534;
-      border-color: #22c55e;
-    }
+         .calendar-day.available {
+       background: #dcfce7 !important;
+       color: #166534 !important;
+       border-color: #22c55e !important;
+     }
 
-    .calendar-day.available:hover {
-      background: #bbf7d0;
-      transform: scale(1.05);
-    }
+     .calendar-day.available:hover {
+       background: #bbf7d0 !important;
+       transform: scale(1.05);
+     }
 
-    .calendar-day.unavailable {
-      background: #f3f4f6;
-      color: #9ca3af;
-      cursor: not-allowed;
-    }
+     .calendar-day.unavailable {
+       background: #f3f4f6 !important;
+       color: #9ca3af !important;
+       cursor: not-allowed !important;
+     }
 
-    .calendar-day.selected {
-      background: #E51F52;
-      color: white;
-      border-color: #E51F52;
-      transform: scale(1.05);
-    }
+     .calendar-day.selected {
+       background: #E51F52 !important;
+       color: white !important;
+       border-color: #E51F52 !important;
+       transform: scale(1.05);
+     }
 
-    .calendar-day.today {
-      border-color: #3b82f6;
-      font-weight: bold;
-    }
+     .calendar-day.today {
+       border-color: #3b82f6 !important;
+       font-weight: bold !important;
+     }
 
-    .calendar-day.weekend {
-      background: #fef2f2;
-      color: #dc2626;
-    }
+     .calendar-day.weekend {
+       background: #fef2f2 !important;
+       color: #dc2626 !important;
+     }
 
-    .calendar-day.past {
-      background: #f9fafb;
-      color: #d1d5db;
-      cursor: not-allowed;
-    }
+     .calendar-day.past {
+       background: #f9fafb !important;
+       color: #d1d5db !important;
+       cursor: not-allowed !important;
+     }
 
     /* Calendar Legend */
     .calendar-legend {
@@ -640,52 +640,52 @@ import Button from '../common/Button.astro';
      color: #374151;
    }
 
-   /* Slots disponibles */
-   .time-slot:not(.disabled) {
-     border-color: #E51F52;
-     background-color: white;
-     color: #374151;
-   }
+       /* Slots disponibles */
+    .time-slot:not(.disabled) {
+      border-color: #E51F52 !important;
+      background-color: white !important;
+      color: #374151 !important;
+    }
 
-   .time-slot:not(.disabled):hover {
-     background-color: rgba(229, 31, 82, 0.08);
-     transform: translateY(-1px);
-     box-shadow: 0 4px 8px rgba(229, 31, 82, 0.2);
-     border-color: #E51F52;
-   }
+    .time-slot:not(.disabled):hover {
+      background-color: rgba(229, 31, 82, 0.08) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(229, 31, 82, 0.2);
+      border-color: #E51F52 !important;
+    }
 
-   .time-slot.selected {
-     border-color: #E51F52;
-     background: linear-gradient(135deg, #E51F52 0%, #d41a4a 100%);
-     color: white;
-     transform: translateY(-1px);
-     box-shadow: 0 4px 12px rgba(229, 31, 82, 0.3);
-   }
+    .time-slot.selected {
+      border-color: #E51F52 !important;
+      background: linear-gradient(135deg, #E51F52 0%, #d41a4a 100%) !important;
+      color: white !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(229, 31, 82, 0.3);
+    }
 
-   .time-slot.selected .time-slot-label {
-     color: white;
-   }
+    .time-slot.selected .time-slot-label {
+      color: white !important;
+    }
 
-   /* Slots inhabilitados */
-   .time-slot.disabled {
-     background-color: #f9fafb;
-     color: #9ca3af;
-     cursor: not-allowed;
-     border-color: #d1d5db;
-     opacity: 0.6;
-     box-shadow: none;
-   }
+    /* Slots inhabilitados */
+    .time-slot.disabled {
+      background-color: #f9fafb !important;
+      color: #9ca3af !important;
+      cursor: not-allowed !important;
+      border-color: #d1d5db !important;
+      opacity: 0.6;
+      box-shadow: none;
+    }
 
-   .time-slot.disabled .time-slot-label {
-     color: #9ca3af;
-   }
+    .time-slot.disabled .time-slot-label {
+      color: #9ca3af !important;
+    }
 
-        .time-slot.disabled:hover {
-       transform: none;
-       box-shadow: none;
-       border-color: #d1d5db;
-       background-color: #f9fafb;
-     }
+         .time-slot.disabled:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: #d1d5db !important;
+        background-color: #f9fafb !important;
+      }
 
      /* Loading state */
      .loading {
@@ -980,3 +980,67 @@ import Button from '../common/Button.astro';
 <!-- Cargar Flatpickr JavaScript -->
 <script src="/scripts/flatpickr.min.js" is:inline></script>
 <script src="/scripts/es.js" is:inline></script>
+
+<!-- Script para forzar estilos -->
+<script is:inline>
+  // Función para forzar la aplicación de estilos
+  function forceStyles() {
+    // Forzar estilos del calendario
+    const calendarDays = document.querySelectorAll('.calendar-day');
+    calendarDays.forEach(day => {
+      if (day.classList.contains('available')) {
+        day.style.background = '#dcfce7';
+        day.style.color = '#166534';
+        day.style.borderColor = '#22c55e';
+      } else if (day.classList.contains('unavailable')) {
+        day.style.background = '#f3f4f6';
+        day.style.color = '#9ca3af';
+        day.style.cursor = 'not-allowed';
+      } else if (day.classList.contains('selected')) {
+        day.style.background = '#E51F52';
+        day.style.color = 'white';
+        day.style.borderColor = '#E51F52';
+      } else if (day.classList.contains('weekend')) {
+        day.style.background = '#fef2f2';
+        day.style.color = '#dc2626';
+      } else if (day.classList.contains('past')) {
+        day.style.background = '#f9fafb';
+        day.style.color = '#d1d5db';
+        day.style.cursor = 'not-allowed';
+      }
+    });
+
+    // Forzar estilos de time slots
+    const timeSlots = document.querySelectorAll('.time-slot');
+    timeSlots.forEach(slot => {
+      if (slot.classList.contains('disabled')) {
+        slot.style.background = '#f9fafb';
+        slot.style.color = '#9ca3af';
+        slot.style.cursor = 'not-allowed';
+        slot.style.borderColor = '#d1d5db';
+      } else if (slot.classList.contains('selected')) {
+        slot.style.background = 'linear-gradient(135deg, #E51F52 0%, #d41a4a 100%)';
+        slot.style.color = 'white';
+        slot.style.borderColor = '#E51F52';
+      } else {
+        slot.style.background = 'white';
+        slot.style.color = '#374151';
+        slot.style.borderColor = '#E51F52';
+        slot.style.cursor = 'pointer';
+      }
+    });
+  }
+
+  // Ejecutar cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', forceStyles);
+  
+  // Ejecutar después de un pequeño delay para asegurar que los elementos estén renderizados
+  setTimeout(forceStyles, 500);
+  
+  // Ejecutar cuando se abra el modal
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('open-meeting-modal')) {
+      setTimeout(forceStyles, 1000);
+    }
+  });
+</script>

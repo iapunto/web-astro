@@ -220,6 +220,17 @@ class MeetingWizard {
     }
 
     calendarGrid.innerHTML = calendarHTML;
+    
+    // Forzar la aplicación de estilos
+    setTimeout(() => {
+      const days = calendarGrid.querySelectorAll('.calendar-day');
+      days.forEach(day => {
+        day.style.display = 'flex';
+        day.style.alignItems = 'center';
+        day.style.justifyContent = 'center';
+      });
+    }, 100);
+    
     console.log('✅ Calendario renderizado correctamente');
   }
 
@@ -585,6 +596,17 @@ class MeetingWizard {
         </div>
       `;
     }).join('');
+    
+    // Forzar la aplicación de estilos
+    setTimeout(() => {
+      const timeSlots = timeSlotsGrid.querySelectorAll('.time-slot');
+      timeSlots.forEach(slot => {
+        slot.style.display = 'flex';
+        slot.style.alignItems = 'center';
+        slot.style.justifyContent = 'center';
+        slot.style.cursor = slot.classList.contains('disabled') ? 'not-allowed' : 'pointer';
+      });
+    }, 100);
     
     console.log('✅ Horarios renderizados:', slots.length);
   }
