@@ -106,9 +106,18 @@ class MonthlyAvailabilityService {
   private generateBaseTimeSlots(date: string): any[] {
     const slots: any[] = [];
     
+    // Verificar si es fin de semana
+    const dateObj = new Date(date);
+    const dayOfWeek = dateObj.getDay();
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // 0 = Domingo, 6 = Sábado
+    
+    if (isWeekend) {
+      return slots;
+    }
+    
     // Obtener horario de trabajo desde variables de entorno
     const businessHoursStart = process.env.BUSINESS_HOURS_START || '09:00';
-    const businessHoursEnd = process.env.BUSINESS_HOURS_END || '18:00';
+    const businessHoursEnd = process.env.BUSINESS_HOURS_END || '17:00'; // Cambiado a 17:00 (5 PM)
     
     // Parsear horarios
     const startHour = parseInt(businessHoursStart.split(':')[0]);
@@ -116,6 +125,11 @@ class MonthlyAvailabilityService {
     
     // Generar horarios dinámicamente basados en el horario de trabajo
     for (let hour = startHour; hour < endHour; hour++) {
+      // Excluir hora de almuerzo (12:00 PM - 1:00 PM)
+      if (hour === 12) {
+        continue;
+      }
+      
       const time = new Date(`${date}T${hour.toString().padStart(2, '0')}:00:00`);
       time.setMinutes(0, 0, 0);
       

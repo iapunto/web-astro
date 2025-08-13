@@ -76,18 +76,34 @@ class AvailabilityService {
   private generateBaseTimeSlots(date: string): TimeSlot[] {
     const slots: TimeSlot[] = [];
     
+    // Verificar si es fin de semana
+    const dateObj = new Date(date);
+    const dayOfWeek = dateObj.getDay();
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // 0 = Domingo, 6 = Sábado
+    
+    if (isWeekend) {
+      console.log(`📅 Es fin de semana (${dayOfWeek === 0 ? 'Domingo' : 'Sábado'}), no se generan horarios`);
+      return slots;
+    }
+    
     // Obtener horario de trabajo desde variables de entorno
     const businessHoursStart = process.env.BUSINESS_HOURS_START || '09:00';
-    const businessHoursEnd = process.env.BUSINESS_HOURS_END || '18:00';
+    const businessHoursEnd = process.env.BUSINESS_HOURS_END || '17:00'; // Cambiado a 17:00 (5 PM)
     
     // Parsear horarios
     const startHour = parseInt(businessHoursStart.split(':')[0]);
     const endHour = parseInt(businessHoursEnd.split(':')[0]);
     
-    console.log(`📅 Generando horarios de ${startHour}:00 a ${endHour}:00`);
+    console.log(`📅 Generando horarios de ${startHour}:00 a ${endHour}:00 (excluyendo almuerzo 12:00-13:00)`);
     
     // Generar horarios dinámicamente basados en el horario de trabajo
     for (let hour = startHour; hour < endHour; hour++) {
+      // Excluir hora de almuerzo (12:00 PM - 1:00 PM)
+      if (hour === 12) {
+        console.log(`🍽️ Excluyendo hora de almuerzo: ${hour}:00`);
+        continue;
+      }
+      
       const time = new Date(`${date}T${hour.toString().padStart(2, '0')}:00:00`);
       time.setMinutes(0, 0, 0);
       
@@ -103,7 +119,7 @@ class AvailabilityService {
       });
     }
     
-    console.log(`📅 Horarios generados: ${slots.length} slots`);
+    console.log(`📅 Horarios generados: ${slots.length} slots (excluyendo almuerzo y fines de semana)`);
     return slots;
   }
 
