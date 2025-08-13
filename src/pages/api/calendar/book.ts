@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { google } from 'googleapis';
 import * as dotenv from 'dotenv';
 import EmailService from '../../../lib/services/emailService.js';
+import { getStaffForCalendar } from '../../../lib/constants/staff.js';
 
 // Cargar variables de entorno
 dotenv.config();
@@ -196,11 +197,16 @@ class GoogleCalendarService {
 
       // Si usamos OAuth2, agregar attendees y Google Meet
       if (isUsingOAuth2) {
+        // Obtener lista de miembros del staff de IA Punto
+        const staffMembers = getStaffForCalendar();
+
+        // Agregar cliente + staff como attendees
         event.attendees = [
           {
             email: appointment.email,
             displayName: appointment.name,
           },
+          ...staffMembers,
         ];
         
         // Agregar Google Meet automáticamente

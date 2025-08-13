@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { google } from 'googleapis';
+import { getStaffForCalendar } from '../../../lib/constants/staff.js';
 import * as dotenv from 'dotenv';
 
 // Cargar variables de entorno
@@ -205,7 +206,10 @@ class GoogleCalendarService {
         throw new Error('Evento no encontrado');
       }
 
-      // Combinar invitados existentes con nuevos
+      // Obtener miembros del staff de IA Punto
+      const staffMembers = getStaffForCalendar();
+
+      // Combinar invitados existentes con nuevos + staff
       const existingAttendees = currentEvent.attendees || [];
       const allAttendees = [...existingAttendees];
 
@@ -219,6 +223,16 @@ class GoogleCalendarService {
             email: newAttendee.email,
             displayName: newAttendee.displayName,
           });
+        }
+      });
+
+      // Agregar staff si no están ya incluidos
+      staffMembers.forEach((staffMember) => {
+        const exists = allAttendees.some(
+          (existing) => existing.email === staffMember.email
+        );
+        if (!exists) {
+          allAttendees.push(staffMember);
         }
       });
 

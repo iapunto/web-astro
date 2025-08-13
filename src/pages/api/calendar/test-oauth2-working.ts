@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import OAuth2Service from '../../../lib/services/oauth2Service.js';
+import { getStaffForCalendar } from '../../../lib/constants/staff.js';
 
 export const GET: APIRoute = async () => {
   try {
@@ -70,6 +71,7 @@ export const GET: APIRoute = async () => {
           email: 'test@example.com',
           displayName: 'Usuario de Prueba',
         },
+        ...getStaffForCalendar(),
       ],
       conferenceData: {
         createRequest: {
