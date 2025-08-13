@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { google } from 'googleapis';
 import * as dotenv from 'dotenv';
+import OAuth2Service from '../../../lib/services/oauth2Service.js';
 import EmailService from '../../../lib/services/emailService.js';
 
 // Cargar variables de entorno
@@ -33,64 +33,32 @@ interface CalendarEvent {
   meetLink?: string;
 }
 
-class GoogleCalendarService {
+class GoogleCalendarOAuth2Service {
   private calendar: any;
   private calendarId: string;
   private timezone: string;
+  private oauth2Service: OAuth2Service;
 
   constructor() {
-    // Configurar autenticación con Service Account
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: [
-        'https://www.googleapis.com/auth/calendar',
-        'https://www.googleapis.com/auth/calendar.events',
-      ],
-    });
-
-    // Configurar impersonación del usuario de Google Workspace (requerido para Google Meet)
-    if (process.env.GOOGLE_WORKSPACE_USER) {
-      console.log(
-        '🔐 Configurada impersonación para:',
-        process.env.GOOGLE_WORKSPACE_USER
-      );
-    } else {
-      console.warn(
-        '⚠️ GOOGLE_WORKSPACE_USER no configurado. Google Meet puede no funcionar.'
-      );
+    this.oauth2Service = new OAuth2Service();
+    
+    // Intentar cargar tokens desde variables de entorno
+    const tokensLoaded = this.oauth2Service.setTokensFromEnv();
+    
+    if (!tokensLoaded) {
+      console.warn('⚠️ No se encontraron tokens OAuth2 en variables de entorno');
+      console.warn('📋 Ejecuta el flujo de OAuth2 primero visitando /api/calendar/auth');
     }
 
-    this.calendar = google.calendar({ version: 'v3', auth });
     this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
     this.timezone = process.env.TIMEZONE || 'America/Bogota';
   }
 
   async verifyConnection(): Promise<boolean> {
     try {
-      console.log('🔍 Verificando conexión con Google Calendar...');
-
-      const response = await this.calendar.calendars.get({
-        calendarId: this.calendarId,
-      });
-
-      if (response.data) {
-        console.log('✅ Conexión con Google Calendar verificada');
-        console.log(
-          '📅 Calendario:',
-          response.data.summary || 'Calendario Principal'
-        );
-        return true;
-      }
-
-      return false;
+      return await this.oauth2Service.verifyConnection();
     } catch (error) {
-      console.error(
-        '❌ Error verificando conexión con Google Calendar:',
-        error
-      );
+      console.error('❌ Error verificando conexión OAuth2:', error);
       return false;
     }
   }
@@ -99,7 +67,9 @@ class GoogleCalendarService {
     try {
       console.log('🔍 Verificando disponibilidad...');
 
-      const response = await this.calendar.freebusy.query({
+      const calendar = this.oauth2Service.getCalendarClient();
+      
+      const response = await calendar.freebusy.query({
         requestBody: {
           timeMin: startTime.toISOString(),
           timeMax: endTime.toISOString(),
@@ -126,7 +96,7 @@ class GoogleCalendarService {
     appointment: AppointmentRequest
   ): Promise<CalendarEvent> {
     try {
-      console.log('🚀 ===== CREANDO CITA =====');
+      console.log('🚀 ===== CREANDO CITA CON OAUTH2 =====');
       console.log(`📝 Creando cita para ${appointment.name}`);
       console.log(`📅 Fecha: ${appointment.startTime}`);
       console.log(`📧 Email: ${appointment.email}`);
@@ -144,7 +114,7 @@ class GoogleCalendarService {
 
       console.log('✅ Verificación de disponibilidad: DISPONIBLE');
 
-      // Crear el evento sin attendees (para evitar problemas de Domain-Wide Delegation)
+      // Crear el evento CON attendees (OAuth2 permite esto)
       const event = {
         summary: `Consulta con ${appointment.name}`,
         description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}\n\nCliente: ${appointment.name} (${appointment.email})\n\nNota: Puedes agregar Google Meet manualmente desde Google Calendar`,
@@ -156,6 +126,12 @@ class GoogleCalendarService {
           dateTime: endDate.toISOString(),
           timeZone: this.timezone,
         },
+        attendees: [
+          {
+            email: appointment.email,
+            displayName: appointment.name,
+          },
+        ],
         reminders: {
           useDefault: false,
           overrides: [
@@ -165,10 +141,12 @@ class GoogleCalendarService {
         },
       };
 
-      const response = await this.calendar.events.insert({
+      const calendar = this.oauth2Service.getCalendarClient();
+      
+      const response = await calendar.events.insert({
         calendarId: this.calendarId,
         requestBody: event,
-        sendUpdates: 'none', // No enviar actualizaciones ya que no hay attendees
+        sendUpdates: 'all', // Enviar invitaciones automáticamente
       });
 
       const createdEvent = response.data;
@@ -177,11 +155,20 @@ class GoogleCalendarService {
       console.log(`📅 Resumen del evento: ${createdEvent.summary}`);
       console.log(`🕐 Inicio: ${createdEvent.start?.dateTime}`);
       console.log(`🕐 Fin: ${createdEvent.end?.dateTime}`);
+      console.log(`👥 Invitados: ${createdEvent.attendees?.length || 0}`);
 
-      // Nota sobre Google Meet manual
-      console.log('ℹ️ Google Meet no se crea automáticamente. Puedes agregarlo manualmente desde Google Calendar.');
+      // Extraer enlace de Google Meet si existe
+      const meetLink = createdEvent.conferenceData?.entryPoints?.find(
+        (entry: any) => entry.entryPointType === 'video'
+      )?.uri;
 
-      console.log('🏁 ===== CITA CREADA =====');
+      if (meetLink) {
+        console.log(`🔗 Enlace de Google Meet: ${meetLink}`);
+      } else {
+        console.log('ℹ️ Google Meet no se crea automáticamente. Puedes agregarlo manualmente desde Google Calendar.');
+      }
+
+      console.log('🏁 ===== CITA CREADA CON OAUTH2 =====');
 
       return {
         id: createdEvent.id!,
@@ -194,19 +181,22 @@ class GoogleCalendarService {
           dateTime: createdEvent.end!.dateTime!,
           timeZone: createdEvent.end!.timeZone!,
         },
-        attendees: [], // No hay attendees en la creación inicial
-        meetLink: undefined, // Google Meet se agrega manualmente
+        attendees: createdEvent.attendees?.map((attendee: any) => ({
+          email: attendee.email!,
+          displayName: attendee.displayName || undefined,
+        })),
+        meetLink: meetLink || undefined,
       };
     } catch (error) {
-      console.error('❌ Error creando cita:', error);
+      console.error('❌ Error creando cita con OAuth2:', error);
       throw error;
     }
   }
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  console.log('🚀 ===== ENDPOINT DE AGENDAMIENTO INICIADO =====');
-  console.log('📥 Solicitud recibida en /api/calendar/book');
+  console.log('🚀 ===== ENDPOINT DE AGENDAMIENTO OAUTH2 INICIADO =====');
+  console.log('📥 Solicitud recibida en /api/calendar/book-oauth2');
 
   try {
     console.log('📋 Parseando cuerpo de la solicitud...');
@@ -293,24 +283,26 @@ export const POST: APIRoute = async ({ request }) => {
 
     console.log('✅ Todas las validaciones pasaron');
 
-    // Crear instancia del servicio de Google Calendar
-    console.log('🔍 Creando servicio de Google Calendar...');
-    const calendarService = new GoogleCalendarService();
+    // Crear instancia del servicio de Google Calendar OAuth2
+    console.log('🔍 Creando servicio de Google Calendar OAuth2...');
+    const calendarService = new GoogleCalendarOAuth2Service();
 
     // Verificar conexión del servicio
-    console.log('🔍 Verificando conexión del servicio...');
+    console.log('🔍 Verificando conexión del servicio OAuth2...');
     const isConnected = await calendarService.verifyConnection();
 
     if (!isConnected) {
-      console.error('❌ Falló la conexión del servicio');
+      console.error('❌ Falló la conexión del servicio OAuth2');
       return new Response(
         JSON.stringify({
           success: false,
           error: 'No se pudo conectar con Google Calendar',
-          details: 'Verifica las credenciales de Google Calendar',
+          details: 'Verifica la autenticación OAuth2. Visita /api/calendar/auth para configurar',
+          authRequired: true,
+          authUrl: '/api/calendar/auth'
         }),
         {
-          status: 500,
+          status: 401,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -318,10 +310,10 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    console.log('✅ Conexión del servicio verificada');
+    console.log('✅ Conexión del servicio OAuth2 verificada');
 
     // Crear la cita
-    console.log('🚀 Creando cita...');
+    console.log('🚀 Creando cita con OAuth2...');
     const appointmentData: AppointmentRequest = {
       name,
       email,
@@ -334,12 +326,13 @@ export const POST: APIRoute = async ({ request }) => {
     const createdAppointment =
       await calendarService.createAppointment(appointmentData);
 
-    console.log('✅ Cita creada exitosamente');
+    console.log('✅ Cita creada exitosamente con OAuth2');
     console.log('📅 Detalles de la cita:', {
       id: createdAppointment.id,
       summary: createdAppointment.summary,
       start: createdAppointment.start,
       end: createdAppointment.end,
+      attendees: createdAppointment.attendees?.length || 0,
       meetLink: createdAppointment.meetLink,
     });
 
@@ -378,16 +371,18 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'Cita creada exitosamente',
+        message: 'Cita creada exitosamente con OAuth2',
         appointment: {
           id: createdAppointment.id,
           summary: createdAppointment.summary,
           start: createdAppointment.start,
           end: createdAppointment.end,
+          attendees: createdAppointment.attendees,
           meetLink: createdAppointment.meetLink,
         },
-        service: 'Google Calendar',
-        serviceType: 'google-calendar',
+        service: 'Google Calendar OAuth2',
+        serviceType: 'google-calendar-oauth2',
+        authStatus: 'authenticated',
       }),
       {
         status: 200,
@@ -397,13 +392,13 @@ export const POST: APIRoute = async ({ request }) => {
       }
     );
   } catch (error) {
-    console.error('❌ ===== ERROR EN ENDPOINT DE AGENDAMIENTO =====');
+    console.error('❌ ===== ERROR EN ENDPOINT DE AGENDAMIENTO OAUTH2 =====');
     console.error('❌ Detalles del error:', error);
     console.error(
       '❌ Stack del error:',
       error instanceof Error ? error.stack : 'Sin stack trace'
     );
-    console.error('🏁 ===== FIN DEL ENDPOINT DE AGENDAMIENTO =====');
+    console.error('🏁 ===== FIN DEL ENDPOINT DE AGENDAMIENTO OAUTH2 =====');
 
     return new Response(
       JSON.stringify({

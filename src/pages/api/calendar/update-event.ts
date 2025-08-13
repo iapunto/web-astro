@@ -231,13 +231,14 @@ class GoogleCalendarService {
         requestBody: {
           attendees: allAttendees,
         },
-        sendUpdates: 'all', // Enviar invitaciones a todos los invitados
+        sendUpdates: 'none', // No enviar invitaciones automáticas sin Domain-Wide Delegation
       });
 
       const updatedEvent = response.data;
 
       console.log(`✅ Invitados agregados exitosamente`);
-      console.log(`📧 Invitaciones enviadas a ${allAttendees.length} personas`);
+      console.log(`📧 Emails agregados: ${allAttendees.map(a => a.email).join(', ')}`);
+      console.log('ℹ️ Nota: Las invitaciones deben enviarse manualmente desde Google Calendar');
 
       return {
         id: updatedEvent.id!,
