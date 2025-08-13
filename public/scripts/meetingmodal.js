@@ -329,13 +329,15 @@ class MeetingModalManager {
 
       // Verificar si el slot seleccionado está disponible
       const selectedTime = date.toISOString();
-      const isAvailable = Array.isArray(this.availableSlots) && this.availableSlots.some((slot) => {
-        const slotStart = new Date(slot.start_time);
-        const slotEnd = new Date(slot.end_time);
-        return (
-          date >= slotStart && date < slotEnd && slot.status === 'available'
-        );
-      });
+      const isAvailable =
+        Array.isArray(this.availableSlots) &&
+        this.availableSlots.some((slot) => {
+          const slotStart = new Date(slot.start_time);
+          const slotEnd = new Date(slot.end_time);
+          return (
+            date >= slotStart && date < slotEnd && slot.status === 'available'
+          );
+        });
 
       console.log('✅ Availability check result:', isAvailable);
 
@@ -453,12 +455,22 @@ class MeetingModalManager {
       }
 
       console.log('✅ Appointment created successfully');
-      
+
       // Track conversion for appointment booking
       this.trackAppointmentConversion(appointmentData);
-      
+
       // Mostrar confirmación
       this.showConfirmation(result.appointment, appointmentData);
+
+      // Disparar evento personalizado para el gestor de invitados
+      document.dispatchEvent(
+        new CustomEvent('appointmentCreated', {
+          detail: {
+            eventId: result.appointment.id,
+            appointmentData: appointmentData,
+          },
+        })
+      );
     } catch (error) {
       console.error('❌ ===== HANDLE FORM SUBMIT ERROR =====');
       console.error('❌ Error booking appointment:', error);
@@ -601,12 +613,12 @@ class MeetingModalManager {
   trackAppointmentConversion(appointmentData) {
     try {
       console.log('📊 Tracking appointment conversion...');
-      
+
       // Preparar datos para tracking
       const trackingData = {
         meetingType: appointmentData.meetingType || 'General',
         appointmentDate: appointmentData.startTime,
-        source: 'calendar_modal'
+        source: 'calendar_modal',
       };
 
       // Track con Google Analytics

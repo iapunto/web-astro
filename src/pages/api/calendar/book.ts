@@ -51,6 +51,18 @@ class GoogleCalendarService {
       ],
     });
 
+    // Configurar impersonación del usuario de Google Workspace (requerido para Google Meet)
+    if (process.env.GOOGLE_WORKSPACE_USER) {
+      console.log(
+        '🔐 Configurada impersonación para:',
+        process.env.GOOGLE_WORKSPACE_USER
+      );
+    } else {
+      console.warn(
+        '⚠️ GOOGLE_WORKSPACE_USER no configurado. Google Meet puede no funcionar.'
+      );
+    }
+
     this.calendar = google.calendar({ version: 'v3', auth });
     this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
     this.timezone = process.env.TIMEZONE || 'America/Bogota';
@@ -132,10 +144,10 @@ class GoogleCalendarService {
 
       console.log('✅ Verificación de disponibilidad: DISPONIBLE');
 
-      // Crear el evento sin attendees (para evitar problemas de permisos)
+      // Crear el evento sin Google Meet (para cuentas sin Workspace)
       const event = {
         summary: `Consulta con ${appointment.name}`,
-        description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}\n\nCliente: ${appointment.name} (${appointment.email})`,
+        description: `Tipo de consulta: ${appointment.meetingType || 'Consulta General'}\n\nDescripción: ${appointment.description || 'Sin descripción adicional'}\n\nCliente: ${appointment.name} (${appointment.email})\n\nNota: Puedes agregar Google Meet manualmente desde Google Calendar`,
         start: {
           dateTime: startDate.toISOString(),
           timeZone: this.timezone,
@@ -166,18 +178,8 @@ class GoogleCalendarService {
       console.log(`🕐 Inicio: ${createdEvent.start?.dateTime}`);
       console.log(`🕐 Fin: ${createdEvent.end?.dateTime}`);
 
-      // Extraer enlace de Google Meet
-      const meetLink = createdEvent.conferenceData?.entryPoints?.find(
-        (entry: any) => entry.entryPointType === 'video'
-      )?.uri;
-
-      if (meetLink) {
-        console.log(`🔗 Enlace de Google Meet generado: ${meetLink}`);
-      } else {
-        console.warn(
-          '⚠️ No se encontró enlace de Google Meet en la respuesta del evento'
-        );
-      }
+      // Nota sobre Google Meet manual
+      console.log('ℹ️ Google Meet no se crea automáticamente. Puedes agregarlo manualmente desde Google Calendar.');
 
       console.log('🏁 ===== CITA CREADA =====');
 
@@ -196,7 +198,7 @@ class GoogleCalendarService {
           email: attendee.email!,
           displayName: attendee.displayName || undefined,
         })),
-        meetLink: meetLink || undefined,
+        meetLink: undefined, // Google Meet se agrega manualmente
       };
     } catch (error) {
       console.error('❌ Error creando cita:', error);
