@@ -253,14 +253,24 @@ class MeetingWizard {
     
     allSteps.forEach((step, index) => {
       step.classList.remove('active');
-      console.log(`Paso ${index + 1} removido de active`);
+      // FORZAR OCULTAMIENTO DE TODOS LOS PASOS
+      step.style.display = 'none';
+      step.style.visibility = 'hidden';
+      step.style.opacity = '0';
+      console.log(`Paso ${index + 1} removido de active y ocultado`);
     });
     
     // Mostrar el paso actual
     const currentStepElement = document.querySelector(`[data-step="${this.currentStep}"]`);
     if (currentStepElement) {
       currentStepElement.classList.add('active');
-      console.log(`✅ Paso ${this.currentStep} activado`);
+      
+      // FORZAR VISIBILIDAD DEL PASO ACTUAL
+      currentStepElement.style.display = 'block';
+      currentStepElement.style.visibility = 'visible';
+      currentStepElement.style.opacity = '1';
+      
+      console.log(`✅ Paso ${this.currentStep} activado y forzado a visible`);
       
       // Verificar visibilidad del paso actual
       const computedStyle = window.getComputedStyle(currentStepElement);
