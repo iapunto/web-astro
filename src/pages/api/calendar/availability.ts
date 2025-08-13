@@ -133,11 +133,18 @@ class AvailabilityService {
       const busyStart = new Date(busySlot.start);
       const busyEnd = new Date(busySlot.end);
       
-      // Verificar si hay conflicto (cualquier superposición)
-      const hasConflict = (slotStart < busyEnd && slotEnd > busyStart);
+      // Verificar si hay conflicto (superposición significativa)
+      // Un slot se considera ocupado si hay más del 50% de superposición
+      const overlapStart = Math.max(slotStart.getTime(), busyStart.getTime());
+      const overlapEnd = Math.min(slotEnd.getTime(), busyEnd.getTime());
+      const overlapDuration = overlapEnd - overlapStart;
+      const slotDuration = slotEnd.getTime() - slotStart.getTime();
+      
+      const hasConflict = overlapDuration > (slotDuration * 0.5); // Más del 50% de superposición
       
       if (hasConflict) {
         console.log(`❌ Conflicto detectado: ${busyStart.toISOString()} - ${busyEnd.toISOString()}`);
+        console.log(`📊 Superposición: ${overlapDuration}ms de ${slotDuration}ms (${(overlapDuration/slotDuration*100).toFixed(1)}%)`);
       }
       
       return hasConflict;

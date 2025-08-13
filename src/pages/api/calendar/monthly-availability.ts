@@ -157,8 +157,14 @@ class MonthlyAvailabilityService {
       const busyStart = new Date(busySlot.start);
       const busyEnd = new Date(busySlot.end);
       
-      // Verificar si hay conflicto
-      return (slotStart < busyEnd && slotEnd > busyStart);
+      // Verificar si hay conflicto (superposición significativa)
+      // Un slot se considera ocupado si hay más del 50% de superposición
+      const overlapStart = Math.max(slotStart.getTime(), busyStart.getTime());
+      const overlapEnd = Math.min(slotEnd.getTime(), busyEnd.getTime());
+      const overlapDuration = overlapEnd - overlapStart;
+      const slotDuration = slotEnd.getTime() - slotStart.getTime();
+      
+      return overlapDuration > (slotDuration * 0.5); // Más del 50% de superposición
     });
   }
 }
