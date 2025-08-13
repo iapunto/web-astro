@@ -397,29 +397,29 @@ class MeetingWizard {
 
   generateTimeSlots(date) {
     const slots = [];
-    // Rangos de horas específicos: 9-10, 10-11, 11-12, 13-14, 14-15, 15-16, 16-17
-    const timeRanges = [
-      { start: 9, end: 10, label: '9:00 - 10:00' },
-      { start: 10, end: 11, label: '10:00 - 11:00' },
-      { start: 11, end: 12, label: '11:00 - 12:00' },
-      { start: 13, end: 14, label: '1:00 - 2:00 PM' },
-      { start: 14, end: 15, label: '2:00 - 3:00 PM' },
-      { start: 15, end: 16, label: '3:00 - 4:00 PM' },
-      { start: 16, end: 17, label: '4:00 - 5:00 PM' }
+    // Solo horas específicas: 9, 10, 11, 13, 14, 15, 16
+    const timeSlots = [
+      { hour: 9, label: '09:00' },
+      { hour: 10, label: '10:00' },
+      { hour: 11, label: '11:00' },
+      { hour: 13, label: '13:00' },
+      { hour: 14, label: '14:00' },
+      { hour: 15, label: '15:00' },
+      { hour: 16, label: '16:00' }
     ];
 
-    timeRanges.forEach(range => {
+    timeSlots.forEach(slot => {
       const startTime = new Date(date);
-      startTime.setHours(range.start, 0, 0, 0);
+      startTime.setHours(slot.hour, 0, 0, 0);
 
       const endTime = new Date(date);
-      endTime.setHours(range.end, 0, 0, 0);
+      endTime.setHours(slot.hour + 1, 0, 0, 0);
 
       slots.push({
         startTime: startTime,
         endTime: endTime,
-        time: startTime, // Para compatibilidad
-        formatted: range.label,
+        time: startTime,
+        formatted: slot.label,
         available: true
       });
     });
@@ -482,7 +482,6 @@ class MeetingWizard {
           data-end-time="${slot.endTime.toISOString()}"
           ${slot.available ? 'onclick="meetingWizard.selectTimeSlot(this)"' : ''}>
        <div class="time-slot-label">${slot.formatted}</div>
-       <div class="time-slot-duration">45 min reunión</div>
       </div>
     `).join('');
     
@@ -544,11 +543,11 @@ class MeetingWizard {
       hour12: true
     });
 
-    selectedDatetimeInfo.innerHTML = `
-      <p><strong>Fecha:</strong> ${formattedDate}</p>
-      <p><strong>Horario:</strong> ${formattedStartTime} - ${formattedEndTime}</p>
-      <p><strong>Duración:</strong> 45 minutos (reunión) + 15 minutos (margen)</p>
-    `;
+         selectedDatetimeInfo.innerHTML = `
+       <p><strong>Fecha:</strong> ${formattedDate}</p>
+       <p><strong>Hora:</strong> ${formattedStartTime}</p>
+       <p><strong>Duración:</strong> 45 minutos</p>
+     `;
     
     selectionInfo.style.display = 'block';
     console.log('✅ Información de selección mostrada');
@@ -606,14 +605,14 @@ class MeetingWizard {
         <span class="confirmation-label">📅 Fecha:</span>
         <span class="confirmation-value">${formattedDate}</span>
       </div>
-      <div class="confirmation-row">
-        <span class="confirmation-label">🕐 Horario:</span>
-        <span class="confirmation-value">${formattedStartTime} - ${formattedEndTime}</span>
-      </div>
-      <div class="confirmation-row">
-        <span class="confirmation-label">⏱️ Duración:</span>
-        <span class="confirmation-value">45 minutos (reunión) + 15 minutos (margen)</span>
-      </div>
+             <div class="confirmation-row">
+         <span class="confirmation-label">🕐 Hora:</span>
+         <span class="confirmation-value">${formattedStartTime}</span>
+       </div>
+       <div class="confirmation-row">
+         <span class="confirmation-label">⏱️ Duración:</span>
+         <span class="confirmation-value">45 minutos</span>
+       </div>
     `;
     
     console.log('✅ Confirmación preparada');
@@ -684,10 +683,10 @@ class MeetingWizard {
           <span class="confirmation-label">📅 Fecha:</span>
           <span class="confirmation-value">${this.selectedDate.toLocaleDateString('es-CO')}</span>
         </div>
-        <div class="confirmation-row">
-          <span class="confirmation-label">🕐 Horario:</span>
-          <span class="confirmation-value">${this.selectedTime.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: true })} - ${this.selectedEndTime.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
-        </div>
+                 <div class="confirmation-row">
+           <span class="confirmation-label">🕐 Hora:</span>
+           <span class="confirmation-value">${this.selectedTime.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+         </div>
         <div class="confirmation-row">
           <span class="confirmation-label">👤 Cliente:</span>
           <span class="confirmation-value">${this.formData.name}</span>

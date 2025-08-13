@@ -145,9 +145,9 @@ import Button from '../common/Button.astro';
           <!-- Horarios disponibles para la fecha seleccionada -->
           <div class="time-slots-section mb-4" id="time-slots-container" style="display: none;">
             <h3 class="text-lg font-semibold mb-3">🕐 Horarios Disponibles</h3>
-            <p class="text-sm text-gray-600 mb-3">
-              Las reuniones duran 45 minutos con 15 minutos de margen entre cada una.
-            </p>
+                         <p class="text-sm text-gray-600 mb-3">
+               Selecciona una hora disponible para tu reunión de 45 minutos.
+             </p>
             <div class="time-slots-grid" id="time-slots-grid">
               <!-- Los horarios se cargarán dinámicamente -->
             </div>
@@ -443,68 +443,45 @@ import Button from '../common/Button.astro';
 
   .time-slots-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
     margin-top: 1rem;
   }
 
   .time-slot {
-    padding: 1rem;
+    padding: 1.5rem 1rem;
     border: 2px solid #e2e8f0;
-    border-radius: 8px;
+    border-radius: 12px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
     background-color: white;
-    font-weight: 500;
-    min-height: 80px;
+    font-weight: 600;
+    min-height: 60px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
-    overflow: hidden;
-  }
-
-  .time-slot::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(229, 31, 82, 0.05) 0%, rgba(229, 31, 82, 0.02) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
+    font-size: 1.1rem;
   }
 
   .time-slot-label {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 0.25rem;
     color: #27282D;
-    position: relative;
-    z-index: 1;
   }
 
-  .time-slot-duration {
-    font-size: 0.75rem;
-    opacity: 0.8;
-    color: #4B5563;
-    position: relative;
-    z-index: 1;
-  }
-
-  .time-slot:hover {
+  /* Slots disponibles */
+  .time-slot:not(.disabled) {
     border-color: #E51F52;
+    background-color: white;
+    color: #27282D;
+  }
+
+  .time-slot:not(.disabled):hover {
     background-color: rgba(229, 31, 82, 0.05);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(229, 31, 82, 0.15);
-  }
-
-  .time-slot:hover::before {
-    opacity: 1;
   }
 
   .time-slot.selected {
@@ -515,44 +492,28 @@ import Button from '../common/Button.astro';
     box-shadow: 0 6px 20px rgba(229, 31, 82, 0.3);
   }
 
-  .time-slot.selected .time-slot-label,
-  .time-slot.selected .time-slot-duration {
+  .time-slot.selected .time-slot-label {
     color: white;
   }
 
+  /* Slots inhabilitados */
   .time-slot.disabled {
-    background: linear-gradient(135deg, #f7fafc 0%, #f1f5f9 100%);
+    background-color: #f8f9fa;
     color: #878C9C;
     cursor: not-allowed;
-    border-color: #e2e8f0;
-    opacity: 0.6;
-    position: relative;
-  }
-
-  .time-slot.disabled::after {
-    content: '❌';
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    font-size: 0.75rem;
+    border-color: #d1d5db;
     opacity: 0.7;
   }
 
   .time-slot.disabled .time-slot-label {
     color: #878C9C;
-    text-decoration: line-through;
-  }
-
-  .time-slot.disabled .time-slot-duration {
-    color: #878C9C;
-    opacity: 0.5;
   }
 
   .time-slot.disabled:hover {
     transform: none;
     box-shadow: none;
-    border-color: #e2e8f0;
-    background: linear-gradient(135deg, #f7fafc 0%, #f1f5f9 100%);
+    border-color: #d1d5db;
+    background-color: #f8f9fa;
   }
 
   .info-card {
