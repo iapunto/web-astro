@@ -75,29 +75,35 @@ class AvailabilityService {
 
   private generateBaseTimeSlots(date: string): TimeSlot[] {
     const slots: TimeSlot[] = [];
-    // Horarios específicos según la imagen de Google Calendar
-    const timeSlots = [
-      { hour: 9, label: '09:00 a. m.' },
-      { hour: 10, label: '10:00 a. m.' },
-      { hour: 11, label: '11:00 a. m.' },
-      { hour: 12, label: '12:00 p. m.' },
-      { hour: 13, label: '01:00 p. m.' },
-      { hour: 14, label: '02:00 p. m.' },
-      { hour: 15, label: '03:00 p. m.' },
-      { hour: 16, label: '04:00 p. m.' }
-    ];
     
-    for (const slot of timeSlots) {
-      const time = new Date(`${date}T${slot.hour.toString().padStart(2, '0')}:00:00`);
+    // Obtener horario de trabajo desde variables de entorno
+    const businessHoursStart = process.env.BUSINESS_HOURS_START || '09:00';
+    const businessHoursEnd = process.env.BUSINESS_HOURS_END || '18:00';
+    
+    // Parsear horarios
+    const startHour = parseInt(businessHoursStart.split(':')[0]);
+    const endHour = parseInt(businessHoursEnd.split(':')[0]);
+    
+    console.log(`📅 Generando horarios de ${startHour}:00 a ${endHour}:00`);
+    
+    // Generar horarios dinámicamente basados en el horario de trabajo
+    for (let hour = startHour; hour < endHour; hour++) {
+      const time = new Date(`${date}T${hour.toString().padStart(2, '0')}:00:00`);
       time.setMinutes(0, 0, 0);
+      
+      // Formatear hora en español
+      const formattedHour = hour < 12 ? `${hour.toString().padStart(2, '0')}:00 a. m.` : 
+                           hour === 12 ? '12:00 p. m.' :
+                           `${(hour - 12).toString().padStart(2, '0')}:00 p. m.`;
       
       slots.push({
         time: time.toISOString(),
-        formatted: slot.label,
+        formatted: formattedHour,
         available: true
       });
     }
     
+    console.log(`📅 Horarios generados: ${slots.length} slots`);
     return slots;
   }
 
@@ -133,18 +139,13 @@ class AvailabilityService {
       const busyStart = new Date(busySlot.start);
       const busyEnd = new Date(busySlot.end);
       
-      // Verificar si hay conflicto (superposición significativa)
-      // Un slot se considera ocupado si hay más del 50% de superposición
-      const overlapStart = Math.max(slotStart.getTime(), busyStart.getTime());
-      const overlapEnd = Math.min(slotEnd.getTime(), busyEnd.getTime());
-      const overlapDuration = overlapEnd - overlapStart;
-      const slotDuration = slotEnd.getTime() - slotStart.getTime();
-      
-      const hasConflict = overlapDuration > (slotDuration * 0.5); // Más del 50% de superposición
+      // Verificar si hay conflicto (cualquier superposición)
+      const hasConflict = (slotStart < busyEnd && slotEnd > busyStart);
       
       if (hasConflict) {
         console.log(`❌ Conflicto detectado: ${busyStart.toISOString()} - ${busyEnd.toISOString()}`);
-        console.log(`📊 Superposición: ${overlapDuration}ms de ${slotDuration}ms (${(overlapDuration/slotDuration*100).toFixed(1)}%)`);
+        console.log(`📊 Slot: ${slotStart.toISOString()} - ${slotEnd.toISOString()}`);
+        console.log(`📊 Evento: ${busyStart.toISOString()} - ${busyEnd.toISOString()}`);
       }
       
       return hasConflict;
