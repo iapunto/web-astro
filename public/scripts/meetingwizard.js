@@ -658,6 +658,7 @@ class MeetingWizard {
     const successMessage = document.getElementById('wizard-success-message');
     const appointmentDetails = document.getElementById('wizard-appointment-details');
     const wizardBody = document.querySelector('.wizard-modal-body');
+    const modalContent = document.querySelector('.wizard-modal-content');
     
     if (successMessage && appointmentDetails && wizardBody) {
       // Ocultar progress bar y todos los pasos
@@ -670,6 +671,12 @@ class MeetingWizard {
         step.style.visibility = 'hidden';
         step.style.opacity = '0';
       });
+      
+      // Ajustar el modal content para el mensaje de éxito
+      if (modalContent) {
+        modalContent.style.padding = '0';
+        modalContent.style.overflow = 'hidden';
+      }
       
       // Preparar contenido del mensaje de éxito
       appointmentDetails.innerHTML = `
@@ -764,6 +771,17 @@ class MeetingWizard {
     if (timeSlotsContainer) timeSlotsContainer.style.display = 'none';
     if (selectionInfo) selectionInfo.style.display = 'none';
     if (successMessage) successMessage.classList.add('hidden');
+    
+    // Restaurar progress bar
+    const progressBar = document.querySelector('.wizard-progress');
+    if (progressBar) progressBar.style.display = 'flex';
+    
+    // Restaurar modal content
+    const modalContent = document.querySelector('.wizard-modal-content');
+    if (modalContent) {
+      modalContent.style.padding = '2rem';
+      modalContent.style.overflow = 'auto';
+    }
     
     // Resetear progress bar
     document.querySelectorAll('.progress-step').forEach((step, index) => {
