@@ -247,7 +247,7 @@ class MeetingWizard {
   updateStep() {
     console.log('🔄 Actualizando paso a:', this.currentStep);
     
-    // Ocultar todos los pasos
+    // Ocultar todos los pasos - USAR SELECTOR MÁS ROBUSTO
     const allSteps = document.querySelectorAll('.wizard-step');
     console.log('📋 Pasos encontrados:', allSteps.length);
     
@@ -257,11 +257,20 @@ class MeetingWizard {
       step.style.display = 'none';
       step.style.visibility = 'hidden';
       step.style.opacity = '0';
-      console.log(`Paso ${index + 1} removido de active y ocultado`);
+      console.log(`Paso ${index + 1} (data-step="${step.getAttribute('data-step')}") removido de active y ocultado`);
     });
     
-    // Mostrar el paso actual
-    const currentStepElement = document.querySelector(`[data-step="${this.currentStep}"]`);
+    // Mostrar el paso actual - USAR SELECTOR MÁS ROBUSTO
+    let currentStepElement = document.querySelector(`.wizard-step[data-step="${this.currentStep}"]`);
+    
+    // Si no lo encuentra, intentar con selector más específico
+    if (!currentStepElement) {
+      const allSteps = document.querySelectorAll('.wizard-step');
+      currentStepElement = Array.from(allSteps).find(step => 
+        step.getAttribute('data-step') === this.currentStep.toString()
+      );
+    }
+    
     if (currentStepElement) {
       currentStepElement.classList.add('active');
       
@@ -271,6 +280,7 @@ class MeetingWizard {
       currentStepElement.style.opacity = '1';
       
       console.log(`✅ Paso ${this.currentStep} activado y forzado a visible`);
+      console.log(`🔍 Elemento encontrado:`, currentStepElement);
       
       // Verificar visibilidad del paso actual
       const computedStyle = window.getComputedStyle(currentStepElement);
@@ -305,6 +315,12 @@ class MeetingWizard {
       }
     } else {
       console.error(`❌ No se encontró el elemento del paso ${this.currentStep}`);
+      // DEBUG: Mostrar todos los pasos disponibles
+      const allSteps = document.querySelectorAll('.wizard-step');
+      console.log('🔍 Todos los pasos disponibles:', allSteps.length);
+      allSteps.forEach((step, index) => {
+        console.log(`Paso ${index + 1}:`, step.getAttribute('data-step'), step);
+      });
     }
 
     // Actualizar progress bar
