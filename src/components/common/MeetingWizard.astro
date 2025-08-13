@@ -1,0 +1,695 @@
+---
+import Button from '../common/Button.astro';
+---
+
+<!-- Estilos de Flatpickr -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
+
+<!-- Modal Wizard -->
+<div id="meeting-wizard-modal" class="wizard-modal hidden">
+  <div class="wizard-modal-content">
+    <span id="close-wizard-btn" class="close">&times;</span>
+
+    <div class="wizard-modal-body">
+      <!-- Progress Bar -->
+      <div class="wizard-progress">
+        <div class="progress-step active" data-step="1">
+          <div class="step-number">1</div>
+          <div class="step-label">Información</div>
+        </div>
+        <div class="progress-step" data-step="2">
+          <div class="step-number">2</div>
+          <div class="step-label">Fecha & Hora</div>
+        </div>
+        <div class="progress-step" data-step="3">
+          <div class="step-number">3</div>
+          <div class="step-label">Confirmar</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Información Personal -->
+      <div class="wizard-step active" data-step="1">
+        <div class="step-header">
+          <h2 class="text-2xl font-bold mb-2 text-gray-800">
+            👤 Información Personal
+          </h2>
+          <p class="text-gray-600 mb-4">
+            Cuéntanos sobre ti y tu proyecto para preparar mejor nuestra reunión.
+          </p>
+        </div>
+
+        <form id="wizard-step1-form">
+          <div class="form-row">
+            <div class="form-group form-col mb-3">
+              <label for="wizard-name">👤 Nombre Completo *</label>
+              <input
+                type="text"
+                id="wizard-name"
+                name="name"
+                required
+                placeholder="Tu nombre completo"
+              />
+              <div class="field-error" id="wizard-name-error"></div>
+            </div>
+
+            <div class="form-group form-col mb-3">
+              <label for="wizard-email">📧 Correo Electrónico *</label>
+              <input
+                type="email"
+                id="wizard-email"
+                name="email"
+                required
+                placeholder="tu@email.com"
+              />
+              <div class="field-error" id="wizard-email-error"></div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-col mb-3">
+              <label for="wizard-phone">📱 Teléfono *</label>
+              <input
+                type="tel"
+                id="wizard-phone"
+                name="phone"
+                required
+                placeholder="+57 300 123 4567"
+              />
+              <div class="field-error" id="wizard-phone-error"></div>
+            </div>
+
+            <div class="form-group form-col mb-3">
+              <label for="wizard-meeting-type">💼 Tipo de Consulta *</label>
+              <select id="wizard-meeting-type" name="meeting-type" required>
+                <option value="">Selecciona el tipo de consulta</option>
+                <option value="Consulta General">Consulta General</option>
+                <option value="Marketing Digital">Marketing Digital</option>
+                <option value="Inteligencia Artificial">Inteligencia Artificial</option>
+                <option value="Desarrollo Web">Desarrollo Web</option>
+                <option value="SEO y Posicionamiento">SEO y Posicionamiento</option>
+                <option value="Publicidad Digital">Publicidad Digital</option>
+                <option value="Automatización">Automatización</option>
+              </select>
+              <div class="field-error" id="wizard-meeting-type-error"></div>
+            </div>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="wizard-description">📝 Descripción del Proyecto *</label>
+            <textarea
+              id="wizard-description"
+              name="description"
+              rows="4"
+              required
+              placeholder="Cuéntanos brevemente sobre tu proyecto, objetivos, presupuesto y cualquier detalle relevante..."
+            ></textarea>
+            <div class="field-error" id="wizard-description-error"></div>
+          </div>
+
+          <div class="wizard-actions">
+            <button type="button" class="wizard-next-btn" data-next="2">
+              Siguiente: Seleccionar Fecha & Hora →
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 2: Selección de Fecha y Hora -->
+      <div class="wizard-step" data-step="2">
+        <div class="step-header">
+          <h2 class="text-2xl font-bold mb-2 text-gray-800">
+            📅 Seleccionar Fecha y Hora
+          </h2>
+          <p class="text-gray-600 mb-4">
+            Elige una fecha disponible y luego selecciona el horario que mejor te convenga.
+          </p>
+        </div>
+
+        <div class="availability-container">
+          <!-- Calendario de fechas disponibles -->
+          <div class="calendar-section mb-4">
+            <h3 class="text-lg font-semibold mb-3">📆 Fechas Disponibles</h3>
+            <div class="calendar-wrapper">
+              <input
+                type="text"
+                id="wizard-date-picker"
+                placeholder="Selecciona una fecha..."
+                readonly
+              />
+            </div>
+          </div>
+
+          <!-- Horarios disponibles para la fecha seleccionada -->
+          <div class="time-slots-section mb-4" id="time-slots-container" style="display: none;">
+            <h3 class="text-lg font-semibold mb-3">🕐 Horarios Disponibles</h3>
+            <div class="time-slots-grid" id="time-slots-grid">
+              <!-- Los horarios se cargarán dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Información de la selección -->
+          <div class="selection-info" id="selection-info" style="display: none;">
+            <div class="info-card">
+              <h4 class="text-md font-semibold mb-2">✅ Selección Actual</h4>
+              <div id="selected-datetime-info"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-actions">
+          <button type="button" class="wizard-prev-btn" data-prev="1">
+            ← Anterior: Información
+          </button>
+          <button type="button" class="wizard-next-btn" data-next="3" id="wizard-next-step2" disabled>
+            Siguiente: Confirmar →
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Confirmación -->
+      <div class="wizard-step" data-step="3">
+        <div class="step-header">
+          <h2 class="text-2xl font-bold mb-2 text-gray-800">
+            ✅ Confirmar Cita
+          </h2>
+          <p class="text-gray-600 mb-4">
+            Revisa los detalles de tu cita antes de confirmarla.
+          </p>
+        </div>
+
+        <div class="confirmation-details" id="confirmation-details">
+          <!-- Los detalles se llenarán dinámicamente -->
+        </div>
+
+        <div class="wizard-actions">
+          <button type="button" class="wizard-prev-btn" data-prev="2">
+            ← Anterior: Fecha & Hora
+          </button>
+          <button type="button" class="wizard-confirm-btn" id="wizard-confirm-appointment">
+            ✅ Confirmar Cita
+          </button>
+        </div>
+      </div>
+
+      <!-- Mensaje de confirmación exitosa -->
+      <div id="wizard-success-message" class="wizard-success hidden">
+        <div class="success-icon">✅</div>
+        <h2 class="text-2xl font-bold text-green-600">
+          ¡Cita Agendada Exitosamente!
+        </h2>
+        <div id="wizard-appointment-details" class="appointment-summary">
+          <!-- Los detalles se llenarán dinámicamente -->
+        </div>
+        <div class="next-steps">
+          <h3>📋 Próximos pasos:</h3>
+          <ul>
+            <li>📧 Recibirás una confirmación por email con el enlace de Google Meet</li>
+            <li>⏰ Recibirás recordatorios 24 horas y 30 minutos antes</li>
+            <li>🎥 Prepara tu conexión y micrófono para la reunión virtual</li>
+            <li>👥 El equipo de IA Punto también recibirá la invitación</li>
+          </ul>
+        </div>
+        <button onclick="meetingWizard.closeModal()" class="close-button">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .wizard-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .wizard-modal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .wizard-modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 95%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  .wizard-modal:not(.hidden) .wizard-modal-content {
+    transform: scale(1);
+  }
+
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+    z-index: 10;
+  }
+
+  .close:hover {
+    color: #333;
+  }
+
+  /* Progress Bar */
+  .wizard-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+  }
+
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+  }
+
+  .progress-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: #e2e8f0;
+    z-index: 1;
+  }
+
+  .progress-step.active:not(:last-child)::after {
+    background-color: #667eea;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    color: #718096;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+
+  .progress-step.active .step-number {
+    background-color: #667eea;
+    color: white;
+  }
+
+  .progress-step.completed .step-number {
+    background-color: #48bb78;
+    color: white;
+  }
+
+  .step-label {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #718096;
+    text-align: center;
+  }
+
+  .progress-step.active .step-label {
+    color: #667eea;
+    font-weight: 600;
+  }
+
+  /* Wizard Steps */
+  .wizard-step {
+    display: none;
+  }
+
+  .wizard-step.active {
+    display: block;
+  }
+
+  .step-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  /* Form Styles */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-col {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 0.95rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background-color: #fff;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .form-group input.error,
+  .form-group select.error,
+  .form-group textarea.error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+  }
+
+  .field-error {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    min-height: 1.25rem;
+  }
+
+  /* Calendar and Time Slots */
+  .calendar-wrapper {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .time-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .time-slot {
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: white;
+    font-weight: 500;
+  }
+
+  .time-slot:hover {
+    border-color: #667eea;
+    background-color: #f0f4ff;
+  }
+
+  .time-slot.selected {
+    border-color: #667eea;
+    background-color: #667eea;
+    color: white;
+  }
+
+  .time-slot.disabled {
+    background-color: #f7fafc;
+    color: #cbd5e0;
+    cursor: not-allowed;
+    border-color: #e2e8f0;
+  }
+
+  .info-card {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  /* Wizard Actions */
+  .wizard-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    gap: 1rem;
+  }
+
+  .wizard-prev-btn,
+  .wizard-next-btn,
+  .wizard-confirm-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 140px;
+  }
+
+  .wizard-prev-btn {
+    background-color: #e2e8f0;
+    color: #4a5568;
+  }
+
+  .wizard-prev-btn:hover {
+    background-color: #cbd5e0;
+  }
+
+  .wizard-next-btn {
+    background-color: #667eea;
+    color: white;
+  }
+
+  .wizard-next-btn:hover:not(:disabled) {
+    background-color: #5a67d8;
+  }
+
+  .wizard-next-btn:disabled {
+    background-color: #cbd5e0;
+    cursor: not-allowed;
+  }
+
+  .wizard-confirm-btn {
+    background-color: #48bb78;
+    color: white;
+  }
+
+  .wizard-confirm-btn:hover {
+    background-color: #38a169;
+  }
+
+  /* Success Message */
+  .wizard-success {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .appointment-summary {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: left;
+  }
+
+  .next-steps {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: left;
+  }
+
+  .next-steps h3 {
+    color: #92400e;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  .next-steps ul {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  .next-steps li {
+    margin: 0.5rem 0;
+    color: #92400e;
+  }
+
+  .close-button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+  }
+
+  .close-button:hover {
+    background: #5a67d8;
+  }
+
+  /* Confirmation Details */
+  .confirmation-details {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .confirmation-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .confirmation-row:last-child {
+    border-bottom: none;
+  }
+
+  .confirmation-label {
+    font-weight: 600;
+    color: #4a5568;
+  }
+
+  .confirmation-value {
+    color: #2d3748;
+    text-align: right;
+  }
+
+  /* Flatpickr Styles */
+  .flatpickr-calendar {
+    font-family: 'Inter', sans-serif;
+    border-radius: 12px;
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+  }
+
+  .flatpickr-day.selected {
+    background: #667eea;
+    border-color: #667eea;
+  }
+
+  .flatpickr-day.selected:hover {
+    background: #5a67d8;
+  }
+
+  .flatpickr-day.today {
+    border-color: #667eea;
+    color: #667eea;
+  }
+
+  .flatpickr-day.disabled {
+    color: #cbd5e0;
+    background: #f7fafc;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .wizard-modal-content {
+      padding: 1rem;
+      margin: 0.5rem;
+      max-height: 95vh;
+    }
+
+    .wizard-progress {
+      padding: 0;
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+    }
+
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .form-col {
+      margin-bottom: 1.5rem;
+    }
+
+    .wizard-actions {
+      flex-direction: column;
+    }
+
+    .wizard-prev-btn,
+    .wizard-next-btn,
+    .wizard-confirm-btn {
+      width: 100%;
+      min-width: auto;
+    }
+
+    .time-slots-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+  }
+</style>
+
+<!-- Cargar Flatpickr JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr" is:inline></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js" is:inline></script>
+
+<script src="/scripts/meetingwizard.js" is:inline></script>

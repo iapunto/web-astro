@@ -5,19 +5,26 @@ import * as dotenv from 'dotenv';
 // Cargar variables de entorno
 dotenv.config();
 
-interface AvailableSlot {
-  start_time: string;
-  end_time: string;
-  status: 'available' | 'busy';
+interface AvailabilityRequest {
+  date: string; // YYYY-MM-DD
 }
 
-class GoogleCalendarService {
+interface TimeSlot {
+  time: string; // ISO string
+  formatted: string; // Formato legible
+  available: boolean;
+}
+
+class AvailabilityService {
   private calendar: any;
   private calendarId: string;
   private timezone: string;
 
   constructor() {
-    // Configurar autenticación con Service Account
+    this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
+    this.timezone = process.env.TIMEZONE || 'America/Bogota';
+    
+    // Configurar autenticación
     const auth = new google.auth.GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
@@ -25,130 +32,120 @@ class GoogleCalendarService {
       },
       scopes: [
         'https://www.googleapis.com/auth/calendar',
-        'https://www.googleapis.com/auth/calendar.events',
+        'https://www.googleapis.com/auth/calendar.readonly',
       ],
     });
 
     this.calendar = google.calendar({ version: 'v3', auth });
-    this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
-    this.timezone = process.env.TIMEZONE || 'America/Bogota';
   }
 
-  async verifyConnection(): Promise<boolean> {
+  async getAvailabilityForDate(date: string): Promise<TimeSlot[]> {
     try {
-      console.log('🔍 Verificando conexión con Google Calendar...');
+      console.log(`🔍 Verificando disponibilidad para: ${date}`);
 
-      const response = await this.calendar.calendars.get({
-        calendarId: this.calendarId,
+      // Generar horarios base (9:00 AM - 5:00 PM)
+      const timeSlots = this.generateBaseTimeSlots(date);
+      
+      // Verificar conflictos en Google Calendar
+      const busySlots = await this.getBusySlots(date);
+      
+      // Marcar slots como disponibles/no disponibles
+      const availableSlots = timeSlots.map(slot => {
+        const isBusy = this.isSlotBusy(slot.time, busySlots);
+        return {
+          ...slot,
+          available: !isBusy
+        };
       });
 
-      if (response.data) {
-        console.log('✅ Conexión con Google Calendar verificada');
-        console.log(
-          '📅 Calendario:',
-          response.data.summary || 'Calendario Principal'
-        );
-        return true;
-      }
+      console.log(`✅ Disponibilidad verificada: ${availableSlots.filter(s => s.available).length}/${availableSlots.length} horarios disponibles`);
 
-      return false;
+      return availableSlots;
     } catch (error) {
-      console.error(
-        '❌ Error verificando conexión con Google Calendar:',
-        error
-      );
-      return false;
+      console.error('❌ Error verificando disponibilidad:', error);
+      throw error;
     }
   }
 
-  async getAvailableSlots(date: Date): Promise<AvailableSlot[]> {
+  private generateBaseTimeSlots(date: string): TimeSlot[] {
+    const slots: TimeSlot[] = [];
+    const startHour = 9; // 9:00 AM
+    const endHour = 17; // 5:00 PM
+    
+    for (let hour = startHour; hour < endHour; hour++) {
+      const time = new Date(`${date}T${hour.toString().padStart(2, '0')}:00:00`);
+      time.setMinutes(0, 0, 0);
+      
+      slots.push({
+        time: time.toISOString(),
+        formatted: time.toLocaleTimeString('es-CO', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: true 
+        }),
+        available: true
+      });
+    }
+    
+    return slots;
+  }
+
+  private async getBusySlots(date: string): Promise<any[]> {
     try {
-      console.log('🔍 Obteniendo slots disponibles de Google Calendar...');
+      const startOfDay = new Date(`${date}T00:00:00`);
+      const endOfDay = new Date(`${date}T23:59:59`);
 
-      // Convertir fecha a formato ISO
-      const startTime = new Date(date);
-      startTime.setHours(0, 0, 0, 0);
-
-      const endTime = new Date(date);
-      endTime.setHours(23, 59, 59, 999);
-
-      // Obtener eventos existentes para la fecha
-      const response = await this.calendar.events.list({
-        calendarId: this.calendarId,
-        timeMin: startTime.toISOString(),
-        timeMax: endTime.toISOString(),
-        singleEvents: true,
-        orderBy: 'startTime',
+      const response = await this.calendar.freebusy.query({
+        requestBody: {
+          timeMin: startOfDay.toISOString(),
+          timeMax: endOfDay.toISOString(),
+          items: [{ id: this.calendarId }],
+          timeZone: this.timezone,
+        },
       });
 
-      const events = response.data.items || [];
-      console.log(
-        `📅 Encontrados ${events.length} eventos existentes para ${date.toDateString()}`
-      );
-
-      // Generar slots disponibles (9 AM a 6 PM, cada hora)
-      const availableSlots: AvailableSlot[] = [];
-      const workStartHour = 9;
-      const workEndHour = 18;
-      const slotDuration = 60; // minutos
-
-      for (let hour = workStartHour; hour < workEndHour; hour++) {
-        const slotStart = new Date(date);
-        slotStart.setHours(hour, 0, 0, 0);
-
-        const slotEnd = new Date(
-          slotStart.getTime() + slotDuration * 60 * 1000
-        );
-
-        // Verificar si el slot está disponible
-        const isAvailable = !events.some((event) => {
-          const eventStart = new Date(
-            event.start?.dateTime || event.start?.date || ''
-          );
-          const eventEnd = new Date(
-            event.end?.dateTime || event.end?.date || ''
-          );
-
-          return (
-            (slotStart >= eventStart && slotStart < eventEnd) ||
-            (slotEnd > eventStart && slotEnd <= eventEnd) ||
-            (slotStart <= eventStart && slotEnd >= eventEnd)
-          );
-        });
-
-        availableSlots.push({
-          start_time: slotStart.toISOString(),
-          end_time: slotEnd.toISOString(),
-          status: isAvailable ? 'available' : 'busy',
-        });
-      }
-
-      console.log(
-        `✅ Encontrados ${availableSlots.filter((slot) => slot.status === 'available').length} slots disponibles`
-      );
-      return availableSlots;
+      const calendarData = response.data.calendars?.[this.calendarId];
+      return calendarData?.busy || [];
     } catch (error) {
-      console.error('❌ Error obteniendo slots disponibles:', error);
+      console.error('Error obteniendo horarios ocupados:', error);
       return [];
     }
   }
+
+  private isSlotBusy(slotTime: string, busySlots: any[]): boolean {
+    const slotStart = new Date(slotTime);
+    const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000); // +1 hora
+
+    return busySlots.some(busySlot => {
+      const busyStart = new Date(busySlot.start);
+      const busyEnd = new Date(busySlot.end);
+      
+      // Verificar si hay conflicto
+      return (slotStart < busyEnd && slotEnd > busyStart);
+    });
+  }
 }
 
-export const GET: APIRoute = async ({ url }) => {
+export const POST: APIRoute = async ({ request }) => {
   console.log('🚀 ===== ENDPOINT DE DISPONIBILIDAD INICIADO =====');
   console.log('📥 Solicitud recibida en /api/calendar/availability');
 
   try {
-    const searchParams = url.searchParams;
-    const dateParam = searchParams.get('date');
+    console.log('📋 Parseando cuerpo de la solicitud...');
+    const body = await request.json();
+    console.log('✅ Cuerpo de la solicitud parseado exitosamente');
+    console.log('📝 Datos de la solicitud:', JSON.stringify(body, null, 2));
 
-    if (!dateParam) {
-      console.error('❌ Parámetro de fecha faltante');
+    // Validación de datos requeridos
+    const { date } = body as AvailabilityRequest;
+
+    console.log('🔍 Validando campos requeridos...');
+    if (!date) {
+      console.error('❌ Falta campo requerido: date');
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Parámetro de fecha requerido',
-          message: 'Proporciona un parámetro "date" en formato YYYY-MM-DD',
+          error: 'Falta campo requerido: date',
         }),
         {
           status: 400,
@@ -160,14 +157,13 @@ export const GET: APIRoute = async ({ url }) => {
     }
 
     // Validar formato de fecha
-    const date = new Date(dateParam);
-    if (isNaN(date.getTime())) {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(date)) {
       console.error('❌ Formato de fecha inválido');
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Formato de fecha inválido',
-          message: 'La fecha debe estar en formato YYYY-MM-DD',
+          error: 'Formato de fecha inválido. Use YYYY-MM-DD',
         }),
         {
           status: 400,
@@ -178,16 +174,17 @@ export const GET: APIRoute = async ({ url }) => {
       );
     }
 
-    // Verificar que la fecha no esté en el pasado
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    if (date < now) {
+    // Validar que la fecha no esté en el pasado
+    const requestedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (requestedDate < today) {
       console.error('❌ La fecha está en el pasado');
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Fecha en el pasado',
-          message: 'No se pueden consultar fechas pasadas',
+          error: 'No se puede verificar disponibilidad para fechas pasadas',
         }),
         {
           status: 400,
@@ -198,54 +195,30 @@ export const GET: APIRoute = async ({ url }) => {
       );
     }
 
-    console.log(`📅 Consultando disponibilidad para: ${date.toDateString()}`);
+    console.log('✅ Todas las validaciones pasaron');
 
-    // Crear instancia del servicio de Google Calendar
-    console.log('🔍 Creando servicio de Google Calendar...');
-    const calendarService = new GoogleCalendarService();
+    // Crear instancia del servicio de disponibilidad
+    console.log('🔍 Creando servicio de disponibilidad...');
+    const availabilityService = new AvailabilityService();
 
-    // Verificar conexión del servicio
-    console.log('🔍 Verificando conexión del servicio...');
-    const isConnected = await calendarService.verifyConnection();
+    // Obtener disponibilidad para la fecha
+    console.log('🚀 Verificando disponibilidad...');
+    const timeSlots = await availabilityService.getAvailabilityForDate(date);
 
-    if (!isConnected) {
-      console.error('❌ Falló la conexión del servicio');
-      return new Response(
-        JSON.stringify({
-          success: false,
-          error: 'No se pudo conectar con Google Calendar',
-          details: 'Verifica las credenciales de Google Calendar',
-        }),
-        {
-          status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    }
-
-    console.log('✅ Conexión del servicio verificada');
-
-    // Obtener slots disponibles
-    console.log('📅 Obteniendo slots disponibles...');
-    const availableSlots = await calendarService.getAvailableSlots(date);
-
-    console.log(
-      `✅ Obtenidos ${availableSlots.length} slots para ${date.toDateString()}`
-    );
+    console.log('✅ Disponibilidad verificada exitosamente');
+    console.log('📅 Horarios disponibles:', timeSlots.filter(slot => slot.available).length);
 
     return new Response(
       JSON.stringify({
         success: true,
-        date: dateParam,
-        slots: availableSlots,
-        totalSlots: availableSlots.length,
-        availableSlots: availableSlots.filter(
-          (slot) => slot.status === 'available'
-        ).length,
-        busySlots: availableSlots.filter((slot) => slot.status === 'busy')
-          .length,
+        message: 'Disponibilidad verificada exitosamente',
+        date: date,
+        timeSlots: timeSlots,
+        summary: {
+          total: timeSlots.length,
+          available: timeSlots.filter(slot => slot.available).length,
+          busy: timeSlots.filter(slot => !slot.available).length,
+        },
         service: 'Google Calendar',
         serviceType: 'google-calendar',
       }),
@@ -287,7 +260,7 @@ export const OPTIONS: APIRoute = async () => {
     status: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },
   });

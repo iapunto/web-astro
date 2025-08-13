@@ -10,6 +10,7 @@ dotenv.config();
 interface AppointmentRequest {
   name: string;
   email: string;
+  phone: string;
   startTime: string;
   endTime: string;
   description?: string;
@@ -297,15 +298,15 @@ export const POST: APIRoute = async ({ request }) => {
     console.log('📝 Datos de la solicitud:', JSON.stringify(body, null, 2));
 
     // Validación de datos requeridos
-    const { name, email, startTime, endTime, description, meetingType } = body;
+    const { name, email, phone, startTime, endTime, description, meetingType } = body;
 
     console.log('🔍 Validando campos requeridos...');
-    if (!name || !email || !startTime || !endTime) {
+    if (!name || !email || !phone || !startTime || !endTime) {
       console.error('❌ Faltan campos requeridos');
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Faltan campos requeridos: name, email, startTime, endTime',
+          error: 'Faltan campos requeridos: name, email, phone, startTime, endTime',
         }),
         {
           status: 400,
@@ -407,6 +408,7 @@ export const POST: APIRoute = async ({ request }) => {
     const appointmentData: AppointmentRequest = {
       name,
       email,
+      phone,
       startTime,
       endTime,
       description: description || '',

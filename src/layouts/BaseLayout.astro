@@ -12,6 +12,7 @@ import TrackingScripts from '../components/common/TrackingScripts.astro';
 import WhatsAppButton from '../components/layout/WhatsAppButton.astro';
 import GDPRManager from '../components/common/GDPRManager.astro';
 import GoogleConsentMode from '../components/common/GoogleConsentMode.astro';
+import MeetingWizard from '../components/common/MeetingWizard.astro';
 
 export interface Props {
   // Props básicas
@@ -150,6 +151,9 @@ const RECAPTCHA_SITE_KEY = showRecaptcha
 
     <!-- GDPR Manager - Siempre presente para gestionar consentimiento -->
     <GDPRManager />
+
+    <!-- Meeting Wizard - Modal para agendamiento de citas -->
+    <MeetingWizard />
 
     <script
       src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
