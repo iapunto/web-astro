@@ -18,7 +18,7 @@ const latestPosts = sortedPosts.slice(0, 6);
 // Verificar si hay suficientes posts para el carousel
 const hasEnoughPosts = latestPosts.length >= 3;
 ---
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+<link rel="stylesheet" href="/styles/splide.min.css">
 
 <section class="py-20 bg-gradient-to-b from-gray-50 to-white">
   <div class="container w-4/5 py-16 mx-auto px-4">
@@ -85,7 +85,7 @@ const hasEnoughPosts = latestPosts.length >= 3;
   </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+<script src="/scripts/splide.min.js" is:inline></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     new Splide('#blog-splide', {

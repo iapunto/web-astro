@@ -28,8 +28,8 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
     'Content-Security-Policy',
     [
       "default-src 'self'",
-      "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://analytics.ahrefs.com https://www.google.com https://www.gstatic.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://analytics.ahrefs.com https://www.google.com https://www.gstatic.com https://cdn.jsdelivr.net",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net",
       "img-src 'self' data: https: https://res.cloudinary.com https://blog.n8n.io https://*.techcrunch.com https://*.hubspot.com https://inedif.com.co https://iapunto.com https://www.semrush.com https://semrush.com https://strapi.iapunto.com",
       "font-src 'self' https://fonts.gstatic.com",
       "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://api.resend.com https://strapi.iapunto.com",

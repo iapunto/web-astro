@@ -4,7 +4,7 @@ import Card from '../common/Card.astro';
 // import CompanyLogo from '../common/CompanyLogo.astro';
 ---
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+<link rel="stylesheet" href="/styles/splide.min.css">
 
 <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
 <section class="py-20 bg-gradient-to-b from-gray to-gray-50">
@@ -49,8 +49,8 @@ import Card from '../common/Card.astro';
 </section>
 <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
 
-<!-- Splide JS desde CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+<!-- Splide JS local -->
+<script src="/scripts/splide.min.js" is:inline></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     new Splide('#testimonials-splide', {
