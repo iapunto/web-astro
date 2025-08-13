@@ -5,27 +5,36 @@ class MeetingWizard {
     this.formData = {};
     this.selectedDate = null;
     this.selectedTime = null;
+    this.selectedEndTime = null;
     this.datePicker = null;
     this.availableSlots = [];
     
+    console.log('🚀 MeetingWizard constructor iniciado');
     this.init();
   }
 
   init() {
+    console.log('🔧 Inicializando MeetingWizard...');
     this.bindEvents();
     this.initDatePicker();
+    console.log('✅ MeetingWizard inicializado correctamente');
   }
 
   bindEvents() {
+    console.log('🔗 Vinculando eventos...');
+    
     // Botones de navegación
     document.addEventListener('click', (e) => {
       if (e.target.classList.contains('wizard-next-btn')) {
+        console.log('👉 Botón siguiente clickeado');
         this.nextStep();
       }
       if (e.target.classList.contains('wizard-prev-btn')) {
+        console.log('👈 Botón anterior clickeado');
         this.prevStep();
       }
       if (e.target.classList.contains('wizard-confirm-btn')) {
+        console.log('✅ Botón confirmar clickeado');
         this.confirmAppointment();
       }
     });
@@ -48,11 +57,16 @@ class MeetingWizard {
 
     // Validación en tiempo real del paso 1
     this.setupStep1Validation();
+    console.log('✅ Eventos vinculados correctamente');
   }
 
   initDatePicker() {
+    console.log('📅 Inicializando Flatpickr...');
     const dateInput = document.getElementById('wizard-date-picker');
-    if (!dateInput) return;
+    if (!dateInput) {
+      console.error('❌ No se encontró el input de fecha');
+      return;
+    }
 
     // Configurar Flatpickr para fechas disponibles
     this.datePicker = flatpickr(dateInput, {
@@ -67,17 +81,22 @@ class MeetingWizard {
         }
       ],
       onChange: (selectedDates) => {
+        console.log('📅 Fecha seleccionada:', selectedDates[0]);
         if (selectedDates.length > 0) {
           this.selectedDate = selectedDates[0];
           this.loadTimeSlots(this.selectedDate);
         }
       }
     });
+    console.log('✅ Flatpickr inicializado correctamente');
   }
 
   setupStep1Validation() {
     const form = document.getElementById('wizard-step1-form');
-    if (!form) return;
+    if (!form) {
+      console.error('❌ No se encontró el formulario del paso 1');
+      return;
+    }
 
     const fields = ['wizard-name', 'wizard-email', 'wizard-phone', 'wizard-meeting-type', 'wizard-description'];
     
@@ -172,6 +191,7 @@ class MeetingWizard {
   }
 
   validateStep1() {
+    console.log('🔍 Validando paso 1...');
     const fields = ['wizard-name', 'wizard-email', 'wizard-phone', 'wizard-meeting-type', 'wizard-description'];
     let isValid = true;
 
@@ -181,14 +201,20 @@ class MeetingWizard {
       }
     });
 
+    console.log('✅ Paso 1 válido:', isValid);
     return isValid;
   }
 
   validateStep2() {
-    return this.selectedDate && this.selectedTime;
+    console.log('🔍 Validando paso 2...');
+    const isValid = this.selectedDate && this.selectedTime;
+    console.log('✅ Paso 2 válido:', isValid, 'Fecha:', this.selectedDate, 'Hora:', this.selectedTime);
+    return isValid;
   }
 
   nextStep() {
+    console.log('👉 Avanzando al siguiente paso. Paso actual:', this.currentStep);
+    
     if (this.currentStep === 1) {
       if (!this.validateStep1()) {
         this.showStepError('Por favor, completa todos los campos requeridos correctamente.');
@@ -205,11 +231,13 @@ class MeetingWizard {
 
     if (this.currentStep < this.totalSteps) {
       this.currentStep++;
+      console.log('🔄 Actualizando al paso:', this.currentStep);
       this.updateStep();
     }
   }
 
   prevStep() {
+    console.log('👈 Retrocediendo al paso anterior. Paso actual:', this.currentStep);
     if (this.currentStep > 1) {
       this.currentStep--;
       this.updateStep();
@@ -217,11 +245,25 @@ class MeetingWizard {
   }
 
   updateStep() {
-    // Actualizar pasos visibles
-    document.querySelectorAll('.wizard-step').forEach(step => {
+    console.log('🔄 Actualizando paso a:', this.currentStep);
+    
+    // Ocultar todos los pasos
+    const allSteps = document.querySelectorAll('.wizard-step');
+    console.log('📋 Pasos encontrados:', allSteps.length);
+    
+    allSteps.forEach((step, index) => {
       step.classList.remove('active');
+      console.log(`Paso ${index + 1} removido de active`);
     });
-    document.querySelector(`[data-step="${this.currentStep}"]`).classList.add('active');
+    
+    // Mostrar el paso actual
+    const currentStepElement = document.querySelector(`[data-step="${this.currentStep}"]`);
+    if (currentStepElement) {
+      currentStepElement.classList.add('active');
+      console.log(`✅ Paso ${this.currentStep} activado`);
+    } else {
+      console.error(`❌ No se encontró el elemento del paso ${this.currentStep}`);
+    }
 
     // Actualizar progress bar
     document.querySelectorAll('.progress-step').forEach((step, index) => {
@@ -237,6 +279,8 @@ class MeetingWizard {
 
     // Habilitar/deshabilitar botones según el paso
     this.updateNavigationButtons();
+    
+    console.log('✅ Paso actualizado correctamente');
   }
 
   updateNavigationButtons() {
@@ -253,6 +297,7 @@ class MeetingWizard {
   }
 
   saveStep1Data() {
+    console.log('💾 Guardando datos del paso 1...');
     this.formData = {
       name: document.getElementById('wizard-name').value.trim(),
       email: document.getElementById('wizard-email').value.trim(),
@@ -260,27 +305,34 @@ class MeetingWizard {
       meetingType: document.getElementById('wizard-meeting-type').value,
       description: document.getElementById('wizard-description').value.trim()
     };
+    console.log('✅ Datos guardados:', this.formData);
   }
 
   async loadTimeSlots(date) {
+    console.log('🕐 Cargando horarios para:', date);
     try {
       // Mostrar loading
       const timeSlotsContainer = document.getElementById('time-slots-container');
       const timeSlotsGrid = document.getElementById('time-slots-grid');
       
+      if (!timeSlotsContainer || !timeSlotsGrid) {
+        console.error('❌ No se encontraron elementos de horarios');
+        return;
+      }
+      
       timeSlotsContainer.style.display = 'block';
       timeSlotsGrid.innerHTML = '<div class="loading">Cargando horarios disponibles...</div>';
 
-      // Generar horarios disponibles (9:00 AM - 5:00 PM, cada hora)
+      // Generar horarios disponibles
       const timeSlots = this.generateTimeSlots(date);
       
-      // Simular verificación de disponibilidad
+      // Verificar disponibilidad
       const availableSlots = await this.checkAvailability(date, timeSlots);
       
       this.renderTimeSlots(availableSlots);
       
     } catch (error) {
-      console.error('Error cargando horarios:', error);
+      console.error('❌ Error cargando horarios:', error);
       this.showStepError('Error cargando horarios disponibles. Intenta de nuevo.');
     }
   }
@@ -297,14 +349,14 @@ class MeetingWizard {
       { start: 15, end: 16, label: '3:00 - 4:00 PM' },
       { start: 16, end: 17, label: '4:00 - 5:00 PM' }
     ];
-    
+
     timeRanges.forEach(range => {
       const startTime = new Date(date);
       startTime.setHours(range.start, 0, 0, 0);
-      
+
       const endTime = new Date(date);
       endTime.setHours(range.end, 0, 0, 0);
-      
+
       slots.push({
         startTime: startTime,
         endTime: endTime,
@@ -313,87 +365,88 @@ class MeetingWizard {
         available: true
       });
     });
-    
+
+    console.log('✅ Horarios generados:', slots.length);
     return slots;
   }
 
   async checkAvailability(date, timeSlots) {
+    console.log('🔍 Verificando disponibilidad...');
     try {
-      // Llamar al endpoint real de disponibilidad
       const response = await fetch('/api/calendar/availability', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          date: date.toISOString().split('T')[0] // YYYY-MM-DD
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date: date.toISOString().split('T')[0] }),
       });
-
-      const result = await response.json();
-
-      if (result.success) {
-        // Mapear los resultados del API a nuestro formato
-        return timeSlots.map(slot => {
-          // Buscar slots ocupados que se superpongan con nuestro rango
-          const conflictingSlot = result.timeSlots.find(apiSlot => {
-            const apiStart = new Date(apiSlot.time);
-            const apiEnd = new Date(apiStart.getTime() + 60 * 60 * 1000); // +1 hora
-            
-            // Verificar si hay superposición
-            return !apiSlot.available && 
-                   (slot.startTime < apiEnd && slot.endTime > apiStart);
-          });
-          
-          return {
-            ...slot,
-            available: !conflictingSlot
-          };
-        });
-      } else {
-        console.warn('Error en API de disponibilidad, usando slots por defecto:', result.error);
-        // Fallback: marcar todos como disponibles
-        return timeSlots.map(slot => ({
-          ...slot,
-          available: true
-        }));
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
+      const result = await response.json();
+      console.log('📊 Resultado de disponibilidad:', result);
+      
+      // Mapear los resultados del API a nuestro formato
+      return timeSlots.map(slot => {
+        // Buscar slots ocupados que se superpongan con nuestro rango
+        const conflictingSlot = result.timeSlots.find(apiSlot => {
+          const apiStart = new Date(apiSlot.time);
+          const apiEnd = new Date(apiStart.getTime() + 60 * 60 * 1000); // +1 hora
+
+          // Verificar si hay superposición
+          return !apiSlot.available &&
+                 (slot.startTime < apiEnd && slot.endTime > apiStart);
+        });
+
+        return {
+          ...slot,
+          available: !conflictingSlot
+        };
+      });
     } catch (error) {
-      console.error('Error verificando disponibilidad:', error);
-      // Fallback: marcar todos como disponibles
-      return timeSlots.map(slot => ({
-        ...slot,
-        available: true
-      }));
+      console.error('❌ Error verificando disponibilidad:', error);
+      // En caso de error, asumir que todos están disponibles
+      return timeSlots.map(slot => ({ ...slot, available: true }));
     }
   }
 
   renderTimeSlots(slots) {
+    console.log('🎨 Renderizando horarios...');
     const timeSlotsGrid = document.getElementById('time-slots-grid');
-    
+    if (!timeSlotsGrid) {
+      console.error('❌ No se encontró el grid de horarios');
+      return;
+    }
+
     timeSlotsGrid.innerHTML = slots.map(slot => `
-      <div class="time-slot ${slot.available ? '' : 'disabled'}" 
-           data-start-time="${slot.startTime.toISOString()}"
-           data-end-time="${slot.endTime.toISOString()}"
-           ${slot.available ? 'onclick="meetingWizard.selectTimeSlot(this)"' : ''}>
-        <div class="time-slot-label">${slot.formatted}</div>
-        <div class="time-slot-duration">45 min reunión</div>
+      <div class="time-slot ${slot.available ? '' : 'disabled'}"
+          data-start-time="${slot.startTime.toISOString()}"
+          data-end-time="${slot.endTime.toISOString()}"
+          ${slot.available ? 'onclick="meetingWizard.selectTimeSlot(this)"' : ''}>
+       <div class="time-slot-label">${slot.formatted}</div>
+       <div class="time-slot-duration">45 min reunión</div>
       </div>
     `).join('');
+    
+    console.log('✅ Horarios renderizados:', slots.length);
   }
 
   selectTimeSlot(element) {
-    // Deseleccionar slot anterior
-    document.querySelectorAll('.time-slot.selected').forEach(slot => {
+    console.log('🎯 Horario seleccionado:', element);
+    
+    // Remover selección anterior
+    document.querySelectorAll('.time-slot').forEach(slot => {
       slot.classList.remove('selected');
     });
     
-    // Seleccionar nuevo slot
+    // Seleccionar el nuevo
     element.classList.add('selected');
     
     // Guardar selección
     this.selectedTime = new Date(element.dataset.startTime);
     this.selectedEndTime = new Date(element.dataset.endTime);
+    
+    console.log('✅ Horario guardado:', this.selectedTime, 'a', this.selectedEndTime);
     
     // Mostrar información de selección
     this.showSelectionInfo();
@@ -406,108 +459,111 @@ class MeetingWizard {
   }
 
   showSelectionInfo() {
-    const selectionInfo = document.getElementById('selection-info');
     const selectedDatetimeInfo = document.getElementById('selected-datetime-info');
+    const selectionInfo = document.getElementById('selection-info');
     
-    if (selectionInfo && selectedDatetimeInfo) {
-      const formattedDate = this.selectedDate.toLocaleDateString('es-CO', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-      
-      const formattedStartTime = this.selectedTime.toLocaleTimeString('es-CO', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      });
-      
-      const formattedEndTime = this.selectedEndTime.toLocaleTimeString('es-CO', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      });
-      
-      selectedDatetimeInfo.innerHTML = `
-        <p><strong>Fecha:</strong> ${formattedDate}</p>
-        <p><strong>Horario:</strong> ${formattedStartTime} - ${formattedEndTime}</p>
-        <p><strong>Duración:</strong> 45 minutos (reunión) + 15 minutos (margen)</p>
-      `;
-      
-      selectionInfo.style.display = 'block';
+    if (!selectedDatetimeInfo || !selectionInfo) {
+      console.error('❌ No se encontraron elementos de información de selección');
+      return;
     }
+    
+    const formattedDate = this.selectedDate.toLocaleDateString('es-CO', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    const formattedStartTime = this.selectedTime.toLocaleTimeString('es-CO', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    const formattedEndTime = this.selectedEndTime.toLocaleTimeString('es-CO', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    selectedDatetimeInfo.innerHTML = `
+      <p><strong>Fecha:</strong> ${formattedDate}</p>
+      <p><strong>Horario:</strong> ${formattedStartTime} - ${formattedEndTime}</p>
+      <p><strong>Duración:</strong> 45 minutos (reunión) + 15 minutos (margen)</p>
+    `;
+    
+    selectionInfo.style.display = 'block';
+    console.log('✅ Información de selección mostrada');
   }
 
   prepareConfirmation() {
+    console.log('📋 Preparando confirmación...');
     const confirmationDetails = document.getElementById('confirmation-details');
-    
-    if (confirmationDetails) {
-      const formattedDate = this.selectedDate.toLocaleDateString('es-CO', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-      
-      const formattedStartTime = this.selectedTime.toLocaleTimeString('es-CO', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      });
-      
-      const formattedEndTime = this.selectedEndTime.toLocaleTimeString('es-CO', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      });
-      
-      confirmationDetails.innerHTML = `
-        <div class="confirmation-row">
-          <span class="confirmation-label">👤 Nombre:</span>
-          <span class="confirmation-value">${this.formData.name}</span>
-        </div>
-        <div class="confirmation-row">
-          <span class="confirmation-label">📧 Email:</span>
-          <span class="confirmation-value">${this.formData.email}</span>
-        </div>
-        <div class="confirmation-row">
-          <span class="confirmation-label">📱 Teléfono:</span>
-          <span class="confirmation-value">${this.formData.phone}</span>
-        </div>
-        <div class="confirmation-row">
-          <span class="confirmation-label">💼 Tipo de Consulta:</span>
-          <span class="confirmation-value">${this.formData.meetingType}</span>
-        </div>
-        <div class="confirmation-row">
-          <span class="confirmation-label">📅 Fecha:</span>
-          <span class="confirmation-value">${formattedDate}</span>
-        </div>
-        <div class="confirmation-row">
-          <span class="confirmation-label">🕐 Horario:</span>
-          <span class="confirmation-value">${formattedStartTime} - ${formattedEndTime}</span>
-        </div>
-        <div class="confirmation-row">
-          <span class="confirmation-label">⏱️ Duración:</span>
-          <span class="confirmation-value">45 minutos (reunión) + 15 minutos (margen)</span>
-        </div>
-        <div class="confirmation-row">
-          <span class="confirmation-label">📝 Descripción:</span>
-          <span class="confirmation-value">${this.formData.description}</span>
-        </div>
-      `;
+    if (!confirmationDetails) {
+      console.error('❌ No se encontró el elemento de confirmación');
+      return;
     }
+    
+    const formattedDate = this.selectedDate.toLocaleDateString('es-CO', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    const formattedStartTime = this.selectedTime.toLocaleTimeString('es-CO', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    const formattedEndTime = this.selectedEndTime.toLocaleTimeString('es-CO', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    confirmationDetails.innerHTML = `
+      <div class="confirmation-row">
+        <span class="confirmation-label">👤 Nombre:</span>
+        <span class="confirmation-value">${this.formData.name}</span>
+      </div>
+      <div class="confirmation-row">
+        <span class="confirmation-label">📧 Email:</span>
+        <span class="confirmation-value">${this.formData.email}</span>
+      </div>
+      <div class="confirmation-row">
+        <span class="confirmation-label">📱 Teléfono:</span>
+        <span class="confirmation-value">${this.formData.phone}</span>
+      </div>
+      <div class="confirmation-row">
+        <span class="confirmation-label">💼 Tipo de Consulta:</span>
+        <span class="confirmation-value">${this.formData.meetingType}</span>
+      </div>
+      <div class="confirmation-row">
+        <span class="confirmation-label">📝 Descripción:</span>
+        <span class="confirmation-value">${this.formData.description}</span>
+      </div>
+      <div class="confirmation-row">
+        <span class="confirmation-label">📅 Fecha:</span>
+        <span class="confirmation-value">${formattedDate}</span>
+      </div>
+      <div class="confirmation-row">
+        <span class="confirmation-label">🕐 Horario:</span>
+        <span class="confirmation-value">${formattedStartTime} - ${formattedEndTime}</span>
+      </div>
+      <div class="confirmation-row">
+        <span class="confirmation-label">⏱️ Duración:</span>
+        <span class="confirmation-value">45 minutos (reunión) + 15 minutos (margen)</span>
+      </div>
+    `;
+    
+    console.log('✅ Confirmación preparada');
   }
 
   async confirmAppointment() {
+    console.log('✅ Confirmando cita...');
     try {
-      // Mostrar loading
-      const confirmBtn = document.getElementById('wizard-confirm-appointment');
-      const originalText = confirmBtn.textContent;
-      confirmBtn.textContent = '⏳ Confirmando...';
-      confirmBtn.disabled = true;
-
-      // Preparar datos para la API
       const appointmentData = {
         name: this.formData.name,
         email: this.formData.email,
@@ -518,12 +574,11 @@ class MeetingWizard {
         endTime: this.selectedEndTime.toISOString()
       };
 
-      // Llamar a la API
+      console.log('📤 Enviando datos:', appointmentData);
+
       const response = await fetch('/api/calendar/book', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(appointmentData),
       });
 
@@ -532,39 +587,37 @@ class MeetingWizard {
       if (result.success) {
         this.showSuccessMessage(result);
       } else {
-        throw new Error(result.error || 'Error al agendar la cita');
+        this.showStepError(result.message || 'Error al agendar la cita. Intenta de nuevo.');
       }
-
     } catch (error) {
-      console.error('Error confirmando cita:', error);
-      this.showStepError('Error al confirmar la cita. Intenta de nuevo.');
-      
-      // Restaurar botón
-      const confirmBtn = document.getElementById('wizard-confirm-appointment');
-      confirmBtn.textContent = '✅ Confirmar Cita';
-      confirmBtn.disabled = false;
+      console.error('❌ Error confirmando cita:', error);
+      this.showStepError('Error de conexión. Intenta de nuevo.');
     }
   }
 
   showSuccessMessage(result) {
-    // Ocultar todos los pasos
-    document.querySelectorAll('.wizard-step').forEach(step => {
-      step.style.display = 'none';
-    });
-    
-    // Ocultar progress bar
-    document.querySelector('.wizard-progress').style.display = 'none';
-    
-    // Mostrar mensaje de éxito
+    console.log('🎉 Mostrando mensaje de éxito');
     const successMessage = document.getElementById('wizard-success-message');
     const appointmentDetails = document.getElementById('wizard-appointment-details');
     
     if (successMessage && appointmentDetails) {
       appointmentDetails.innerHTML = `
-        <p><strong>ID de la cita:</strong> ${result.appointment.id}</p>
-        <p><strong>Resumen:</strong> ${result.appointment.summary}</p>
-        <p><strong>Fecha:</strong> ${new Date(result.appointment.start.dateTime).toLocaleString('es-CO')}</p>
-        ${result.appointment.meetLink ? `<p><strong>Google Meet:</strong> <a href="${result.appointment.meetLink}" target="_blank">Unirse a la reunión</a></p>` : ''}
+        <div class="confirmation-row">
+          <span class="confirmation-label">📅 Fecha:</span>
+          <span class="confirmation-value">${this.selectedDate.toLocaleDateString('es-CO')}</span>
+        </div>
+        <div class="confirmation-row">
+          <span class="confirmation-label">🕐 Horario:</span>
+          <span class="confirmation-value">${this.selectedTime.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: true })} - ${this.selectedEndTime.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+        </div>
+        <div class="confirmation-row">
+          <span class="confirmation-label">👤 Cliente:</span>
+          <span class="confirmation-value">${this.formData.name}</span>
+        </div>
+        <div class="confirmation-row">
+          <span class="confirmation-label">📧 Email:</span>
+          <span class="confirmation-value">${this.formData.email}</span>
+        </div>
       `;
       
       successMessage.classList.remove('hidden');
@@ -572,63 +625,41 @@ class MeetingWizard {
   }
 
   showStepError(message) {
-    // Crear o actualizar mensaje de error
-    let errorElement = document.querySelector('.wizard-step-error');
-    if (!errorElement) {
-      errorElement = document.createElement('div');
-      errorElement.className = 'wizard-step-error';
-      errorElement.style.cssText = `
-        background: #fed7d7;
-        border: 1px solid #feb2b2;
-        color: #c53030;
-        padding: 0.75rem;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-        text-align: center;
-      `;
-      
-      const currentStep = document.querySelector(`[data-step="${this.currentStep}"]`);
-      if (currentStep) {
-        currentStep.insertBefore(errorElement, currentStep.firstChild);
-      }
-    }
-    
-    errorElement.textContent = message;
-    
-    // Auto-ocultar después de 5 segundos
-    setTimeout(() => {
-      if (errorElement) {
-        errorElement.remove();
-      }
-    }, 5000);
+    console.error('❌ Error en paso:', message);
+    // Aquí podrías mostrar un mensaje de error en la UI
+    alert(message);
   }
 
   openModal() {
+    console.log('🚀 Abriendo modal del wizard...');
     const modal = document.getElementById('meeting-wizard-modal');
     if (modal) {
       modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
+      console.log('✅ Modal abierto');
+    } else {
+      console.error('❌ No se encontró el modal');
     }
   }
 
   closeModal() {
+    console.log('🔒 Cerrando modal del wizard...');
     const modal = document.getElementById('meeting-wizard-modal');
     if (modal) {
       modal.classList.add('hidden');
-      document.body.style.overflow = '';
-      
-      // Resetear wizard
       this.resetWizard();
+      console.log('✅ Modal cerrado');
     }
   }
 
   resetWizard() {
+    console.log('🔄 Reseteando wizard...');
     this.currentStep = 1;
     this.formData = {};
     this.selectedDate = null;
     this.selectedTime = null;
+    this.selectedEndTime = null;
     
-    // Limpiar formulario
+    // Resetear formulario
     const form = document.getElementById('wizard-step1-form');
     if (form) {
       form.reset();
@@ -643,28 +674,44 @@ class MeetingWizard {
       field.classList.remove('error');
     });
     
-    // Resetear date picker
-    if (this.datePicker) {
-      this.datePicker.clear();
-    }
+    // Resetear selecciones
+    document.querySelectorAll('.time-slot').forEach(slot => {
+      slot.classList.remove('selected');
+    });
     
     // Ocultar contenedores
-    document.getElementById('time-slots-container').style.display = 'none';
-    document.getElementById('selection-info').style.display = 'none';
+    const timeSlotsContainer = document.getElementById('time-slots-container');
+    const selectionInfo = document.getElementById('selection-info');
+    const successMessage = document.getElementById('wizard-success-message');
     
-    // Ocultar mensaje de éxito
-    document.getElementById('wizard-success-message').classList.add('hidden');
+    if (timeSlotsContainer) timeSlotsContainer.style.display = 'none';
+    if (selectionInfo) selectionInfo.style.display = 'none';
+    if (successMessage) successMessage.classList.add('hidden');
     
-    // Mostrar progress bar
-    document.querySelector('.wizard-progress').style.display = 'flex';
+    // Resetear progress bar
+    document.querySelectorAll('.progress-step').forEach((step, index) => {
+      step.classList.remove('active', 'completed');
+      if (index === 0) step.classList.add('active');
+    });
     
-    // Resetear pasos
+    // Mostrar paso 1
     this.updateStep();
+    
+    console.log('✅ Wizard reseteado');
   }
 }
 
-// Inicializar wizard cuando el DOM esté listo
+// Inicialización global
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('🌐 DOM cargado, inicializando MeetingWizard...');
+  
+  // Verificar que Flatpickr esté disponible
+  if (typeof flatpickr === 'undefined') {
+    console.error('❌ Flatpickr no está disponible');
+    return;
+  }
+  
+  // Crear instancia global
   window.meetingWizard = new MeetingWizard();
 
   // Conectar botones específicos al wizard
@@ -680,8 +727,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (button) {
       button.addEventListener('click', (e) => {
         e.preventDefault();
+        console.log(`🎯 Botón ${buttonId} clickeado`);
         window.meetingWizard.openModal();
       });
+    } else {
+      console.log(`⚠️ Botón ${buttonId} no encontrado`);
     }
   });
 
@@ -698,15 +748,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!button.getAttribute('href')) {
           e.preventDefault();
         }
+        console.log('🎯 Botón de agenda encontrado por texto');
         window.meetingWizard.openModal();
       });
     }
   });
+
+  console.log('✅ MeetingWizard inicializado globalmente');
 });
 
 // Función global para abrir el wizard
 window.openMeetingWizard = () => {
+  console.log('🌐 Función global openMeetingWizard llamada');
   if (window.meetingWizard) {
     window.meetingWizard.openModal();
+  } else {
+    console.error('❌ MeetingWizard no está disponible');
   }
 };
