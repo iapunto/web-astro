@@ -287,23 +287,32 @@ class MeetingWizard {
 
   generateTimeSlots(date) {
     const slots = [];
-    const startHour = 9; // 9:00 AM
-    const endHour = 17; // 5:00 PM
+    // Rangos de horas específicos: 9-10, 10-11, 11-12, 13-14, 14-15, 15-16, 16-17
+    const timeRanges = [
+      { start: 9, end: 10, label: '9:00 - 10:00' },
+      { start: 10, end: 11, label: '10:00 - 11:00' },
+      { start: 11, end: 12, label: '11:00 - 12:00' },
+      { start: 13, end: 14, label: '1:00 - 2:00 PM' },
+      { start: 14, end: 15, label: '2:00 - 3:00 PM' },
+      { start: 15, end: 16, label: '3:00 - 4:00 PM' },
+      { start: 16, end: 17, label: '4:00 - 5:00 PM' }
+    ];
     
-    for (let hour = startHour; hour < endHour; hour++) {
-      const time = new Date(date);
-      time.setHours(hour, 0, 0, 0);
+    timeRanges.forEach(range => {
+      const startTime = new Date(date);
+      startTime.setHours(range.start, 0, 0, 0);
+      
+      const endTime = new Date(date);
+      endTime.setHours(range.end, 0, 0, 0);
       
       slots.push({
-        time: time,
-        formatted: time.toLocaleTimeString('es-CO', { 
-          hour: '2-digit', 
-          minute: '2-digit',
-          hour12: true 
-        }),
+        startTime: startTime,
+        endTime: endTime,
+        time: startTime, // Para compatibilidad
+        formatted: range.label,
         available: true
       });
-    }
+    });
     
     return slots;
   }
@@ -326,12 +335,19 @@ class MeetingWizard {
       if (result.success) {
         // Mapear los resultados del API a nuestro formato
         return timeSlots.map(slot => {
-          const apiSlot = result.timeSlots.find(apiSlot => 
-            new Date(apiSlot.time).getHours() === slot.time.getHours()
-          );
+          // Buscar slots ocupados que se superpongan con nuestro rango
+          const conflictingSlot = result.timeSlots.find(apiSlot => {
+            const apiStart = new Date(apiSlot.time);
+            const apiEnd = new Date(apiStart.getTime() + 60 * 60 * 1000); // +1 hora
+            
+            // Verificar si hay superposición
+            return !apiSlot.available && 
+                   (slot.startTime < apiEnd && slot.endTime > apiStart);
+          });
+          
           return {
             ...slot,
-            available: apiSlot ? apiSlot.available : false
+            available: !conflictingSlot
           };
         });
       } else {
@@ -357,9 +373,11 @@ class MeetingWizard {
     
     timeSlotsGrid.innerHTML = slots.map(slot => `
       <div class="time-slot ${slot.available ? '' : 'disabled'}" 
-           data-time="${slot.time.toISOString()}"
+           data-start-time="${slot.startTime.toISOString()}"
+           data-end-time="${slot.endTime.toISOString()}"
            ${slot.available ? 'onclick="meetingWizard.selectTimeSlot(this)"' : ''}>
-        ${slot.formatted}
+        <div class="time-slot-label">${slot.formatted}</div>
+        <div class="time-slot-duration">45 min reunión</div>
       </div>
     `).join('');
   }
@@ -374,7 +392,8 @@ class MeetingWizard {
     element.classList.add('selected');
     
     // Guardar selección
-    this.selectedTime = new Date(element.dataset.time);
+    this.selectedTime = new Date(element.dataset.startTime);
+    this.selectedEndTime = new Date(element.dataset.endTime);
     
     // Mostrar información de selección
     this.showSelectionInfo();
@@ -398,7 +417,13 @@ class MeetingWizard {
         day: 'numeric'
       });
       
-      const formattedTime = this.selectedTime.toLocaleTimeString('es-CO', {
+      const formattedStartTime = this.selectedTime.toLocaleTimeString('es-CO', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      
+      const formattedEndTime = this.selectedEndTime.toLocaleTimeString('es-CO', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: true
@@ -406,8 +431,8 @@ class MeetingWizard {
       
       selectedDatetimeInfo.innerHTML = `
         <p><strong>Fecha:</strong> ${formattedDate}</p>
-        <p><strong>Hora:</strong> ${formattedTime}</p>
-        <p><strong>Duración:</strong> 60 minutos</p>
+        <p><strong>Horario:</strong> ${formattedStartTime} - ${formattedEndTime}</p>
+        <p><strong>Duración:</strong> 45 minutos (reunión) + 15 minutos (margen)</p>
       `;
       
       selectionInfo.style.display = 'block';
@@ -425,14 +450,13 @@ class MeetingWizard {
         day: 'numeric'
       });
       
-      const formattedTime = this.selectedTime.toLocaleTimeString('es-CO', {
+      const formattedStartTime = this.selectedTime.toLocaleTimeString('es-CO', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: true
       });
       
-      const endTime = new Date(this.selectedTime.getTime() + 60 * 60 * 1000); // +1 hora
-      const formattedEndTime = endTime.toLocaleTimeString('es-CO', {
+      const formattedEndTime = this.selectedEndTime.toLocaleTimeString('es-CO', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: true
@@ -461,7 +485,11 @@ class MeetingWizard {
         </div>
         <div class="confirmation-row">
           <span class="confirmation-label">🕐 Horario:</span>
-          <span class="confirmation-value">${formattedTime} - ${formattedEndTime}</span>
+          <span class="confirmation-value">${formattedStartTime} - ${formattedEndTime}</span>
+        </div>
+        <div class="confirmation-row">
+          <span class="confirmation-label">⏱️ Duración:</span>
+          <span class="confirmation-value">45 minutos (reunión) + 15 minutos (margen)</span>
         </div>
         <div class="confirmation-row">
           <span class="confirmation-label">📝 Descripción:</span>
@@ -487,7 +515,7 @@ class MeetingWizard {
         meetingType: this.formData.meetingType,
         description: this.formData.description,
         startTime: this.selectedTime.toISOString(),
-        endTime: new Date(this.selectedTime.getTime() + 60 * 60 * 1000).toISOString()
+        endTime: this.selectedEndTime.toISOString()
       };
 
       // Llamar a la API
