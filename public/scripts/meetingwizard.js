@@ -126,6 +126,11 @@ class MeetingWizard {
         this.monthlyAvailability = result.days;
         this.renderCalendar();
         this.updateMonthTitle();
+        
+        // Aplicar estilos después de renderizar
+        setTimeout(() => {
+          this.applyCalendarStyles();
+        }, 100);
       } else {
         console.error('❌ Error cargando disponibilidad mensual:', result.error);
       }
@@ -221,15 +226,37 @@ class MeetingWizard {
 
     calendarGrid.innerHTML = calendarHTML;
     
-    // Forzar la aplicación de estilos
+    // Aplicar estilos inmediatamente después del renderizado
     setTimeout(() => {
       const days = calendarGrid.querySelectorAll('.calendar-day');
       days.forEach(day => {
         day.style.display = 'flex';
         day.style.alignItems = 'center';
         day.style.justifyContent = 'center';
+        
+        // Aplicar colores según las clases
+        if (day.classList.contains('available')) {
+          day.style.background = '#dcfce7';
+          day.style.color = '#166534';
+          day.style.borderColor = '#22c55e';
+        } else if (day.classList.contains('unavailable')) {
+          day.style.background = '#f3f4f6';
+          day.style.color = '#9ca3af';
+          day.style.cursor = 'not-allowed';
+        } else if (day.classList.contains('selected')) {
+          day.style.background = '#E51F52';
+          day.style.color = 'white';
+          day.style.borderColor = '#E51F52';
+        } else if (day.classList.contains('weekend')) {
+          day.style.background = '#fef2f2';
+          day.style.color = '#dc2626';
+        } else if (day.classList.contains('past')) {
+          day.style.background = '#f9fafb';
+          day.style.color = '#d1d5db';
+          day.style.cursor = 'not-allowed';
+        }
       });
-    }, 100);
+    }, 50);
     
     console.log('✅ Calendario renderizado correctamente');
   }
@@ -240,10 +267,19 @@ class MeetingWizard {
     // Remover selección anterior
     document.querySelectorAll('.calendar-day').forEach(day => {
       day.classList.remove('selected');
+      // Restaurar estilos originales
+      if (day.classList.contains('available')) {
+        day.style.background = '#dcfce7';
+        day.style.color = '#166534';
+        day.style.borderColor = '#22c55e';
+      }
     });
     
     // Seleccionar el nuevo día
     element.classList.add('selected');
+    element.style.background = '#E51F52';
+    element.style.color = 'white';
+    element.style.borderColor = '#E51F52';
     
     // Guardar fecha seleccionada
     this.selectedDate = new Date(element.dataset.date);
@@ -597,16 +633,28 @@ class MeetingWizard {
       `;
     }).join('');
     
-    // Forzar la aplicación de estilos
+    // Aplicar estilos inmediatamente después del renderizado
     setTimeout(() => {
       const timeSlots = timeSlotsGrid.querySelectorAll('.time-slot');
       timeSlots.forEach(slot => {
         slot.style.display = 'flex';
         slot.style.alignItems = 'center';
         slot.style.justifyContent = 'center';
-        slot.style.cursor = slot.classList.contains('disabled') ? 'not-allowed' : 'pointer';
+        
+        // Aplicar colores según las clases
+        if (slot.classList.contains('disabled')) {
+          slot.style.background = '#f9fafb';
+          slot.style.color = '#9ca3af';
+          slot.style.cursor = 'not-allowed';
+          slot.style.borderColor = '#d1d5db';
+        } else {
+          slot.style.background = 'white';
+          slot.style.color = '#374151';
+          slot.style.borderColor = '#E51F52';
+          slot.style.cursor = 'pointer';
+        }
       });
-    }, 100);
+    }, 50);
     
     console.log('✅ Horarios renderizados:', slots.length);
   }
@@ -617,10 +665,19 @@ class MeetingWizard {
     // Remover selección anterior
     document.querySelectorAll('.time-slot').forEach(slot => {
       slot.classList.remove('selected');
+      // Restaurar estilos originales
+      if (!slot.classList.contains('disabled')) {
+        slot.style.background = 'white';
+        slot.style.color = '#374151';
+        slot.style.borderColor = '#E51F52';
+      }
     });
     
     // Seleccionar el nuevo
     element.classList.add('selected');
+    element.style.background = 'linear-gradient(135deg, #E51F52 0%, #d41a4a 100%)';
+    element.style.color = 'white';
+    element.style.borderColor = '#E51F52';
     
     // Guardar selección
     this.selectedTime = new Date(element.dataset.startTime);
@@ -636,6 +693,33 @@ class MeetingWizard {
     if (nextBtn) {
       nextBtn.disabled = false;
     }
+  }
+
+  applyCalendarStyles() {
+    console.log('🎨 Aplicando estilos al calendario...');
+    const calendarDays = document.querySelectorAll('.calendar-day');
+    calendarDays.forEach(day => {
+      if (day.classList.contains('available')) {
+        day.style.background = '#dcfce7';
+        day.style.color = '#166534';
+        day.style.borderColor = '#22c55e';
+      } else if (day.classList.contains('unavailable')) {
+        day.style.background = '#f3f4f6';
+        day.style.color = '#9ca3af';
+        day.style.cursor = 'not-allowed';
+      } else if (day.classList.contains('selected')) {
+        day.style.background = '#E51F52';
+        day.style.color = 'white';
+        day.style.borderColor = '#E51F52';
+      } else if (day.classList.contains('weekend')) {
+        day.style.background = '#fef2f2';
+        day.style.color = '#dc2626';
+      } else if (day.classList.contains('past')) {
+        day.style.background = '#f9fafb';
+        day.style.color = '#d1d5db';
+        day.style.cursor = 'not-allowed';
+      }
+    });
   }
 
   showSelectionInfo() {
