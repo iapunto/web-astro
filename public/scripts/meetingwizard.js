@@ -628,7 +628,8 @@ class MeetingWizard {
         meetingType: this.formData.meetingType,
         description: this.formData.description,
         startTime: this.selectedTime.toISOString(),
-        endTime: this.selectedEndTime.toISOString()
+        endTime: this.selectedEndTime.toISOString(),
+        autoConfirm: true // Confirmación automática
       };
 
       console.log('📤 Enviando datos:', appointmentData);
