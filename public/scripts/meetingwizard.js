@@ -107,13 +107,9 @@ class MeetingWizard {
   async loadMonthlyAvailability() {
     console.log('📅 Cargando disponibilidad mensual...');
     try {
-      const response = await fetch('/api/calendar/monthly-availability', {
-        method: 'POST',
+      const response = await fetch(`/api/calendar/monthly-availability?year=${this.currentYear}&month=${this.currentMonth + 1}`, {
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          year: this.currentYear,
-          month: this.currentMonth
-        }),
       });
       
       if (!response.ok) {
@@ -123,7 +119,7 @@ class MeetingWizard {
       const result = await response.json();
       
       if (result.success) {
-        this.monthlyAvailability = result.days;
+        this.monthlyAvailability = result.availability;
         this.renderCalendar();
         this.updateMonthTitle();
         
@@ -580,10 +576,9 @@ class MeetingWizard {
 
       // Obtener disponibilidad real de Google Calendar
       const dateString = date.toISOString().split('T')[0];
-      const response = await fetch('/api/calendar/availability', {
-        method: 'POST',
+      const response = await fetch(`/api/calendar/availability?date=${dateString}`, {
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ date: dateString }),
       });
       
       if (!response.ok) {
@@ -593,7 +588,13 @@ class MeetingWizard {
       const result = await response.json();
       
       if (result.success) {
-        this.renderTimeSlots(result.timeSlots);
+        // Convertir availableSlots a formato esperado por renderTimeSlots
+        const timeSlots = result.availableSlots.map(slot => ({
+          time: `${dateString}T${slot}:00`,
+          formatted: slot,
+          available: true
+        }));
+        this.renderTimeSlots(timeSlots);
       } else {
         throw new Error(result.error || 'Error obteniendo disponibilidad');
       }
