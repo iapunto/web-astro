@@ -14,6 +14,122 @@ interface DayAvailability {
   isWeekend: boolean;
 }
 
+export const GET: APIRoute = async ({ request, url }) => {
+  try {
+    const year = parseInt(url.searchParams.get('year') || '');
+    const month = parseInt(url.searchParams.get('month') || '');
+
+    if (!year || !month) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: 'Año y mes requeridos'
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    console.log('🚀 ===== ENDPOINT DE DISPONIBILIDAD MENSUAL INICIADO =====');
+    console.log('📝 Datos de la solicitud:', { year, month });
+
+    const appointmentManager = new PostgresAppointmentManager();
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const availability: DayAvailability[] = [];
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      const dateObj = new Date(date);
+      const dayOfWeek = dateObj.getDay();
+      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+      // Verificar si es fecha pasada
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const isPastDate = dateObj < today;
+
+      if (isPastDate) {
+        availability.push({
+          date,
+          available: false,
+          availableSlots: [],
+          totalSlots: 0,
+          hasReachedLimit: false,
+          isWeekend: false
+        });
+        continue;
+      }
+
+      if (isWeekend) {
+        availability.push({
+          date,
+          available: false,
+          availableSlots: [],
+          totalSlots: 0,
+          hasReachedLimit: false,
+          isWeekend: true
+        });
+        continue;
+      }
+
+      const availableSlots = await appointmentManager.getAvailabilityForDate(date);
+      const hasReachedLimit = availableSlots.length === 0;
+
+      availability.push({
+        date,
+        available: availableSlots.length > 0,
+        availableSlots,
+        totalSlots: availableSlots.length,
+        hasReachedLimit,
+        isWeekend: false
+      });
+    }
+
+    const availableDays = availability.filter(day => day.available).length;
+    console.log('✅ Disponibilidad mensual obtenida:', availableDays, 'días con disponibilidad');
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        year,
+        month,
+        availability,
+        summary: {
+          totalDays: daysInMonth,
+          availableDays,
+          weekendDays: availability.filter(day => day.isWeekend).length,
+          pastDays: availability.filter(day => !day.available && !day.isWeekend && day.totalSlots === 0).length
+        },
+        timezone: process.env.TIMEZONE || 'America/Bogota',
+        businessHours: {
+          start: process.env.BUSINESS_HOURS_START || '09:00',
+          end: process.env.BUSINESS_HOURS_END || '17:00'
+        }
+      }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+
+  } catch (error) {
+    console.error('❌ Error en endpoint de disponibilidad mensual:', error);
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: 'Error obteniendo disponibilidad mensual',
+        message: error instanceof Error ? error.message : 'Error desconocido'
+      }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+  }
+};
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
@@ -99,8 +215,7 @@ export const POST: APIRoute = async ({ request }) => {
         summary: {
           totalDays: daysInMonth,
           availableDays,
-          weekendDays: availability.filter(day => day.isWeekend).length,
-          pastDays: availability.filter(day => !day.available && !day.isWeekend && day.totalSlots === 0).length
+          unavailableDays: daysInMonth - availableDays
         },
         timezone: process.env.TIMEZONE || 'America/Bogota',
         businessHours: {
