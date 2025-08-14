@@ -195,7 +195,7 @@ class MeetingWizard {
         dayClasses.push('past');
       } else if (isWeekend) {
         dayClasses.push('weekend');
-      } else if (dayAvailability && dayAvailability.hasAvailability) {
+      } else if (dayAvailability && dayAvailability.available) {
         dayClasses.push('available');
       } else {
         dayClasses.push('unavailable');
@@ -209,7 +209,7 @@ class MeetingWizard {
         dayClasses.push('selected');
       }
       
-      const isClickable = !isPast && !isWeekend && dayAvailability && dayAvailability.hasAvailability;
+      const isClickable = !isPast && !isWeekend && dayAvailability && dayAvailability.available;
       
       calendarHTML += `
         <div class="${dayClasses.join(' ')}" 

@@ -124,6 +124,25 @@ export class PostgresAppointmentService {
     }
   }
 
+  async getAppointmentByGoogleEventId(googleEventId: string): Promise<Appointment | null> {
+    const client = await this.getClient();
+    
+    try {
+      const result = await client.query(
+        'SELECT * FROM appointments WHERE google_event_id = $1',
+        [googleEventId]
+      );
+      
+      if (result.rows.length === 0) {
+        return null;
+      }
+
+      return this.mapRowToAppointment(result.rows[0]);
+    } finally {
+      client.release();
+    }
+  }
+
   async getDailyAppointmentsCount(date: string): Promise<number> {
     return this.getAppointmentsCountByDate(date);
   }
