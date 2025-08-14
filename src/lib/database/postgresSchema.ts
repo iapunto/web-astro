@@ -51,8 +51,8 @@ let pool: Pool | null = null;
 export function getPool(): Pool {
   if (!pool) {
     pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+      connectionString: process.env.DATABASE_PUBLIC_URL || process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
     });
   }
   return pool;
