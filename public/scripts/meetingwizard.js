@@ -829,19 +829,18 @@ class MeetingWizard {
     console.log('✅ Confirmando cita...');
     try {
       const appointmentData = {
-        name: this.formData.name,
-        email: this.formData.email,
-        phone: this.formData.phone,
-        meetingType: this.formData.meetingType,
+        clientName: this.formData.name,
+        clientEmail: this.formData.email,
+        clientPhone: this.formData.phone,
+        serviceType: this.formData.meetingType,
         description: this.formData.description,
-        startTime: this.selectedTime.toISOString(),
-        endTime: this.selectedEndTime.toISOString(),
-        autoConfirm: true // Confirmación automática
+        appointmentDate: this.selectedDate.toISOString().split('T')[0],
+        appointmentTime: this.selectedTime.toTimeString().split(' ')[0].substring(0, 5)
       };
 
       console.log('📤 Enviando datos:', appointmentData);
 
-      const response = await fetch('/api/calendar/book', {
+      const response = await fetch('/api/appointments/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(appointmentData),
@@ -852,7 +851,7 @@ class MeetingWizard {
       if (result.success) {
         this.showSuccessMessage(result);
       } else {
-        this.showStepError(result.message || 'Error al agendar la cita. Intenta de nuevo.');
+        this.showStepError(result.error || 'Error al agendar la cita. Intenta de nuevo.');
       }
     } catch (error) {
       console.error('❌ Error confirmando cita:', error);
