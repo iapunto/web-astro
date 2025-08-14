@@ -1068,3 +1068,23 @@ window.openMeetingWizard = () => {
     console.error('❌ MeetingWizard no está disponible');
   }
 };
+
+// Función global para seleccionar fecha
+window.selectDate = (element) => {
+  console.log('🌐 Función global selectDate llamada');
+  if (window.meetingWizard) {
+    window.meetingWizard.selectDate(element);
+  } else {
+    console.error('❌ MeetingWizard no está disponible');
+  }
+};
+
+// Función global para seleccionar horario
+window.selectTimeSlot = (element) => {
+  console.log('🌐 Función global selectTimeSlot llamada');
+  if (window.meetingWizard) {
+    window.meetingWizard.selectTimeSlot(element);
+  } else {
+    console.error('❌ MeetingWizard no está disponible');
+  }
+};
