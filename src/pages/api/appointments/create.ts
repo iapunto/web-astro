@@ -1,31 +1,21 @@
 import type { APIRoute } from 'astro';
-import { AppointmentManager, CreateAppointmentRequest } from '../../../lib/appointment/appointmentManager';
+import { PostgresAppointmentManager, CreateAppointmentRequest } from '../../../lib/appointment/postgresAppointmentManager.js';
 import * as dotenv from 'dotenv';
 
 // Cargar variables de entorno
 dotenv.config();
 
 export const POST: APIRoute = async ({ request }) => {
-  console.log('🚀 ===== ENDPOINT DE CREACIÓN DE CITA INICIADO =====');
-  console.log('📥 Solicitud recibida en /api/appointments/create');
-
   try {
-    console.log('📋 Parseando cuerpo de la solicitud...');
     const body = await request.json();
-    console.log('✅ Cuerpo de la solicitud parseado exitosamente');
-    console.log('📝 Datos de la solicitud:', JSON.stringify(body, null, 2));
+    const { clientName, clientEmail, serviceType, appointmentDate, appointmentTime, notes } = body;
 
-    // Validación de datos requeridos
-    const { clientName, clientEmail, appointmentDate, appointmentTime, serviceType, clientPhone, description } = body as CreateAppointmentRequest;
-
-    console.log('🔍 Validando campos requeridos...');
-    
-    if (!clientName || !clientEmail || !appointmentDate || !appointmentTime || !serviceType) {
-      console.error('❌ Faltan campos requeridos');
+    // Validación de campos requeridos
+    if (!clientName || !clientEmail || !serviceType || !appointmentDate || !appointmentTime) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Faltan campos requeridos: clientName, clientEmail, appointmentDate, appointmentTime, serviceType',
+          error: 'Todos los campos son requeridos: clientName, clientEmail, serviceType, appointmentDate, appointmentTime'
         }),
         {
           status: 400,
@@ -36,14 +26,13 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Validar formato de email
+    // Validación de formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(clientEmail)) {
-      console.error('❌ Formato de email inválido');
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Formato de email inválido',
+          error: 'Formato de email inválido'
         }),
         {
           status: 400,
@@ -54,14 +43,13 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Validar formato de fecha
+    // Validación de formato de fecha
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(appointmentDate)) {
-      console.error('❌ Formato de fecha inválido');
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Formato de fecha inválido. Use YYYY-MM-DD',
+          error: 'Formato de fecha inválido. Use YYYY-MM-DD'
         }),
         {
           status: 400,
@@ -72,14 +60,13 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Validar formato de hora
+    // Validación de formato de hora
     const timeRegex = /^\d{2}:\d{2}$/;
     if (!timeRegex.test(appointmentTime)) {
-      console.error('❌ Formato de hora inválido');
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Formato de hora inválido. Use HH:MM',
+          error: 'Formato de hora inválido. Use HH:MM'
         }),
         {
           status: 400,
@@ -90,17 +77,14 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Validar que la fecha no esté en el pasado
-    const requestedDate = new Date(appointmentDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (requestedDate < today) {
-      console.error('❌ La fecha está en el pasado');
+    // Validación de fecha futura
+    const appointmentDateTime = new Date(`${appointmentDate}T${appointmentTime}:00`);
+    const now = new Date();
+    if (appointmentDateTime <= now) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'No se puede programar citas para fechas pasadas',
+          error: 'No se pueden programar citas en fechas pasadas'
         }),
         {
           status: 400,
@@ -111,30 +95,39 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    console.log('✅ Todas las validaciones pasaron');
-
-    // Crear instancia del gestor de citas
-    console.log('🔍 Creando gestor de citas...');
-    const appointmentManager = new AppointmentManager();
-
-    // Crear la cita
-    console.log('🚀 Creando cita...');
-    const result = await appointmentManager.createAppointment({
+    const appointmentRequest: CreateAppointmentRequest = {
       clientName,
       clientEmail,
-      clientPhone,
+      serviceType,
       appointmentDate,
       appointmentTime,
-      serviceType,
-      description
-    });
+      notes
+    };
 
-    if (!result.success) {
-      console.error('❌ Error creando cita:', result.error);
+    const appointmentManager = new PostgresAppointmentManager();
+    const result = await appointmentManager.createAppointment(appointmentRequest);
+
+    if (result.success) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Cita creada exitosamente',
+          appointment: result.appointment,
+          details: result.details
+        }),
+        {
+          status: 201,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    } else {
       return new Response(
         JSON.stringify({
           success: false,
-          error: result.error || 'Error creando la cita',
+          error: result.error || 'Error al crear la cita',
+          details: result.details
         }),
         {
           status: 400,
@@ -145,64 +138,13 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    console.log('✅ Cita creada exitosamente');
-    console.log('📅 ID de la cita:', result.appointment?.id);
-    console.log('📅 ID de Google Calendar:', result.googleCalendarEventId);
-    console.log('📧 Email enviado:', result.emailSent);
-    console.log('🔗 Enlace de Meet:', result.meetLink);
-
-    // Cerrar conexiones
-    appointmentManager.close();
-
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Cita creada exitosamente',
-        appointment: {
-          id: result.appointment?.id,
-          clientName: result.appointment?.clientName,
-          clientEmail: result.appointment?.clientEmail,
-          appointmentDate: result.appointment?.appointmentDate,
-          appointmentTime: result.appointment?.appointmentTime,
-          serviceType: result.appointment?.serviceType,
-          status: result.appointment?.status,
-        },
-        googleCalendar: {
-          eventId: result.googleCalendarEventId,
-          meetLink: result.meetLink,
-        },
-        email: {
-          sent: result.emailSent,
-        },
-        summary: {
-          appointmentId: result.appointment?.id,
-          googleCalendarSynced: !!result.googleCalendarEventId,
-          emailSent: result.emailSent,
-          meetLinkAvailable: !!result.meetLink,
-        },
-      }),
-      {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
   } catch (error) {
-    console.error('❌ ===== ERROR EN ENDPOINT DE CREACIÓN DE CITA =====');
-    console.error('❌ Detalles del error:', error);
-    console.error(
-      '❌ Stack del error:',
-      error instanceof Error ? error.stack : 'Sin stack trace'
-    );
-    console.error('🏁 ===== FIN DEL ENDPOINT DE CREACIÓN DE CITA =====');
-
+    console.error('Error in appointment creation endpoint:', error);
     return new Response(
       JSON.stringify({
         success: false,
         error: 'Error interno del servidor',
-        details: error instanceof Error ? error.message : 'Error desconocido',
+        message: error instanceof Error ? error.message : 'Error desconocido'
       }),
       {
         status: 500,
