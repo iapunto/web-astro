@@ -19,6 +19,8 @@ interface DayAvailability {
   availableSlots: number;
   totalSlots: number;
   hasAvailability: boolean;
+  totalEvents: number; // Total de eventos en el día
+  hasReachedLimit: boolean; // Si ya alcanzó el límite de 3 reuniones
 }
 
 class MonthlyAvailabilityService {
@@ -76,22 +78,31 @@ class MonthlyAvailabilityService {
         // Generar horarios base para este día
         const timeSlots = this.generateBaseTimeSlots(dateString);
         
-        // Verificar disponibilidad
-        const availableSlots = timeSlots.filter(slot => {
-          if (isPast || isWeekend) return false;
-          return !this.isSlotBusy(slot.time, busySlots);
-        });
+                 // Verificar disponibilidad
+         const availableSlots = timeSlots.filter(slot => {
+           if (isPast || isWeekend) return false;
+           return !this.isSlotBusy(slot.time, busySlots);
+         });
 
-        daysAvailability.push({
-          date: dateString,
-          dayOfWeek,
-          isWeekend,
-          isPast,
-          isToday,
-          availableSlots: availableSlots.length,
-          totalSlots: timeSlots.length,
-          hasAvailability: availableSlots.length > 0
-        });
+         // Verificar límite de 3 reuniones por día
+         const totalEvents = await this.getTotalEventsForDate(dateString);
+         const hasReachedLimit = totalEvents >= 3;
+         
+         // Si ya hay 3 o más eventos, no hay disponibilidad
+         const finalAvailableSlots = hasReachedLimit ? 0 : availableSlots.length;
+
+                 daysAvailability.push({
+           date: dateString,
+           dayOfWeek,
+           isWeekend,
+           isPast,
+           isToday,
+           availableSlots: finalAvailableSlots,
+           totalSlots: timeSlots.length,
+           hasAvailability: finalAvailableSlots > 0,
+           totalEvents: totalEvents,
+           hasReachedLimit: hasReachedLimit
+         });
       }
 
       console.log(`✅ Disponibilidad mensual obtenida: ${daysAvailability.filter(d => d.hasAvailability).length} días con disponibilidad`);
@@ -163,6 +174,28 @@ class MonthlyAvailabilityService {
     } catch (error) {
       console.error('Error obteniendo horarios ocupados del mes:', error);
       return [];
+    }
+  }
+
+  private async getTotalEventsForDate(date: string): Promise<number> {
+    try {
+      const startOfDay = new Date(`${date}T00:00:00`);
+      const endOfDay = new Date(`${date}T23:59:59`);
+
+      const response = await this.calendar.events.list({
+        calendarId: this.calendarId,
+        timeMin: startOfDay.toISOString(),
+        timeMax: endOfDay.toISOString(),
+        singleEvents: true,
+        orderBy: 'startTime',
+        timeZone: this.timezone
+      });
+
+      const events = response.data.items || [];
+      return events.length;
+    } catch (error) {
+      console.error('Error obteniendo eventos del día:', error);
+      return 0;
     }
   }
 

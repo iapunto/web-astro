@@ -52,6 +52,19 @@ class AvailabilityService {
       console.log(`📅 Slots ocupados encontrados: ${busySlots.length}`);
       console.log(`📅 Detalles de slots ocupados:`, busySlots);
       
+      // Verificar límite de 3 reuniones por día
+      const totalEvents = await this.getTotalEventsForDate(date);
+      console.log(`📊 Total de eventos en el día: ${totalEvents}`);
+      
+      // Si ya hay 3 o más eventos, deshabilitar todo el día
+      if (totalEvents >= 3) {
+        console.log(`🚫 Límite de 3 reuniones alcanzado (${totalEvents} eventos). Día deshabilitado.`);
+        return timeSlots.map(slot => ({
+          ...slot,
+          available: false
+        }));
+      }
+      
       // Marcar slots como disponibles/no disponibles
       const availableSlots = timeSlots.map(slot => {
         const isBusy = this.isSlotBusy(slot.time, busySlots);
@@ -65,6 +78,7 @@ class AvailabilityService {
       const availableCount = availableSlots.filter(s => s.available).length;
       console.log(`✅ Disponibilidad verificada: ${availableCount}/${availableSlots.length} horarios disponibles`);
       console.log(`📋 Horarios disponibles:`, availableSlots.filter(s => s.available).map(s => s.formatted));
+      console.log(`📊 Eventos actuales: ${totalEvents}/3 (límite diario)`);
 
       return availableSlots;
     } catch (error) {
@@ -142,6 +156,35 @@ class AvailabilityService {
     } catch (error) {
       console.error('Error obteniendo horarios ocupados:', error);
       return [];
+    }
+  }
+
+  private async getTotalEventsForDate(date: string): Promise<number> {
+    try {
+      const startOfDay = new Date(`${date}T00:00:00`);
+      const endOfDay = new Date(`${date}T23:59:59`);
+
+      const response = await this.calendar.events.list({
+        calendarId: this.calendarId,
+        timeMin: startOfDay.toISOString(),
+        timeMax: endOfDay.toISOString(),
+        singleEvents: true,
+        orderBy: 'startTime',
+        timeZone: this.timezone
+      });
+
+      const events = response.data.items || [];
+      console.log(`📅 Eventos encontrados para ${date}:`, events.length);
+      
+      // Log de eventos para debugging
+      events.forEach((event, index) => {
+        console.log(`📅 Evento ${index + 1}: ${event.summary} (${event.start?.dateTime || event.start?.date})`);
+      });
+
+      return events.length;
+    } catch (error) {
+      console.error('Error obteniendo eventos del día:', error);
+      return 0;
     }
   }
 
