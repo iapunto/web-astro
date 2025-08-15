@@ -1,0 +1,87 @@
+{
+  "summary": {
+    "total": 9,
+    "fixed": 9,
+    "errors": 0,
+    "tagsFixed": 9,
+    "coversFixed": 4
+  },
+  "results": [
+    {
+      "filename": "alaan-fintech-ia-mena-48m.mdx",
+      "fixed": true,
+      "changes": [
+        "Cover actualizado: https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop",
+        "Tags agregados: IA, Fintech, Startups, Innovación, Tecnología, Negocios, FinTech, Digital"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "apple-ia-chatgpt.mdx",
+      "fixed": true,
+      "changes": [
+        "Cover actualizado: https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
+        "Tags agregados: IA, ChatGPT, Apple, Tecnología, Innovación, Digital, Machine Learning, Generative AI"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "automatiza-tu-marketing-con-ia-guia-definitiva.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Automatización, Marketing Digital, Herramientas, Tecnología, Innovación, Digital, ROI"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "automatizacion-contenido-ia-estrategia-digital.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Automatización, Content Marketing, Estrategia Digital, Tecnología, Innovación, Digital, Herramientas"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "automatizacion-contenido-ia-flujo-completo.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Automatización, Content Marketing, Flujo de Trabajo, Tecnología, Innovación, Digital, Productividad"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "ia-todoterreno-openai.mdx",
+      "fixed": true,
+      "changes": [
+        "Cover actualizado: https://images.unsplash.com/photo-1676299251996-879af6e91c49?w=800&h=600&fit=crop",
+        "Tags agregados: IA, OpenAI, Inteligencia Artificial, Tecnología, Innovación, Digital, Machine Learning, Generative AI"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "trump-ia-silicon-valley.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Silicon Valley, Tecnología, Innovación, Digital, Startups, Negocios, Tendencias"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "vogue-ia-adios-modelos.mdx",
+      "fixed": true,
+      "changes": [
+        "Cover actualizado: https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop",
+        "Tags agregados: IA, Moda, Tecnología, Innovación, Digital, Tendencias, Industria, Transformación Digital"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "zuckerberg-gafas-ia-futuro.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Meta, Zuckerberg, Tecnología, Innovación, Digital, Realidad Virtual, Metaverso"
+      ],
+      "errors": []
+    }
+  ]
+}

@@ -1,0 +1,925 @@
+{
+  "summary": {
+    "totalArticles": 106,
+    "fixedArticles": 9,
+    "failedArticles": 97,
+    "summary": {
+      "tagsAdded": 16,
+      "coversFixed": 4,
+      "errors": 68
+    },
+    "fixedList": [
+      "alaan-fintech-ia-mena-48m.mdx",
+      "apple-ia-chatgpt.mdx",
+      "automatiza-tu-marketing-con-ia-guia-definitiva.mdx",
+      "automatizacion-contenido-ia-estrategia-digital.mdx",
+      "automatizacion-contenido-ia-flujo-completo.mdx",
+      "ia-todoterreno-openai.mdx",
+      "trump-ia-silicon-valley.mdx",
+      "vogue-ia-adios-modelos.mdx",
+      "zuckerberg-gafas-ia-futuro.mdx"
+    ],
+    "failedList": [
+      "5-estrategias-aumentar-ventas.mdx",
+      "aaron-levie-box-disrupt-2025.mdx",
+      "alexa-ia-asistente-familia.mdx",
+      "alternativas-chrome-safari-2025.mdx",
+      "analisis-sentimiento-ia-n8n-sin-codigo.mdx",
+      "anthropic-ficha-humanloop-ia.mdx",
+      "apps-ia-companeras-120m-2025.mdx",
+      "automatiza-sitio-web-rss.mdx",
+      "beneficios-ia-personalizar-experiencia-cliente-local.mdx",
+      "boom-ia-techo-meta-anthropic.mdx",
+      "chatbots-whatsapp-ia-atencion-24-7.mdx",
+      "chatgpt-guia-ia.mdx",
+      "claude-1-gobierno-anthropic-openai.mdx",
+      "clay-100m-3-1b.mdx",
+      "cognition-despidos-windsurf.mdx",
+      "cohere-ia-amd-nvidia-salesforce.mdx",
+      "continua-ia-chats-exgoogle.mdx",
+      "deepmind-genie-3-ia-humana.mdx",
+      "duolingo-ia-ganancias-criticas.mdx",
+      "eeuu-intel-inversion-chips.mdx",
+      "elad-gil-disrupt-2025-futuro-tech.mdx",
+      "elasticsearch-postgres-paradedb-busqueda-ia.mdx",
+      "evafs-marco-ia-punto-experiencias-digitales.mdx",
+      "furiosaai-chips-ia-meta.mdx",
+      "google-finance-ia-noticias.mdx",
+      "google-gemini-estudiar-gratis.mdx",
+      "google-ia-trafico-web-sin-impacto.mdx",
+      "google-notebooklm-ia-estudiar.mdx",
+      "gpt-5-openai-ia-mas-potente.mdx",
+      "grok-4-ia-descargas-dinero.mdx",
+      "grok-x-anuncios.mdx",
+      "guerra-precios-ia-gpt5-openai.mdx",
+      "herramientas-ia-optimizacion-seo-local.mdx",
+      "herramientas-investigacion-mercado-2025.mdx",
+      "ia-ayudar-empresas-competir-seo-local.mdx",
+      "ia-empresas-tendencias-desafios-soluciones.mdx",
+      "ia-ex-googlers-videos-adictivos.mdx",
+      "ia-experiencia-cliente-ecommerce-2025.mdx",
+      "ia-mejora-seo-local-atrae-clientes.mdx",
+      "ia-openai-google-anthropic-agencias-eeuu.mdx",
+      "ia-para-pymes-crecimiento.mdx",
+      "ia-poder-concentrado-costo.mdx",
+      "ia-revoluciona-marketing-contenidos-2025.mdx",
+      "ia-transforma-marketing-facebook-evafs.mdx",
+      "inteligencia-artificial-agresiva-ciencia-revela.mdx",
+      "joelle-pineau-lidera-ia-cohere.mdx",
+      "jules-google-asistente-ia-codigo.mdx",
+      "lava-5-8m-billeteras-digitales.mdx",
+      "lens-ia-escaneos.mdx",
+      "ley-ia-ue-innovacion.mdx",
+      "lior-ron-waabi-camiones-autonomos.mdx",
+      "lovable-supera-100m-arr-8-meses.mdx",
+      "lovable-vibe-coding-1b.mdx",
+      "meta-ai-chats-romanticos-ninos.mdx",
+      "meta-centros-datos-ia.mdx",
+      "meta-waveforms-audio-ia.mdx",
+      "microsoft-openai-windows-gratis.mdx",
+      "modelos-openai-aws.mdx",
+      "multiverse-mini-ia-potente.mdx",
+      "musica-ia-negocio-elevenlabs.mdx",
+      "nasa-google-medico-ia-marte.mdx",
+      "neologic-cpus-ia-eco.mdx",
+      "north-cohere-ia-segura-empresas.mdx",
+      "nvidia-4-billones.mdx",
+      "nvidia-chips-ia-contrabando-china.mdx",
+      "nvidia-h20-licencias-frenadas-eeuu.mdx",
+      "openai-2-nuevos-modelos-ia.mdx",
+      "openai-chatgpt-gobierno-gratis.mdx",
+      "openai-ex-ingeniero-verdad.mdx",
+      "perplexity-cloudflare-polemica.mdx",
+      "perplexity-ofrece-miles-millones-chrome.mdx",
+      "perplexity-truth-social-ai.mdx",
+      "pinterest-ceo-ia-compras-espera.mdx",
+      "pocket-fm-ia-tramas-adictivas.mdx",
+      "que-es-evafs-estrategia-digital.mdx",
+      "quien-gana-auge-ia.mdx",
+      "qwant-ecosia-busqueda-europea-privada.mdx",
+      "renuncia-xai-elon-musk.mdx",
+      "rss-actualizar-blog-web.mdx",
+      "sam-altman-gpt5-problemas-gpt4o.mdx",
+      "sam-altman-openai-vs-neuralink.mdx",
+      "seo-programatico-posicionamiento-ia.mdx",
+      "software-ideal-inversion-2025.mdx",
+      "startups-codigo-ia-costos.mdx",
+      "talento-ia-liga-mayor-tecnologia.mdx",
+      "tavily-ia-web.mdx",
+      "techcrunch-disrupt-2025-ahorra-entrada.mdx",
+      "techcrunch-disrupt-2025-asegura-tu-mesa.mdx",
+      "tesla-dojo-apaga-autoconduccion.mdx",
+      "transformando-ideas-exito-digital.mdx",
+      "trump-aranceles-chips.mdx",
+      "vast-data-ia-30b-google-nvidia.mdx",
+      "vuelos-baratos-google-flights-ia.mdx",
+      "waymo-spotify-robotaxi-musica.mdx",
+      "web-con-rss-contenido-fresco-automatico.mdx",
+      "windsurf-google-reparto-dinero.mdx",
+      "xai-cofundador-musk-se-despide.mdx"
+    ]
+  },
+  "fixes": [
+    {
+      "filename": "5-estrategias-aumentar-ventas.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "aaron-levie-box-disrupt-2025.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "alaan-fintech-ia-mena-48m.mdx",
+      "fixed": true,
+      "changes": [
+        "Cover actualizado: https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
+        "Tags agregados: IA, Fintech, FinTech",
+        "Tags agregados: IA, Fintech, FinTech"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "alexa-ia-asistente-familia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "alternativas-chrome-safari-2025.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "analisis-sentimiento-ia-n8n-sin-codigo.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "anthropic-ficha-humanloop-ia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "apple-ia-chatgpt.mdx",
+      "fixed": true,
+      "changes": [
+        "Cover actualizado: https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
+        "Tags agregados: IA, ChatGPT, Apple, Tecnología, Negocios, ARR, CAC",
+        "Tags agregados: IA, ChatGPT, Apple, Tecnología, Negocios, ARR, CAC"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "apps-ia-companeras-120m-2025.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "automatiza-sitio-web-rss.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "automatiza-tu-marketing-con-ia-guia-definitiva.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Automatización, DeFi",
+        "Tags agregados: IA, Automatización, DeFi"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "automatizacion-contenido-ia-estrategia-digital.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Automatización, ROI, Git",
+        "Tags agregados: IA, Automatización, ROI, Git"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "automatizacion-contenido-ia-flujo-completo.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Automatización, Tecnología, Innovación, Digital",
+        "Tags agregados: IA, Automatización, Tecnología, Innovación, Digital"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "beneficios-ia-personalizar-experiencia-cliente-local.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "boom-ia-techo-meta-anthropic.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "chatbots-whatsapp-ia-atencion-24-7.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "chatgpt-guia-ia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "claude-1-gobierno-anthropic-openai.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "clay-100m-3-1b.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "cognition-despidos-windsurf.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "cohere-ia-amd-nvidia-salesforce.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "continua-ia-chats-exgoogle.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "deepmind-genie-3-ia-humana.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "duolingo-ia-ganancias-criticas.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "eeuu-intel-inversion-chips.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "elad-gil-disrupt-2025-futuro-tech.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "elasticsearch-postgres-paradedb-busqueda-ia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "evafs-marco-ia-punto-experiencias-digitales.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "furiosaai-chips-ia-meta.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "google-finance-ia-noticias.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "google-gemini-estudiar-gratis.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "google-ia-trafico-web-sin-impacto.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "google-notebooklm-ia-estudiar.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "gpt-5-openai-ia-mas-potente.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "grok-4-ia-descargas-dinero.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "grok-x-anuncios.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "guerra-precios-ia-gpt5-openai.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "herramientas-ia-optimizacion-seo-local.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "herramientas-investigacion-mercado-2025.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "ia-ayudar-empresas-competir-seo-local.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "ia-empresas-tendencias-desafios-soluciones.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "ia-ex-googlers-videos-adictivos.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "ia-experiencia-cliente-ecommerce-2025.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "ia-mejora-seo-local-atrae-clientes.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "ia-openai-google-anthropic-agencias-eeuu.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "ia-para-pymes-crecimiento.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "ia-poder-concentrado-costo.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "ia-revoluciona-marketing-contenidos-2025.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "ia-todoterreno-openai.mdx",
+      "fixed": true,
+      "changes": [
+        "Cover actualizado: https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
+        "Tags agregados: IA, Inteligencia Artificial, OpenAI, Automatización, Negocios, DeFi, Agent",
+        "Tags agregados: IA, Inteligencia Artificial, OpenAI, Automatización, Negocios, DeFi, Agent"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "ia-transforma-marketing-facebook-evafs.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "inteligencia-artificial-agresiva-ciencia-revela.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "joelle-pineau-lidera-ia-cohere.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "jules-google-asistente-ia-codigo.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "lava-5-8m-billeteras-digitales.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "lens-ia-escaneos.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "ley-ia-ue-innovacion.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "lior-ron-waabi-camiones-autonomos.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "lovable-supera-100m-arr-8-meses.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "lovable-vibe-coding-1b.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "meta-ai-chats-romanticos-ninos.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "meta-centros-datos-ia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "meta-waveforms-audio-ia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "microsoft-openai-windows-gratis.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "modelos-openai-aws.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "multiverse-mini-ia-potente.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "musica-ia-negocio-elevenlabs.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "nasa-google-medico-ia-marte.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "neologic-cpus-ia-eco.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "north-cohere-ia-segura-empresas.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "nvidia-4-billones.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "nvidia-chips-ia-contrabando-china.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "nvidia-h20-licencias-frenadas-eeuu.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "openai-2-nuevos-modelos-ia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "openai-chatgpt-gobierno-gratis.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "openai-ex-ingeniero-verdad.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "perplexity-cloudflare-polemica.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "perplexity-ofrece-miles-millones-chrome.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "perplexity-truth-social-ai.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "pinterest-ceo-ia-compras-espera.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "pocket-fm-ia-tramas-adictivas.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "que-es-evafs-estrategia-digital.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "quien-gana-auge-ia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "qwant-ecosia-busqueda-europea-privada.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "renuncia-xai-elon-musk.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "rss-actualizar-blog-web.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "sam-altman-gpt5-problemas-gpt4o.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "sam-altman-openai-vs-neuralink.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "seo-programatico-posicionamiento-ia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "software-ideal-inversion-2025.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "startups-codigo-ia-costos.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "talento-ia-liga-mayor-tecnologia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "tavily-ia-web.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "techcrunch-disrupt-2025-ahorra-entrada.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "techcrunch-disrupt-2025-asegura-tu-mesa.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "tesla-dojo-apaga-autoconduccion.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "transformando-ideas-exito-digital.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filename": "trump-aranceles-chips.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "trump-ia-silicon-valley.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Automatización, Tecnología, Innovación, Digital",
+        "Tags agregados: IA, Automatización, Tecnología, Innovación, Digital"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "vast-data-ia-30b-google-nvidia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "vogue-ia-adios-modelos.mdx",
+      "fixed": true,
+      "changes": [
+        "Cover actualizado: https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "vuelos-baratos-google-flights-ia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "waymo-spotify-robotaxi-musica.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "web-con-rss-contenido-fresco-automatico.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "windsurf-google-reparto-dinero.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "xai-cofundador-musk-se-despide.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "zuckerberg-gafas-ia-futuro.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags agregados: IA, Automatización, Tecnología, Innovación, Digital",
+        "Tags agregados: IA, Automatización, Tecnología, Innovación, Digital"
+      ],
+      "errors": []
+    }
+  ]
+}

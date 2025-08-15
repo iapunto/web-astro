@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "totalArticles": 9,
+    "validArticles": 1,
+    "invalidArticles": 8,
+    "articlesWithDuplicateCovers": 0,
+    "summary": {
+      "frontmatterErrors": 0,
+      "dateErrors": 0,
+      "coverErrors": 0,
+      "tagsErrors": 8,
+      "duplicateCovers": 0
+    },
+    "validArticlesList": [
+      "vogue-ia-adios-modelos.mdx"
+    ],
+    "invalidArticlesList": [
+      "alaan-fintech-ia-mena-48m.mdx",
+      "apple-ia-chatgpt.mdx",
+      "automatiza-tu-marketing-con-ia-guia-definitiva.mdx",
+      "automatizacion-contenido-ia-estrategia-digital.mdx",
+      "automatizacion-contenido-ia-flujo-completo.mdx",
+      "ia-todoterreno-openai.mdx",
+      "trump-ia-silicon-valley.mdx",
+      "zuckerberg-gafas-ia-futuro.mdx"
+    ],
+    "duplicateCoversList": []
+  },
+  "validations": [
+    {
+      "filename": "alaan-fintech-ia-mena-48m.mdx",
+      "hasValidFrontmatter": true,
+      "hasValidDate": true,
+      "hasValidCover": true,
+      "coverUrl": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop",
+      "hasValidTags": false,
+      "tagsCount": 0,
+      "isDuplicateCover": false,
+      "duplicateWith": [],
+      "errors": [
+        "Campo tags faltante o inválido"
+      ],
+      "warnings": []
+    },
+    {
+      "filename": "apple-ia-chatgpt.mdx",
+      "hasValidFrontmatter": true,
+      "hasValidDate": true,
+      "hasValidCover": true,
+      "coverUrl": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
+      "hasValidTags": false,
+      "tagsCount": 0,
+      "isDuplicateCover": false,
+      "duplicateWith": [],
+      "errors": [
+        "Campo tags faltante o inválido"
+      ],
+      "warnings": []
+    },
+    {
+      "filename": "automatiza-tu-marketing-con-ia-guia-definitiva.mdx",
+      "hasValidFrontmatter": true,
+      "hasValidDate": true,
+      "hasValidCover": true,
+      "coverUrl": "https://res.cloudinary.com/dkb9jfet8/image/upload/v1755229470/blog-covers/automatiza-tu-marketing-con-ia-la-gua-definitiva-1755229466404.jpg",
+      "hasValidTags": false,
+      "tagsCount": 0,
+      "isDuplicateCover": false,
+      "duplicateWith": [],
+      "errors": [
+        "Campo tags faltante o inválido"
+      ],
+      "warnings": []
+    },
+    {
+      "filename": "automatizacion-contenido-ia-estrategia-digital.mdx",
+      "hasValidFrontmatter": true,
+      "hasValidDate": true,
+      "hasValidCover": true,
+      "coverUrl": "https://res.cloudinary.com/dkb9jfet8/image/upload/v1755222983/unnamed_canyhf.png",
+      "hasValidTags": false,
+      "tagsCount": 0,
+      "isDuplicateCover": false,
+      "duplicateWith": [],
+      "errors": [
+        "Campo tags faltante o inválido"
+      ],
+      "warnings": []
+    },
+    {
+      "filename": "automatizacion-contenido-ia-flujo-completo.mdx",
+      "hasValidFrontmatter": true,
+      "hasValidDate": true,
+      "hasValidCover": true,
+      "coverUrl": "https://res.cloudinary.com/dkb9jfet8/image/upload/v1755219084/blog-covers/ia-marketing-digital-2025-claves-estrategicas-crecer-dominar-mercado-1755219080324.jpg",
+      "hasValidTags": false,
+      "tagsCount": 0,
+      "isDuplicateCover": false,
+      "duplicateWith": [],
+      "errors": [
+        "Campo tags faltante o inválido"
+      ],
+      "warnings": []
+    },
+    {
+      "filename": "ia-todoterreno-openai.mdx",
+      "hasValidFrontmatter": true,
+      "hasValidDate": true,
+      "hasValidCover": true,
+      "coverUrl": "https://images.unsplash.com/photo-1676299251996-879af6e91c49?w=800&h=600&fit=crop",
+      "hasValidTags": false,
+      "tagsCount": 0,
+      "isDuplicateCover": false,
+      "duplicateWith": [],
+      "errors": [
+        "Campo tags faltante o inválido"
+      ],
+      "warnings": []
+    },
+    {
+      "filename": "trump-ia-silicon-valley.mdx",
+      "hasValidFrontmatter": true,
+      "hasValidDate": true,
+      "hasValidCover": true,
+      "coverUrl": "https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2224983065-e1753313001258.jpg",
+      "hasValidTags": false,
+      "tagsCount": 0,
+      "isDuplicateCover": false,
+      "duplicateWith": [],
+      "errors": [
+        "Campo tags faltante o inválido"
+      ],
+      "warnings": []
+    },
+    {
+      "filename": "vogue-ia-adios-modelos.mdx",
+      "hasValidFrontmatter": true,
+      "hasValidDate": true,
+      "hasValidCover": true,
+      "coverUrl": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop",
+      "hasValidTags": true,
+      "tagsCount": 6,
+      "isDuplicateCover": false,
+      "duplicateWith": [],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "filename": "zuckerberg-gafas-ia-futuro.mdx",
+      "hasValidFrontmatter": true,
+      "hasValidDate": true,
+      "hasValidCover": true,
+      "coverUrl": "https://techcrunch.com/wp-content/uploads/2024/09/zuck-meta.png?w=1024",
+      "hasValidTags": false,
+      "tagsCount": 0,
+      "isDuplicateCover": false,
+      "duplicateWith": [],
+      "errors": [
+        "Campo tags faltante o inválido"
+      ],
+      "warnings": []
+    }
+  ]
+}

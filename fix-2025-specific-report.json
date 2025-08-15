@@ -1,0 +1,116 @@
+{
+  "summary": {
+    "totalArticles": 10,
+    "fixedArticles": 8,
+    "failedArticles": 2,
+    "summary": {
+      "tagsFixed": 8,
+      "coversFixed": 0,
+      "errors": 2
+    },
+    "fixedList": [
+      "alaan-fintech-ia-mena-48m.mdx",
+      "apple-ia-chatgpt.mdx",
+      "automatiza-tu-marketing-con-ia-guia-definitiva.mdx",
+      "automatizacion-contenido-ia-estrategia-digital.mdx",
+      "automatizacion-contenido-ia-flujo-completo.mdx",
+      "ia-todoterreno-openai.mdx",
+      "trump-ia-silicon-valley.mdx",
+      "zuckerberg-gafas-ia-futuro.mdx"
+    ],
+    "failedList": [
+      "vast-data-ia-30b-google-nvidia.mdx",
+      "windsurf-google-reparto-dinero.mdx"
+    ]
+  },
+  "fixes": [
+    {
+      "filename": "alaan-fintech-ia-mena-48m.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags corregidos: IA, Fintech, FinTech",
+        "Tags corregidos: IA, Fintech, FinTech"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "apple-ia-chatgpt.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags corregidos: IA, ChatGPT, Apple, Tecnología, Negocios, ARR, CAC",
+        "Tags corregidos: IA, ChatGPT, Apple, Tecnología, Negocios, ARR, CAC"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "automatiza-tu-marketing-con-ia-guia-definitiva.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags corregidos: IA, Automatización, DeFi",
+        "Tags corregidos: IA, Automatización, DeFi"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "automatizacion-contenido-ia-estrategia-digital.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags corregidos: IA, Automatización, ROI, Git",
+        "Tags corregidos: IA, Automatización, ROI, Git"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "automatizacion-contenido-ia-flujo-completo.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags corregidos: IA, Automatización, Tecnología, Innovación, Digital",
+        "Tags corregidos: IA, Automatización, Tecnología, Innovación, Digital"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "ia-todoterreno-openai.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags corregidos: IA, Inteligencia Artificial, OpenAI, Automatización, Negocios, DeFi, Agent",
+        "Tags corregidos: IA, Inteligencia Artificial, OpenAI, Automatización, Negocios, DeFi, Agent"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "trump-ia-silicon-valley.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags corregidos: IA, Automatización, Tecnología, Innovación, Digital",
+        "Tags corregidos: IA, Automatización, Tecnología, Innovación, Digital"
+      ],
+      "errors": []
+    },
+    {
+      "filename": "vast-data-ia-30b-google-nvidia.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "windsurf-google-reparto-dinero.mdx",
+      "fixed": false,
+      "changes": [],
+      "errors": [
+        "No se puede parsear el frontmatter"
+      ]
+    },
+    {
+      "filename": "zuckerberg-gafas-ia-futuro.mdx",
+      "fixed": true,
+      "changes": [
+        "Tags corregidos: IA, Automatización, Tecnología, Innovación, Digital",
+        "Tags corregidos: IA, Automatización, Tecnología, Innovación, Digital"
+      ],
+      "errors": []
+    }
+  ]
+}
