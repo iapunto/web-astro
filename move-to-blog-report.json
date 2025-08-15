@@ -1,0 +1,451 @@
+{
+  "summary": {
+    "total": 88,
+    "successful": 88,
+    "failed": 0,
+    "validated": 88
+  },
+  "successful": [
+    {
+      "filename": "7-de-10-jovenes-eeuu-ia-companeros.mdx",
+      "originalPath": "articulos-no-aprobados\\7-de-10-jovenes-eeuu-ia-companeros.mdx",
+      "destinationPath": "src\\content\\blog\\7-de-10-jovenes-eeuu-ia-companeros.mdx"
+    },
+    {
+      "filename": "altman-chatgpt-terapia-sin-confidencialidad.mdx",
+      "originalPath": "articulos-no-aprobados\\altman-chatgpt-terapia-sin-confidencialidad.mdx",
+      "destinationPath": "src\\content\\blog\\altman-chatgpt-terapia-sin-confidencialidad.mdx"
+    },
+    {
+      "filename": "amazon-alexa-anuncios.mdx",
+      "originalPath": "articulos-no-aprobados\\amazon-alexa-anuncios.mdx",
+      "destinationPath": "src\\content\\blog\\amazon-alexa-anuncios.mdx"
+    },
+    {
+      "filename": "ambiq-debut-bursatil.mdx",
+      "originalPath": "articulos-no-aprobados\\ambiq-debut-bursatil.mdx",
+      "destinationPath": "src\\content\\blog\\ambiq-debut-bursatil.mdx"
+    },
+    {
+      "filename": "amor-ia-fin-o-comienzo.mdx",
+      "originalPath": "articulos-no-aprobados\\amor-ia-fin-o-comienzo.mdx",
+      "destinationPath": "src\\content\\blog\\amor-ia-fin-o-comienzo.mdx"
+    },
+    {
+      "filename": "anthropic-ia-empresarial-supera-openai.mdx",
+      "originalPath": "articulos-no-aprobados\\anthropic-ia-empresarial-supera-openai.mdx",
+      "destinationPath": "src\\content\\blog\\anthropic-ia-empresarial-supera-openai.mdx"
+    },
+    {
+      "filename": "anthropic-valor-170b.mdx",
+      "originalPath": "articulos-no-aprobados\\anthropic-valor-170b.mdx",
+      "destinationPath": "src\\content\\blog\\anthropic-valor-170b.mdx"
+    },
+    {
+      "filename": "apple-ia-inversion.mdx",
+      "originalPath": "articulos-no-aprobados\\apple-ia-inversion.mdx",
+      "destinationPath": "src\\content\\blog\\apple-ia-inversion.mdx"
+    },
+    {
+      "filename": "chatgpt-2-5-mil-millones-preguntas-diarias.mdx",
+      "originalPath": "articulos-no-aprobados\\chatgpt-2-5-mil-millones-preguntas-diarias.mdx",
+      "destinationPath": "src\\content\\blog\\chatgpt-2-5-mil-millones-preguntas-diarias.mdx"
+    },
+    {
+      "filename": "chatgpt-chatbot-ia-guia.mdx",
+      "originalPath": "articulos-no-aprobados\\chatgpt-chatbot-ia-guia.mdx",
+      "destinationPath": "src\\content\\blog\\chatgpt-chatbot-ia-guia.mdx"
+    },
+    {
+      "filename": "chatgpt-modo-estudio-aprende-pensar.mdx",
+      "originalPath": "articulos-no-aprobados\\chatgpt-modo-estudio-aprende-pensar.mdx",
+      "destinationPath": "src\\content\\blog\\chatgpt-modo-estudio-aprende-pensar.mdx"
+    },
+    {
+      "filename": "chats-publicos-chatgpt-google.mdx",
+      "originalPath": "articulos-no-aprobados\\chats-publicos-chatgpt-google.mdx",
+      "destinationPath": "src\\content\\blog\\chats-publicos-chatgpt-google.mdx"
+    },
+    {
+      "filename": "chrome-ia-compras.mdx",
+      "originalPath": "articulos-no-aprobados\\chrome-ia-compras.mdx",
+      "destinationPath": "src\\content\\blog\\chrome-ia-compras.mdx"
+    },
+    {
+      "filename": "claude-code-anthropic-exigentes.mdx",
+      "originalPath": "articulos-no-aprobados\\claude-code-anthropic-exigentes.mdx",
+      "destinationPath": "src\\content\\blog\\claude-code-anthropic-exigentes.mdx"
+    },
+    {
+      "filename": "coches-autonomos-tekedra-mawakana-waymo.mdx",
+      "originalPath": "articulos-no-aprobados\\coches-autonomos-tekedra-mawakana-waymo.mdx",
+      "destinationPath": "src\\content\\blog\\coches-autonomos-tekedra-mawakana-waymo.mdx"
+    },
+    {
+      "filename": "cofundador-tech-dispo-acero.mdx",
+      "originalPath": "articulos-no-aprobados\\cofundador-tech-dispo-acero.mdx",
+      "destinationPath": "src\\content\\blog\\cofundador-tech-dispo-acero.mdx"
+    },
+    {
+      "filename": "cognition-windsurf-equipo-google.mdx",
+      "originalPath": "articulos-no-aprobados\\cognition-windsurf-equipo-google.mdx",
+      "destinationPath": "src\\content\\blog\\cognition-windsurf-equipo-google.mdx"
+    },
+    {
+      "filename": "doge-ia-corta-regulaciones.mdx",
+      "originalPath": "articulos-no-aprobados\\doge-ia-corta-regulaciones.mdx",
+      "destinationPath": "src\\content\\blog\\doge-ia-corta-regulaciones.mdx"
+    },
+    {
+      "filename": "ethan-thornton-ia-defensa-disrupt-2025.mdx",
+      "originalPath": "articulos-no-aprobados\\ethan-thornton-ia-defensa-disrupt-2025.mdx",
+      "destinationPath": "src\\content\\blog\\ethan-thornton-ia-defensa-disrupt-2025.mdx"
+    },
+    {
+      "filename": "fotos-youtube-shorts-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\fotos-youtube-shorts-ia.mdx",
+      "destinationPath": "src\\content\\blog\\fotos-youtube-shorts-ia.mdx"
+    },
+    {
+      "filename": "frl-ia-juegos-trabajo.mdx",
+      "originalPath": "articulos-no-aprobados\\frl-ia-juegos-trabajo.mdx",
+      "destinationPath": "src\\content\\blog\\frl-ia-juegos-trabajo.mdx"
+    },
+    {
+      "filename": "github-copilot-20-millones-programadores.mdx",
+      "originalPath": "articulos-no-aprobados\\github-copilot-20-millones-programadores.mdx",
+      "destinationPath": "src\\content\\blog\\github-copilot-20-millones-programadores.mdx"
+    },
+    {
+      "filename": "google-adivina-edad-ia-eeuu.mdx",
+      "originalPath": "articulos-no-aprobados\\google-adivina-edad-ia-eeuu.mdx",
+      "destinationPath": "src\\content\\blog\\google-adivina-edad-ia-eeuu.mdx"
+    },
+    {
+      "filename": "google-ai-prueba-virtual.mdx",
+      "originalPath": "articulos-no-aprobados\\google-ai-prueba-virtual.mdx",
+      "destinationPath": "src\\content\\blog\\google-ai-prueba-virtual.mdx"
+    },
+    {
+      "filename": "google-discover-ia-visitas.mdx",
+      "originalPath": "articulos-no-aprobados\\google-discover-ia-visitas.mdx",
+      "destinationPath": "src\\content\\blog\\google-discover-ia-visitas.mdx"
+    },
+    {
+      "filename": "google-fotos-ia-videos-estilos.mdx",
+      "originalPath": "articulos-no-aprobados\\google-fotos-ia-videos-estilos.mdx",
+      "destinationPath": "src\\content\\blog\\google-fotos-ia-videos-estilos.mdx"
+    },
+    {
+      "filename": "google-gemini-deep-think-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\google-gemini-deep-think-ia.mdx",
+      "destinationPath": "src\\content\\blog\\google-gemini-deep-think-ia.mdx"
+    },
+    {
+      "filename": "google-ia-canvas-actualiza.mdx",
+      "originalPath": "articulos-no-aprobados\\google-ia-canvas-actualiza.mdx",
+      "destinationPath": "src\\content\\blog\\google-ia-canvas-actualiza.mdx"
+    },
+    {
+      "filename": "google-ia-ordenar-busquedas.mdx",
+      "originalPath": "articulos-no-aprobados\\google-ia-ordenar-busquedas.mdx",
+      "destinationPath": "src\\content\\blog\\google-ia-ordenar-busquedas.mdx"
+    },
+    {
+      "filename": "google-ia-responsable-ue.mdx",
+      "originalPath": "articulos-no-aprobados\\google-ia-responsable-ue.mdx",
+      "destinationPath": "src\\content\\blog\\google-ia-responsable-ue.mdx"
+    },
+    {
+      "filename": "google-notebooklm-videos.mdx",
+      "originalPath": "articulos-no-aprobados\\google-notebooklm-videos.mdx",
+      "destinationPath": "src\\content\\blog\\google-notebooklm-videos.mdx"
+    },
+    {
+      "filename": "google-opal-crear-web-apps.mdx",
+      "originalPath": "articulos-no-aprobados\\google-opal-crear-web-apps.mdx",
+      "destinationPath": "src\\content\\blog\\google-opal-crear-web-apps.mdx"
+    },
+    {
+      "filename": "google-stan-gaming-social.mdx",
+      "originalPath": "articulos-no-aprobados\\google-stan-gaming-social.mdx",
+      "destinationPath": "src\\content\\blog\\google-stan-gaming-social.mdx"
+    },
+    {
+      "filename": "grok-4-xai-control.mdx",
+      "originalPath": "articulos-no-aprobados\\grok-4-xai-control.mdx",
+      "destinationPath": "src\\content\\blog\\grok-4-xai-control.mdx"
+    },
+    {
+      "filename": "grok-ia-amor-caos.mdx",
+      "originalPath": "articulos-no-aprobados\\grok-ia-amor-caos.mdx",
+      "destinationPath": "src\\content\\blog\\grok-ia-amor-caos.mdx"
+    },
+    {
+      "filename": "grok-ia-gotica-anime.mdx",
+      "originalPath": "articulos-no-aprobados\\grok-ia-gotica-anime.mdx",
+      "destinationPath": "src\\content\\blog\\grok-ia-gotica-anime.mdx"
+    },
+    {
+      "filename": "groq-6b-chips-ia-vs-nvidia.mdx",
+      "originalPath": "articulos-no-aprobados\\groq-6b-chips-ia-vs-nvidia.mdx",
+      "destinationPath": "src\\content\\blog\\groq-6b-chips-ia-vs-nvidia.mdx"
+    },
+    {
+      "filename": "harmonic-ai-robinhood-chatbot.mdx",
+      "originalPath": "articulos-no-aprobados\\harmonic-ai-robinhood-chatbot.mdx",
+      "destinationPath": "src\\content\\blog\\harmonic-ai-robinhood-chatbot.mdx"
+    },
+    {
+      "filename": "ia-boom-visitas-web.mdx",
+      "originalPath": "articulos-no-aprobados\\ia-boom-visitas-web.mdx",
+      "destinationPath": "src\\content\\blog\\ia-boom-visitas-web.mdx"
+    },
+    {
+      "filename": "ia-diseno-proteinas-facil.mdx",
+      "originalPath": "articulos-no-aprobados\\ia-diseno-proteinas-facil.mdx",
+      "destinationPath": "src\\content\\blog\\ia-diseno-proteinas-facil.mdx"
+    },
+    {
+      "filename": "ia-marketing-berkeley-28m.mdx",
+      "originalPath": "articulos-no-aprobados\\ia-marketing-berkeley-28m.mdx",
+      "destinationPath": "src\\content\\blog\\ia-marketing-berkeley-28m.mdx"
+    },
+    {
+      "filename": "ia-mates-google-openai.mdx",
+      "originalPath": "articulos-no-aprobados\\ia-mates-google-openai.mdx",
+      "destinationPath": "src\\content\\blog\\ia-mates-google-openai.mdx"
+    },
+    {
+      "filename": "ia-reportes-falsos-bug-bounties.mdx",
+      "originalPath": "articulos-no-aprobados\\ia-reportes-falsos-bug-bounties.mdx",
+      "destinationPath": "src\\content\\blog\\ia-reportes-falsos-bug-bounties.mdx"
+    },
+    {
+      "filename": "ia-techcrunch-disrupt-2025.mdx",
+      "originalPath": "articulos-no-aprobados\\ia-techcrunch-disrupt-2025.mdx",
+      "destinationPath": "src\\content\\blog\\ia-techcrunch-disrupt-2025.mdx"
+    },
+    {
+      "filename": "ia-trump-anti-woke-tecnologia.mdx",
+      "originalPath": "articulos-no-aprobados\\ia-trump-anti-woke-tecnologia.mdx",
+      "destinationPath": "src\\content\\blog\\ia-trump-anti-woke-tecnologia.mdx"
+    },
+    {
+      "filename": "iconfactory-venta-apps-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\iconfactory-venta-apps-ia.mdx",
+      "destinationPath": "src\\content\\blog\\iconfactory-venta-apps-ia.mdx"
+    },
+    {
+      "filename": "intel-freno-fabricas-chips.mdx",
+      "originalPath": "articulos-no-aprobados\\intel-freno-fabricas-chips.mdx",
+      "destinationPath": "src\\content\\blog\\intel-freno-fabricas-chips.mdx"
+    },
+    {
+      "filename": "julius-ai-asegura-10m.mdx",
+      "originalPath": "articulos-no-aprobados\\julius-ai-asegura-10m.mdx",
+      "destinationPath": "src\\content\\blog\\julius-ai-asegura-10m.mdx"
+    },
+    {
+      "filename": "k-prize-ia-codificacion.mdx",
+      "originalPath": "articulos-no-aprobados\\k-prize-ia-codificacion.mdx",
+      "destinationPath": "src\\content\\blog\\k-prize-ia-codificacion.mdx"
+    },
+    {
+      "filename": "lauren-kolodny-ia-herencias.mdx",
+      "originalPath": "articulos-no-aprobados\\lauren-kolodny-ia-herencias.mdx",
+      "destinationPath": "src\\content\\blog\\lauren-kolodny-ia-herencias.mdx"
+    },
+    {
+      "filename": "legalon-ia-tramites-legales.mdx",
+      "originalPath": "articulos-no-aprobados\\legalon-ia-tramites-legales.mdx",
+      "destinationPath": "src\\content\\blog\\legalon-ia-tramites-legales.mdx"
+    },
+    {
+      "filename": "luma-runway-robotica-oro.mdx",
+      "originalPath": "articulos-no-aprobados\\luma-runway-robotica-oro.mdx",
+      "destinationPath": "src\\content\\blog\\luma-runway-robotica-oro.mdx"
+    },
+    {
+      "filename": "mago-oz-esfera-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\mago-oz-esfera-ia.mdx",
+      "destinationPath": "src\\content\\blog\\mago-oz-esfera-ia.mdx"
+    },
+    {
+      "filename": "malasia-chips-ia-eeuu-permisos.mdx",
+      "originalPath": "articulos-no-aprobados\\malasia-chips-ia-eeuu-permisos.mdx",
+      "destinationPath": "src\\content\\blog\\malasia-chips-ia-eeuu-permisos.mdx"
+    },
+    {
+      "filename": "mercado-chips-eeuu-2025.mdx",
+      "originalPath": "articulos-no-aprobados\\mercado-chips-eeuu-2025.mdx",
+      "destinationPath": "src\\content\\blog\\mercado-chips-eeuu-2025.mdx"
+    },
+    {
+      "filename": "meta-corrige-privacidad-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\meta-corrige-privacidad-ia.mdx",
+      "destinationPath": "src\\content\\blog\\meta-corrige-privacidad-ia.mdx"
+    },
+    {
+      "filename": "meta-facebook-contenido-copiado.mdx",
+      "originalPath": "articulos-no-aprobados\\meta-facebook-contenido-copiado.mdx",
+      "destinationPath": "src\\content\\blog\\meta-facebook-contenido-copiado.mdx"
+    },
+    {
+      "filename": "meta-ficha-openai-superinteligente.mdx",
+      "originalPath": "articulos-no-aprobados\\meta-ficha-openai-superinteligente.mdx",
+      "destinationPath": "src\\content\\blog\\meta-ficha-openai-superinteligente.mdx"
+    },
+    {
+      "filename": "meta-ia-adios-apertura.mdx",
+      "originalPath": "articulos-no-aprobados\\meta-ia-adios-apertura.mdx",
+      "destinationPath": "src\\content\\blog\\meta-ia-adios-apertura.mdx"
+    },
+    {
+      "filename": "meta-ia-infraestructura-72b-2025.mdx",
+      "originalPath": "articulos-no-aprobados\\meta-ia-infraestructura-72b-2025.mdx",
+      "destinationPath": "src\\content\\blog\\meta-ia-infraestructura-72b-2025.mdx"
+    },
+    {
+      "filename": "meta-ia-zuckerberg.mdx",
+      "originalPath": "articulos-no-aprobados\\meta-ia-zuckerberg.mdx",
+      "destinationPath": "src\\content\\blog\\meta-ia-zuckerberg.mdx"
+    },
+    {
+      "filename": "microsoft-edge-ia-copilot.mdx",
+      "originalPath": "articulos-no-aprobados\\microsoft-edge-ia-copilot.mdx",
+      "destinationPath": "src\\content\\blog\\microsoft-edge-ia-copilot.mdx"
+    },
+    {
+      "filename": "microsoft-openai-ia-mas-alla-agi.mdx",
+      "originalPath": "articulos-no-aprobados\\microsoft-openai-ia-mas-alla-agi.mdx",
+      "destinationPath": "src\\content\\blog\\microsoft-openai-ia-mas-alla-agi.mdx"
+    },
+    {
+      "filename": "mira-murati-ia-12-mil-millones.mdx",
+      "originalPath": "articulos-no-aprobados\\mira-murati-ia-12-mil-millones.mdx",
+      "destinationPath": "src\\content\\blog\\mira-murati-ia-12-mil-millones.mdx"
+    },
+    {
+      "filename": "mistral-voxtral-ia-abierta.mdx",
+      "originalPath": "articulos-no-aprobados\\mistral-voxtral-ia-abierta.mdx",
+      "destinationPath": "src\\content\\blog\\mistral-voxtral-ia-abierta.mdx"
+    },
+    {
+      "filename": "nextdoor-ia-alertas.mdx",
+      "originalPath": "articulos-no-aprobados\\nextdoor-ia-alertas.mdx",
+      "destinationPath": "src\\content\\blog\\nextdoor-ia-alertas.mdx"
+    },
+    {
+      "filename": "nvidia-china-luz-verde-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\nvidia-china-luz-verde-ia.mdx",
+      "destinationPath": "src\\content\\blog\\nvidia-china-luz-verde-ia.mdx"
+    },
+    {
+      "filename": "nvidia-chips-china-ai.mdx",
+      "originalPath": "articulos-no-aprobados\\nvidia-chips-china-ai.mdx",
+      "destinationPath": "src\\content\\blog\\nvidia-chips-china-ai.mdx"
+    },
+    {
+      "filename": "observabilidad-apache-iceberg.mdx",
+      "originalPath": "articulos-no-aprobados\\observabilidad-apache-iceberg.mdx",
+      "destinationPath": "src\\content\\blog\\observabilidad-apache-iceberg.mdx"
+    },
+    {
+      "filename": "openai-noruega-centro-ia-europa.mdx",
+      "originalPath": "articulos-no-aprobados\\openai-noruega-centro-ia-europa.mdx",
+      "destinationPath": "src\\content\\blog\\openai-noruega-centro-ia-europa.mdx"
+    },
+    {
+      "filename": "openai-valoracion-300b.mdx",
+      "originalPath": "articulos-no-aprobados\\openai-valoracion-300b.mdx",
+      "destinationPath": "src\\content\\blog\\openai-valoracion-300b.mdx"
+    },
+    {
+      "filename": "pichai-google-cloud-openai-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\pichai-google-cloud-openai-ia.mdx",
+      "destinationPath": "src\\content\\blog\\pichai-google-cloud-openai-ia.mdx"
+    },
+    {
+      "filename": "playerzero-15m-ia-codigo-sin-errores.mdx",
+      "originalPath": "articulos-no-aprobados\\playerzero-15m-ia-codigo-sin-errores.mdx",
+      "destinationPath": "src\\content\\blog\\playerzero-15m-ia-codigo-sin-errores.mdx"
+    },
+    {
+      "filename": "poe-quora-api-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\poe-quora-api-ia.mdx",
+      "destinationPath": "src\\content\\blog\\poe-quora-api-ia.mdx"
+    },
+    {
+      "filename": "proton-lumo-ia-privacidad.mdx",
+      "originalPath": "articulos-no-aprobados\\proton-lumo-ia-privacidad.mdx",
+      "destinationPath": "src\\content\\blog\\proton-lumo-ia-privacidad.mdx"
+    },
+    {
+      "filename": "reddit-ia-anuncios-ganancias.mdx",
+      "originalPath": "articulos-no-aprobados\\reddit-ia-anuncios-ganancias.mdx",
+      "destinationPath": "src\\content\\blog\\reddit-ia-anuncios-ganancias.mdx"
+    },
+    {
+      "filename": "samsung-ia-analiza-videos.mdx",
+      "originalPath": "articulos-no-aprobados\\samsung-ia-analiza-videos.mdx",
+      "destinationPath": "src\\content\\blog\\samsung-ia-analiza-videos.mdx"
+    },
+    {
+      "filename": "sixsense-ia-recauda-8-5m-chips.mdx",
+      "originalPath": "articulos-no-aprobados\\sixsense-ia-recauda-8-5m-chips.mdx",
+      "destinationPath": "src\\content\\blog\\sixsense-ia-recauda-8-5m-chips.mdx"
+    },
+    {
+      "filename": "spotify-ia-conversacional.mdx",
+      "originalPath": "articulos-no-aprobados\\spotify-ia-conversacional.mdx",
+      "destinationPath": "src\\content\\blog\\spotify-ia-conversacional.mdx"
+    },
+    {
+      "filename": "startup-ia-no-compran.mdx",
+      "originalPath": "articulos-no-aprobados\\startup-ia-no-compran.mdx",
+      "destinationPath": "src\\content\\blog\\startup-ia-no-compran.mdx"
+    },
+    {
+      "filename": "techcrunch-all-stage-boston-startup.mdx",
+      "originalPath": "articulos-no-aprobados\\techcrunch-all-stage-boston-startup.mdx",
+      "destinationPath": "src\\content\\blog\\techcrunch-all-stage-boston-startup.mdx"
+    },
+    {
+      "filename": "tesla-optimus-no-cumple-meta.mdx",
+      "originalPath": "articulos-no-aprobados\\tesla-optimus-no-cumple-meta.mdx",
+      "destinationPath": "src\\content\\blog\\tesla-optimus-no-cumple-meta.mdx"
+    },
+    {
+      "filename": "tesla-samsung-chips-ia-165b.mdx",
+      "originalPath": "articulos-no-aprobados\\tesla-samsung-chips-ia-165b.mdx",
+      "destinationPath": "src\\content\\blog\\tesla-samsung-chips-ia-165b.mdx"
+    },
+    {
+      "filename": "trabajar-openai-ex-ingeniero.mdx",
+      "originalPath": "articulos-no-aprobados\\trabajar-openai-ex-ingeniero.mdx",
+      "destinationPath": "src\\content\\blog\\trabajar-openai-ex-ingeniero.mdx"
+    },
+    {
+      "filename": "trump-chips-china-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\trump-chips-china-ia.mdx",
+      "destinationPath": "src\\content\\blog\\trump-chips-china-ia.mdx"
+    },
+    {
+      "filename": "trump-ia-plan.mdx",
+      "originalPath": "articulos-no-aprobados\\trump-ia-plan.mdx",
+      "destinationPath": "src\\content\\blog\\trump-ia-plan.mdx"
+    },
+    {
+      "filename": "trump-ia-reglas-china.mdx",
+      "originalPath": "articulos-no-aprobados\\trump-ia-reglas-china.mdx",
+      "destinationPath": "src\\content\\blog\\trump-ia-reglas-china.mdx"
+    },
+    {
+      "filename": "vigilar-ia.mdx",
+      "originalPath": "articulos-no-aprobados\\vigilar-ia.mdx",
+      "destinationPath": "src\\content\\blog\\vigilar-ia.mdx"
+    }
+  ],
+  "failed": []
+}
