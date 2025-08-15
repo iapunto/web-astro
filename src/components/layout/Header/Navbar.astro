@@ -27,11 +27,27 @@ import Button from '../../common/Button.astro';
         </li>
         <!-- Buscador global (desktop) -->
         <li class="relative">
-          <form method="get" action="/search" class="searchbar-desktop flex items-center" role="search" aria-label="Buscar en todo el sitio">
-            <button type="button" id="search-toggle-btn" class="group bg-transparent p-2 rounded-full hover:bg-gray-100 transition flex items-center focus:outline-none" aria-label="Mostrar buscador">
-              <svg class="w-5 h-5 stroke-gray-500 group-hover:stroke-primary-600 transition-colors" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          <form
+            method="get"
+            action="/search"
+            class="searchbar-desktop flex items-center"
+            role="search"
+            aria-label="Buscar en todo el sitio"
+          >
+            <button
+              type="button"
+              id="search-toggle-btn"
+              class="group bg-transparent p-2 rounded-full hover:bg-gray-100 transition flex items-center focus:outline-none"
+              aria-label="Mostrar buscador"
+            >
+              <svg
+                class="w-5 h-5 stroke-gray-500 group-hover:stroke-primary-600 transition-colors"
+                fill="none"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
             </button>
             <input
@@ -44,18 +60,30 @@ import Button from '../../common/Button.astro';
               aria-label="Buscar en todo el sitio"
               style="min-width: 220px;"
             />
-            <button type="submit" class="searchbar-submit hidden absolute right-0 top-0 bg-primary-600 text-white px-3 py-1 rounded hover:bg-primary-700 transition ml-2" aria-label="Buscar">
+            <button
+              type="submit"
+              class="searchbar-submit hidden absolute right-0 top-0 bg-primary-600 text-white px-3 py-1 rounded hover:bg-primary-700 transition ml-2"
+              aria-label="Buscar"
+            >
               Buscar
             </button>
           </form>
         </li>
         <li>
-          <Button text="Agenda una Reunión" id="open-wizard-btn-nav" variant="primary" />
+          <Button
+            text="Agenda una Reunión"
+            id="open-wizard-btn-nav"
+            variant="primary"
+          />
         </li>
       </ul>
 
       <!-- Botón hamburguesa (mobile) -->
-      <button id="menu-toggle" class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none" aria-label="Abrir menú">
+      <button
+        id="menu-toggle"
+        class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none"
+        aria-label="Abrir menú"
+      >
         <span class="block w-6 h-0.5 bg-gray-800 mb-1"></span>
         <span class="block w-6 h-0.5 bg-gray-800 mb-1"></span>
         <span class="block w-6 h-0.5 bg-gray-800"></span>
@@ -63,13 +91,26 @@ import Button from '../../common/Button.astro';
     </div>
   </div>
   <!-- Menú móvil -->
-  <div id="mobile-menu" class="md:hidden fixed top-0 left-0 w-full h-full bg-white z-40 flex flex-col items-center justify-center transition-transform duration-300 translate-x-full">
-    <button id="menu-close" class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center" aria-label="Cerrar menú">
+  <div
+    id="mobile-menu"
+    class="md:hidden fixed top-0 left-0 w-full h-full bg-white z-40 flex flex-col items-center justify-center transition-transform duration-300 translate-x-full"
+  >
+    <button
+      id="menu-close"
+      class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center"
+      aria-label="Cerrar menú"
+    >
       <span class="block w-6 h-0.5 bg-gray-800 rotate-45 absolute"></span>
       <span class="block w-6 h-0.5 bg-gray-800 -rotate-45 absolute"></span>
     </button>
     <!-- Buscador global (mobile) -->
-    <form method="get" action="/search" class="w-4/5 mb-8 flex items-center" role="search" aria-label="Buscar en todo el sitio">
+    <form
+      method="get"
+      action="/search"
+      class="w-4/5 mb-8 flex items-center"
+      role="search"
+      aria-label="Buscar en todo el sitio"
+    >
       <input
         type="text"
         name="q"
@@ -78,32 +119,72 @@ import Button from '../../common/Button.astro';
         autocomplete="off"
         aria-label="Buscar en todo el sitio"
       />
-      <button type="submit" class="group bg-primary-600 text-white px-3 py-2 rounded-r hover:bg-primary-700 transition flex items-center" aria-label="Buscar">
-        <svg class="w-5 h-5 stroke-gray-500 group-hover:stroke-primary-600 transition-colors" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      <button
+        type="submit"
+        class="group bg-primary-600 text-white px-3 py-2 rounded-r hover:bg-primary-700 transition flex items-center"
+        aria-label="Buscar"
+      >
+        <svg
+          class="w-5 h-5 stroke-gray-500 group-hover:stroke-primary-600 transition-colors"
+          fill="none"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </button>
     </form>
-    <ul class="flex flex-col items-center space-y-8 text-2xl font-semibold mt-16">
+    <ul
+      class="flex flex-col items-center space-y-8 text-2xl font-semibold mt-16"
+    >
       <li><NavLink href="/acerca-de" text="LA AGENCIA" /></li>
       <li class="relative w-full flex flex-col items-center">
-        <button id="mobile-services-toggle" class="tracking-widest uppercase text-[15px] text-gray-600 hover:text-primary transition-colors duration-300 font-normal flex items-center focus:outline-none">
+        <button
+          id="mobile-services-toggle"
+          class="tracking-widest uppercase text-[15px] text-gray-600 hover:text-primary transition-colors duration-300 font-normal flex items-center focus:outline-none"
+        >
           SERVICIOS
-          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+          <svg
+            class="w-5 h-5 ml-2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19 9l-7 7-7-7"></path></svg
+          >
         </button>
-        <ul id="mobile-services-list" class="hidden flex-col items-center mt-4 space-y-4 bg-white rounded shadow-md p-4 w-64 z-50">
+        <ul
+          id="mobile-services-list"
+          class="hidden flex-col items-center mt-4 space-y-4 bg-white rounded shadow-md p-4 w-64 z-50"
+        >
           {
-            servicesMenuData.flatMap(cat => cat.links).map(link => (
-              <li><a href={link.href} class="block w-full text-center text-lg text-gray-700 hover:text-primary transition-colors duration-200">{link.text}</a></li>
-            ))
+            servicesMenuData
+              .flatMap((cat) => cat.links)
+              .map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="block w-full text-center text-lg text-gray-700 hover:text-primary transition-colors duration-200"
+                  >
+                    {link.text}
+                  </a>
+                </li>
+              ))
           }
         </ul>
       </li>
       <li><NavLink href="/blog" text="IDEAS 360" /></li>
       <li><NavLink href="/contacto" text="CONTACTO" /></li>
       <li>
-        <Button text="Agenda una Reunión" id="open-wizard-btn-nav-mobile" variant="primary" />
+        <Button
+          text="Agenda una Reunión"
+          id="open-wizard-btn-nav-mobile"
+          variant="primary"
+        />
       </li>
     </ul>
   </div>
@@ -156,5 +237,3 @@ import Button from '../../common/Button.astro';
 </style>
 
 <script src="/scripts/navbar.js" defer is:inline></script>
-
-

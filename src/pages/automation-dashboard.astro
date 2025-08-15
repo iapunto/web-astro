@@ -1,0 +1,953 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ArticleTrackingService } from '../lib/database/articleTrackingSchema.js';
+import { Client } from 'pg';
+import { AUTHORS } from '../lib/constants/authors.js';
+
+// Configurar conexión a la base de datos
+const client = new Client({
+  connectionString: process.env.DATABASE_PUBLIC_URL,
+});
+
+let stats = {
+  total: 0,
+  pending: 0,
+  completed: 0,
+  error: 0,
+};
+
+try {
+  await client.connect();
+  const trackingService = new ArticleTrackingService(client);
+
+  // Obtener estadísticas
+  const result = await client.query(`
+    SELECT 
+      COUNT(*) as total,
+      COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending,
+      COUNT(CASE WHEN status = 'published' THEN 1 END) as completed,
+      COUNT(CASE WHEN status = 'error' THEN 1 END) as error
+    FROM articles_tracking
+  `);
+
+  if (result.rows.length > 0) {
+    stats = result.rows[0];
+  }
+} catch (error) {
+  console.error('Error conectando a la base de datos:', error);
+} finally {
+  await client.end();
+}
+---
+
+<BaseLayout title="Dashboard de Automatización - IA Punto">
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">
+              🤖 Dashboard de Automatización
+            </h1>
+            <p class="text-gray-600 mt-1">
+              Sistema de creación automática de artículos con IA
+            </p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="text-right">
+              <div class="text-sm text-gray-500">Estado del sistema</div>
+              <div class="text-lg font-semibold text-green-600">🟢 Activo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Estadísticas -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Total Artículos</p>
+              <p class="text-2xl font-semibold text-gray-900">{stats.total}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Pendientes</p>
+              <p class="text-2xl font-semibold text-gray-900">
+                {stats.pending}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Completados</p>
+              <p class="text-2xl font-semibold text-gray-900">
+                {stats.completed}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-red-100 text-red-600">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Errores</p>
+              <p class="text-2xl font-semibold text-gray-900">{stats.error}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario de creación -->
+      <div class="bg-white rounded-lg shadow mb-8">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">
+            🚀 Crear Nuevo Artículo
+          </h2>
+          <p class="text-gray-600 mt-1">
+            Introduce un tema y observa el proceso de automatización en tiempo
+            real
+          </p>
+        </div>
+        <div class="p-6">
+          <form id="articleForm" class="space-y-4">
+            <div>
+              <label
+                for="topic"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Tema del Artículo
+              </label>
+              <input
+                type="text"
+                id="topic"
+                name="topic"
+                placeholder="Ej: Estrategias de marketing digital para 2025"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="author"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Autor del Artículo
+              </label>
+              <select
+                id="author"
+                name="author"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                {
+                  AUTHORS.map((author) => (
+                    <option value={author.id}>
+                      {author.name} - {author.description}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+            <div class="flex items-center space-x-4">
+              <button
+                type="submit"
+                id="submitBtn"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span>Iniciar Automatización</span>
+              </button>
+              <div id="loadingIndicator" class="hidden">
+                <div class="flex items-center space-x-2 text-blue-600">
+                  <div
+                    class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"
+                  >
+                  </div>
+                  <span>Procesando...</span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Panel de Progreso en Tiempo Real -->
+      <div id="progressPanel" class="hidden">
+        <div class="bg-white rounded-lg shadow mb-8">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">
+              📊 Progreso en Tiempo Real
+            </h2>
+            <p class="text-gray-600 mt-1">
+              Seguimiento del proceso de creación del artículo
+            </p>
+          </div>
+          <div class="p-6">
+            <!-- Barra de progreso -->
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-700"
+                  >Progreso General</span
+                >
+                <span
+                  id="progressPercentage"
+                  class="text-sm font-medium text-blue-600">0%</span
+                >
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  id="progressBar"
+                  class="bg-blue-600 h-2 rounded-full transition-all duration-500"
+                  style="width: 0%"
+                >
+                </div>
+              </div>
+            </div>
+
+            <!-- Estados de las GEMs -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div
+                id="gem1Status"
+                class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-medium text-gray-900">Planificación</h3>
+                  <span class="text-gray-400">⏳</span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  Planificando estructura del artículo...
+                </p>
+              </div>
+
+              <div
+                id="gem2Status"
+                class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-medium text-gray-900">Investigación</h3>
+                  <span class="text-gray-400">⏳</span>
+                </div>
+                <p class="text-sm text-gray-600">Investigando secciones...</p>
+              </div>
+
+              <div
+                id="gem3Status"
+                class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-medium text-gray-900">Redacción</h3>
+                  <span class="text-gray-400">⏳</span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  Redactando artículo final...
+                </p>
+              </div>
+
+              <div
+                id="gem4Status"
+                class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-medium text-gray-900">Finalización</h3>
+                  <span class="text-gray-400">⏳</span>
+                </div>
+                <p class="text-sm text-gray-600">Generando frontmatter...</p>
+              </div>
+            </div>
+
+            <!-- Logs en tiempo real -->
+            <div class="bg-gray-900 rounded-lg p-4">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-white font-medium">📝 Logs del Sistema</h3>
+                <button
+                  id="clearLogs"
+                  class="text-gray-400 hover:text-white text-sm">Limpiar</button
+                >
+              </div>
+              <div
+                id="logsContainer"
+                class="text-green-400 text-sm font-mono h-64 overflow-y-auto space-y-1"
+              >
+                <div class="text-gray-500">Esperando inicio del proceso...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultados -->
+      <div id="resultsPanel" class="hidden">
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">
+              📄 Resultado Final
+            </h2>
+            <p class="text-gray-600 mt-1">Artículo generado automáticamente</p>
+          </div>
+          <div class="p-6">
+            <!-- Información del artículo -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                  📋 Información del Artículo
+                </h3>
+                <div class="space-y-3">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Título</label
+                    >
+                    <div
+                      id="articleTitle"
+                      class="mt-1 p-3 bg-gray-50 rounded border text-gray-900"
+                    >
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Meta Descripción</label
+                    >
+                    <div
+                      id="articleDescription"
+                      class="mt-1 p-3 bg-gray-50 rounded border text-gray-900"
+                    >
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Palabra Clave</label
+                    >
+                    <div
+                      id="articleKeyword"
+                      class="mt-1 p-3 bg-gray-50 rounded border text-gray-900"
+                    >
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Categoría</label
+                    >
+                    <div
+                      id="articleCategory"
+                      class="mt-1 p-3 bg-gray-50 rounded border text-gray-900"
+                    >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                  🏷️ Etiquetas y Metadatos
+                </h3>
+                <div class="space-y-3">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Etiquetas</label
+                    >
+                    <div
+                      id="articleTags"
+                      class="mt-1 p-3 bg-gray-50 rounded border text-gray-900"
+                    >
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Cita Destacada</label
+                    >
+                    <div
+                      id="articleQuote"
+                      class="mt-1 p-3 bg-gray-50 rounded border text-gray-900 italic"
+                    >
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700"
+                      >URL del Artículo</label
+                    >
+                    <div
+                      id="articleUrl"
+                      class="mt-1 p-3 bg-gray-50 rounded border text-gray-900"
+                    >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview de la imagen -->
+            <div class="border-t pt-6">
+              <h3 class="text-lg font-medium text-gray-900 mb-4">
+                🖼️ Imagen de Portada Generada
+              </h3>
+              <div id="imagePreview" class="bg-gray-50 rounded-lg p-6 border">
+                <div class="text-gray-500 text-center py-8">
+                  La imagen de portada aparecerá aquí una vez generada...
+                </div>
+              </div>
+            </div>
+
+            <!-- Vista previa del artículo -->
+            <div class="border-t pt-6">
+              <h3 class="text-lg font-medium text-gray-900 mb-4">
+                👁️ Vista Previa del Artículo
+              </h3>
+              <div
+                id="articlePreview"
+                class="prose max-w-none bg-gray-50 rounded-lg p-6 border"
+              >
+                <div class="text-gray-500 text-center py-8">
+                  El contenido del artículo aparecerá aquí una vez completado el
+                  proceso...
+                </div>
+              </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="mt-6 flex space-x-4">
+              <button
+                id="previewArticle"
+                class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                👁️ Preview del Artículo
+              </button>
+              <button
+                id="publishArticle"
+                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                📝 Publicar Artículo
+              </button>
+              <button
+                id="viewArticle"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                Ver Artículo Completo
+              </button>
+              <button
+                id="downloadArticle"
+                class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                Descargar MDX
+              </button>
+              <button
+                id="createNew"
+                class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+              >
+                Crear Otro Artículo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Variables globales
+    let currentArticleId = null;
+    let eventSource = null;
+
+    // Elementos del DOM
+    const form = document.getElementById('articleForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const progressPanel = document.getElementById('progressPanel');
+    const resultsPanel = document.getElementById('resultsPanel');
+    const progressBar = document.getElementById('progressBar');
+    const progressPercentage = document.getElementById('progressPercentage');
+    const logsContainer = document.getElementById('logsContainer');
+    const clearLogsBtn = document.getElementById('clearLogs');
+
+    // Estados de las GEMs
+    const gemStatuses = {
+      gem1: document.getElementById('gem1Status'),
+      gem2: document.getElementById('gem2Status'),
+      gem3: document.getElementById('gem3Status'),
+      gem4: document.getElementById('gem4Status'),
+    };
+
+    // Elementos de resultados
+    const resultElements = {
+      title: document.getElementById('articleTitle'),
+      description: document.getElementById('articleDescription'),
+      keyword: document.getElementById('articleKeyword'),
+      category: document.getElementById('articleCategory'),
+      tags: document.getElementById('articleTags'),
+      quote: document.getElementById('articleQuote'),
+      url: document.getElementById('articleUrl'),
+      preview: document.getElementById('articlePreview'),
+    };
+
+    // Funciones de utilidad
+    function addLog(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const logElement = document.createElement('div');
+      logElement.className = `text-${type === 'error' ? 'red' : type === 'success' ? 'green' : 'yellow'}-400`;
+      logElement.textContent = `[${timestamp}] ${message}`;
+      logsContainer.appendChild(logElement);
+      logsContainer.scrollTop = logsContainer.scrollHeight;
+    }
+
+    function updateProgress(percentage) {
+      progressBar.style.width = `${percentage}%`;
+      progressPercentage.textContent = `${percentage}%`;
+    }
+
+    function updateGemStatus(gem, status, message = '') {
+      const gemElement = gemStatuses[gem];
+      const statusIcon = gemElement.querySelector('span');
+      const statusText = gemElement.querySelector('p');
+
+      gemElement.className = `rounded-lg p-4 border-2 ${
+        status === 'completed'
+          ? 'bg-green-50 border-green-200'
+          : status === 'error'
+            ? 'bg-red-50 border-red-200'
+            : status === 'in_progress'
+              ? 'bg-blue-50 border-blue-200'
+              : 'bg-gray-50 border-gray-200'
+      }`;
+
+      statusIcon.textContent =
+        status === 'completed'
+          ? '✅'
+          : status === 'error'
+            ? '❌'
+            : status === 'in_progress'
+              ? '🔄'
+              : '⏳';
+
+      if (message) {
+        statusText.textContent = message;
+      }
+    }
+
+    function resetUI() {
+      progressPanel.classList.add('hidden');
+      resultsPanel.classList.add('hidden');
+      updateProgress(0);
+      logsContainer.innerHTML =
+        '<div class="text-gray-500">Esperando inicio del proceso...</div>';
+
+      Object.values(gemStatuses).forEach((gem) => {
+        updateGemStatus(gem.id.replace('Status', ''), 'pending');
+      });
+    }
+
+    // Event Listeners
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const topic = document.getElementById('topic').value.trim();
+      const authorId = document.getElementById('author').value;
+      if (!topic) return;
+
+      // Reset UI
+      resetUI();
+
+      // Mostrar indicadores de carga
+      submitBtn.disabled = true;
+      loadingIndicator.classList.remove('hidden');
+      progressPanel.classList.remove('hidden');
+
+      addLog('Iniciando proceso de automatización...', 'info');
+
+      try {
+        // Crear artículo
+        const response = await fetch('/api/articles/create-automatic', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            topic: topic,
+            authorId: authorId,
+            apiKey: 'demo-key', // En producción usar una clave real
+          }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          currentArticleId = result.articleId;
+          addLog(`Artículo creado con ID: ${currentArticleId}`, 'success');
+
+          // Iniciar SSE para seguimiento en tiempo real
+          startSSEConnection(currentArticleId);
+        } else {
+          throw new Error(result.error || 'Error desconocido');
+        }
+      } catch (error) {
+        addLog(`Error: ${error.message}`, 'error');
+        updateGemStatus('gem1', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        loadingIndicator.classList.add('hidden');
+      }
+    });
+
+    clearLogsBtn.addEventListener('click', () => {
+      logsContainer.innerHTML =
+        '<div class="text-gray-500">Logs limpiados...</div>';
+    });
+
+    document.getElementById('createNew').addEventListener('click', () => {
+      resetUI();
+      form.reset();
+    });
+
+    // SSE Connection
+    function startSSEConnection(articleId) {
+      if (eventSource) {
+        eventSource.close();
+      }
+
+      eventSource = new EventSource(`/api/articles/status/${articleId}`);
+
+      eventSource.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        handleSSEMessage(data);
+      };
+
+      eventSource.onerror = function (error) {
+        addLog('Error en conexión SSE', 'error');
+        eventSource.close();
+      };
+    }
+
+    function handleSSEMessage(data) {
+      const { type, status, progress, message, result } = data;
+
+      switch (type) {
+        case 'status_update':
+          updateGemStatus(status.gem, status.state, status.message);
+          if (progress) {
+            updateProgress(progress);
+          }
+          if (message) {
+            addLog(message, status.state === 'error' ? 'error' : 'info');
+          }
+          break;
+
+        case 'gem1_completed':
+          updateGemStatus('gem1', 'completed', 'Planificación completada');
+          updateProgress(25);
+          if (result) {
+            addLog(`Título: ${result.titulo}`, 'success');
+            addLog(`Secciones: ${result.secciones.length}`, 'success');
+          }
+          break;
+
+        case 'gem2_completed':
+          updateGemStatus('gem2', 'completed', 'Investigación completada');
+          updateProgress(50);
+          if (result) {
+            addLog(
+              `Investigación completada para ${result.sections_researched} secciones`,
+              'success'
+            );
+          }
+          break;
+
+        case 'gem3_completed':
+          updateGemStatus('gem3', 'completed', 'Redacción completada');
+          updateProgress(75);
+          if (result) {
+            addLog(
+              `Artículo redactado: ${result.word_count} palabras`,
+              'success'
+            );
+          }
+          break;
+
+        case 'gem4_completed':
+          updateGemStatus('gem4', 'completed', 'Finalización completada');
+          updateProgress(100);
+          if (result) {
+            addLog('Artículo finalizado y publicado', 'success');
+            displayResults(result);
+          }
+          break;
+
+        case 'error':
+          addLog(`Error: ${message}`, 'error');
+          updateGemStatus(status.gem, 'error');
+          break;
+
+        case 'completed':
+          addLog('Proceso completado exitosamente', 'success');
+          eventSource.close();
+          break;
+      }
+    }
+
+    function displayResults(result) {
+      // Llenar información del artículo
+      resultElements.title.textContent =
+        result.frontmatter?.title || 'Sin título';
+      resultElements.description.textContent =
+        result.frontmatter?.description || 'Sin descripción';
+      resultElements.keyword.textContent =
+        result.frontmatter?.keyword || 'Sin palabra clave';
+      resultElements.category.textContent =
+        result.frontmatter?.category || 'Sin categoría';
+      resultElements.tags.textContent =
+        result.frontmatter?.tags?.join(', ') || 'Sin etiquetas';
+      resultElements.quote.textContent =
+        result.frontmatter?.quote || 'Sin cita';
+      resultElements.url.textContent = result.url || 'URL no disponible';
+
+      // Mostrar vista previa
+      if (result.content) {
+        resultElements.preview.innerHTML = `
+          <div class="prose max-w-none">
+            <h1>${result.frontmatter?.title || 'Título del Artículo'}</h1>
+            <div class="text-gray-600 mb-4">
+              <p><strong>Meta descripción:</strong> ${result.frontmatter?.description || ''}</p>
+              <p><strong>Palabra clave:</strong> ${result.frontmatter?.keyword || ''}</p>
+            </div>
+            <div class="border-l-4 border-blue-500 pl-4 mb-6">
+              <blockquote class="italic text-gray-700">
+                "${result.frontmatter?.quote || 'Cita destacada del artículo'}"
+              </blockquote>
+            </div>
+            <div class="article-content">
+              ${result.content.substring(0, 1000)}${result.content.length > 1000 ? '...' : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      // Mostrar panel de resultados
+      resultsPanel.classList.remove('hidden');
+    }
+
+    // Funciones para preview y publicación
+    async function loadArticlePreview(articleId) {
+      try {
+        const response = await fetch(`/api/articles/preview/${articleId}`);
+        const data = await response.json();
+
+        if (data.success && data.preview) {
+          const preview = data.preview;
+
+          // Actualizar elementos de resultado
+          resultElements.title.textContent =
+            preview.frontmatter?.title || 'Sin título';
+          resultElements.description.textContent =
+            preview.frontmatter?.description || 'Sin descripción';
+          resultElements.keyword.textContent =
+            preview.frontmatter?.keyword || 'Sin palabra clave';
+          resultElements.category.textContent =
+            preview.frontmatter?.category || 'Sin categoría';
+          resultElements.tags.textContent =
+            preview.frontmatter?.tags?.join(', ') || 'Sin etiquetas';
+          resultElements.quote.textContent =
+            preview.frontmatter?.quote || 'Sin cita';
+
+          // Mostrar preview de imagen si existe
+          const imagePreview = document.getElementById('imagePreview');
+          if (preview.image) {
+            imagePreview.innerHTML = `
+              <div class="text-center">
+                <img src="${preview.image.url}" alt="${preview.image.alt}" class="mx-auto max-w-full h-auto rounded-lg shadow-lg" style="max-height: 400px;">
+                <p class="text-sm text-gray-600 mt-2">${preview.image.alt}</p>
+              </div>
+            `;
+          } else {
+            imagePreview.innerHTML = `
+              <div class="text-gray-500 text-center py-8">
+                No se ha generado imagen de portada aún...
+              </div>
+            `;
+          }
+
+          // Mostrar preview del contenido
+          if (preview.mdxContent) {
+            resultElements.preview.innerHTML = `
+              <div class="prose max-w-none">
+                <h1>${preview.frontmatter?.title || 'Título del Artículo'}</h1>
+                <div class="text-gray-600 mb-4">
+                  <p><strong>Meta descripción:</strong> ${preview.frontmatter?.description || ''}</p>
+                  <p><strong>Autor:</strong> ${preview.frontmatter?.author?.name || ''}</p>
+                  <p><strong>Categoría:</strong> ${preview.frontmatter?.category || ''}</p>
+                </div>
+                <div class="border-l-4 border-blue-500 pl-4 mb-6">
+                  <blockquote class="italic text-gray-700">
+                    "${preview.frontmatter?.quote || 'Cita destacada del artículo'}"
+                  </blockquote>
+                </div>
+                <div class="article-content">
+                  ${preview.mdxContent.substring(0, 2000)}${preview.mdxContent.length > 2000 ? '...' : ''}
+                </div>
+              </div>
+            `;
+          }
+
+          // Mostrar panel de resultados
+          resultsPanel.classList.remove('hidden');
+          addLog('Preview del artículo cargado exitosamente', 'success');
+        } else {
+          addLog('Error cargando preview del artículo', 'error');
+        }
+      } catch (error) {
+        addLog(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    async function publishArticle(articleId) {
+      try {
+        addLog('Publicando artículo...', 'info');
+
+        const response = await fetch(`/api/articles/publish/${articleId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          addLog('Artículo publicado exitosamente', 'success');
+          addLog(`URL: ${data.url}`, 'success');
+
+          // Actualizar URL del artículo
+          resultElements.url.textContent = data.url;
+
+          // Mostrar mensaje de éxito
+          alert('¡Artículo publicado exitosamente!');
+        } else {
+          addLog(`Error al publicar: ${data.error}`, 'error');
+        }
+      } catch (error) {
+        addLog(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    // Configurar botones de acción
+    document.getElementById('previewArticle').addEventListener('click', () => {
+      if (currentArticleId) {
+        loadArticlePreview(currentArticleId);
+      } else {
+        addLog('No hay artículo seleccionado para preview', 'error');
+      }
+    });
+
+    document.getElementById('publishArticle').addEventListener('click', () => {
+      if (currentArticleId) {
+        if (confirm('¿Estás seguro de que quieres publicar este artículo?')) {
+          publishArticle(currentArticleId);
+        }
+      } else {
+        addLog('No hay artículo seleccionado para publicar', 'error');
+      }
+    });
+
+    document.getElementById('viewArticle').addEventListener('click', () => {
+      if (currentArticleId) {
+        window.open(`/blog/${currentArticleId}`, '_blank');
+      }
+    });
+
+    document
+      .getElementById('downloadArticle')
+      .addEventListener('click', async () => {
+        if (currentArticleId) {
+          try {
+            const response = await fetch(
+              `/api/articles/download/${currentArticleId}`
+            );
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `articulo-${currentArticleId}.mdx`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+          } catch (error) {
+            addLog('Error descargando artículo', 'error');
+          }
+        }
+      });
+  </script>
+</BaseLayout>
