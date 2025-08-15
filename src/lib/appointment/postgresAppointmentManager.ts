@@ -298,38 +298,49 @@ export class PostgresAppointmentManager {
     try {
       console.log(`🔍 Verificando disponibilidad para: ${date}`);
 
-      const businessHoursStart =
-        (await this.appointmentService.getSystemSetting(
-          'business_hours_start'
-        )) || '09:00';
-      const businessHoursEnd =
-        (await this.appointmentService.getSystemSetting(
-          'business_hours_end'
-        )) || '17:00';
-
-      const startHour = parseInt(businessHoursStart.split(':')[0]);
-      const endHour = parseInt(businessHoursEnd.split(':')[0]);
-
+      // Verificar si es fin de semana
       const dayOfWeek = new Date(date).getDay();
       if (dayOfWeek === 0 || dayOfWeek === 6) {
         console.log(`📅 ${date} es fin de semana, no disponible`);
         return []; // Fines de semana no disponibles
       }
 
-      const availableSlots: string[] = [];
-      const dailyCount =
-        await this.appointmentService.getDailyAppointmentsCount(date);
-      const maxAppointments = await this.appointmentService.getSystemSetting(
-        'max_appointments_per_day'
-      );
-      const maxPerDay = parseInt(maxAppointments || '3');
+      // Verificar si es fecha pasada
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const dateObj = new Date(date);
+      if (dateObj < today) {
+        console.log(`📅 ${date} es fecha pasada, no disponible`);
+        return [];
+      }
 
-      console.log(`📊 Citas del día: ${dailyCount}/${maxPerDay}`);
+      // Obtener configuraciones con fallback
+      const businessHoursStart = await this.getSystemSettingWithFallback('business_hours_start', '09:00');
+      const businessHoursEnd = await this.getSystemSettingWithFallback('business_hours_end', '17:00');
+      const maxAppointments = await this.getSystemSettingWithFallback('max_appointments_per_day', '3');
+
+      const startHour = parseInt(businessHoursStart.split(':')[0]);
+      const endHour = parseInt(businessHoursEnd.split(':')[0]);
+      const maxPerDay = parseInt(maxAppointments);
+
+      console.log(`📊 Configuración: ${startHour}:00 - ${endHour}:00, máximo ${maxPerDay} citas/día`);
+
+      // Verificar límite diario
+      let dailyCount = 0;
+      try {
+        dailyCount = await this.appointmentService.getDailyAppointmentsCount(date);
+        console.log(`📊 Citas del día: ${dailyCount}/${maxPerDay}`);
+      } catch (error) {
+        console.error('Error obteniendo conteo diario, usando 0:', error);
+        dailyCount = 0;
+      }
 
       if (dailyCount >= maxPerDay) {
         console.log(`❌ Día completo ocupado: ${date}`);
         return []; // Día completo ocupado
       }
+
+      const availableSlots: string[] = [];
 
       for (let hour = startHour; hour < endHour; hour++) {
         if (hour === 12) continue; // Excluir hora de almuerzo
@@ -360,6 +371,17 @@ export class PostgresAppointmentManager {
       console.error('Error in getAvailabilityForDate:', error);
       // Retornar array vacío en lugar de propagar el error
       return [];
+    }
+  }
+
+  // Método auxiliar para obtener configuraciones con fallback
+  private async getSystemSettingWithFallback(key: string, defaultValue: string): Promise<string> {
+    try {
+      const value = await this.appointmentService.getSystemSetting(key);
+      return value || defaultValue;
+    } catch (error) {
+      console.error(`Error obteniendo configuración ${key}, usando valor por defecto:`, error);
+      return defaultValue;
     }
   }
 

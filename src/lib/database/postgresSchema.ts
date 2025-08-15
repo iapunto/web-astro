@@ -47,6 +47,8 @@ export interface SystemSettings {
 }
 
 let pool: Pool | null = null;
+let isInitializing = false;
+let initializationPromise: Promise<void> | null = null;
 
 export function getPool(): Pool {
   if (!pool) {
@@ -55,15 +57,19 @@ export function getPool(): Pool {
         process.env.DATABASE_PUBLIC_URL || process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false },
       // Configuración del pool para evitar ECONNRESET
-      max: 20, // Máximo número de conexiones en el pool
-      idleTimeoutMillis: 30000, // Tiempo de inactividad antes de cerrar conexión
-      connectionTimeoutMillis: 2000, // Tiempo de espera para nueva conexión
-      maxUses: 7500, // Número máximo de veces que se puede usar una conexión
+      max: 10, // Reducir el máximo de conexiones
+      idleTimeoutMillis: 10000, // Reducir tiempo de inactividad
+      connectionTimeoutMillis: 5000, // Aumentar tiempo de espera
+      maxUses: 1000, // Reducir número máximo de usos
+      // Configuración adicional para estabilidad
+      allowExitOnIdle: true,
     });
 
     // Manejar errores del pool
     pool.on('error', (err) => {
       console.error('Error in PostgreSQL pool:', err);
+      // Resetear el pool en caso de error
+      pool = null;
     });
 
     pool.on('connect', (client) => {
@@ -77,25 +83,74 @@ export function getPool(): Pool {
   return pool;
 }
 
+// Función de reintento con backoff exponencial
+async function retryWithBackoff<T>(
+  operation: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 1000
+): Promise<T> {
+  let lastError: Error;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error as Error;
+      
+      if (attempt === maxRetries) {
+        throw lastError;
+      }
+      
+      const delay = baseDelay * Math.pow(2, attempt);
+      console.log(`⚠️ Intento ${attempt + 1} falló, reintentando en ${delay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+  
+  throw lastError!;
+}
+
 export async function initializeDatabase(): Promise<void> {
-  let client: PoolClient | null = null;
+  // Evitar múltiples inicializaciones simultáneas
+  if (isInitializing) {
+    if (initializationPromise) {
+      await initializationPromise;
+      return;
+    }
+  }
+
+  if (isInitializing) {
+    return;
+  }
+
+  isInitializing = true;
+  initializationPromise = retryWithBackoff(async () => {
+    let client: PoolClient | null = null;
+
+    try {
+      client = await getPool().connect();
+      console.log('🔌 Inicializando base de datos de citas...');
+
+      await createTables(client);
+      await insertDefaultSettings(client);
+      await insertDefaultEmailTemplates(client);
+
+      console.log('✅ Base de datos de citas inicializada correctamente');
+    } catch (error) {
+      console.error('❌ Error inicializando base de datos:', error);
+      throw error;
+    } finally {
+      if (client) {
+        client.release();
+      }
+    }
+  });
 
   try {
-    client = await getPool().connect();
-    console.log('🔌 Inicializando base de datos de citas...');
-
-    await createTables(client);
-    await insertDefaultSettings(client);
-    await insertDefaultEmailTemplates(client);
-
-    console.log('✅ Base de datos de citas inicializada correctamente');
-  } catch (error) {
-    console.error('❌ Error inicializando base de datos:', error);
-    throw error;
+    await initializationPromise;
   } finally {
-    if (client) {
-      client.release();
-    }
+    isInitializing = false;
+    initializationPromise = null;
   }
 }
 

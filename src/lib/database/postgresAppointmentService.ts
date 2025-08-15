@@ -11,6 +11,9 @@ import { v4 as uuidv4 } from 'uuid';
 export class PostgresAppointmentService {
   private initialized: boolean = false;
   private initializationPromise: Promise<void> | null = null;
+  private settingsCache: Map<string, string> = new Map();
+  private cacheExpiry: Map<string, number> = new Map();
+  private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutos
 
   constructor() {
     // No inicializar automáticamente en el constructor
@@ -43,13 +46,18 @@ export class PostgresAppointmentService {
       await initializeDatabase();
     } catch (error) {
       console.error('Error en inicialización de base de datos:', error);
-      throw error;
+      // No lanzar el error, permitir que el sistema continúe con valores por defecto
     }
   }
 
   private async getClient() {
-    await this.initializeDatabase();
-    return getPool().connect();
+    try {
+      await this.initializeDatabase();
+      return getPool().connect();
+    } catch (error) {
+      console.error('Error obteniendo cliente de base de datos:', error);
+      throw error;
+    }
   }
 
   // Métodos para citas
@@ -148,7 +156,7 @@ export class PostgresAppointmentService {
         'DELETE FROM appointments WHERE id = $1',
         [id]
       );
-      return result.rowCount > 0;
+      return (result.rowCount || 0) > 0;
     } finally {
       client.release();
     }
@@ -209,16 +217,49 @@ export class PostgresAppointmentService {
 
   // Métodos para configuraciones del sistema
   async getSystemSetting(key: string): Promise<string | null> {
-    const client = await this.getClient();
+    // Verificar cache primero
+    const cached = this.settingsCache.get(key);
+    const expiry = this.cacheExpiry.get(key);
+    
+    if (cached && expiry && Date.now() < expiry) {
+      return cached;
+    }
 
     try {
-      const result = await client.query(
-        'SELECT value FROM system_settings WHERE key = $1',
-        [key]
-      );
-      return result.rows.length > 0 ? result.rows[0].value : null;
-    } finally {
-      client.release();
+      const client = await this.getClient();
+
+      try {
+        const result = await client.query(
+          'SELECT value FROM system_settings WHERE key = $1',
+          [key]
+        );
+        
+        const value = result.rows.length > 0 ? result.rows[0].value : null;
+        
+        // Actualizar cache
+        if (value) {
+          this.settingsCache.set(key, value);
+          this.cacheExpiry.set(key, Date.now() + this.CACHE_TTL);
+        }
+        
+        return value;
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      console.error(`Error obteniendo configuración ${key}:`, error);
+      
+      // Retornar valores por defecto en caso de error
+      const defaults: { [key: string]: string } = {
+        'business_hours_start': '09:00',
+        'business_hours_end': '17:00',
+        'max_appointments_per_day': '3',
+        'timezone': 'America/Bogota',
+        'lunch_break_start': '12:00',
+        'lunch_break_end': '13:00'
+      };
+      
+      return defaults[key] || null;
     }
   }
 
