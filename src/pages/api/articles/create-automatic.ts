@@ -59,7 +59,11 @@ export const POST: APIRoute = async ({ request }) => {
     await client.connect();
     console.log('✅ Conexión a la base de datos exitosa');
     const trackingService = new ArticleTrackingService(client);
-    const gemService = new GemArticleService('demo-key', trackingService, authorId);
+    const gemService = new GemArticleService(
+      'demo-key',
+      trackingService,
+      authorId
+    );
     const publisherService = new ArticlePublisherService();
 
     console.log(`🚀 Iniciando creación automática de artículo:`);
@@ -78,8 +82,16 @@ export const POST: APIRoute = async ({ request }) => {
       const result = await gemService.createArticle(topic);
       console.log('✅ Proceso de creación completado');
 
-      // Publicar artículo
-      const publishedArticle = await publisherService.publishArticle(result);
+      // Obtener el resultado final de GEM 5
+      const finalTracking = await trackingService.getTracking(result.id);
+      if (!finalTracking?.gem5Result) {
+        throw new Error('No se pudo obtener el resultado final de GEM 5');
+      }
+
+      // Publicar artículo usando el resultado de GEM 5
+      const publishedArticle = await publisherService.publishArticle(
+        finalTracking.gem5Result
+      );
       console.log(`✅ Artículo publicado: ${publishedArticle.url}`);
 
       // Marcar como publicado

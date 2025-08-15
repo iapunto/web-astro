@@ -167,18 +167,18 @@ class AutomatedArticleCreator {
         topicConfig.topic
       );
 
-      // Obtener el resultado final de GEM 4
+      // Obtener el resultado final de GEM 5
       const trackingResult = await this.trackingService.getTracking(
         finalTracking.id
       );
-      if (!trackingResult?.gem4Result) {
-        throw new Error('No se pudo obtener el resultado final de GEM 4');
+      if (!trackingResult?.gem5Result) {
+        throw new Error('No se pudo obtener el resultado final de GEM 5');
       }
 
       // Publicar artículo
       console.log('📤 Publicando artículo...');
       const publishResult = await this.publisherService.publishArticle(
-        trackingResult.gem4Result
+        trackingResult.gem5Result
       );
 
       if (!publishResult.success) {

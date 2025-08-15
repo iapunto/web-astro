@@ -51,22 +51,51 @@ let pool: Pool | null = null;
 export function getPool(): Pool {
   if (!pool) {
     pool = new Pool({
-      connectionString: process.env.DATABASE_PUBLIC_URL || process.env.DATABASE_URL,
+      connectionString:
+        process.env.DATABASE_PUBLIC_URL || process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false },
+      // Configuración del pool para evitar ECONNRESET
+      max: 20, // Máximo número de conexiones en el pool
+      idleTimeoutMillis: 30000, // Tiempo de inactividad antes de cerrar conexión
+      connectionTimeoutMillis: 2000, // Tiempo de espera para nueva conexión
+      maxUses: 7500, // Número máximo de veces que se puede usar una conexión
+    });
+
+    // Manejar errores del pool
+    pool.on('error', (err) => {
+      console.error('Error in PostgreSQL pool:', err);
+    });
+
+    pool.on('connect', (client) => {
+      console.log('✅ Nueva conexión establecida con PostgreSQL');
+    });
+
+    pool.on('remove', (client) => {
+      console.log('🔌 Conexión removida del pool');
     });
   }
   return pool;
 }
 
 export async function initializeDatabase(): Promise<void> {
-  const client = await getPool().connect();
-  
+  let client: PoolClient | null = null;
+
   try {
+    client = await getPool().connect();
+    console.log('🔌 Inicializando base de datos de citas...');
+
     await createTables(client);
     await insertDefaultSettings(client);
     await insertDefaultEmailTemplates(client);
+
+    console.log('✅ Base de datos de citas inicializada correctamente');
+  } catch (error) {
+    console.error('❌ Error inicializando base de datos:', error);
+    throw error;
   } finally {
-    client.release();
+    if (client) {
+      client.release();
+    }
   }
 }
 
@@ -149,44 +178,47 @@ async function insertDefaultSettings(client: PoolClient): Promise<void> {
     {
       key: 'business_hours_start',
       value: '09:00',
-      description: 'Hora de inicio del horario laboral'
+      description: 'Hora de inicio del horario laboral',
     },
     {
       key: 'business_hours_end',
       value: '17:00',
-      description: 'Hora de fin del horario laboral'
+      description: 'Hora de fin del horario laboral',
     },
     {
       key: 'timezone',
       value: 'America/Bogota',
-      description: 'Zona horaria del sistema'
+      description: 'Zona horaria del sistema',
     },
     {
       key: 'max_appointments_per_day',
       value: '3',
-      description: 'Máximo número de citas por día'
+      description: 'Máximo número de citas por día',
     },
     {
       key: 'lunch_break_start',
       value: '12:00',
-      description: 'Inicio del descanso para almuerzo'
+      description: 'Inicio del descanso para almuerzo',
     },
     {
       key: 'lunch_break_end',
       value: '13:00',
-      description: 'Fin del descanso para almuerzo'
-    }
+      description: 'Fin del descanso para almuerzo',
+    },
   ];
 
   for (const setting of settings) {
-    await client.query(`
+    await client.query(
+      `
       INSERT INTO system_settings (key, value, description)
       VALUES ($1, $2, $3)
       ON CONFLICT (key) DO UPDATE SET
         value = EXCLUDED.value,
         description = EXCLUDED.description,
         updated_at = CURRENT_TIMESTAMP
-    `, [setting.key, setting.value, setting.description]);
+    `,
+      [setting.key, setting.value, setting.description]
+    );
   }
 }
 
@@ -207,7 +239,7 @@ async function insertDefaultEmailTemplates(client: PoolClient): Promise<void> {
         <p>Nos vemos pronto.</p>
         <p>Saludos,<br>Equipo de IA Punto</p>
       `,
-      type: 'confirmation'
+      type: 'confirmation',
     },
     {
       name: 'Recordatorio de Cita',
@@ -224,7 +256,7 @@ async function insertDefaultEmailTemplates(client: PoolClient): Promise<void> {
         <p>Nos vemos mañana.</p>
         <p>Saludos,<br>Equipo de IA Punto</p>
       `,
-      type: 'reminder'
+      type: 'reminder',
     },
     {
       name: 'Cancelación de Cita',
@@ -241,7 +273,7 @@ async function insertDefaultEmailTemplates(client: PoolClient): Promise<void> {
         <p>Si necesitas reprogramar, por favor contáctanos.</p>
         <p>Saludos,<br>Equipo de IA Punto</p>
       `,
-      type: 'cancellation'
+      type: 'cancellation',
     },
     {
       name: 'Notificación de Nueva Cita (Admin)',
@@ -258,12 +290,13 @@ async function insertDefaultEmailTemplates(client: PoolClient): Promise<void> {
         </ul>
         <p>Esta cita ha sido registrada en el sistema.</p>
       `,
-      type: 'admin_notification'
-    }
+      type: 'admin_notification',
+    },
   ];
 
   for (const template of templates) {
-    await client.query(`
+    await client.query(
+      `
       INSERT INTO email_templates (name, subject, body, type)
       VALUES ($1, $2, $3, $4)
       ON CONFLICT (name) DO UPDATE SET
@@ -271,7 +304,9 @@ async function insertDefaultEmailTemplates(client: PoolClient): Promise<void> {
         body = EXCLUDED.body,
         type = EXCLUDED.type,
         updated_at = CURRENT_TIMESTAMP
-    `, [template.name, template.subject, template.body, template.type]);
+    `,
+      [template.name, template.subject, template.body, template.type]
+    );
   }
 }
 

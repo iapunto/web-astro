@@ -26,53 +26,44 @@ export const POST: APIRoute = async ({ params }) => {
     const tracking = await trackingService.getTracking(id);
 
     if (!tracking) {
-      return new Response(
-        JSON.stringify({ error: 'Artículo no encontrado' }),
-        { status: 404, headers: { 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: 'Artículo no encontrado' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     // Verificar que el artículo esté listo para publicar
-    if (tracking.status !== 'gem5_completed' && tracking.status !== 'gem4_completed') {
+    if (
+      tracking.status !== 'gem5_completed' &&
+      tracking.status !== 'gem4_completed'
+    ) {
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: 'El artículo no está listo para publicar',
-          status: tracking.status 
+          status: tracking.status,
         }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    // Obtener resultado de GEM 4
-    const gem4Result = tracking.gem4Result;
+    // Obtener resultado de GEM 5
+    const gem5Result = tracking.gem5Result;
 
-    if (!gem4Result) {
+    if (!gem5Result) {
       return new Response(
-        JSON.stringify({ error: 'No se encontró el resultado de GEM 4' }),
+        JSON.stringify({ error: 'No se encontró el resultado de GEM 5' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    // Obtener resultado de GEM 5 si existe
-    const gem5Result = await client.query(
-      'SELECT * FROM gem5_results WHERE tracking_id = $1 ORDER BY created_at DESC LIMIT 1',
-      [id]
-    );
-
-    // Actualizar frontmatter con la imagen si existe
-    if (gem5Result.rows[0]) {
-      gem4Result.frontmatter.cover = gem5Result.rows[0].image_url;
-      gem4Result.frontmatter.coverAlt = gem5Result.rows[0].image_alt;
-    }
-
-    // Publicar el artículo
-    const publishedArticle = await publisherService.publishArticle(gem4Result);
+    // Publicar el artículo usando GEM 5
+    const publishedArticle = await publisherService.publishArticle(gem5Result);
 
     if (!publishedArticle.success) {
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: 'Error al publicar el artículo',
-          details: publishedArticle.error 
+          details: publishedArticle.error,
         }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
@@ -84,21 +75,20 @@ export const POST: APIRoute = async ({ params }) => {
     await client.end();
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: 'Artículo publicado exitosamente',
         url: publishedArticle.url,
-        filePath: publishedArticle.filePath
+        filePath: publishedArticle.filePath,
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
-
   } catch (error) {
     console.error('Error publicando artículo:', error);
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         error: 'Error interno del servidor',
-        details: error instanceof Error ? error.message : String(error)
+        details: error instanceof Error ? error.message : String(error),
       }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );

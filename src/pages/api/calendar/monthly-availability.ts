@@ -23,11 +23,11 @@ export const GET: APIRoute = async ({ request, url }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Año y mes requeridos'
+          error: 'Año y mes requeridos',
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         }
       );
     }
@@ -57,7 +57,7 @@ export const GET: APIRoute = async ({ request, url }) => {
           availableSlots: [],
           totalSlots: 0,
           hasReachedLimit: false,
-          isWeekend: false
+          isWeekend: false,
         });
         continue;
       }
@@ -69,26 +69,44 @@ export const GET: APIRoute = async ({ request, url }) => {
           availableSlots: [],
           totalSlots: 0,
           hasReachedLimit: false,
-          isWeekend: true
+          isWeekend: true,
         });
         continue;
       }
 
-      const availableSlots = await appointmentManager.getAvailabilityForDate(date);
-      const hasReachedLimit = availableSlots.length === 0;
+      try {
+        const availableSlots =
+          await appointmentManager.getAvailabilityForDate(date);
+        const hasReachedLimit = availableSlots.length === 0;
 
-      availability.push({
-        date,
-        available: availableSlots.length > 0,
-        availableSlots,
-        totalSlots: availableSlots.length,
-        hasReachedLimit,
-        isWeekend: false
-      });
+        availability.push({
+          date,
+          available: availableSlots.length > 0,
+          availableSlots,
+          totalSlots: availableSlots.length,
+          hasReachedLimit,
+          isWeekend: false,
+        });
+      } catch (error) {
+        console.error(`Error obteniendo disponibilidad para ${date}:`, error);
+        // En caso de error, marcar como no disponible
+        availability.push({
+          date,
+          available: false,
+          availableSlots: [],
+          totalSlots: 0,
+          hasReachedLimit: true,
+          isWeekend: false,
+        });
+      }
     }
 
-    const availableDays = availability.filter(day => day.available).length;
-    console.log('✅ Disponibilidad mensual obtenida:', availableDays, 'días con disponibilidad');
+    const availableDays = availability.filter((day) => day.available).length;
+    console.log(
+      '✅ Disponibilidad mensual obtenida:',
+      availableDays,
+      'días con disponibilidad'
+    );
 
     return new Response(
       JSON.stringify({
@@ -99,32 +117,26 @@ export const GET: APIRoute = async ({ request, url }) => {
         summary: {
           totalDays: daysInMonth,
           availableDays,
-          weekendDays: availability.filter(day => day.isWeekend).length,
-          pastDays: availability.filter(day => !day.available && !day.isWeekend && day.totalSlots === 0).length
+          unavailableDays: daysInMonth - availableDays,
         },
-        timezone: process.env.TIMEZONE || 'America/Bogota',
-        businessHours: {
-          start: process.env.BUSINESS_HOURS_START || '09:00',
-          end: process.env.BUSINESS_HOURS_END || '17:00'
-        }
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       }
     );
-
   } catch (error) {
-    console.error('❌ Error en endpoint de disponibilidad mensual:', error);
+    console.error('❌ Error en disponibilidad mensual:', error);
+
     return new Response(
       JSON.stringify({
         success: false,
-        error: 'Error obteniendo disponibilidad mensual',
-        message: error instanceof Error ? error.message : 'Error desconocido'
+        error: 'Error interno del servidor',
+        details: error instanceof Error ? error.message : 'Error desconocido',
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       }
     );
   }
@@ -139,11 +151,11 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Año y mes requeridos'
+          error: 'Año y mes requeridos',
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         }
       );
     }
@@ -173,7 +185,7 @@ export const POST: APIRoute = async ({ request }) => {
           availableSlots: [],
           totalSlots: 0,
           hasReachedLimit: false,
-          isWeekend: false
+          isWeekend: false,
         });
         continue;
       }
@@ -185,12 +197,13 @@ export const POST: APIRoute = async ({ request }) => {
           availableSlots: [],
           totalSlots: 0,
           hasReachedLimit: false,
-          isWeekend: true
+          isWeekend: true,
         });
         continue;
       }
 
-      const availableSlots = await appointmentManager.getAvailabilityForDate(date);
+      const availableSlots =
+        await appointmentManager.getAvailabilityForDate(date);
       const hasReachedLimit = availableSlots.length === 0;
 
       availability.push({
@@ -199,12 +212,16 @@ export const POST: APIRoute = async ({ request }) => {
         availableSlots,
         totalSlots: availableSlots.length,
         hasReachedLimit,
-        isWeekend: false
+        isWeekend: false,
       });
     }
 
-    const availableDays = availability.filter(day => day.available).length;
-    console.log('✅ Disponibilidad mensual obtenida:', availableDays, 'días con disponibilidad');
+    const availableDays = availability.filter((day) => day.available).length;
+    console.log(
+      '✅ Disponibilidad mensual obtenida:',
+      availableDays,
+      'días con disponibilidad'
+    );
 
     return new Response(
       JSON.stringify({
@@ -215,31 +232,30 @@ export const POST: APIRoute = async ({ request }) => {
         summary: {
           totalDays: daysInMonth,
           availableDays,
-          unavailableDays: daysInMonth - availableDays
+          unavailableDays: daysInMonth - availableDays,
         },
         timezone: process.env.TIMEZONE || 'America/Bogota',
         businessHours: {
           start: process.env.BUSINESS_HOURS_START || '09:00',
-          end: process.env.BUSINESS_HOURS_END || '17:00'
-        }
+          end: process.env.BUSINESS_HOURS_END || '17:00',
+        },
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       }
     );
-
   } catch (error) {
     console.error('❌ Error en endpoint de disponibilidad mensual:', error);
     return new Response(
       JSON.stringify({
         success: false,
         error: 'Error obteniendo disponibilidad mensual',
-        message: error instanceof Error ? error.message : 'Error desconocido'
+        message: error instanceof Error ? error.message : 'Error desconocido',
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       }
     );
   }
