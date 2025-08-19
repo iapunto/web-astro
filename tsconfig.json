@@ -1,13 +1,12 @@
 {
   "include": [
     ".astro/types.d.ts",
-    "**/*",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "astro.config.ts",
-    "src/**/*.astro"
+    "src/**/*.astro",
+    "astro.config.ts"
   ],
-  "exclude": ["dist", "node_modules"],
+  "exclude": ["dist", "node_modules", "articulos-no-aprobados/**"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
