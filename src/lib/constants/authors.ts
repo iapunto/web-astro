@@ -13,7 +13,7 @@ export const AUTHORS: Author[] = [
     name: 'Sergio Rondón',
     description: 'CEO y Fundador de IA Punto.',
     image:
-      'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.pn',
+      'https://res.cloudinary.com/dkb9jfet8/image/upload/v1739925181/sergio_gdcaeh.png',
     email: 'sergio.rondon@iapunto.com',
     bio: 'Emprendedor tecnológico con más de 25 años de experiencia en transformación digital.',
   },
