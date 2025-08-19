@@ -131,6 +131,11 @@ export default defineConfig({
         '@services': new URL('./src/services', import.meta.url).pathname,
       },
     },
+    build: {
+      rollupOptions: {
+        external: ['pg', '@google/generative-ai', 'cloudinary'],
+      },
+    },
   },
   security: {
     checkOrigin: true,
