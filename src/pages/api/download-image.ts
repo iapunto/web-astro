@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ url }) => {
   const imageUrl = url.searchParams.get('url');
+  const raw = url.searchParams.get('raw') === '1';
   
   if (!imageUrl) {
     return new Response(JSON.stringify({
@@ -20,7 +21,13 @@ export const GET: APIRoute = async ({ url }) => {
 
   try {
     // Descargar la imagen
-    const response = await fetch(imageUrl);
+    const response = await fetch(imageUrl, {
+      headers: {
+        // Evitar bloqueos por referer/user-agent estrictos
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36',
+        'Referer': 'https://www.iapunto.com/'
+      }
+    });
     
     if (!response.ok) {
       throw new Error(`Error al descargar imagen: ${response.status}`);
@@ -29,11 +36,22 @@ export const GET: APIRoute = async ({ url }) => {
     // Obtener el buffer de la imagen
     const imageBuffer = await response.arrayBuffer();
     
-    // Convertir a base64
-    const base64 = Buffer.from(imageBuffer).toString('base64');
-    
     // Obtener el tipo de contenido
     const contentType = response.headers.get('content-type') || 'image/jpeg';
+
+    // Si se solicita binario crudo, devolver directamente la imagen
+    if (raw) {
+      return new Response(imageBuffer, {
+        status: 200,
+        headers: {
+          'Content-Type': contentType,
+          'Cache-Control': 'public, max-age=86400',
+        }
+      });
+    }
+
+    // Convertir a base64 para respuesta JSON
+    const base64 = Buffer.from(imageBuffer).toString('base64');
     
     // Obtener el nombre del archivo de la URL
     const urlParts = imageUrl.split('/');
