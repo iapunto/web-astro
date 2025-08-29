@@ -33,7 +33,8 @@
     "build:coolify:working": "astro build --config astro.config.coolify.working.mjs",
     "start:coolify": "node ./dist/server/entry.mjs",
     "coolify:migrate": "tsx scripts/migrate-to-coolify.ts",
-    "coolify:setup": "tsx scripts/migrate-to-coolify.ts --no-backup"
+    "coolify:setup": "tsx scripts/migrate-to-coolify.ts --no-backup",
+    "articles:move-malformed": "node scripts/move-malformed-articles.cjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.1.0",

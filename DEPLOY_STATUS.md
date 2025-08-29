@@ -12,22 +12,26 @@
 ## 📋 Archivos de Configuración Verificados
 
 ### ✅ Archivos Principales
+
 - `astro.config.coolify.working.mjs` - Configuración funcional de Astro
 - `Dockerfile.coolify` - Dockerfile optimizado para Coolify
 - `env.coolify.example` - Variables de entorno para Coolify
 - `.dockerignore` - Archivos a ignorar en Docker
 
 ### ✅ Documentación
+
 - `COOLIFY_SETUP.md` - Documentación completa de configuración
 - `MIGRATION_SUMMARY.md` - Resumen de la migración
 - `DEPLOY_INSTRUCTIONS.md` - Instrucciones específicas de despliegue
 - `DEPLOY_STATUS.md` - Este archivo de estado
 
 ### ✅ Scripts
+
 - `deploy-to-coolify.sh` - Script automatizado de despliegue
 - `scripts/migrate-to-coolify.ts` - Script de migración TypeScript
 
 ### ✅ Package.json
+
 - Scripts agregados: `build:coolify`, `build:coolify:working`, `start:coolify`
 - Scripts de migración: `coolify:migrate`, `coolify:setup`
 
@@ -36,6 +40,7 @@
 ## 🚀 Próximos Pasos en Coolify
 
 ### 1. Configurar Aplicación
+
 1. Acceder al panel de Coolify
 2. Crear nueva aplicación
 3. Seleccionar tipo: **Docker**
@@ -43,12 +48,14 @@
 5. Configurar branch: **main**
 
 ### 2. Configurar Dockerfile
+
 - **Dockerfile:** `Dockerfile.coolify`
 - **Puerto:** 4321
 - **Build Command:** `pnpm run build:coolify:working`
 - **Start Command:** `pnpm run start:coolify`
 
 ### 3. Configurar Variables de Entorno
+
 Copiar desde `env.coolify.example` y configurar valores reales:
 
 ```bash
@@ -78,11 +85,13 @@ CLOUDINARY_API_SECRET=your-secret
 ```
 
 ### 4. Configurar Dominio
+
 - **Dominio principal:** iapunto.com
 - **Subdominio Strapi:** strapi.iapunto.com
 - **Habilitar SSL automático**
 
 ### 5. Migrar Base de Datos
+
 ```bash
 # Exportar desde Railway
 pg_dump $RAILWAY_DATABASE_URL > backup.sql
@@ -96,17 +105,20 @@ psql $COOLIFY_DATABASE_URL < backup.sql
 ## 🔧 Configuración Técnica
 
 ### Dockerfile.coolify
+
 - **Base:** Node 22 Alpine
 - **Package Manager:** pnpm
 - **Multi-stage build:** Optimizado para producción
 - **Puerto expuesto:** 4321
 
 ### Configuración de Astro
+
 - **Modo:** standalone
 - **Host:** 0.0.0.0
 - **Integraciones:** React, Tailwind, MDX, Sitemap
 
 ### Scripts Disponibles
+
 ```bash
 # Build específico para Coolify
 pnpm run build:coolify:working
@@ -126,12 +138,14 @@ pnpm run coolify:setup
 ## 📊 Monitoreo
 
 ### Health Check
+
 - **Endpoint:** `https://iapunto.com/health`
 - **Puerto:** 4321
 - **Timeout:** 30 segundos
 - **Retries:** 3
 
 ### Logs
+
 - Acceder desde el panel de Coolify
 - Configurar alertas para errores críticos
 - Monitorear uso de recursos
@@ -141,16 +155,19 @@ pnpm run coolify:setup
 ## 🚨 Troubleshooting
 
 ### Error de Build
+
 1. Verificar Dockerfile.coolify
 2. Revisar logs de build
 3. Verificar variables de entorno
 
 ### Error de Conexión
+
 1. Verificar puerto 4321
 2. Verificar variables de entorno
 3. Revisar logs de aplicación
 
 ### Error de Base de Datos
+
 1. Verificar DATABASE_URL
 2. Verificar conectividad de red
 3. Revisar configuración de firewall
