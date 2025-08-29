@@ -28,7 +28,12 @@
     "article:health": "tsx scripts/article-monitor.ts --health-check",
     "db:setup": "tsx scripts/setup-database.ts",
     "railway:setup": "tsx scripts/railway-setup-final.ts",
-    "railway:db": "tsx scripts/railway-database-manager.ts"
+    "railway:db": "tsx scripts/railway-database-manager.ts",
+    "build:coolify": "astro build --config astro.config.coolify.mjs",
+    "build:coolify:working": "astro build --config astro.config.coolify.working.mjs",
+    "start:coolify": "node ./dist/server/entry.mjs",
+    "coolify:migrate": "tsx scripts/migrate-to-coolify.ts",
+    "coolify:setup": "tsx scripts/migrate-to-coolify.ts --no-backup"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.1.0",
