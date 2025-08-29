@@ -1,0 +1,26 @@
+# Dockerfile simple para Astro
+FROM node:18-alpine
+
+# Instalar pnpm
+RUN npm install -g pnpm
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Copiar archivos de dependencias
+COPY package.json pnpm-lock.yaml ./
+
+# Instalar dependencias
+RUN pnpm install --frozen-lockfile
+
+# Copiar código fuente
+COPY . .
+
+# Build de la aplicación
+RUN pnpm run build:simple
+
+# Exponer puerto
+EXPOSE 4321
+
+# Comando de inicio
+CMD ["pnpm", "run", "start:coolify"]

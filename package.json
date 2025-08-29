@@ -31,6 +31,7 @@
     "railway:db": "tsx scripts/railway-database-manager.ts",
     "build:coolify": "astro build --config astro.config.coolify.mjs",
     "build:coolify:working": "astro build --config astro.config.coolify.working.mjs",
+    "build:simple": "astro build --config astro.config.simple.mjs",
     "start:coolify": "node ./dist/server/entry.mjs",
     "coolify:migrate": "tsx scripts/migrate-to-coolify.ts",
     "coolify:setup": "tsx scripts/migrate-to-coolify.ts --no-backup",
