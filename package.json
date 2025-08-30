@@ -54,7 +54,7 @@
     "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.15.5",
     "@types/uuid": "^10.0.0",
-    "astro": "^5.4.2",
+    "astro": "^5.13.1",
     "cloudinary": "^2.7.0",
     "dotenv": "^16.6.1",
     "flagpack": "^1.0.5",
