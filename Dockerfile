@@ -3,7 +3,7 @@
 FROM node:18-alpine
 
 # 2. Install Dependencies for node-gyp
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ openssl
 
 # 3. Set Working Directory
 WORKDIR /app
