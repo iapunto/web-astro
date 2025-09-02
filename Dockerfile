@@ -23,6 +23,8 @@ COPY . .
 # 8. Build the application
 RUN pnpm run build
 
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
 # 9. Expose the port
 EXPOSE 3000
 
