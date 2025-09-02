@@ -1,9 +1,9 @@
 
 # 1. Base Image
-FROM node:18-alpine
+FROM node:18-slim
 
 # 2. Install Dependencies for node-gyp
-RUN apk add --no-cache python3 make g++ openssl
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ openssl
 
 # 3. Set Working Directory
 WORKDIR /app
