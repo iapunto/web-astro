@@ -37,23 +37,33 @@ export class PostgresAppointmentManager {
     this.initializeGoogleCalendar();
   }
 
-  private initializeGoogleCalendar() {
+  private async initializeGoogleCalendar() {
     try {
       this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
       this.timezone = process.env.TIMEZONE || 'America/Bogota';
 
-      const auth = new google.auth.GoogleAuth({
-        credentials: {
-          client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-          private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-        },
-        scopes: ['https://www.googleapis.com/auth/calendar'],
-      });
+      const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+      const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+      const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
+      const REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
+
+      if (!CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI || !REFRESH_TOKEN) {
+        console.warn('Faltan variables de entorno para Google Calendar (CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, REFRESH_TOKEN). La integración con Google Calendar no funcionará.');
+        return;
+      }
+
+      const auth = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+      auth.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+      // Refresh the access token to ensure it's valid
+      const { credentials } = await auth.refreshAccessToken();
+      auth.setCredentials(credentials);
 
       this.calendar = google.calendar({ version: 'v3', auth });
+      console.log('✅ Google Calendar inicializado con OAuth2 y Refresh Token.');
     } catch (error) {
-      console.error('Error initializing Google Calendar:', error);
-      throw error;
+      console.error('❌ Error inicializando Google Calendar con OAuth2:', error);
+      // No lanzar el error para no bloquear la aplicación si el calendario falla
     }
   }
 
