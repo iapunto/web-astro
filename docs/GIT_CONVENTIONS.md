@@ -4,8 +4,8 @@ Este proyecto utiliza [Conventional Commits](https://www.conventionalcommits.org
 
 ## Formato
 
-```
-<tipo>[alcance opcional]: <descripción>
+```txt
+[tipo](alcance opcional): <descripción>
 
 [cuerpo opcional]
 
