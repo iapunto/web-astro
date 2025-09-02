@@ -55,7 +55,7 @@ export function getPool(): Pool {
     pool = new Pool({
       connectionString:
         process.env.DATABASE_PUBLIC_URL || process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
+      ssl: false,
       // Configuración del pool para evitar ECONNRESET
       max: 10, // Reducir el máximo de conexiones
       idleTimeoutMillis: 10000, // Reducir tiempo de inactividad
