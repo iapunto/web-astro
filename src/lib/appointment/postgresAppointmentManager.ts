@@ -38,18 +38,23 @@ export class PostgresAppointmentManager {
   }
 
   private initializeGoogleCalendar() {
-    this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
-    this.timezone = process.env.TIMEZONE || 'America/Bogota';
+    try {
+      this.calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
+      this.timezone = process.env.TIMEZONE || 'America/Bogota';
 
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/calendar'],
-    });
+      const auth = new google.auth.GoogleAuth({
+        credentials: {
+          client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+          private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        },
+        scopes: ['https://www.googleapis.com/auth/calendar'],
+      });
 
-    this.calendar = google.calendar({ version: 'v3', auth });
+      this.calendar = google.calendar({ version: 'v3', auth });
+    } catch (error) {
+      console.error('Error initializing Google Calendar:', error);
+      throw error;
+    }
   }
 
   async createAppointment(

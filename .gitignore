@@ -45,3 +45,6 @@ cspell.json
 # Cloudflare
 .wrangler/
 wrangler.toml
+
+*.log
+errors.log
