@@ -21,85 +21,59 @@ export async function GET() {
     const posts = await getCollection('blog');
     const site = 'https://iapunto.com';
 
-    const itemsPromises = posts
+    // Limitar a los últimos 50 artículos para n8n
+    const recentPosts = posts
       .sort((a, b) => {
         const dateA = normalizeDate(a.data.pubDate);
         const dateB = normalizeDate(b.data.pubDate);
         return dateB.getTime() - dateA.getTime();
       })
-      .map(async (post) => {
-        try {
-          // Validar y limpiar datos
-          const title = post.data.title || 'Sin título';
-          const slug = post.data.slug || post.id;
-          const pubDate = normalizeDate(post.data.pubDate);
-          const description = post.data.description || '';
-          const cover = post.data.cover || '';
-          const coverAlt = post.data.coverAlt || '';
-          const authorName = post.data.author?.name || 'IA Punto';
-          const authorDescription = post.data.author?.description || '';
-          const authorImage = post.data.author?.image || '';
-          const category = post.data.category || '';
-          const subcategory = post.data.subcategory || '';
-          const tags = post.data.tags || [];
-          const quote = post.data.quote || '';
+      .slice(0, 50); // Solo últimos 50 artículos
 
-          // Construir tags como string
-          const tagsString = tags.length > 0 ? tags.join(', ') : '';
+    const itemsPromises = recentPosts.map(async (post) => {
+      try {
+        // Validar y limpiar datos
+        const title = post.data.title || 'Sin título';
+        const slug = post.data.slug || post.id;
+        const pubDate = normalizeDate(post.data.pubDate);
+        const description = post.data.description || '';
+        const cover = post.data.cover || '';
+        const authorName = post.data.author?.name || 'IA Punto';
+        const category = post.data.category || '';
+        const tags = post.data.tags || [];
 
-          // Construir categorías
-          const categories = [category];
-          if (subcategory) {
-            categories.push(subcategory);
-          }
-          const categoriesString = categories.join(', ');
+        // Construir tags como string (limitado a 5 tags)
+        const tagsString = tags.slice(0, 5).join(', ');
 
-          // Fecha en formato ISO para n8n
-          const isoDate = pubDate.toISOString();
+        // Fecha en formato ISO para n8n
+        const isoDate = pubDate.toISOString();
 
-          return `
+        return `
       <item>
         <title><![CDATA[${title}]]></title>
         <link>${escapeXml(site)}/blog/${escapeXml(slug)}</link>
         <guid>${escapeXml(site)}/blog/${escapeXml(slug)}</guid>
         <pubDate>${pubDate.toUTCString()}</pubDate>
-        <isoDate>${isoDate}</isoDate>
         <description><![CDATA[${description}]]></description>
         <author>${escapeXml(authorName)}</author>
-        <category>${escapeXml(categoriesString)}</category>
-        <categories>${escapeXml(categoriesString)}</categories>
-        ${tagsString ? `<tags>${escapeXml(tagsString)}</tags>` : ''}
-        ${cover ? `<enclosure url="${escapeXml(cover)}" type="image/jpeg" />` : ''}
-        ${cover ? `<media:content url="${escapeXml(cover)}" type="image/jpeg" />` : ''}
-        ${cover ? `<media:thumbnail url="${escapeXml(cover)}" />` : ''}
-        ${coverAlt ? `<coverAlt>${escapeXml(coverAlt)}</coverAlt>` : ''}
-        ${authorDescription ? `<authorDescription>${escapeXml(authorDescription)}</authorDescription>` : ''}
-        ${authorImage ? `<authorImage>${escapeXml(authorImage)}</authorImage>` : ''}
-        ${quote ? `<quote>${escapeXml(quote)}</quote>` : ''}
-        <date>${escapeXml(pubDate.toString())}</date>
-        <slug>${escapeXml(slug)}</slug>
-        <!-- Campos adicionales para migración a Strapi -->
+        <category>${escapeXml(category)}</category>
+        <!-- Campos Strapi optimizados para n8n -->
         <strapi:title>${escapeXml(title)}</strapi:title>
         <strapi:slug>${escapeXml(slug)}</strapi:slug>
         <strapi:description>${escapeXml(description)}</strapi:description>
         <strapi:category>${escapeXml(category)}</strapi:category>
-        ${subcategory ? `<strapi:subcategory>${escapeXml(subcategory)}</strapi:subcategory>` : ''}
-        ${tagsString ? `<strapi:tags>${escapeXml(tagsString)}</strapi:tags>` : ''}
-        ${quote ? `<strapi:quote>${escapeXml(quote)}</strapi:quote>` : ''}
-        ${cover ? `<strapi:cover>${escapeXml(cover)}</strapi:cover>` : ''}
-        ${coverAlt ? `<strapi:coverAlt>${escapeXml(coverAlt)}</strapi:coverAlt>` : ''}
+        <strapi:tags>${escapeXml(tagsString)}</strapi:tags>
+        <strapi:cover>${escapeXml(cover)}</strapi:cover>
         <strapi:authorName>${escapeXml(authorName)}</strapi:authorName>
-        ${authorDescription ? `<strapi:authorDescription>${escapeXml(authorDescription)}</strapi:authorDescription>` : ''}
-        ${authorImage ? `<strapi:authorImage>${escapeXml(authorImage)}</strapi:authorImage>` : ''}
         <strapi:pubDate>${escapeXml(pubDate.toString())}</strapi:pubDate>
         <strapi:isoDate>${escapeXml(isoDate)}</strapi:isoDate>
       </item>
     `;
-        } catch (error) {
-          console.error(`Error procesando artículo ${post.id}:`, error);
-          return ''; // Retornar string vacío si hay error
-        }
-      });
+      } catch (error) {
+        console.error(`Error procesando artículo ${post.id}:`, error);
+        return ''; // Retornar string vacío si hay error
+      }
+    });
 
     const items = await Promise.all(itemsPromises);
     const validItems = items.filter((item) => item !== ''); // Filtrar items vacíos
