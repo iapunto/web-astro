@@ -29,9 +29,6 @@ importers:
       '@google/generative-ai':
         specifier: ^0.21.0
         version: 0.21.0
-      '@iconify-json/logos':
-        specifier: ^1.2.4
-        version: 1.2.4
       '@jop-software/astro-cookieconsent':
         specifier: ^3.0.1
         version: 3.0.1(vanilla-cookieconsent@3.1.0)
@@ -138,6 +135,9 @@ importers:
         specifier: ^3.24.2
         version: 3.25.76
     devDependencies:
+      '@iconify-json/logos':
+        specifier: ^1.2.4
+        version: 1.2.4
       '@iconify-json/material-symbols':
         specifier: ^1.2.15
         version: 1.2.29
@@ -4226,6 +4226,7 @@ packages:
   source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
 
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
