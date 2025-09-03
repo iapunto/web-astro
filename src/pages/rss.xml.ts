@@ -13,86 +13,7 @@ function escapeXml(text: string): string {
 
 // Función para normalizar fechas
 function normalizeDate(dateString: string): Date {
-  // Manejar diferentes formatos de fecha
-  if (dateString.includes(' ')) {
-    // Formato: 'Aug 26 2025'
-    return new Date(dateString);
-  } else {
-    // Formato: '2025-07-29'
-    return new Date(dateString);
-  }
-}
-
-// Función para limpiar contenido HTML
-function cleanHtmlContent(content: string): string {
-  if (!content) return '';
-  
-  // Limpieza básica de HTML problemático para RSS
-  return content
-    .replace(/<script[^>]*>.*?<\/script>/gis, '')
-    .replace(/<style[^>]*>.*?<\/style>/gis, '')
-    .replace(/<iframe[^>]*>.*?<\/iframe>/gis, '')
-    .replace(/<object[^>]*>.*?<\/object>/gis, '')
-    .replace(/<embed[^>]*>/gi, '')
-    .replace(/<form[^>]*>.*?<\/form>/gis, '')
-    .replace(/<input[^>]*>/gi, '')
-    .replace(/<button[^>]*>/gi, '')
-    .replace(/<select[^>]*>.*?<\/select>/gis, '')
-    .replace(/<textarea[^>]*>/gi, '')
-    .replace(/<label[^>]*>/gi, '')
-    .replace(/<fieldset[^>]*>/gi, '')
-    .replace(/<legend[^>]*>/gi, '')
-    .replace(/<optgroup[^>]*>/gi, '')
-    .replace(/<option[^>]*>/gi, '')
-    .replace(/<datalist[^>]*>.*?<\/datalist>/gis, '')
-    .replace(/<output[^>]*>/gi, '')
-    .replace(/<meter[^>]*>/gi, '')
-    .replace(/<progress[^>]*>/gi, '')
-    .replace(/<canvas[^>]*>/gi, '')
-    .replace(/<svg[^>]*>.*?<\/svg>/gis, '')
-    .replace(/<math[^>]*>.*?<\/math>/gis, '')
-    .replace(/<video[^>]*>.*?<\/video>/gis, '')
-    .replace(/<audio[^>]*>.*?<\/audio>/gis, '')
-    .replace(/<source[^>]*>/gi, '')
-    .replace(/<track[^>]*>/gi, '')
-    .replace(/<map[^>]*>.*?<\/map>/gis, '')
-    .replace(/<area[^>]*>/gi, '')
-    .replace(/<picture[^>]*>.*?<\/picture>/gis, '')
-    .replace(/<img[^>]*>/gi, '')
-    .replace(/<figure[^>]*>.*?<\/figure>/gis, '')
-    .replace(/<figcaption[^>]*>/gi, '')
-    .replace(/<details[^>]*>.*?<\/details>/gis, '')
-    .replace(/<summary[^>]*>/gi, '')
-    .replace(/<dialog[^>]*>.*?<\/dialog>/gis, '')
-    .replace(/<menu[^>]*>.*?<\/menu>/gis, '')
-    .replace(/<menuitem[^>]*>/gi, '')
-    .replace(/<command[^>]*>/gi, '')
-    .replace(/<keygen[^>]*>/gi, '')
-    .replace(/<isindex[^>]*>/gi, '')
-    .replace(/<listing[^>]*>/gi, '')
-    .replace(/<plaintext[^>]*>/gi, '')
-    .replace(/<xmp[^>]*>/gi, '')
-    .replace(/<noembed[^>]*>.*?<\/noembed>/gis, '')
-    .replace(/<noframes[^>]*>.*?<\/noframes>/gis, '')
-    .replace(/<noscript[^>]*>.*?<\/noscript>/gis, '')
-    .replace(/<applet[^>]*>.*?<\/applet>/gis, '')
-    .replace(/<basefont[^>]*>/gi, '')
-    .replace(/<bgsound[^>]*>/gi, '')
-    .replace(/<link[^>]*>/gi, '')
-    .replace(/<meta[^>]*>/gi, '')
-    .replace(/<title[^>]*>/gi, '')
-    .replace(/<head[^>]*>.*?<\/head>/gis, '')
-    .replace(/<body[^>]*>.*?<\/body>/gis, '')
-    .replace(/<html[^>]*>.*?<\/html>/gis, '')
-    .replace(/<!DOCTYPE[^>]*>/gi, '')
-    .replace(/<!--.*?-->/gs, '')
-    .replace(/<![CDATA\[/g, '')
-    .replace(/\]>/g, '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
+  return new Date(dateString);
 }
 
 export async function GET() {
@@ -122,7 +43,6 @@ export async function GET() {
           const subcategory = post.data.subcategory || '';
           const tags = post.data.tags || [];
           const quote = post.data.quote || '';
-          const content = post.body || '';
 
           // Construir tags como string
           const tagsString = tags.length > 0 ? tags.join(', ') : '';
@@ -133,9 +53,6 @@ export async function GET() {
             categories.push(subcategory);
           }
           const categoriesString = categories.join(', ');
-
-          // Limpiar contenido HTML
-          const cleanContent = cleanHtmlContent(content);
 
           // Fecha en formato ISO para n8n
           const isoDate = pubDate.toISOString();
@@ -185,7 +102,7 @@ export async function GET() {
       });
 
     const items = await Promise.all(itemsPromises);
-    const validItems = items.filter(item => item !== ''); // Filtrar items vacíos
+    const validItems = items.filter((item) => item !== ''); // Filtrar items vacíos
 
     const rss = `<?xml version="1.0" encoding="UTF-8" ?>
     <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:strapi="https://strapi.io/rss/">
@@ -203,8 +120,8 @@ export async function GET() {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
+        Pragma: 'no-cache',
+        Expires: '0',
       },
     });
   } catch (error) {
