@@ -60,8 +60,8 @@ export async function GET() {
           return `
       <item>
         <title><![CDATA[${title}]]></title>
-        <link>${site}/blog/${slug}</link>
-        <guid>${site}/blog/${slug}</guid>
+        <link>${escapeXml(site)}/blog/${escapeXml(slug)}</link>
+        <guid>${escapeXml(site)}/blog/${escapeXml(slug)}</guid>
         <pubDate>${pubDate.toUTCString()}</pubDate>
         <isoDate>${isoDate}</isoDate>
         <description><![CDATA[${description}]]></description>
@@ -69,30 +69,30 @@ export async function GET() {
         <category>${escapeXml(categoriesString)}</category>
         <categories>${escapeXml(categoriesString)}</categories>
         ${tagsString ? `<tags>${escapeXml(tagsString)}</tags>` : ''}
-        ${cover ? `<enclosure url="${cover}" type="image/jpeg" />` : ''}
-        ${cover ? `<media:content url="${cover}" type="image/jpeg" />` : ''}
-        ${cover ? `<media:thumbnail url="${cover}" />` : ''}
+        ${cover ? `<enclosure url="${escapeXml(cover)}" type="image/jpeg" />` : ''}
+        ${cover ? `<media:content url="${escapeXml(cover)}" type="image/jpeg" />` : ''}
+        ${cover ? `<media:thumbnail url="${escapeXml(cover)}" />` : ''}
         ${coverAlt ? `<coverAlt>${escapeXml(coverAlt)}</coverAlt>` : ''}
         ${authorDescription ? `<authorDescription>${escapeXml(authorDescription)}</authorDescription>` : ''}
-        ${authorImage ? `<authorImage>${authorImage}</authorImage>` : ''}
+        ${authorImage ? `<authorImage>${escapeXml(authorImage)}</authorImage>` : ''}
         ${quote ? `<quote>${escapeXml(quote)}</quote>` : ''}
-        <date>${pubDate.toString()}</date>
-        <slug>${slug}</slug>
+        <date>${escapeXml(pubDate.toString())}</date>
+        <slug>${escapeXml(slug)}</slug>
         <!-- Campos adicionales para migración a Strapi -->
         <strapi:title>${escapeXml(title)}</strapi:title>
-        <strapi:slug>${slug}</strapi:slug>
+        <strapi:slug>${escapeXml(slug)}</strapi:slug>
         <strapi:description>${escapeXml(description)}</strapi:description>
         <strapi:category>${escapeXml(category)}</strapi:category>
         ${subcategory ? `<strapi:subcategory>${escapeXml(subcategory)}</strapi:subcategory>` : ''}
         ${tagsString ? `<strapi:tags>${escapeXml(tagsString)}</strapi:tags>` : ''}
         ${quote ? `<strapi:quote>${escapeXml(quote)}</strapi:quote>` : ''}
-        ${cover ? `<strapi:cover>${cover}</strapi:cover>` : ''}
+        ${cover ? `<strapi:cover>${escapeXml(cover)}</strapi:cover>` : ''}
         ${coverAlt ? `<strapi:coverAlt>${escapeXml(coverAlt)}</strapi:coverAlt>` : ''}
         <strapi:authorName>${escapeXml(authorName)}</strapi:authorName>
         ${authorDescription ? `<strapi:authorDescription>${escapeXml(authorDescription)}</strapi:authorDescription>` : ''}
-        ${authorImage ? `<strapi:authorImage>${authorImage}</strapi:authorImage>` : ''}
-        <strapi:pubDate>${pubDate.toString()}</strapi:pubDate>
-        <strapi:isoDate>${isoDate}</strapi:isoDate>
+        ${authorImage ? `<strapi:authorImage>${escapeXml(authorImage)}</strapi:authorImage>` : ''}
+        <strapi:pubDate>${escapeXml(pubDate.toString())}</strapi:pubDate>
+        <strapi:isoDate>${escapeXml(isoDate)}</strapi:isoDate>
       </item>
     `;
         } catch (error) {
