@@ -2,6 +2,7 @@ import { getCollection } from 'astro:content';
 
 // Función para escapar caracteres especiales en XML
 function escapeXml(text: string): string {
+  if (!text) return '';
   return text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -10,77 +11,183 @@ function escapeXml(text: string): string {
     .replace(/'/g, '&apos;');
 }
 
+// Función para normalizar fechas
+function normalizeDate(dateString: string): Date {
+  // Manejar diferentes formatos de fecha
+  if (dateString.includes(' ')) {
+    // Formato: 'Aug 26 2025'
+    return new Date(dateString);
+  } else {
+    // Formato: '2025-07-29'
+    return new Date(dateString);
+  }
+}
+
+// Función para limpiar contenido HTML
+function cleanHtmlContent(content: string): string {
+  if (!content) return '';
+  
+  // Limpieza básica de HTML problemático para RSS
+  return content
+    .replace(/<script[^>]*>.*?<\/script>/gis, '')
+    .replace(/<style[^>]*>.*?<\/style>/gis, '')
+    .replace(/<iframe[^>]*>.*?<\/iframe>/gis, '')
+    .replace(/<object[^>]*>.*?<\/object>/gis, '')
+    .replace(/<embed[^>]*>/gi, '')
+    .replace(/<form[^>]*>.*?<\/form>/gis, '')
+    .replace(/<input[^>]*>/gi, '')
+    .replace(/<button[^>]*>/gi, '')
+    .replace(/<select[^>]*>.*?<\/select>/gis, '')
+    .replace(/<textarea[^>]*>/gi, '')
+    .replace(/<label[^>]*>/gi, '')
+    .replace(/<fieldset[^>]*>/gi, '')
+    .replace(/<legend[^>]*>/gi, '')
+    .replace(/<optgroup[^>]*>/gi, '')
+    .replace(/<option[^>]*>/gi, '')
+    .replace(/<datalist[^>]*>.*?<\/datalist>/gis, '')
+    .replace(/<output[^>]*>/gi, '')
+    .replace(/<meter[^>]*>/gi, '')
+    .replace(/<progress[^>]*>/gi, '')
+    .replace(/<canvas[^>]*>/gi, '')
+    .replace(/<svg[^>]*>.*?<\/svg>/gis, '')
+    .replace(/<math[^>]*>.*?<\/math>/gis, '')
+    .replace(/<video[^>]*>.*?<\/video>/gis, '')
+    .replace(/<audio[^>]*>.*?<\/audio>/gis, '')
+    .replace(/<source[^>]*>/gi, '')
+    .replace(/<track[^>]*>/gi, '')
+    .replace(/<map[^>]*>.*?<\/map>/gis, '')
+    .replace(/<area[^>]*>/gi, '')
+    .replace(/<picture[^>]*>.*?<\/picture>/gis, '')
+    .replace(/<img[^>]*>/gi, '')
+    .replace(/<figure[^>]*>.*?<\/figure>/gis, '')
+    .replace(/<figcaption[^>]*>/gi, '')
+    .replace(/<details[^>]*>.*?<\/details>/gis, '')
+    .replace(/<summary[^>]*>/gi, '')
+    .replace(/<dialog[^>]*>.*?<\/dialog>/gis, '')
+    .replace(/<menu[^>]*>.*?<\/menu>/gis, '')
+    .replace(/<menuitem[^>]*>/gi, '')
+    .replace(/<command[^>]*>/gi, '')
+    .replace(/<keygen[^>]*>/gi, '')
+    .replace(/<isindex[^>]*>/gi, '')
+    .replace(/<listing[^>]*>/gi, '')
+    .replace(/<plaintext[^>]*>/gi, '')
+    .replace(/<xmp[^>]*>/gi, '')
+    .replace(/<noembed[^>]*>.*?<\/noembed>/gis, '')
+    .replace(/<noframes[^>]*>.*?<\/noframes>/gis, '')
+    .replace(/<noscript[^>]*>.*?<\/noscript>/gis, '')
+    .replace(/<applet[^>]*>.*?<\/applet>/gis, '')
+    .replace(/<basefont[^>]*>/gi, '')
+    .replace(/<bgsound[^>]*>/gi, '')
+    .replace(/<link[^>]*>/gi, '')
+    .replace(/<meta[^>]*>/gi, '')
+    .replace(/<title[^>]*>/gi, '')
+    .replace(/<head[^>]*>.*?<\/head>/gis, '')
+    .replace(/<body[^>]*>.*?<\/body>/gis, '')
+    .replace(/<html[^>]*>.*?<\/html>/gis, '')
+    .replace(/<!DOCTYPE[^>]*>/gi, '')
+    .replace(/<!--.*?-->/gs, '')
+    .replace(/<![CDATA\[/g, '')
+    .replace(/\]>/g, '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 export async function GET() {
-  const posts = await getCollection('blog');
-  const site = 'https://iapunto.com';
+  try {
+    const posts = await getCollection('blog');
+    const site = 'https://iapunto.com';
 
-  const itemsPromises = posts
-    .sort(
-      (a, b) =>
-        new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-    )
-    .map(async (post) => {
-      // Construir tags como string
-      const tagsString = post.data.tags ? post.data.tags.join(', ') : '';
+    const itemsPromises = posts
+      .sort((a, b) => {
+        const dateA = normalizeDate(a.data.pubDate);
+        const dateB = normalizeDate(b.data.pubDate);
+        return dateB.getTime() - dateA.getTime();
+      })
+      .map(async (post) => {
+        try {
+          // Validar y limpiar datos
+          const title = post.data.title || 'Sin título';
+          const slug = post.data.slug || post.id;
+          const pubDate = normalizeDate(post.data.pubDate);
+          const description = post.data.description || '';
+          const cover = post.data.cover || '';
+          const coverAlt = post.data.coverAlt || '';
+          const authorName = post.data.author?.name || 'IA Punto';
+          const authorDescription = post.data.author?.description || '';
+          const authorImage = post.data.author?.image || '';
+          const category = post.data.category || '';
+          const subcategory = post.data.subcategory || '';
+          const tags = post.data.tags || [];
+          const quote = post.data.quote || '';
+          const content = post.body || '';
 
-      // Construir categorías
-      const categories = [post.data.category];
-      if (post.data.subcategory) {
-        categories.push(post.data.subcategory);
-      }
-      const categoriesString = categories.join(', ');
+          // Construir tags como string
+          const tagsString = tags.length > 0 ? tags.join(', ') : '';
 
-      // Obtener el contenido completo del artículo y escapar caracteres especiales
-      const contentHtml = escapeXml(post.body || '');
+          // Construir categorías
+          const categories = [category];
+          if (subcategory) {
+            categories.push(subcategory);
+          }
+          const categoriesString = categories.join(', ');
 
-      // Fecha en formato ISO para n8n
-      const isoDate = new Date(post.data.pubDate).toISOString();
+          // Limpiar contenido HTML
+          const cleanContent = cleanHtmlContent(content);
 
-      return `
+          // Fecha en formato ISO para n8n
+          const isoDate = pubDate.toISOString();
+
+          return `
       <item>
-        <title><![CDATA[${post.data.title}]]></title>
-        <link>${site}/blog/${post.data.slug || post.id}</link>
-        <guid>${site}/blog/${post.data.slug || post.id}</guid>
-        <pubDate>${new Date(post.data.pubDate).toUTCString()}</pubDate>
+        <title><![CDATA[${title}]]></title>
+        <link>${site}/blog/${slug}</link>
+        <guid>${site}/blog/${slug}</guid>
+        <pubDate>${pubDate.toUTCString()}</pubDate>
         <isoDate>${isoDate}</isoDate>
-        <description><![CDATA[${post.data.description}]]></description>
-        <author>${escapeXml(post.data.author?.name || 'IA Punto')}</author>
+        <description><![CDATA[${description}]]></description>
+        <author>${escapeXml(authorName)}</author>
         <category>${escapeXml(categoriesString)}</category>
         <categories>${escapeXml(categoriesString)}</categories>
         ${tagsString ? `<tags>${escapeXml(tagsString)}</tags>` : ''}
-        <enclosure url="${post.data.cover}" type="image/jpeg" />
-        <media:content url="${post.data.cover}" type="image/jpeg" />
-        <media:thumbnail url="${post.data.cover}" />
-        <coverAlt>${escapeXml(post.data.coverAlt || '')}</coverAlt>
-        <authorDescription>${escapeXml(post.data.author?.description || '')}</authorDescription>
-        <authorImage>${post.data.author?.image || ''}</authorImage>
-        <quote>${escapeXml(post.data.quote || '')}</quote>
-        <date>${post.data.pubDate}</date>
-        <slug>${post.data.slug || post.id}</slug>
-        <content:encoded><![CDATA[${contentHtml}]]></content:encoded>
+        ${cover ? `<enclosure url="${cover}" type="image/jpeg" />` : ''}
+        ${cover ? `<media:content url="${cover}" type="image/jpeg" />` : ''}
+        ${cover ? `<media:thumbnail url="${cover}" />` : ''}
+        ${coverAlt ? `<coverAlt>${escapeXml(coverAlt)}</coverAlt>` : ''}
+        ${authorDescription ? `<authorDescription>${escapeXml(authorDescription)}</authorDescription>` : ''}
+        ${authorImage ? `<authorImage>${authorImage}</authorImage>` : ''}
+        ${quote ? `<quote>${escapeXml(quote)}</quote>` : ''}
+        <date>${pubDate.toString()}</date>
+        <slug>${slug}</slug>
         <!-- Campos adicionales para migración a Strapi -->
-        <strapi:title>${escapeXml(post.data.title)}</strapi:title>
-        <strapi:slug>${post.data.slug || post.id}</strapi:slug>
-        <strapi:description>${escapeXml(post.data.description)}</strapi:description>
-        <strapi:category>${escapeXml(post.data.category)}</strapi:category>
-        <strapi:subcategory>${escapeXml(post.data.subcategory || '')}</strapi:subcategory>
-        <strapi:tags>${escapeXml(tagsString)}</strapi:tags>
-        <strapi:quote>${escapeXml(post.data.quote || '')}</strapi:quote>
-        <strapi:cover>${post.data.cover}</strapi:cover>
-        <strapi:coverAlt>${escapeXml(post.data.coverAlt || '')}</strapi:coverAlt>
-        <strapi:authorName>${escapeXml(post.data.author?.name || 'IA Punto')}</strapi:authorName>
-        <strapi:authorDescription>${escapeXml(post.data.author?.description || '')}</strapi:authorDescription>
-        <strapi:authorImage>${post.data.author?.image || ''}</strapi:authorImage>
-        <strapi:pubDate>${post.data.pubDate}</strapi:pubDate>
+        <strapi:title>${escapeXml(title)}</strapi:title>
+        <strapi:slug>${slug}</strapi:slug>
+        <strapi:description>${escapeXml(description)}</strapi:description>
+        <strapi:category>${escapeXml(category)}</strapi:category>
+        ${subcategory ? `<strapi:subcategory>${escapeXml(subcategory)}</strapi:subcategory>` : ''}
+        ${tagsString ? `<strapi:tags>${escapeXml(tagsString)}</strapi:tags>` : ''}
+        ${quote ? `<strapi:quote>${escapeXml(quote)}</strapi:quote>` : ''}
+        ${cover ? `<strapi:cover>${cover}</strapi:cover>` : ''}
+        ${coverAlt ? `<strapi:coverAlt>${escapeXml(coverAlt)}</strapi:coverAlt>` : ''}
+        <strapi:authorName>${escapeXml(authorName)}</strapi:authorName>
+        ${authorDescription ? `<strapi:authorDescription>${escapeXml(authorDescription)}</strapi:authorDescription>` : ''}
+        ${authorImage ? `<strapi:authorImage>${authorImage}</strapi:authorImage>` : ''}
+        <strapi:pubDate>${pubDate.toString()}</strapi:pubDate>
         <strapi:isoDate>${isoDate}</strapi:isoDate>
-        <strapi:content><![CDATA[${contentHtml}]]></strapi:content>
       </item>
     `;
-    });
+        } catch (error) {
+          console.error(`Error procesando artículo ${post.id}:`, error);
+          return ''; // Retornar string vacío si hay error
+        }
+      });
 
-  const items = await Promise.all(itemsPromises);
+    const items = await Promise.all(itemsPromises);
+    const validItems = items.filter(item => item !== ''); // Filtrar items vacíos
 
-  const rss = `<?xml version="1.0" encoding="UTF-8" ?>
+    const rss = `<?xml version="1.0" encoding="UTF-8" ?>
     <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:strapi="https://strapi.io/rss/">
       <channel>
         <title>Blog de IA Punto</title>
@@ -88,13 +195,20 @@ export async function GET() {
         <description>Últimos artículos y novedades de IA Punto</description>
         <language>es</language>
         <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-        ${items.join('')}
+        ${validItems.join('')}
       </channel>
     </rss>`;
 
-  return new Response(rss, {
-    headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-    },
-  });
+    return new Response(rss, {
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      },
+    });
+  } catch (error) {
+    console.error('Error generando RSS:', error);
+    return new Response('Error generando RSS', { status: 500 });
+  }
 }
