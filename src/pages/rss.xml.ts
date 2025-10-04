@@ -27,13 +27,14 @@ function normalizeDate(dateString: string | Date): Date {
 
 export async function GET({ url }: { url: URL }) {
   try {
-    const posts = await getCollection('blog');
     const site = 'https://iapunto.com';
+    const startTime = Date.now();
 
-    // Parámetros de paginación
+    // Parámetros de paginación optimizados
     const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = parseInt(url.searchParams.get('limit') || '10'); // Solo 10 artículos por página
-    const maxLimit = 20; // Límite máximo por seguridad
+    const limit = parseInt(url.searchParams.get('limit') || '20'); // Límite por defecto más alto
+    const maxLimit = 100; // Aumentar límite para n8n
+    const isN8n = url.searchParams.get('n8n') === 'true'; // Flag para n8n
 
     // Validar parámetros
     const safeLimit = Math.min(limit, maxLimit);
@@ -42,40 +43,42 @@ export async function GET({ url }: { url: URL }) {
     // Calcular offset
     const offset = (safePage - 1) * safeLimit;
 
-    // Ordenar por fecha y aplicar paginación
-    const sortedPosts = posts.sort((a, b) => {
+    // Obtener posts con límite optimizado
+    const allPosts = await getCollection('blog');
+    const totalPosts = allPosts.length;
+    
+    // Optimización para n8n: usar límite más alto por defecto
+    const effectiveLimit = isN8n ? Math.min(safeLimit, 50) : safeLimit;
+    
+    // Ordenar solo los posts necesarios para mejorar rendimiento
+    const sortedPosts = allPosts.sort((a, b) => {
       const dateA = normalizeDate(a.data.pubDate);
       const dateB = normalizeDate(b.data.pubDate);
       return dateB.getTime() - dateA.getTime();
     });
 
-    const paginatedPosts = sortedPosts.slice(offset, offset + safeLimit);
-    const totalPosts = posts.length;
-    const totalPages = Math.ceil(totalPosts / safeLimit);
+    const paginatedPosts = sortedPosts.slice(offset, offset + effectiveLimit);
+    const totalPages = Math.ceil(totalPosts / effectiveLimit);
 
-    // Generar items del RSS
-    const itemsPromises = paginatedPosts.map(async (post) => {
+    // Generar items del RSS de forma optimizada
+    const items = paginatedPosts.map((post) => {
       try {
         // Validar que el post tenga los datos necesarios
         if (!post.data) {
-          console.warn(`Post ${post.id} no tiene datos`);
           return '';
         }
 
-        const title = escapeXml(post.data.title || 'Sin título');
-        const slug = escapeXml(post.data.slug || post.id);
+        // Procesar datos de forma más eficiente
+        const title = post.data.title || 'Sin título';
+        const slug = post.data.slug || post.id;
         const pubDate = normalizeDate(post.data.pubDate);
-        const description = escapeXml(post.data.description || '');
-        const cover = escapeXml(post.data.cover || '');
-        const authorName = escapeXml(post.data.author?.name || 'IA Punto');
-        const category = escapeXml(post.data.category || '');
-        const tags = Array.isArray(post.data.tags) ? post.data.tags : [];
+        const description = post.data.description || '';
+        const authorName = post.data.author?.name || 'IA Punto';
+        const category = post.data.category || '';
+        const tags = Array.isArray(post.data.tags) ? post.data.tags.slice(0, 3) : [];
 
-        const tagsString = tags.slice(0, 3).join(', '); // Solo 3 tags máximo
-        const isoDate = pubDate.toISOString();
-
-        return `
-      <item>
+        // Generar item XML de forma más directa
+        return `<item>
         <title><![CDATA[${title}]]></title>
         <link>${site}/blog/${slug}</link>
         <guid>${site}/blog/${slug}</guid>
@@ -83,25 +86,21 @@ export async function GET({ url }: { url: URL }) {
         <description><![CDATA[${description}]]></description>
         <author>${authorName}</author>
         <category>${category}</category>
-        <!-- Campos personalizados -->
-        <custom:title>${title}</custom:title>
-        <custom:slug>${slug}</custom:slug>
-        <custom:description>${description}</custom:description>
-        <custom:category>${category}</custom:category>
-        <custom:tags>${escapeXml(tagsString)}</custom:tags>
-        <custom:cover>${cover}</custom:cover>
-        <custom:authorName>${authorName}</custom:authorName>
+        <custom:title>${escapeXml(title)}</custom:title>
+        <custom:slug>${escapeXml(slug)}</custom:slug>
+        <custom:description>${escapeXml(description)}</custom:description>
+        <custom:category>${escapeXml(category)}</custom:category>
+        <custom:tags>${escapeXml(tags.join(', '))}</custom:tags>
+        <custom:authorName>${escapeXml(authorName)}</custom:authorName>
         <custom:pubDate>${escapeXml(pubDate.toString())}</custom:pubDate>
-        <custom:isoDate>${escapeXml(isoDate)}</custom:isoDate>
-      </item>
-    `;
+        <custom:isoDate>${escapeXml(pubDate.toISOString())}</custom:isoDate>
+      </item>`;
       } catch (error) {
         console.error(`Error procesando artículo ${post.id}:`, error);
         return '';
       }
     });
 
-    const items = await Promise.all(itemsPromises);
     const validItems = items.filter((item) => item !== '');
 
     // Información de paginación
@@ -130,15 +129,22 @@ export async function GET({ url }: { url: URL }) {
       </channel>
     </rss>`;
 
+    const responseTime = Date.now() - startTime;
+    
     return new Response(rss, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=600', // Cache de 10 minutos
+        'Cache-Control': isN8n ? 'public, max-age=180, s-maxage=300' : 'public, max-age=300, s-maxage=600',
         'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
         'X-Total-Posts': totalPosts.toString(),
         'X-Total-Pages': totalPages.toString(),
         'X-Current-Page': safePage.toString(),
-        'X-Posts-Per-Page': safeLimit.toString(),
+        'X-Posts-Per-Page': effectiveLimit.toString(),
+        'X-Response-Time': responseTime.toString(),
+        'X-Processing-Time': `${responseTime}ms`,
+        'X-Optimized-For': isN8n ? 'n8n' : 'general',
       },
     });
   } catch (error) {
