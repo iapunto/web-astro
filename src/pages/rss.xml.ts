@@ -113,8 +113,8 @@ export async function GET({ url }: { url: URL }) {
     <custom:postsPerPage>${safeLimit}</custom:postsPerPage>
     <custom:hasNextPage>${safePage < totalPages}</custom:hasNextPage>
     <custom:hasPrevPage>${safePage > 1}</custom:hasPrevPage>
-    ${safePage < totalPages ? `<custom:nextPageUrl>${site}/rss.xml?page=${safePage + 1}&limit=${safeLimit}</custom:nextPageUrl>` : ''}
-    ${safePage > 1 ? `<custom:prevPageUrl>${site}/rss.xml?page=${safePage - 1}&limit=${safeLimit}</custom:prevPageUrl>` : ''}
+    ${safePage < totalPages ? `<custom:nextPageUrl>${escapeXml(site)}/rss.xml?page=${safePage + 1}&amp;limit=${safeLimit}</custom:nextPageUrl>` : ''}
+    ${safePage > 1 ? `<custom:prevPageUrl>${escapeXml(site)}/rss.xml?page=${safePage - 1}&amp;limit=${safeLimit}</custom:prevPageUrl>` : ''}
     `;
 
     const rss = `<?xml version="1.0" encoding="UTF-8" ?>
