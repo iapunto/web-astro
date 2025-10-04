@@ -30,16 +30,20 @@ export async function GET({ url }: { url: URL }) {
     
     // Parámetros de paginación optimizados para migración
     const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = parseInt(url.searchParams.get('limit') || '25'); // Límite optimizado para n8n
-    const maxLimit = 50;
+    const limit = parseInt(url.searchParams.get('limit') || '10'); // Límite muy pequeño para n8n
+    const maxLimit = 20; // Límite máximo reducido
     const format = url.searchParams.get('format') || 'json'; // json o rss
+    const isN8n = url.searchParams.get('n8n') === 'true'; // Flag para n8n
 
     // Validar parámetros
     const safeLimit = Math.min(limit, maxLimit);
     const safePage = Math.max(1, page);
+    
+    // Optimización específica para n8n: lotes aún más pequeños
+    const effectiveLimit = isN8n ? Math.min(safeLimit, 10) : safeLimit;
 
     // Calcular offset
-    const offset = (safePage - 1) * safeLimit;
+    const offset = (safePage - 1) * effectiveLimit;
 
     // Obtener todos los posts
     const allPosts = await getCollection('blog');
@@ -53,8 +57,8 @@ export async function GET({ url }: { url: URL }) {
     });
 
     // Aplicar paginación
-    const paginatedPosts = sortedPosts.slice(offset, offset + safeLimit);
-    const totalPages = Math.ceil(totalPosts / safeLimit);
+    const paginatedPosts = sortedPosts.slice(offset, offset + effectiveLimit);
+    const totalPages = Math.ceil(totalPosts / effectiveLimit);
 
     // Procesar posts para migración a Strapi
     const processedPosts = paginatedPosts.map((post) => {
@@ -128,13 +132,13 @@ export async function GET({ url }: { url: URL }) {
           currentPage: safePage,
           totalPages: totalPages,
           totalPosts: totalPosts,
-          postsPerPage: safeLimit,
+          postsPerPage: effectiveLimit,
           hasNextPage: safePage < totalPages,
           hasPrevPage: safePage > 1,
           nextPageUrl: safePage < totalPages ? 
-            `${url.origin}/migrate-to-strapi.json?page=${safePage + 1}&limit=${safeLimit}` : null,
+            `${url.origin}/migrate-to-strapi.json?page=${safePage + 1}&limit=${effectiveLimit}${isN8n ? '&n8n=true' : ''}` : null,
           prevPageUrl: safePage > 1 ? 
-            `${url.origin}/migrate-to-strapi.json?page=${safePage - 1}&limit=${safeLimit}` : null,
+            `${url.origin}/migrate-to-strapi.json?page=${safePage - 1}&limit=${effectiveLimit}${isN8n ? '&n8n=true' : ''}` : null,
         },
         performance: {
           responseTime: responseTime,
@@ -147,7 +151,7 @@ export async function GET({ url }: { url: URL }) {
           instructions: {
             endpoint: 'POST /api/articles',
             contentType: 'application/json',
-            batchSize: safeLimit,
+            batchSize: effectiveLimit,
             totalBatches: totalPages,
           }
         }
@@ -164,7 +168,7 @@ export async function GET({ url }: { url: URL }) {
         'X-Total-Posts': totalPosts.toString(),
         'X-Total-Pages': totalPages.toString(),
         'X-Current-Page': safePage.toString(),
-        'X-Posts-Per-Page': safeLimit.toString(),
+        'X-Posts-Per-Page': effectiveLimit.toString(),
         'X-Response-Time': responseTime.toString(),
         'X-Processing-Time': `${responseTime}ms`,
         'X-Migration-Format': 'strapi-compatible',
