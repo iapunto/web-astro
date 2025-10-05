@@ -2,6 +2,7 @@ import { google } from 'googleapis';
 import { PostgresAppointmentService } from '../database/postgresAppointmentService.js';
 import { ResendEmailService } from '../email/resendEmailService.js';
 import { Appointment } from '../database/postgresSchema.js';
+import { hybridCacheService } from '../cache/hybridCacheService.js';
 
 export interface CreateAppointmentRequest {
   clientName: string;
@@ -138,7 +139,7 @@ export class PostgresAppointmentManager {
       result.details!.databaseCreated = true;
 
       // Limpiar caché para la fecha de la cita
-      this.clearCacheForDate(request.appointmentDate);
+      await this.clearCacheForDate(request.appointmentDate);
 
       // 4. Crear evento en Google Calendar
       try {
@@ -199,7 +200,7 @@ export class PostgresAppointmentManager {
       });
 
       // Limpiar caché para la fecha de la cita cancelada
-      this.clearCacheForDate(appointment.appointmentDate);
+      await this.clearCacheForDate(appointment.appointmentDate);
 
       // Cancelar evento en Google Calendar si existe
       if (appointment.googleCalendarEventId && this.calendarInitialized && this.calendar) {
@@ -252,8 +253,8 @@ export class PostgresAppointmentManager {
       });
 
       // Limpiar caché para ambas fechas (anterior y nueva)
-      this.clearCacheForDate(appointment.appointmentDate);
-      this.clearCacheForDate(newDate);
+      await this.clearCacheForDate(appointment.appointmentDate);
+      await this.clearCacheForDate(newDate);
 
       // Actualizar evento en Google Calendar si existe
       if (appointment.googleCalendarEventId && this.calendarInitialized && this.calendar) {
@@ -337,36 +338,26 @@ export class PostgresAppointmentManager {
     }
   }
 
-  // Método para verificar caché
-  private getCachedAvailability(date: string): string[] | null {
-    const cached = this.availabilityCache.get(date);
-    if (cached && (Date.now() - cached.timestamp) < this.cacheExpiry) {
-      console.log(`💾 Usando caché para ${date}`);
-      return cached.data;
-    }
-    return null;
+  // Método para verificar caché híbrido
+  private async getCachedAvailability(date: string): Promise<string[] | null> {
+    return await hybridCacheService.getAvailability(date);
   }
 
-  // Método para guardar en caché
-  private setCachedAvailability(date: string, data: string[]): void {
-    this.availabilityCache.set(date, {
-      data,
-      timestamp: Date.now()
-    });
+  // Método para guardar en caché híbrido
+  private async setCachedAvailability(date: string, data: string[]): Promise<void> {
+    await hybridCacheService.setAvailability(date, data, this.cacheExpiry);
   }
 
   // Método para limpiar caché cuando se crean/modifican citas
-  private clearCacheForDate(date: string): void {
-    this.availabilityCache.delete(date);
-    this.dailyAppointmentsCache.delete(date);
-    console.log(`🗑️ Caché limpiado para ${date}`);
+  private async clearCacheForDate(date: string): Promise<void> {
+    await hybridCacheService.clearAvailabilityCache(date);
+    console.log(`🗑️ Caché híbrido limpiado para ${date}`);
   }
 
   // Método para limpiar todo el caché
-  private clearAllCache(): void {
-    this.availabilityCache.clear();
-    this.dailyAppointmentsCache.clear();
-    console.log(`🗑️ Todo el caché limpiado`);
+  private async clearAllCache(): Promise<void> {
+    await hybridCacheService.clearAllAvailabilityCache();
+    console.log(`🗑️ Todo el caché híbrido limpiado`);
   }
 
   // Método optimizado para obtener disponibilidad mensual
@@ -419,17 +410,17 @@ export class PostgresAppointmentManager {
     };
   }
 
-  // Método para obtener conteo diario con caché
+  // Método para obtener conteo diario con caché híbrido
   private async getCachedDailyCount(date: string): Promise<number> {
-    const cached = this.dailyAppointmentsCache.get(date);
-    if (cached !== undefined && (Date.now() - (this.dailyAppointmentsCache as any).getTimestamp?.(date) || 0) < this.dailyCacheExpiry) {
-      console.log(`💾 Usando caché de conteo diario para ${date}: ${cached}`);
+    const cached = await hybridCacheService.getDailyCount(date);
+    if (cached !== null) {
+      console.log(`💾 Usando caché híbrido de conteo diario para ${date}: ${cached}`);
       return cached;
     }
 
     try {
       const count = await this.appointmentService.getDailyAppointmentsCount(date);
-      this.dailyAppointmentsCache.set(date, count);
+      await hybridCacheService.setDailyCount(date, count, this.dailyCacheExpiry);
       console.log(`📊 Conteo diario para ${date}: ${count}`);
       return count;
     } catch (error) {
@@ -441,7 +432,7 @@ export class PostgresAppointmentManager {
   async getAvailabilityForDate(date: string): Promise<string[]> {
     try {
       // Verificar caché primero
-      const cached = this.getCachedAvailability(date);
+      const cached = await this.getCachedAvailability(date);
       if (cached) {
         return cached;
       }
@@ -452,7 +443,7 @@ export class PostgresAppointmentManager {
       const dayOfWeek = new Date(date).getDay();
       if (dayOfWeek === 0 || dayOfWeek === 6) {
         console.log(`📅 ${date} es fin de semana, no disponible`);
-        this.setCachedAvailability(date, []);
+        await this.setCachedAvailability(date, []);
         return []; // Fines de semana no disponibles
       }
 
@@ -482,7 +473,7 @@ export class PostgresAppointmentManager {
 
       if (dailyCount >= maxPerDay) {
         console.log(`❌ Día completo ocupado: ${date}`);
-        this.setCachedAvailability(date, []);
+        await this.setCachedAvailability(date, []);
         return []; // Día completo ocupado
       }
 
@@ -548,7 +539,7 @@ export class PostgresAppointmentManager {
       console.log(`📋 Horarios disponibles para ${date}:`, availableSlots);
       
       // Guardar en caché
-      this.setCachedAvailability(date, availableSlots);
+      await this.setCachedAvailability(date, availableSlots);
       
       return availableSlots;
     } catch (error) {
