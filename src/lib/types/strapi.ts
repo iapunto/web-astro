@@ -10,31 +10,30 @@ export interface StrapiResponse<T> {
   };
 }
 
+// Strapi v5 - Los campos están directamente en el objeto, no en attributes
 export interface StrapiImage {
   id: number;
-  attributes: {
-    name: string;
-    alternativeText?: string;
-    caption?: string;
-    width: number;
-    height: number;
-    formats?: {
-      thumbnail?: StrapiImageFormat;
-      small?: StrapiImageFormat;
-      medium?: StrapiImageFormat;
-      large?: StrapiImageFormat;
-    };
-    hash: string;
-    ext: string;
-    mime: string;
-    size: number;
-    url: string;
-    previewUrl?: string;
-    provider: string;
-    provider_metadata?: any;
-    createdAt: string;
-    updatedAt: string;
+  name: string;
+  alternativeText?: string;
+  caption?: string;
+  width: number;
+  height: number;
+  formats?: {
+    thumbnail?: StrapiImageFormat;
+    small?: StrapiImageFormat;
+    medium?: StrapiImageFormat;
+    large?: StrapiImageFormat;
   };
+  hash: string;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
+  previewUrl?: string;
+  provider: string;
+  provider_metadata?: any;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface StrapiImageFormat {
@@ -50,68 +49,57 @@ export interface StrapiImageFormat {
 
 export interface StrapiCategory {
   id: number;
-  attributes: {
-    name: string;
-    slug: string;
-    description?: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-  };
+  name: string;
+  slug: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
 
 export interface StrapiTag {
   id: number;
-  attributes: {
-    name: string;
-    slug: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-  };
+  name: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
 
 export interface StrapiAuthor {
   id: number;
-  attributes: {
-    name: string;
-    email: string;
-    bio?: string;
-    avatar?: StrapiImage;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-  };
+  name: string;
+  email: string;
+  bio?: string;
+  avatar?: StrapiImage;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
 
 export interface StrapiArticle {
   id: number;
-  attributes: {
-    title: string;
-    slug: string;
-    content: string;
-    excerpt?: string;
-    featured?: boolean;
-    article_status: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-    cover?: StrapiImage;
-    author?: {
-      data: StrapiAuthor;
-    };
-    category?: {
-      data: StrapiCategory;
-    };
-    tags?: {
-      data: StrapiTag[];
-    };
-    seo?: {
-      metaTitle?: string;
-      metaDescription?: string;
-      keywords?: string;
-      canonicalURL?: string;
-    };
+  documentId: string; // Importante para Strapi v5
+  title: string;
+  slug: string;
+  content: string;
+  excerpt?: string;
+  description?: string; // Campo que agregamos durante la migración
+  coverAlt?: string; // Campo que agregamos durante la migración
+  featured?: boolean;
+  article_status: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  cover?: StrapiImage;
+  author?: StrapiAuthor;
+  category?: StrapiCategory;
+  tags?: StrapiTag[];
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: string;
+    canonicalURL?: string;
   };
 }
 

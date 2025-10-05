@@ -42,7 +42,7 @@ export class StrapiService {
 
   static async getArticle(slug: string): Promise<StrapiArticle | null> {
     try {
-      const response = await this.fetchAPI<StrapiResponse<StrapiArticle>>(`/articles?filters[slug][$eq]=${slug}&populate=*`);
+      const response = await this.fetchAPI<StrapiResponse<StrapiArticle[]>>(`/articles?filters[slug][$eq]=${slug}&populate=*`);
       return response.data?.[0] || null;
     } catch (error) {
       console.error('Error fetching article from Strapi:', error);

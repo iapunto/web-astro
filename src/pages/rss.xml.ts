@@ -1,4 +1,4 @@
-import { getCollection } from 'astro:content';
+import { StrapiService } from '../lib/strapi';
 
 // Función para escapar caracteres especiales en XML
 function escapeXml(text: string): string {
@@ -43,8 +43,8 @@ export async function GET({ url }: { url: URL }) {
     // Calcular offset
     const offset = (safePage - 1) * safeLimit;
 
-    // Obtener posts con límite optimizado
-    const allPosts = await getCollection('blog');
+    // Obtener posts desde Strapi
+    const allPosts = await StrapiService.getArticles();
     const totalPosts = allPosts.length;
     
     // Optimización para n8n: usar límite más alto por defecto
@@ -52,8 +52,8 @@ export async function GET({ url }: { url: URL }) {
     
     // Ordenar solo los posts necesarios para mejorar rendimiento
     const sortedPosts = allPosts.sort((a, b) => {
-      const dateA = normalizeDate(a.data.pubDate);
-      const dateB = normalizeDate(b.data.pubDate);
+      const dateA = normalizeDate(a.publishedAt);
+      const dateB = normalizeDate(b.publishedAt);
       return dateB.getTime() - dateA.getTime();
     });
 
@@ -64,24 +64,24 @@ export async function GET({ url }: { url: URL }) {
     const items = paginatedPosts.map((post) => {
       try {
         // Validar que el post tenga los datos necesarios
-        if (!post.data) {
+        if (!post) {
           return '';
         }
 
         // Procesar datos de forma más eficiente
-        const title = post.data.title || 'Sin título';
-        const slug = post.data.slug || post.id;
-        const pubDate = normalizeDate(post.data.pubDate);
-        const description = post.data.description || '';
-        const authorName = post.data.author?.name || 'IA Punto';
-        const category = post.data.category || '';
-        const tags = Array.isArray(post.data.tags) ? post.data.tags.slice(0, 3) : [];
+        const title = post.title || 'Sin título';
+        const slug = post.slug || post.id.toString();
+        const pubDate = normalizeDate(post.publishedAt);
+        const description = post.description || post.excerpt || '';
+        const authorName = post.author?.name || 'IA Punto';
+        const category = post.category?.name || '';
+        const tags = post.tags ? post.tags.slice(0, 3).map(tag => tag.name) : [];
 
         // Generar item XML de forma más directa
         return `<item>
         <title><![CDATA[${title}]]></title>
-        <link>${site}/blog/${slug}</link>
-        <guid>${site}/blog/${slug}</guid>
+        <link>${site}/blog-strapi/${slug}</link>
+        <guid>${site}/blog-strapi/${slug}</guid>
         <pubDate>${pubDate.toUTCString()}</pubDate>
         <description><![CDATA[${description}]]></description>
         <author>${authorName}</author>
@@ -120,7 +120,7 @@ export async function GET({ url }: { url: URL }) {
     <rss version="2.0" xmlns:custom="https://iapunto.com/rss/custom/">
       <channel>
         <title>Blog de IA Punto - Página ${safePage} de ${totalPages}</title>
-        <link>${site}/blog</link>
+        <link>${site}/blog-strapi</link>
         <description>Artículos ${offset + 1}-${Math.min(offset + safeLimit, totalPosts)} de ${totalPosts} del blog de IA Punto</description>
         <language>es</language>
         <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
