@@ -1,0 +1,15 @@
+# Redis Configuration Example
+# Copia este contenido a tu archivo .env o .env.local
+
+REDIS_URL=redis://default:AcG9BjJicYTa943fCjSKkzcTib5ZxfVXH8bbtXpt4FwnE3fKLgAClnkN7rWbWTs3@uc4gwscgo84w4wk4wc8k8kok:6379/0
+
+# Otras configuraciones existentes...
+# GOOGLE_CLIENT_ID=your_google_client_id
+# GOOGLE_CLIENT_SECRET=your_google_client_secret
+# GOOGLE_REDIRECT_URI=your_redirect_uri
+# GOOGLE_REFRESH_TOKEN=your_refresh_token
+# GOOGLE_CALENDAR_ID=primary
+# TIMEZONE=America/Bogota
+# DATABASE_URL=your_database_url
+# STRAPI_API_URL=https://strapi.iapunto.com
+# STRAPI_API_TOKEN=your_strapi_token
