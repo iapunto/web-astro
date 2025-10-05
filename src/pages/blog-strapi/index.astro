@@ -20,15 +20,19 @@ const blogEntries = articles.map((article) => ({
     description: article.description || article.excerpt || '',
     category: article.category?.name || '',
     tags: article.tags?.map((tag: any) => tag.name) || [],
-    pubDate: article.publishedAt,
-    cover: article.cover ? `https://strapi.iapunto.com${article.cover.url}` : '',
+    pubDate: new Date(article.publishedAt),
+    cover: article.cover
+      ? `https://strapi.iapunto.com${article.cover.url}`
+      : '',
     coverAlt: article.coverAlt || article.title,
     author: {
       name: article.author?.name || 'IA Punto',
-      image: article.author?.avatar ? `https://strapi.iapunto.com${article.author.avatar.url}` : '/images/default-avatar.jpg'
-    }
+      image: article.author?.avatar
+        ? `https://strapi.iapunto.com${article.author.avatar.url}`
+        : '/images/default-avatar.jpg',
+    },
   },
-  body: article.content
+  body: article.content,
 }));
 
 // Extraer categorías y tags únicas (igual que el diseño original)
@@ -223,7 +227,7 @@ const latestPosts = blogEntries.slice(0, 5);
             searchParams={url.searchParams}
           />
         </div>
-        
+
         <div class="lg:col-span-1">
           <SidebarFilters
             query={query}

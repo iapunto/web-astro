@@ -23,16 +23,20 @@ const post = {
     description: article.description || article.excerpt || '',
     category: article.category?.name || '',
     tags: article.tags?.map((tag: any) => tag.name) || [],
-    pubDate: article.publishedAt,
-    cover: article.cover ? `https://strapi.iapunto.com${article.cover.url}` : '',
+    pubDate: new Date(article.publishedAt),
+    cover: article.cover
+      ? `https://strapi.iapunto.com${article.cover.url}`
+      : '',
     coverAlt: article.coverAlt || article.title,
     author: {
       name: article.author?.name || 'IA Punto',
       description: article.author?.bio || 'Equipo de IA Punto',
-      image: article.author?.avatar ? `https://strapi.iapunto.com${article.author.avatar.url}` : '/images/default-avatar.jpg'
-    }
+      image: article.author?.avatar
+        ? `https://strapi.iapunto.com${article.author.avatar.url}`
+        : '/images/default-avatar.jpg',
+    },
   },
-  body: article.content
+  body: article.content,
 };
 
 // Preparar props
@@ -49,7 +53,7 @@ const author = {
     ? `https://strapi.iapunto.com${article.author.avatar.url}`
     : '/images/default-avatar.jpg',
 };
-const pubDate = article.publishedAt;
+const pubDate = new Date(article.publishedAt);
 
 // Las variables ya están definidas arriba
 
@@ -62,16 +66,20 @@ const blogEntries = allArticles.map((article) => ({
     description: article.description || article.excerpt || '',
     category: article.category?.name || '',
     tags: article.tags?.map((tag: any) => tag.name) || [],
-    pubDate: article.publishedAt,
-    cover: article.cover ? `https://strapi.iapunto.com${article.cover.url}` : '',
+    pubDate: new Date(article.publishedAt),
+    cover: article.cover
+      ? `https://strapi.iapunto.com${article.cover.url}`
+      : '',
     coverAlt: article.coverAlt || article.title,
     author: {
       name: article.author?.name || 'IA Punto',
       description: article.author?.bio || 'Equipo de IA Punto',
-      image: article.author?.avatar ? `https://strapi.iapunto.com${article.author.avatar.url}` : '/images/default-avatar.jpg'
-    }
+      image: article.author?.avatar
+        ? `https://strapi.iapunto.com${article.author.avatar.url}`
+        : '/images/default-avatar.jpg',
+    },
   },
-  body: article.content
+  body: article.content,
 }));
 
 const sortedArticles = [...blogEntries].sort(
@@ -127,7 +135,7 @@ const query = '';
   <div slot="toc">
     <!-- Table of Contents placeholder -->
   </div>
-  
+
   <div slot="sidebar">
     <!-- Sidebar con filtros y últimos posts -->
     <div class="space-y-6">
