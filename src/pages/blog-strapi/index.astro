@@ -1,36 +1,81 @@
 ---
 import DefaultLayout from '../../layouts/DefaultLayout.astro';
+import FormattedDate from '../../components/common/FormattedDate.astro';
+import ReadingTime from '../../components/common/ReadingTime.astro';
+import OptimizedImage from '../../components/common/OptimizedImage.astro';
+import { Image } from 'astro:assets';
+import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
+import SmartPaginator from '../../components/common/SmartPaginator.astro';
 import { StrapiService } from '../../lib/strapi';
 import type { StrapiArticle } from '../../lib/types/strapi';
 
 // Obtener artículos desde Strapi
 const articles = await StrapiService.getArticles();
 
-// Estado de filtros (Astro no es reactivo, se usa query params)
+// Convertir datos de Strapi al formato esperado por el diseño original
+const blogEntries = articles.map((article) => ({
+  data: {
+    slug: article.slug,
+    title: article.title,
+    description: article.description || article.excerpt || '',
+    category: article.category?.name || '',
+    tags: article.tags?.map((tag: any) => tag.name) || [],
+    pubDate: article.publishedAt,
+    cover: article.cover ? `https://strapi.iapunto.com${article.cover.url}` : '',
+    coverAlt: article.coverAlt || article.title,
+    author: {
+      name: article.author?.name || 'IA Punto',
+      image: article.author?.avatar ? `https://strapi.iapunto.com${article.author.avatar.url}` : '/images/default-avatar.jpg'
+    }
+  },
+  body: article.content
+}));
+
+// Extraer categorías y tags únicas (igual que el diseño original)
+type Entry = (typeof blogEntries)[0];
+const categories = Array.from(
+  new Set(blogEntries.map((p: Entry) => p.data.category))
+);
+const tags = Array.from(
+  new Set(
+    blogEntries.flatMap((p: Entry) =>
+      Array.isArray(p.data.tags)
+        ? p.data.tags
+        : p.data.tags
+          ? [p.data.tags]
+          : []
+    )
+  )
+);
+
+// Estado de filtros (igual que el diseño original)
 const url = new URL(Astro.request.url);
 const query = url.searchParams.get('q') || '';
 const selectedCategory = url.searchParams.get('category') || '';
 const selectedTags = url.searchParams.getAll('tag');
 
-// Filtrado profesional
-function matches(post: StrapiArticle) {
+// Filtrado profesional (igual que el diseño original)
+function matches(post: Entry) {
   const q = query.trim().toLowerCase();
-  const inTitle = post.title.toLowerCase().includes(q);
-  const inDesc = (post.description || post.excerpt || '').toLowerCase().includes(q);
-  const inContent = post.content.toLowerCase().includes(q);
+  const inTitle = post.data.title.toLowerCase().includes(q);
+  const inDesc = post.data.description.toLowerCase().includes(q);
+  const inContent = post.body ? post.body.toLowerCase().includes(q) : false;
   const matchQuery = !q || inTitle || inDesc || inContent;
-  
-  const matchCategory = !selectedCategory || post.category?.name === selectedCategory;
-  
-  const postTags = post.tags?.map(tag => tag.name) || [];
-  const matchTags = selectedTags.length === 0 || selectedTags.every((t) => postTags.includes(t));
-  
+  const matchCategory =
+    !selectedCategory || post.data.category === selectedCategory;
+  const postTags = Array.isArray(post.data.tags)
+    ? post.data.tags
+    : post.data.tags
+      ? [post.data.tags]
+      : [];
+  const matchTags =
+    selectedTags.length === 0 ||
+    selectedTags.every((t) => postTags.includes(t));
   return matchQuery && matchCategory && matchTags;
 }
+const filteredPosts = blogEntries.filter(matches);
 
-const filteredPosts = articles.filter(matches);
-
-// Paginación sobre filtrados
+// Paginación sobre filtrados (igual que el diseño original)
 const postsPerPage = 6;
 const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 const currentPage = Number(url.searchParams.get('page')) || 1;
@@ -38,11 +83,19 @@ const startIndex = (currentPage - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;
 const currentPosts = filteredPosts.slice(startIndex, endIndex);
 
-// Extraer categorías y tags únicas
-const categories = Array.from(new Set(articles.map(post => post.category?.name).filter(Boolean)));
-const tags = Array.from(new Set(articles.flatMap(post => post.tags?.map(tag => tag.name) || [])));
+// Handlers para SidebarFilters (igual que el diseño original)
+function handleFilterChange({ query, category, tags }: any) {
+  const params = new URLSearchParams();
+  if (query) params.set('q', query);
+  if (category) params.set('category', category);
+  tags.forEach((tag: any) => params.append('tag', tag));
+  window.location.search = params.toString();
+}
+function handleClear() {
+  window.location.search = '';
+}
 
-const latestPosts = articles.slice(0, 5);
+const latestPosts = blogEntries.slice(0, 5);
 ---
 
 <DefaultLayout
@@ -88,16 +141,17 @@ const latestPosts = articles.slice(0, 5);
               </div>
             ) : (
               <div class="grid gap-8 md:grid-cols-2">
-                {currentPosts.map((article) => (
+                {currentPosts.map((entry) => (
                   <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
                     <div class="w-full mb-5">
-                      {article.cover && (
-                        <img
-                          src={`https://strapi.iapunto.com${article.cover.url}`}
-                          alt={article.coverAlt || article.cover.alternativeText || article.title}
-                          width="600"
-                          height="400"
+                      {entry.data.cover && (
+                        <OptimizedImage
+                          src={entry.data.cover}
+                          alt={entry.data.coverAlt || entry.data.title || ''}
+                          width={600}
+                          height={400}
                           class="w-full h-auto object-cover rounded-lg"
+                          sizes="(max-width: 768px) 100vw, 600px"
                         />
                       )}
                     </div>
@@ -111,43 +165,36 @@ const latestPosts = articles.slice(0, 5);
                         >
                           <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
                         </svg>
-                        {article.category?.name || 'Sin categoría'}
+                        {entry.data.category}
                       </span>
                       <div class="flex items-center gap-4 text-sm">
-                        <time datetime={article.publishedAt}>
-                          {new Date(article.publishedAt).toLocaleDateString('es-ES', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
-                        </time>
+                        <FormattedDate date={entry.data.pubDate} />
+                        <ReadingTime content={entry.body} />
                       </div>
                     </div>
                     <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                      <a href={`/blog-strapi/${article.slug}`}>
-                        {article.title}
+                      <a href={`/blog-strapi/${entry.data.slug}`}>
+                        {entry.data.title}
                       </a>
                     </h2>
                     <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
-                      {article.description || article.excerpt || ''}
+                      {entry.data.description}
                     </p>
                     <div class="flex justify-between items-center">
                       <div class="flex items-center space-x-4">
-                        {article.author?.avatar && (
-                          <img
-                            src={`https://strapi.iapunto.com${article.author.avatar.url}`}
-                            alt={article.author.name}
-                            width="36"
-                            height="36"
-                            class="w-7 h-7 rounded-full"
-                          />
-                        )}
+                        <img
+                          src={entry.data.author.image}
+                          alt="avatar"
+                          width="36"
+                          height="36"
+                          class="w-7 h-7 rounded-full"
+                        />
                         <span class="font-medium dark:text-white">
-                          {article.author?.name || 'IA Punto'}
+                          {entry.data.author.name}
                         </span>
                       </div>
                       <a
-                        href={`/blog-strapi/${article.slug}`}
+                        href={`/blog-strapi/${entry.data.slug}`}
                         class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
                       >
                         Leer más...
@@ -170,120 +217,24 @@ const latestPosts = articles.slice(0, 5);
               </div>
             )
           }
-          
-          <!-- Paginación simple -->
-          {totalPages > 1 && (
-            <div class="flex justify-center mt-8">
-              <nav class="flex items-center space-x-2">
-                {currentPage > 1 && (
-                  <a
-                    href={`/blog-strapi?page=${currentPage - 1}${query ? `&q=${query}` : ''}${selectedCategory ? `&category=${selectedCategory}` : ''}${selectedTags.map(tag => `&tag=${tag}`).join('')}`}
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                  >
-                    Anterior
-                  </a>
-                )}
-                
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <a
-                    href={`/blog-strapi?page=${page}${query ? `&q=${query}` : ''}${selectedCategory ? `&category=${selectedCategory}` : ''}${selectedTags.map(tag => `&tag=${tag}`).join('')}`}
-                    class={`px-3 py-2 text-sm font-medium rounded-md ${
-                      page === currentPage
-                        ? 'text-white bg-primary-600 border border-primary-600'
-                        : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    {page}
-                  </a>
-                ))}
-                
-                {currentPage < totalPages && (
-                  <a
-                    href={`/blog-strapi?page=${currentPage + 1}${query ? `&q=${query}` : ''}${selectedCategory ? `&category=${selectedCategory}` : ''}${selectedTags.map(tag => `&tag=${tag}`).join('')}`}
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                  >
-                    Siguiente
-                  </a>
-                )}
-              </nav>
-            </div>
-          )}
+          <SmartPaginator
+            currentPage={currentPage}
+            totalPages={totalPages}
+            searchParams={url.searchParams}
+          />
         </div>
         
-        <!-- Sidebar -->
         <div class="lg:col-span-1">
-          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Últimos artículos
-            </h3>
-            <div class="space-y-4">
-              {latestPosts.map((post) => (
-                <div class="flex space-x-3">
-                  {post.cover && (
-                    <img
-                      src={`https://strapi.iapunto.com${post.cover.url}`}
-                      alt={post.title}
-                      width="60"
-                      height="60"
-                      class="w-15 h-15 object-cover rounded"
-                    />
-                  )}
-                  <div class="flex-1 min-w-0">
-                    <a
-                      href={`/blog-strapi/${post.slug}`}
-                      class="text-sm font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 line-clamp-2"
-                    >
-                      {post.title}
-                    </a>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      {new Date(post.publishedAt).toLocaleDateString('es-ES')}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <!-- Filtros -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mt-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Categorías
-            </h3>
-            <div class="space-y-2">
-              {categories.map((category) => (
-                <a
-                  href={`/blog-strapi?category=${encodeURIComponent(category)}`}
-                  class={`block text-sm ${
-                    selectedCategory === category
-                      ? 'text-primary-600 dark:text-primary-400 font-medium'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
-                  }`}
-                >
-                  {category}
-                </a>
-              ))}
-            </div>
-          </div>
-          
-          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mt-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Tags
-            </h3>
-            <div class="flex flex-wrap gap-2">
-              {tags.slice(0, 10).map((tag) => (
-                <a
-                  href={`/blog-strapi?tag=${encodeURIComponent(tag)}`}
-                  class={`text-xs px-2 py-1 rounded border ${
-                    selectedTags.includes(tag)
-                      ? 'bg-primary-100 text-primary-800 border-primary-200'
-                      : 'bg-gray-100 text-gray-600 border-gray-200 hover:bg-primary-100 hover:text-primary-800'
-                  }`}
-                >
-                  #{tag}
-                </a>
-              ))}
-            </div>
-          </div>
+          <SidebarFilters
+            query={query}
+            selectedCategory={selectedCategory}
+            selectedTags={selectedTags}
+            categories={categories}
+            tags={tags}
+            onFilterChange={handleFilterChange}
+            onClear={handleClear}
+            latestPosts={latestPosts}
+          />
         </div>
       </div>
     </div>

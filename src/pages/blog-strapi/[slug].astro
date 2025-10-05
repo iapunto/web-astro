@@ -1,5 +1,5 @@
 ---
-import StrapiBlogLayout from '../../layouts/StrapiBlogLayout.astro';
+import BlogLayout from '../../layouts/BlogLayout.astro';
 import { StrapiService } from '../../lib/strapi';
 import type { StrapiArticle } from '../../lib/types/strapi';
 
@@ -14,6 +14,26 @@ const article = await StrapiService.getArticle(slug || '');
 if (!article) {
   return Astro.redirect('/404');
 }
+
+// Convertir datos de Strapi al formato esperado por BlogLayout
+const post = {
+  data: {
+    slug: article.slug,
+    title: article.title,
+    description: article.description || article.excerpt || '',
+    category: article.category?.name || '',
+    tags: article.tags?.map((tag: any) => tag.name) || [],
+    pubDate: article.publishedAt,
+    cover: article.cover ? `https://strapi.iapunto.com${article.cover.url}` : '',
+    coverAlt: article.coverAlt || article.title,
+    author: {
+      name: article.author?.name || 'IA Punto',
+      description: article.author?.bio || 'Equipo de IA Punto',
+      image: article.author?.avatar ? `https://strapi.iapunto.com${article.author.avatar.url}` : '/images/default-avatar.jpg'
+    }
+  },
+  body: article.content
+};
 
 // Preparar props
 const pageTitle = article.title;
@@ -35,14 +55,33 @@ const pubDate = article.publishedAt;
 
 // Obtener artículos relacionados
 const allArticles = await StrapiService.getArticles();
-const sortedArticles = [...allArticles].sort(
+const blogEntries = allArticles.map((article) => ({
+  data: {
+    slug: article.slug,
+    title: article.title,
+    description: article.description || article.excerpt || '',
+    category: article.category?.name || '',
+    tags: article.tags?.map((tag: any) => tag.name) || [],
+    pubDate: article.publishedAt,
+    cover: article.cover ? `https://strapi.iapunto.com${article.cover.url}` : '',
+    coverAlt: article.coverAlt || article.title,
+    author: {
+      name: article.author?.name || 'IA Punto',
+      description: article.author?.bio || 'Equipo de IA Punto',
+      image: article.author?.avatar ? `https://strapi.iapunto.com${article.author.avatar.url}` : '/images/default-avatar.jpg'
+    }
+  },
+  body: article.content
+}));
+
+const sortedArticles = [...blogEntries].sort(
   (a, b) =>
-    new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
 );
 
 // Encontrar el índice del artículo actual
 const currentIndex = sortedArticles.findIndex(
-  (entry) => entry.slug === article.slug
+  (entry) => entry.data.slug === article.slug
 );
 
 // Obtener artículos anterior y siguiente
@@ -50,13 +89,13 @@ const prevArticle = sortedArticles[currentIndex - 1] || null;
 const nextArticle = sortedArticles[currentIndex + 1] || null;
 
 // Artículos recomendados (últimos 5, excluyendo el actual)
-const latestPosts = allArticles
-  .filter((a) => a.slug !== article.slug)
+const latestPosts = blogEntries
+  .filter((a) => a.data.slug !== article.slug)
   .slice(0, 5);
 
 // Artículo recomendado aleatorio
-const recommended = allArticles.filter((a) => a.slug !== article.slug)[
-  Math.floor(Math.random() * (allArticles.length - 1))
+const recommended = blogEntries.filter((a) => a.data.slug !== article.slug)[
+  Math.floor(Math.random() * (blogEntries.length - 1))
 ];
 
 // Frase épica/reflexiva
@@ -66,27 +105,29 @@ const quoteAuthor = author.name;
 
 // Categorías y tags para el sidebar
 const allCategories = Array.from(
-  new Set(allArticles.map((a) => a.category?.name).filter(Boolean))
+  new Set(blogEntries.map((a) => a.data.category).filter(Boolean))
 );
 const allTags = Array.from(
-  new Set(allArticles.flatMap((a) => a.tags?.map((tag: any) => tag.name) || []))
+  new Set(blogEntries.flatMap((a) => a.data.tags || []))
 );
 const selectedCategory = article.category?.name || '';
 const selectedTags = article.tags?.map((tag: any) => tag.name) || [];
 const query = '';
 ---
 
-<StrapiBlogLayout
+<BlogLayout
   pageTitle={pageTitle}
   description={description}
   keywords={keywords}
   image={image}
   author={author}
   pubDate={pubDate}
-  article={article}
+  post={post}
 >
-  <!-- El layout maneja la tabla de contenido automáticamente -->
-
+  <div slot="toc">
+    <!-- Table of Contents placeholder -->
+  </div>
+  
   <div slot="sidebar">
     <!-- Sidebar con filtros y últimos posts -->
     <div class="space-y-6">
@@ -101,10 +142,10 @@ const query = '';
           {
             latestPosts.map((post) => (
               <div class="flex space-x-3">
-                {post.cover && (
+                {post.data.cover && (
                   <img
-                    src={`https://strapi.iapunto.com${post.cover.url}`}
-                    alt={post.title}
+                    src={post.data.cover}
+                    alt={post.data.title}
                     width="60"
                     height="60"
                     class="w-15 h-15 object-cover rounded"
@@ -112,13 +153,13 @@ const query = '';
                 )}
                 <div class="flex-1 min-w-0">
                   <a
-                    href={`/blog-strapi/${post.slug}`}
+                    href={`/blog-strapi/${post.data.slug}`}
                     class="text-sm font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 line-clamp-2"
                   >
-                    {post.title}
+                    {post.data.title}
                   </a>
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {new Date(post.publishedAt).toLocaleDateString('es-ES')}
+                    {new Date(post.data.pubDate).toLocaleDateString('es-ES')}
                   </p>
                 </div>
               </div>
@@ -179,5 +220,153 @@ const query = '';
     </div>
   </div>
 
-  <!-- El layout maneja el contenido principal automáticamente -->
-</StrapiBlogLayout>
+  <div>
+    <!-- Enlaces internos a servicios cornerstone -->
+    <section class="my-8 flex flex-wrap gap-4">
+      <a
+        href="/servicios/diseno-desarrollo-web"
+        class="inline-block px-4 py-2 bg-primary-50 text-primary-700 rounded-lg font-semibold shadow hover:bg-primary-100 transition"
+      >
+        Diseño y Desarrollo Web
+      </a>
+      <a
+        href="/servicios/posicionamiento-seo"
+        class="inline-block px-4 py-2 bg-primary-50 text-primary-700 rounded-lg font-semibold shadow hover:bg-primary-100 transition"
+      >
+        Posicionamiento SEO
+      </a>
+      <a
+        href="/servicios/publicidad-online-ia"
+        class="inline-block px-4 py-2 bg-primary-50 text-primary-700 rounded-lg font-semibold shadow hover:bg-primary-100 transition"
+      >
+        Publicidad Online con IA
+      </a>
+    </section>
+
+    <!-- Contenido del artículo -->
+    <div class="prose prose-lg max-w-none dark:prose-invert">
+      <div set:html={article.content} />
+    </div>
+
+    <!-- Frase épica/reflexiva del autor -->
+    <div
+      class="my-8 p-6 bg-gradient-to-r from-primary-50 to-blue-50 dark:from-gray-800 dark:to-gray-700 rounded-lg border-l-4 border-primary-500"
+    >
+      <blockquote class="text-lg italic text-gray-700 dark:text-gray-300 mb-2">
+        "{quote}"
+      </blockquote>
+      <cite class="text-sm font-medium text-primary-600 dark:text-primary-400">
+        — {quoteAuthor}
+      </cite>
+    </div>
+
+    <!-- Artículo recomendado al final -->
+    {
+      recommended && (
+        <div class="my-8 p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Artículo recomendado
+          </h3>
+          <div class="flex space-x-4">
+            {recommended.data.cover && (
+              <img
+                src={recommended.data.cover}
+                alt={recommended.data.title}
+                width="120"
+                height="80"
+                class="w-30 h-20 object-cover rounded"
+              />
+            )}
+            <div class="flex-1">
+              <a
+                href={`/blog-strapi/${recommended.data.slug}`}
+                class="text-lg font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400"
+              >
+                {recommended.data.title}
+              </a>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                {recommended.data.description}
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                {new Date(recommended.data.pubDate).toLocaleDateString('es-ES')}
+              </p>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Tags al final del artículo -->
+    {
+      article.tags && article.tags.length > 0 && (
+        <div class="mt-8">
+          <div class="w-4/5 h-px bg-gray-200 mx-auto mb-4" />
+          <div class="flex flex-wrap gap-2">
+            {article.tags.map((tag: any) => (
+              <a
+                href={`/blog-strapi?tag=${encodeURIComponent(tag.name)}`}
+                class="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-100 text-gray-600 hover:bg-primary-100 hover:text-primary transition"
+                style="text-decoration: none;"
+              >
+                #{tag.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Navegación entre artículos -->
+    <div class="flex justify-between mt-8">
+      {
+        prevArticle && (
+          <a
+            href={`/blog-strapi/${prevArticle.data.slug}`}
+            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-1 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            <svg
+              class="w-5 h-5 inline-block mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Anterior
+          </a>
+        )
+      }
+      <div></div>
+      {
+        nextArticle && (
+          <a
+            href={`/blog-strapi/${nextArticle.data.slug}`}
+            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            Siguiente
+            <svg
+              class="w-5 h-5 inline-block ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </a>
+        )
+      }
+    </div>
+  </div>
+</BlogLayout>
