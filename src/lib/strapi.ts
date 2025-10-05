@@ -32,8 +32,33 @@ export class StrapiService {
 
   static async getArticles(): Promise<StrapiArticle[]> {
     try {
-      const response = await this.fetchAPI<StrapiResponse<StrapiArticle[]>>('/articles?populate=*&sort=publishedAt:desc');
-      return response.data || [];
+      // Obtener todos los artículos usando múltiples páginas
+      let allArticles: StrapiArticle[] = [];
+      let page = 1;
+      let hasMorePages = true;
+      
+      while (hasMorePages) {
+        const response = await this.fetchAPI<StrapiResponse<StrapiArticle[]>>(
+          `/articles?populate=*&sort=publishedAt:desc&pagination[page]=${page}&pagination[pageSize]=100`
+        );
+        
+        if (response.data && response.data.length > 0) {
+          allArticles = allArticles.concat(response.data);
+          
+          // Verificar si hay más páginas
+          const pagination = response.meta?.pagination;
+          if (pagination && page < pagination.pageCount) {
+            page++;
+          } else {
+            hasMorePages = false;
+          }
+        } else {
+          hasMorePages = false;
+        }
+      }
+      
+      console.log(`📊 StrapiService: Obtenidos ${allArticles.length} artículos de ${page} páginas`);
+      return allArticles;
     } catch (error) {
       console.error('Error fetching articles from Strapi:', error);
       return [];
