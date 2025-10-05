@@ -38,88 +38,43 @@ export const GET: APIRoute = async ({ request, url }) => {
     const daysInMonth = new Date(year, month, 0).getDate();
     const availability: DayAvailability[] = [];
 
-    // Intentar usar el appointment manager, pero con fallback
+    // Usar el nuevo método optimizado
     let appointmentManager: PostgresAppointmentManager | null = null;
     try {
       appointmentManager = new PostgresAppointmentManager();
+      const result = await appointmentManager.getMonthlyAvailability(year, month);
+      availability.push(...result.availability);
     } catch (error) {
-      console.error('Error creando appointment manager:', error);
-    }
+      console.error('Error usando método optimizado, usando fallback:', error);
+      
+      // Fallback: procesar día por día
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        const dateObj = new Date(date);
+        const dayOfWeek = dateObj.getDay();
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-      const dateObj = new Date(date);
-      const dayOfWeek = dateObj.getDay();
-      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+        // Verificar si es fecha pasada
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const isPastDate = dateObj < today;
 
-      // Verificar si es fecha pasada
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const isPastDate = dateObj < today;
+        if (isPastDate || isWeekend) {
+          availability.push({
+            date,
+            available: false,
+            availableSlots: [],
+            totalSlots: 0,
+            hasReachedLimit: false,
+            isWeekend,
+          });
+          continue;
+        }
 
-      if (isPastDate) {
-        availability.push({
-          date,
-          available: false,
-          availableSlots: [],
-          totalSlots: 0,
-          hasReachedLimit: false,
-          isWeekend: false,
-        });
-        continue;
-      }
-
-      if (isWeekend) {
-        availability.push({
-          date,
-          available: false,
-          availableSlots: [],
-          totalSlots: 0,
-          hasReachedLimit: false,
-          isWeekend: true,
-        });
-        continue;
-      }
-
-      // Si no hay appointment manager, usar lógica por defecto
-      if (!appointmentManager) {
         // Lógica por defecto: horario de 9:00 a 17:00, excluyendo 12:00
         const availableSlots: string[] = [];
         for (let hour = 9; hour < 17; hour++) {
           if (hour === 12) continue; // Excluir hora de almuerzo
-          availableSlots.push(`${hour.toString().padStart(2, '0')}:00`);
-        }
-
-        availability.push({
-          date,
-          available: availableSlots.length > 0,
-          availableSlots,
-          totalSlots: availableSlots.length,
-          hasReachedLimit: false,
-          isWeekend: false,
-        });
-        continue;
-      }
-
-      try {
-        const availableSlots =
-          await appointmentManager.getAvailabilityForDate(date);
-        const hasReachedLimit = availableSlots.length === 0;
-
-        availability.push({
-          date,
-          available: availableSlots.length > 0,
-          availableSlots,
-          totalSlots: availableSlots.length,
-          hasReachedLimit,
-          isWeekend: false,
-        });
-      } catch (error) {
-        console.error(`Error obteniendo disponibilidad para ${date}:`, error);
-        // En caso de error, usar lógica por defecto
-        const availableSlots: string[] = [];
-        for (let hour = 9; hour < 17; hour++) {
-          if (hour === 12) continue;
           availableSlots.push(`${hour.toString().padStart(2, '0')}:00`);
         }
 

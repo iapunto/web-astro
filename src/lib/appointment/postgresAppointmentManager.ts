@@ -31,6 +31,12 @@ export class PostgresAppointmentManager {
   private calendarId: string;
   private timezone: string;
   private calendarInitialized: boolean = false;
+  
+  // Sistema de caché para optimizar consultas
+  private availabilityCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private cacheExpiry: number = 5 * 60 * 1000; // 5 minutos
+  private dailyAppointmentsCache: Map<string, number> = new Map();
+  private dailyCacheExpiry: number = 2 * 60 * 1000; // 2 minutos
 
   constructor() {
     this.appointmentService = new PostgresAppointmentService();
@@ -131,6 +137,9 @@ export class PostgresAppointmentManager {
       });
       result.details!.databaseCreated = true;
 
+      // Limpiar caché para la fecha de la cita
+      this.clearCacheForDate(request.appointmentDate);
+
       // 4. Crear evento en Google Calendar
       try {
         const googleEventId = await this.createGoogleCalendarEvent(appointment);
@@ -189,6 +198,9 @@ export class PostgresAppointmentManager {
         status: 'cancelled',
       });
 
+      // Limpiar caché para la fecha de la cita cancelada
+      this.clearCacheForDate(appointment.appointmentDate);
+
       // Cancelar evento en Google Calendar si existe
       if (appointment.googleCalendarEventId && this.calendarInitialized && this.calendar) {
         try {
@@ -238,6 +250,10 @@ export class PostgresAppointmentManager {
         appointmentDate: newDate,
         appointmentTime: newTime,
       });
+
+      // Limpiar caché para ambas fechas (anterior y nueva)
+      this.clearCacheForDate(appointment.appointmentDate);
+      this.clearCacheForDate(newDate);
 
       // Actualizar evento en Google Calendar si existe
       if (appointment.googleCalendarEventId && this.calendarInitialized && this.calendar) {
@@ -321,14 +337,122 @@ export class PostgresAppointmentManager {
     }
   }
 
+  // Método para verificar caché
+  private getCachedAvailability(date: string): string[] | null {
+    const cached = this.availabilityCache.get(date);
+    if (cached && (Date.now() - cached.timestamp) < this.cacheExpiry) {
+      console.log(`💾 Usando caché para ${date}`);
+      return cached.data;
+    }
+    return null;
+  }
+
+  // Método para guardar en caché
+  private setCachedAvailability(date: string, data: string[]): void {
+    this.availabilityCache.set(date, {
+      data,
+      timestamp: Date.now()
+    });
+  }
+
+  // Método para limpiar caché cuando se crean/modifican citas
+  private clearCacheForDate(date: string): void {
+    this.availabilityCache.delete(date);
+    this.dailyAppointmentsCache.delete(date);
+    console.log(`🗑️ Caché limpiado para ${date}`);
+  }
+
+  // Método para limpiar todo el caché
+  private clearAllCache(): void {
+    this.availabilityCache.clear();
+    this.dailyAppointmentsCache.clear();
+    console.log(`🗑️ Todo el caché limpiado`);
+  }
+
+  // Método optimizado para obtener disponibilidad mensual
+  async getMonthlyAvailability(year: number, month: number): Promise<any> {
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0);
+    const daysInMonth = endDate.getDate();
+    
+    console.log(`📅 Obteniendo disponibilidad mensual para ${year}-${month.toString().padStart(2, '0')} (${daysInMonth} días)`);
+    
+    const availability: any[] = [];
+    const promises: Promise<any>[] = [];
+    
+    // Procesar días en lotes para optimizar
+    const batchSize = 5;
+    for (let day = 1; day <= daysInMonth; day += batchSize) {
+      const batchEnd = Math.min(day + batchSize - 1, daysInMonth);
+      
+      for (let d = day; d <= batchEnd; d++) {
+        const date = `${year}-${month.toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
+        promises.push(this.getAvailabilityForDate(date).then(slots => ({
+          date,
+          available: slots.length > 0,
+          availableSlots: slots,
+          totalSlots: slots.length,
+          hasReachedLimit: false,
+          isWeekend: new Date(date).getDay() === 0 || new Date(date).getDay() === 6
+        })));
+      }
+      
+      // Procesar lote
+      const batchResults = await Promise.all(promises.splice(-batchSize));
+      availability.push(...batchResults);
+    }
+    
+    const summary = {
+      totalDays: daysInMonth,
+      availableDays: availability.filter(day => day.available).length,
+      totalSlots: availability.reduce((sum, day) => sum + day.totalSlots, 0)
+    };
+    
+    console.log(`✅ Disponibilidad mensual obtenida: ${summary.availableDays} días con disponibilidad`);
+    
+    return {
+      success: true,
+      year,
+      month,
+      availability,
+      summary
+    };
+  }
+
+  // Método para obtener conteo diario con caché
+  private async getCachedDailyCount(date: string): Promise<number> {
+    const cached = this.dailyAppointmentsCache.get(date);
+    if (cached !== undefined && (Date.now() - (this.dailyAppointmentsCache as any).getTimestamp?.(date) || 0) < this.dailyCacheExpiry) {
+      console.log(`💾 Usando caché de conteo diario para ${date}: ${cached}`);
+      return cached;
+    }
+
+    try {
+      const count = await this.appointmentService.getDailyAppointmentsCount(date);
+      this.dailyAppointmentsCache.set(date, count);
+      console.log(`📊 Conteo diario para ${date}: ${count}`);
+      return count;
+    } catch (error) {
+      console.error('Error obteniendo conteo diario, usando 0:', error);
+      return 0;
+    }
+  }
+
   async getAvailabilityForDate(date: string): Promise<string[]> {
     try {
+      // Verificar caché primero
+      const cached = this.getCachedAvailability(date);
+      if (cached) {
+        return cached;
+      }
+
       console.log(`🔍 Verificando disponibilidad para: ${date}`);
 
       // Verificar si es fin de semana
       const dayOfWeek = new Date(date).getDay();
       if (dayOfWeek === 0 || dayOfWeek === 6) {
         console.log(`📅 ${date} es fin de semana, no disponible`);
+        this.setCachedAvailability(date, []);
         return []; // Fines de semana no disponibles
       }
 
@@ -352,47 +476,80 @@ export class PostgresAppointmentManager {
 
       console.log(`📊 Configuración: ${startHour}:00 - ${endHour}:00, máximo ${maxPerDay} citas/día`);
 
-      // Verificar límite diario
-      let dailyCount = 0;
-      try {
-        dailyCount = await this.appointmentService.getDailyAppointmentsCount(date);
-        console.log(`📊 Citas del día: ${dailyCount}/${maxPerDay}`);
-      } catch (error) {
-        console.error('Error obteniendo conteo diario, usando 0:', error);
-        dailyCount = 0;
-      }
+      // Verificar límite diario usando caché
+      const dailyCount = await this.getCachedDailyCount(date);
+      console.log(`📊 Citas del día: ${dailyCount}/${maxPerDay}`);
 
       if (dailyCount >= maxPerDay) {
         console.log(`❌ Día completo ocupado: ${date}`);
+        this.setCachedAvailability(date, []);
         return []; // Día completo ocupado
       }
 
       const availableSlots: string[] = [];
 
+      // Obtener citas existentes para la fecha una sola vez
+      let existingAppointments: any[] = [];
+      try {
+        existingAppointments = await this.appointmentService.getAppointmentsByDate(date);
+        console.log(`📅 Citas existentes para ${date}: ${existingAppointments.length}`);
+      } catch (error) {
+        console.error('Error obteniendo citas existentes:', error);
+      }
+
+      // Verificar Google Calendar una sola vez para todo el día
+      let googleCalendarBusy: string[] = [];
+      if (this.calendarInitialized && this.calendar && this.calendar.freebusy) {
+        try {
+          const startDateTime = new Date(`${date}T${startHour.toString().padStart(2, '0')}:00:00`);
+          const endDateTime = new Date(`${date}T${endHour.toString().padStart(2, '0')}:00:00`);
+          
+          const response = await this.calendar.freebusy.query({
+            requestBody: {
+              timeMin: startDateTime.toISOString(),
+              timeMax: endDateTime.toISOString(),
+              items: [{ id: this.calendarId }],
+            },
+          });
+
+          const busy = response.data.calendars?.[this.calendarId]?.busy || [];
+          googleCalendarBusy = busy.map((slot: any) => {
+            const start = new Date(slot.start);
+            return start.toTimeString().substring(0, 5);
+          });
+          console.log(`📅 Horarios ocupados en Google Calendar: ${googleCalendarBusy.join(', ')}`);
+        } catch (error) {
+          console.error('Error verificando Google Calendar:', error);
+        }
+      }
+
+      // Verificar cada horario sin hacer consultas adicionales
       for (let hour = startHour; hour < endHour; hour++) {
         if (hour === 12) continue; // Excluir hora de almuerzo
 
         const timeString = `${hour.toString().padStart(2, '0')}:00`;
 
-        try {
-          const isAvailable = await this.checkAvailability(date, timeString);
+        // Verificar si ya hay una cita en este horario
+        const hasExistingAppointment = existingAppointments.some(
+          (apt) => apt.appointmentTime === timeString && apt.status !== 'cancelled'
+        );
 
-          if (isAvailable) {
-            availableSlots.push(timeString);
-            console.log(`✅ ${timeString} disponible`);
-          } else {
-            console.log(`❌ ${timeString} no disponible`);
-          }
-        } catch (error) {
-          console.error(
-            `Error verificando disponibilidad para ${timeString}:`,
-            error
-          );
-          // Continuar con el siguiente horario
+        // Verificar si está ocupado en Google Calendar
+        const isGoogleCalendarBusy = googleCalendarBusy.includes(timeString);
+
+        if (!hasExistingAppointment && !isGoogleCalendarBusy) {
+          availableSlots.push(timeString);
+          console.log(`✅ ${timeString} disponible`);
+        } else {
+          console.log(`❌ ${timeString} no disponible${hasExistingAppointment ? ' (cita existente)' : ''}${isGoogleCalendarBusy ? ' (Google Calendar)' : ''}`);
         }
       }
 
       console.log(`📋 Horarios disponibles para ${date}:`, availableSlots);
+      
+      // Guardar en caché
+      this.setCachedAvailability(date, availableSlots);
+      
       return availableSlots;
     } catch (error) {
       console.error('Error in getAvailabilityForDate:', error);
