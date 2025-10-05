@@ -3,6 +3,7 @@ import { PostgresAppointmentService } from '../database/postgresAppointmentServi
 import { ResendEmailService } from '../email/resendEmailService.js';
 import { Appointment } from '../database/postgresSchema.js';
 import { hybridCacheService } from '../cache/hybridCacheService.js';
+import { socketService } from '../socket/socketServer.js';
 
 export interface CreateAppointmentRequest {
   clientName: string;
@@ -178,6 +179,12 @@ export class PostgresAppointmentManager {
 
       result.success = true;
       result.appointment = appointment;
+      
+      // Notificar via Socket.io
+      if (socketService.isReady()) {
+        socketService.notifyAppointmentCreated(appointment, request.date);
+        socketService.sendNotification('success', `Nueva cita agendada para ${request.date}`, 'admin-dashboard');
+      }
     } catch (error) {
       result.error =
         error instanceof Error ? error.message : 'Error desconocido';
@@ -202,6 +209,12 @@ export class PostgresAppointmentManager {
 
       // Limpiar caché para la fecha de la cita cancelada
       await this.clearCacheForDate(appointment.appointmentDate);
+      
+      // Notificar via Socket.io
+      if (socketService.isReady()) {
+        socketService.notifyAppointmentCancelled(appointmentId, appointment.appointmentDate);
+        socketService.sendNotification('warning', `Cita cancelada para ${appointment.appointmentDate}`, 'admin-dashboard');
+      }
 
       // Cancelar evento en Google Calendar si existe
       if (appointment.googleCalendarEventId && this.calendarInitialized && this.calendar) {
@@ -256,6 +269,12 @@ export class PostgresAppointmentManager {
       // Limpiar caché para ambas fechas (anterior y nueva)
       await this.clearCacheForDate(appointment.appointmentDate);
       await this.clearCacheForDate(newDate);
+      
+      // Notificar via Socket.io
+      if (socketService.isReady()) {
+        socketService.notifyAppointmentRescheduled(updatedAppointment, appointment.appointmentDate, newDate);
+        socketService.sendNotification('success', `Cita reprogramada de ${appointment.appointmentDate} a ${newDate}`, 'admin-dashboard');
+      }
 
       // Actualizar evento en Google Calendar si existe
       if (appointment.googleCalendarEventId && this.calendarInitialized && this.calendar) {

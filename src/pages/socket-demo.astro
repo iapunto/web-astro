@@ -1,0 +1,262 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SocketNotifications from '../components/SocketNotifications.tsx';
+---
+
+<Layout title="Socket.io Demo - Sistema de Citas en Tiempo Real">
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">
+        🚀 Socket.io Demo - Sistema de Citas en Tiempo Real
+      </h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Panel de Estado -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-semibold mb-4">📊 Estado del Sistema</h2>
+          <div id="socket-status" class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Estado de Conexión:</span>
+              <span id="connection-status" class="px-2 py-1 rounded text-sm font-medium bg-gray-100">
+                Verificando...
+              </span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Socket ID:</span>
+              <span id="socket-id" class="text-sm font-mono text-gray-500">
+                -
+              </span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Clientes Conectados:</span>
+              <span id="connected-clients" class="text-sm font-medium">
+                -
+              </span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Salas Activas:</span>
+              <span id="active-rooms" class="text-sm font-medium">
+                -
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel de Controles -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-semibold mb-4">🎮 Controles de Prueba</h2>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Unirse a Sala de Disponibilidad:
+              </label>
+              <div class="flex space-x-2">
+                <input 
+                  type="date" 
+                  id="availability-date" 
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button 
+                  id="join-availability-room"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Unirse
+                </button>
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Solicitar Disponibilidad:
+              </label>
+              <div class="flex space-x-2">
+                <input 
+                  type="date" 
+                  id="request-date" 
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <button 
+                  id="request-availability"
+                  class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                >
+                  Solicitar
+                </button>
+              </div>
+            </div>
+
+            <div class="flex space-x-2">
+              <button 
+                id="reconnect-socket"
+                class="flex-1 px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors"
+              >
+                🔄 Reconectar
+              </button>
+              <button 
+                id="disconnect-socket"
+                class="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              >
+                🔌 Desconectar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel de Eventos en Tiempo Real -->
+      <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">📡 Eventos en Tiempo Real</h2>
+        <div id="events-log" class="bg-gray-50 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm">
+          <div class="text-gray-500">Esperando eventos...</div>
+        </div>
+        <button 
+          id="clear-events"
+          class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+        >
+          🗑️ Limpiar Log
+        </button>
+      </div>
+
+      <!-- Instrucciones -->
+      <div class="mt-8 bg-blue-50 rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-blue-900 mb-3">📋 Instrucciones de Prueba</h3>
+        <ol class="list-decimal list-inside space-y-2 text-blue-800">
+          <li>Verifica que el estado de conexión muestre "Conectado"</li>
+          <li>Únete a una sala de disponibilidad seleccionando una fecha</li>
+          <li>Solicita disponibilidad para ver eventos en tiempo real</li>
+          <li>Abre otra pestaña y agenda una cita para ver notificaciones</li>
+          <li>Observa cómo se actualizan los eventos en tiempo real</li>
+        </ol>
+      </div>
+    </div>
+  </main>
+
+  <!-- Componente de Notificaciones -->
+  <SocketNotifications client:load />
+
+  <script>
+    import { socketClient } from '../lib/socket/socketClient.js';
+
+    // Elementos del DOM
+    const connectionStatus = document.getElementById('connection-status');
+    const socketId = document.getElementById('socket-id');
+    const connectedClients = document.getElementById('connected-clients');
+    const activeRooms = document.getElementById('active-rooms');
+    const eventsLog = document.getElementById('events-log');
+    const joinAvailabilityRoom = document.getElementById('join-availability-room');
+    const requestAvailability = document.getElementById('request-availability');
+    const reconnectSocket = document.getElementById('reconnect-socket');
+    const disconnectSocket = document.getElementById('disconnect-socket');
+    const clearEvents = document.getElementById('clear-events');
+
+    // Función para agregar eventos al log
+    function addEventToLog(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const eventDiv = document.createElement('div');
+      eventDiv.className = `mb-2 p-2 rounded ${
+        type === 'success' ? 'bg-green-100 text-green-800' :
+        type === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+        type === 'error' ? 'bg-red-100 text-red-800' :
+        'bg-blue-100 text-blue-800'
+      }`;
+      eventDiv.innerHTML = `<span class="text-gray-500">[${timestamp}]</span> ${message}`;
+      eventsLog.appendChild(eventDiv);
+      eventsLog.scrollTop = eventsLog.scrollHeight;
+    }
+
+    // Función para actualizar el estado
+    function updateStatus() {
+      const connected = socketClient.isSocketConnected();
+      const id = socketClient.getSocketId();
+      
+      connectionStatus.textContent = connected ? 'Conectado' : 'Desconectado';
+      connectionStatus.className = `px-2 py-1 rounded text-sm font-medium ${
+        connected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+      }`;
+      
+      socketId.textContent = id || '-';
+    }
+
+    // Función para obtener estadísticas del servidor
+    async function fetchServerStats() {
+      try {
+        const response = await fetch('/api/socket/status');
+        const data = await response.json();
+        
+        if (data.success) {
+          connectedClients.textContent = data.socket.connectedClients;
+          activeRooms.textContent = data.socket.rooms;
+        }
+      } catch (error) {
+        console.error('Error obteniendo estadísticas:', error);
+      }
+    }
+
+    // Event listeners
+    joinAvailabilityRoom.addEventListener('click', () => {
+      const date = document.getElementById('availability-date').value;
+      if (date) {
+        socketClient.joinRoom(`availability-${date}`);
+        addEventToLog(`Uniéndose a sala: availability-${date}`, 'info');
+      }
+    });
+
+    requestAvailability.addEventListener('click', () => {
+      const date = document.getElementById('request-date').value;
+      if (date) {
+        socketClient.requestAvailability(date);
+        addEventToLog(`Solicitando disponibilidad para: ${date}`, 'info');
+      }
+    });
+
+    reconnectSocket.addEventListener('click', () => {
+      socketClient.reconnect();
+      addEventToLog('Reconectando...', 'warning');
+    });
+
+    disconnectSocket.addEventListener('click', () => {
+      socketClient.disconnect();
+      addEventToLog('Desconectando...', 'warning');
+    });
+
+    clearEvents.addEventListener('click', () => {
+      eventsLog.innerHTML = '<div class="text-gray-500">Log limpiado...</div>';
+    });
+
+    // Escuchar eventos de Socket.io
+    window.addEventListener('availability-updated', (event) => {
+      const data = event.detail;
+      addEventToLog(`📅 Disponibilidad actualizada para ${data.date}: ${data.availability.length} horarios disponibles`, 'success');
+    });
+
+    window.addEventListener('appointment-created', (event) => {
+      const data = event.detail;
+      addEventToLog(`✅ Nueva cita creada para ${data.date}`, 'success');
+    });
+
+    window.addEventListener('appointment-cancelled', (event) => {
+      const data = event.detail;
+      addEventToLog(`❌ Cita cancelada para ${data.date}`, 'warning');
+    });
+
+    window.addEventListener('appointment-rescheduled', (event) => {
+      const data = event.detail;
+      addEventToLog(`🔄 Cita reprogramada de ${data.oldDate} a ${data.newDate}`, 'info');
+    });
+
+    window.addEventListener('socket-notification', (event) => {
+      const data = event.detail;
+      addEventToLog(`🔔 ${data.message}`, data.type);
+    });
+
+    // Actualizar estado cada 2 segundos
+    setInterval(() => {
+      updateStatus();
+      fetchServerStats();
+    }, 2000);
+
+    // Inicializar
+    updateStatus();
+    fetchServerStats();
+    addEventToLog('🚀 Socket.io Demo iniciado', 'success');
+  </script>
+</Layout>
