@@ -30,6 +30,7 @@ export class PostgresAppointmentManager {
   private calendar: any;
   private calendarId: string;
   private timezone: string;
+  private calendarInitialized: boolean = false;
 
   constructor() {
     this.appointmentService = new PostgresAppointmentService();
@@ -47,8 +48,17 @@ export class PostgresAppointmentManager {
       const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
       const REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
 
+      console.log('🔧 Verificando configuración de Google Calendar...');
+      console.log(`📅 Calendar ID: ${this.calendarId}`);
+      console.log(`🌍 Timezone: ${this.timezone}`);
+      console.log(`🔑 CLIENT_ID: ${CLIENT_ID ? '✅ Configurado' : '❌ Faltante'}`);
+      console.log(`🔑 CLIENT_SECRET: ${CLIENT_SECRET ? '✅ Configurado' : '❌ Faltante'}`);
+      console.log(`🔗 REDIRECT_URI: ${REDIRECT_URI ? '✅ Configurado' : '❌ Faltante'}`);
+      console.log(`🔄 REFRESH_TOKEN: ${REFRESH_TOKEN ? '✅ Configurado' : '❌ Faltante'}`);
+
       if (!CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI || !REFRESH_TOKEN) {
-        console.warn('Faltan variables de entorno para Google Calendar (CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, REFRESH_TOKEN). La integración con Google Calendar no funcionará.');
+        console.warn('⚠️ Faltan variables de entorno para Google Calendar. La integración con Google Calendar no funcionará.');
+        this.calendarInitialized = false;
         return;
       }
 
@@ -60,9 +70,11 @@ export class PostgresAppointmentManager {
       auth.setCredentials(credentials);
 
       this.calendar = google.calendar({ version: 'v3', auth });
+      this.calendarInitialized = true;
       console.log('✅ Google Calendar inicializado con OAuth2 y Refresh Token.');
     } catch (error) {
       console.error('❌ Error inicializando Google Calendar con OAuth2:', error);
+      this.calendarInitialized = false;
       // No lanzar el error para no bloquear la aplicación si el calendario falla
     }
   }
@@ -178,7 +190,7 @@ export class PostgresAppointmentManager {
       });
 
       // Cancelar evento en Google Calendar si existe
-      if (appointment.googleCalendarEventId) {
+      if (appointment.googleCalendarEventId && this.calendarInitialized && this.calendar) {
         try {
           await this.calendar.events.delete({
             calendarId: this.calendarId,
@@ -228,7 +240,7 @@ export class PostgresAppointmentManager {
       });
 
       // Actualizar evento en Google Calendar si existe
-      if (appointment.googleCalendarEventId) {
+      if (appointment.googleCalendarEventId && this.calendarInitialized && this.calendar) {
         try {
           const startDateTime = new Date(`${newDate}T${newTime}:00`);
           const endDateTime = new Date(
@@ -404,6 +416,12 @@ export class PostgresAppointmentManager {
     appointment: Appointment
   ): Promise<string | null> {
     try {
+      // Verificar que el calendario esté inicializado
+      if (!this.calendarInitialized || !this.calendar) {
+        console.warn('⚠️ Google Calendar no está inicializado, no se puede crear evento');
+        return null;
+      }
+
       const startDateTime = new Date(
         `${appointment.appointmentDate}T${appointment.appointmentTime}:00`
       );
@@ -448,6 +466,12 @@ export class PostgresAppointmentManager {
     time: string
   ): Promise<boolean> {
     try {
+      // Verificar que el calendario esté inicializado
+      if (!this.calendarInitialized || !this.calendar || !this.calendar.freebusy) {
+        console.warn('⚠️ Google Calendar no está inicializado, asumiendo disponible');
+        return true;
+      }
+
       const startDateTime = new Date(`${date}T${time}:00`);
       const endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000); // 1 hora
 
