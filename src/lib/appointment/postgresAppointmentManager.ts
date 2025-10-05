@@ -80,7 +80,8 @@ export class PostgresAppointmentManager {
       this.calendarInitialized = true;
       console.log('✅ Google Calendar inicializado con OAuth2 y Refresh Token.');
     } catch (error) {
-      console.error('❌ Error inicializando Google Calendar con OAuth2:', error);
+      console.warn('⚠️ Google Calendar no disponible (token expirado o inválido)');
+      console.warn('💡 El sistema de citas funcionará sin integración con Google Calendar');
       this.calendarInitialized = false;
       // No lanzar el error para no bloquear la aplicación si el calendario falla
     }
