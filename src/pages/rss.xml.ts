@@ -80,8 +80,8 @@ export async function GET({ url }: { url: URL }) {
         // Generar item XML de forma más directa
         return `<item>
         <title><![CDATA[${title}]]></title>
-        <link>${site}/blog-strapi/${slug}</link>
-        <guid>${site}/blog-strapi/${slug}</guid>
+        <link>${site}/blog/${slug}</link>
+        <guid>${site}/blog/${slug}</guid>
         <pubDate>${pubDate.toUTCString()}</pubDate>
         <description><![CDATA[${description}]]></description>
         <author>${authorName}</author>
@@ -120,7 +120,7 @@ export async function GET({ url }: { url: URL }) {
     <rss version="2.0" xmlns:custom="https://iapunto.com/rss/custom/">
       <channel>
         <title>Blog de IA Punto - Página ${safePage} de ${totalPages}</title>
-        <link>${site}/blog-strapi</link>
+        <link>${site}/blog</link>
         <description>Artículos ${offset + 1}-${Math.min(offset + safeLimit, totalPosts)} de ${totalPosts} del blog de IA Punto</description>
         <language>es</language>
         <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>

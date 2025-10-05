@@ -1,19 +1,41 @@
 ---
 import DefaultLayout from '../../layouts/DefaultLayout.astro';
-import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/common/FormattedDate.astro';
 import ReadingTime from '../../components/common/ReadingTime.astro';
 import OptimizedImage from '../../components/common/OptimizedImage.astro';
 import { Image } from 'astro:assets';
 import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
 import SmartPaginator from '../../components/common/SmartPaginator.astro';
+import { StrapiService } from '../../lib/strapi';
+import type { StrapiArticle } from '../../lib/types/strapi';
 
-const blogEntries = (await getCollection('blog')).sort(
-  (a, b) =>
-    new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-);
+// Obtener artículos desde Strapi
+const articles = await StrapiService.getArticles();
 
-// Extraer categorías y tags únicas
+// Convertir datos de Strapi al formato esperado por el diseño original
+const blogEntries = articles.map((article) => ({
+  data: {
+    slug: article.slug,
+    title: article.title,
+    description: article.description || article.excerpt || '',
+    category: article.category?.name || '',
+    tags: article.tags?.map((tag: any) => tag.name) || [],
+    pubDate: new Date(article.publishedAt),
+    cover: article.cover
+      ? `https://strapi.iapunto.com${article.cover.url}`
+      : '',
+    coverAlt: article.coverAlt || article.title,
+    author: {
+      name: article.author?.name || 'IA Punto',
+      image: article.author?.avatar
+        ? `https://strapi.iapunto.com${article.author.avatar.url}`
+        : '/images/default-avatar.jpg',
+    },
+  },
+  body: article.content,
+}));
+
+// Extraer categorías y tags únicas (igual que el diseño original)
 type Entry = (typeof blogEntries)[0];
 const categories = Array.from(
   new Set(blogEntries.map((p: Entry) => p.data.category))
@@ -30,13 +52,13 @@ const tags = Array.from(
   )
 );
 
-// Estado de filtros (Astro no es reactivo, se usa query params)
+// Estado de filtros (igual que el diseño original)
 const url = new URL(Astro.request.url);
 const query = url.searchParams.get('q') || '';
 const selectedCategory = url.searchParams.get('category') || '';
 const selectedTags = url.searchParams.getAll('tag');
 
-// Filtrado profesional
+// Filtrado profesional (igual que el diseño original)
 function matches(post: Entry) {
   const q = query.trim().toLowerCase();
   const inTitle = post.data.title.toLowerCase().includes(q);
@@ -57,20 +79,26 @@ function matches(post: Entry) {
 }
 const filteredPosts = blogEntries.filter(matches);
 
-// Paginación sobre filtrados
+// Paginación sobre filtrados (igual que el diseño original)
 const postsPerPage = 6;
 const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 const currentPage = Number(url.searchParams.get('page')) || 1;
-const startIndex = (currentPage - 1) * postsPerPage;
+
+// Validar que la página actual no exceda el total de páginas
+const validCurrentPage = Math.min(currentPage, Math.max(1, totalPages));
+const startIndex = (validCurrentPage - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;
 const currentPosts = filteredPosts.slice(startIndex, endIndex);
 
-// Handlers para SidebarFilters (redirige con query params)
-function handleFilterChange({ query, category, tags }) {
+// Debug info
+console.log(`📊 Blog Strapi - Total artículos: ${filteredPosts.length}, Páginas: ${totalPages}, Página actual: ${validCurrentPage}, Artículos en página: ${currentPosts.length}`);
+
+// Handlers para SidebarFilters (igual que el diseño original)
+function handleFilterChange({ query, category, tags }: any) {
   const params = new URLSearchParams();
   if (query) params.set('q', query);
   if (category) params.set('category', category);
-  tags.forEach((tag) => params.append('tag', tag));
+  tags.forEach((tag: any) => params.append('tag', tag));
   window.location.search = params.toString();
 }
 function handleClear() {
@@ -128,7 +156,7 @@ const latestPosts = blogEntries.slice(0, 5);
                     <div class="w-full mb-5">
                       {entry.data.cover && (
                         <OptimizedImage
-                          src={entry.data.cover.src || entry.data.cover}
+                          src={entry.data.cover}
                           alt={entry.data.coverAlt || entry.data.title || ''}
                           width={600}
                           height={400}
@@ -165,10 +193,7 @@ const latestPosts = blogEntries.slice(0, 5);
                     <div class="flex justify-between items-center">
                       <div class="flex items-center space-x-4">
                         <img
-                          src={
-                            entry.data.author.image.src ||
-                            entry.data.author.image
-                          }
+                          src={entry.data.author.image}
                           alt="avatar"
                           width="36"
                           height="36"
@@ -203,11 +228,12 @@ const latestPosts = blogEntries.slice(0, 5);
             )
           }
           <SmartPaginator
-            currentPage={currentPage}
+            currentPage={validCurrentPage}
             totalPages={totalPages}
             searchParams={url.searchParams}
           />
         </div>
+
         <div class="lg:col-span-1">
           <SidebarFilters
             query={query}

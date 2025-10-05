@@ -161,7 +161,7 @@ const query = '';
                 )}
                 <div class="flex-1 min-w-0">
                   <a
-                    href={`/blog-strapi/${post.data.slug}`}
+                    href={`/blog/${post.data.slug}`}
                     class="text-sm font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 line-clamp-2"
                   >
                     {post.data.title}
@@ -187,7 +187,7 @@ const query = '';
           {
             allCategories.map((category) => (
               <a
-                href={`/blog-strapi?category=${encodeURIComponent(category)}`}
+                href={`/blog?category=${encodeURIComponent(category)}`}
                 class={`block text-sm ${
                   selectedCategory === category
                     ? 'text-primary-600 dark:text-primary-400 font-medium'
@@ -212,7 +212,7 @@ const query = '';
           {
             allTags.slice(0, 15).map((tag) => (
               <a
-                href={`/blog-strapi?tag=${encodeURIComponent(tag)}`}
+                href={`/blog?tag=${encodeURIComponent(tag)}`}
                 class={`text-xs px-2 py-1 rounded border ${
                   selectedTags.includes(tag)
                     ? 'bg-primary-100 text-primary-800 border-primary-200'
@@ -287,7 +287,7 @@ const query = '';
             )}
             <div class="flex-1">
               <a
-                href={`/blog-strapi/${recommended.data.slug}`}
+                href={`/blog/${recommended.data.slug}`}
                 class="text-lg font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400"
               >
                 {recommended.data.title}
@@ -312,7 +312,7 @@ const query = '';
           <div class="flex flex-wrap gap-2">
             {article.tags.map((tag: any) => (
               <a
-                href={`/blog-strapi?tag=${encodeURIComponent(tag.name)}`}
+                href={`/blog?tag=${encodeURIComponent(tag.name)}`}
                 class="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-100 text-gray-600 hover:bg-primary-100 hover:text-primary transition"
                 style="text-decoration: none;"
               >
@@ -329,7 +329,7 @@ const query = '';
       {
         prevArticle && (
           <a
-            href={`/blog-strapi/${prevArticle.data.slug}`}
+            href={`/blog/${prevArticle.data.slug}`}
             class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-1 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             <svg
@@ -354,7 +354,7 @@ const query = '';
       {
         nextArticle && (
           <a
-            href={`/blog-strapi/${nextArticle.data.slug}`}
+            href={`/blog/${nextArticle.data.slug}`}
             class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Siguiente
