@@ -1,21 +1,17 @@
 #!/usr/bin/env node
 
 /**
- * Script de migración usando Astro directamente
- * Ejecutar con: node scripts/migrate-astro.js
+ * Script de migración directo con configuración en archivo
+ * Ejecutar con: node scripts/migrate-direct.js
  */
 
-import { createServer } from 'http';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+// ===== CONFIGURACIÓN - MODIFICA ESTOS VALORES =====
+const STRAPI_URL = 'https://strapi.iapunto.com'; // URL de tu Strapi
+const STRAPI_TOKEN = 'TU_TOKEN_AQUI'; // ⚠️ CAMBIA ESTO POR TU TOKEN REAL
+// ==================================================
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Configuración
+// Configuración adicional
 const CONFIG = {
-  STRAPI_URL: process.env.STRAPI_URL || 'https://strapi.iapunto.com',
-  STRAPI_TOKEN: process.env.STRAPI_API_TOKEN,
   BATCH_SIZE: 5,
   DELAY_BETWEEN_REQUESTS: 1000, // 1 segundo
   MAX_RETRIES: 3,
@@ -29,13 +25,13 @@ function delay(ms) {
 // Función para hacer request a Strapi
 async function createStrapiArticle(articleData, retryCount = 0) {
   try {
-    const response = await fetch(`${CONFIG.STRAPI_URL}/api/articles`, {
+    const response = await fetch(`${STRAPI_URL}/api/articles`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${CONFIG.STRAPI_TOKEN}`,
+        'Authorization': `Bearer ${STRAPI_TOKEN}`
       },
-      body: JSON.stringify({ data: articleData }),
+      body: JSON.stringify({ data: articleData })
     });
 
     if (!response.ok) {
@@ -45,9 +41,7 @@ async function createStrapiArticle(articleData, retryCount = 0) {
     return await response.json();
   } catch (error) {
     if (retryCount < CONFIG.MAX_RETRIES) {
-      console.log(
-        `🔄 Reintentando (${retryCount + 1}/${CONFIG.MAX_RETRIES}) para: ${articleData.title}`
-      );
+      console.log(`🔄 Reintentando (${retryCount + 1}/${CONFIG.MAX_RETRIES}) para: ${articleData.title}`);
       await delay(2000);
       return createStrapiArticle(articleData, retryCount + 1);
     }
@@ -58,9 +52,7 @@ async function createStrapiArticle(articleData, retryCount = 0) {
 // Función para obtener datos del endpoint local
 async function getArticlesFromLocalEndpoint(page = 1, limit = 50) {
   try {
-    const response = await fetch(
-      `http://localhost:4321/migrate-to-strapi.json?page=${page}&limit=${limit}`
-    );
+    const response = await fetch(`http://localhost:4321/migrate-to-strapi.json?page=${page}&limit=${limit}`);
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
@@ -72,29 +64,32 @@ async function getArticlesFromLocalEndpoint(page = 1, limit = 50) {
 
 // Función principal de migración
 async function migrateArticles() {
-  console.log('🚀 Iniciando migración usando endpoint local...\n');
-
+  console.log('🚀 Iniciando migración directa a Strapi...\n');
+  
   // Verificar configuración
-  if (!CONFIG.STRAPI_TOKEN) {
-    console.error('❌ Error: STRAPI_API_TOKEN no está configurado');
-    console.log(
-      '💡 Configura la variable de entorno: export STRAPI_API_TOKEN="tu_token"'
-    );
+  if (STRAPI_TOKEN === 'TU_TOKEN_AQUI') {
+    console.error('❌ Error: Debes configurar tu token de Strapi');
+    console.log('💡 Edita el archivo scripts/migrate-direct.js');
+    console.log('💡 Cambia STRAPI_TOKEN por tu token real');
     process.exit(1);
   }
+
+  console.log(`🌐 Strapi URL: ${STRAPI_URL}`);
+  console.log(`🔑 Token configurado: ${STRAPI_TOKEN.substring(0, 10)}...`);
+  console.log('');
 
   try {
     // Obtener información del primer lote
     console.log('📚 Obteniendo información de artículos...');
     const firstBatch = await getArticlesFromLocalEndpoint(1, CONFIG.BATCH_SIZE);
-
+    
     if (!firstBatch.success) {
       throw new Error('Error obteniendo datos del endpoint local');
     }
 
     const totalPages = firstBatch.data.pagination.totalPages;
     const totalPosts = firstBatch.data.pagination.totalPosts;
-
+    
     console.log(`📊 Total de artículos: ${totalPosts}`);
     console.log(`📦 Total de lotes: ${totalPages}`);
     console.log(`📦 Tamaño de lote: ${CONFIG.BATCH_SIZE}\n`);
@@ -107,21 +102,18 @@ async function migrateArticles() {
         successful: 0,
         failed: 0,
         startTime: new Date().toISOString(),
-        endTime: null,
-      },
+        endTime: null
+      }
     };
 
     // Procesar cada lote
     for (let page = 1; page <= totalPages; page++) {
       console.log(`\n📦 Procesando lote ${page}/${totalPages}`);
-
+      
       try {
         // Obtener artículos del lote actual
-        const batchData = await getArticlesFromLocalEndpoint(
-          page,
-          CONFIG.BATCH_SIZE
-        );
-
+        const batchData = await getArticlesFromLocalEndpoint(page, CONFIG.BATCH_SIZE);
+        
         if (!batchData.success) {
           throw new Error(`Error obteniendo lote ${page}`);
         }
@@ -132,10 +124,8 @@ async function migrateArticles() {
         // Procesar cada artículo del lote
         for (let i = 0; i < articles.length; i++) {
           const article = articles[i];
-
-          console.log(
-            `📝 [${i + 1}/${articles.length}] Migrando: ${article.title}`
-          );
+          
+          console.log(`📝 [${i + 1}/${articles.length}] Migrando: ${article.title}`);
 
           try {
             const result = await createStrapiArticle(article);
@@ -144,7 +134,7 @@ async function migrateArticles() {
               title: article.title,
               slug: article.slug,
               strapiId: result.data?.id,
-              migratedAt: new Date().toISOString(),
+              migratedAt: new Date().toISOString()
             });
             results.summary.successful++;
           } catch (error) {
@@ -153,7 +143,7 @@ async function migrateArticles() {
               title: article.title,
               slug: article.slug,
               error: error.message,
-              failedAt: new Date().toISOString(),
+              failedAt: new Date().toISOString()
             });
             results.summary.failed++;
           }
@@ -171,12 +161,13 @@ async function migrateArticles() {
           console.log(`⏳ Esperando 2 segundos antes del siguiente lote...`);
           await delay(2000);
         }
+
       } catch (error) {
         console.error(`❌ Error procesando lote ${page}:`, error.message);
         results.failed.push({
           batch: page,
           error: error.message,
-          failedAt: new Date().toISOString(),
+          failedAt: new Date().toISOString()
         });
         results.summary.failed++;
       }
@@ -184,13 +175,10 @@ async function migrateArticles() {
 
     // Finalizar
     results.summary.endTime = new Date().toISOString();
-
+    
     // Guardar resultados
     const fs = await import('fs');
-    fs.writeFileSync(
-      'migration-results.json',
-      JSON.stringify(results, null, 2)
-    );
+    fs.writeFileSync('migration-results.json', JSON.stringify(results, null, 2));
 
     // Mostrar resumen final
     console.log('\n🎉 ¡Migración completada!');
@@ -199,10 +187,10 @@ async function migrateArticles() {
     console.log(`✅ Migrados exitosamente: ${results.summary.successful}`);
     console.log(`❌ Fallidos: ${results.summary.failed}`);
     console.log(`📁 Resultados guardados en: migration-results.json`);
-
+    
     if (results.failed.length > 0) {
       console.log('\n❌ Artículos que fallaron:');
-      results.failed.forEach((failed) => {
+      results.failed.forEach(failed => {
         if (failed.title) {
           console.log(`   - ${failed.title}: ${failed.error}`);
         } else {
@@ -210,6 +198,7 @@ async function migrateArticles() {
         }
       });
     }
+
   } catch (error) {
     console.error('❌ Error durante la migración:', error);
     process.exit(1);

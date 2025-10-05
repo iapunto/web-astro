@@ -4,7 +4,33 @@ Este directorio contiene scripts para migrar todos los artículos de Astro a Str
 
 ## 🚀 Opciones de Migración
 
-### Opción 1: Migración usando endpoint local (Recomendada)
+### Opción 1: Migración directa con token en archivo (Más Fácil)
+
+**Ventajas:**
+- No requiere configuración de variables de entorno
+- Token configurado directamente en el archivo
+- Fácil de usar y modificar
+
+**Pasos:**
+
+1. **Editar el script con tu token:**
+```bash
+# Editar scripts/migrate-direct.js
+# Cambiar: const STRAPI_TOKEN = 'TU_TOKEN_AQUI';
+# Por: const STRAPI_TOKEN = 'tu_token_real_de_strapi';
+```
+
+2. **Asegurar que el servidor Astro esté corriendo:**
+```bash
+pnpm run dev
+```
+
+3. **Ejecutar migración:**
+```bash
+node scripts/migrate-direct.js
+```
+
+### Opción 2: Migración usando endpoint local con variables de entorno
 
 **Ventajas:**
 - Usa los endpoints optimizados que ya creamos
@@ -30,7 +56,7 @@ pnpm run dev
 node scripts/migrate-astro.js
 ```
 
-### Opción 2: Migración directa (Alternativa)
+### Opción 3: Migración directa (Alternativa)
 
 **Ventajas:**
 - No requiere servidor corriendo
