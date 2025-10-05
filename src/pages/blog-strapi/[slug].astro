@@ -3,34 +3,31 @@ import BlogLayout from '../../layouts/BlogLayout.astro';
 import { StrapiService } from '../../lib/strapi';
 import type { StrapiArticle } from '../../lib/types/strapi';
 
-export const prerender = false; // Necesario para SSR con Strapi
+export const prerender = false; // Usar SSR para Strapi
 
-export async function getStaticPaths() {
-  try {
-    const articles = await StrapiService.getArticles();
-    return articles.map((article) => ({
-      params: { slug: article.slug },
-      props: {
-        article,
-        pageTitle: article.title,
-        description: article.description || article.excerpt || '',
-        keywords: article.seo?.keywords?.split(',') || [],
-        image: article.cover ? `https://strapi.iapunto.com${article.cover.url}` : '/images/default-image.jpg',
-        author: {
-          name: article.author?.name || 'IA Punto',
-          description: article.author?.bio || 'Equipo de IA Punto',
-          image: article.author?.avatar ? `https://strapi.iapunto.com${article.author.avatar.url}` : '/images/default-avatar.jpg',
-        },
-        pubDate: article.publishedAt,
-      },
-    }));
-  } catch (error) {
-    console.error('Error generating static paths for Strapi articles:', error);
-    return [];
-  }
+// Obtener el slug de la URL
+const { slug } = Astro.params;
+
+// Obtener el artículo desde Strapi
+const article = await StrapiService.getArticle(slug);
+
+if (!article) {
+  return Astro.redirect('/404');
 }
 
-const { article, pageTitle, description, keywords, image, author, pubDate } = Astro.props;
+// Preparar props
+const pageTitle = article.title;
+const description = article.description || article.excerpt || '';
+const keywords = article.seo?.keywords?.split(',') || [];
+const image = article.cover ? `https://strapi.iapunto.com${article.cover.url}` : '/images/default-image.jpg';
+const author = {
+  name: article.author?.name || 'IA Punto',
+  description: article.author?.bio || 'Equipo de IA Punto',
+  image: article.author?.avatar ? `https://strapi.iapunto.com${article.author.avatar.url}` : '/images/default-avatar.jpg',
+};
+const pubDate = article.publishedAt;
+
+// Las variables ya están definidas arriba
 
 // Obtener artículos relacionados
 const allArticles = await StrapiService.getArticles();
