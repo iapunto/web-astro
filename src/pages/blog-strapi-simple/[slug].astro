@@ -1,0 +1,80 @@
+---
+import { StrapiService } from '../../lib/strapi';
+
+// Obtener el slug de la URL
+const { slug } = Astro.params;
+
+// Obtener el artículo desde Strapi
+const article = await StrapiService.getArticle(slug);
+
+if (!article) {
+  return Astro.redirect('/404');
+}
+---
+
+<html>
+  <head>
+    <title>{article.title}</title>
+    <meta
+      name="description"
+      content={article.description || article.excerpt || ''}
+    />
+  </head>
+  <body>
+    <h1>{article.title}</h1>
+
+    <div>
+      <p><strong>Slug:</strong> {article.slug}</p>
+      <p><strong>Fecha:</strong> {article.publishedAt}</p>
+      <p><strong>ID:</strong> {article.id}</p>
+      <p><strong>Document ID:</strong> {article.documentId}</p>
+    </div>
+
+    {
+      article.cover && (
+        <div>
+          <h3>Imagen destacada:</h3>
+          <img
+            src={`https://strapi.iapunto.com${article.cover.url}`}
+            alt={
+              article.coverAlt || article.cover.alternativeText || article.title
+            }
+            width="400"
+          />
+        </div>
+      )
+    }
+
+    <div>
+      <h3>Contenido:</h3>
+      <div set:html={article.content} />
+    </div>
+
+    <div>
+      <h3>Autor:</h3>
+      <p>{article.author?.name || 'IA Punto'}</p>
+    </div>
+
+    {
+      article.category && (
+        <div>
+          <h3>Categoría:</h3>
+          <p>{article.category.name}</p>
+        </div>
+      )
+    }
+
+    {
+      article.tags && article.tags.length > 0 && (
+        <div>
+          <h3>Tags:</h3>
+          <ul>
+            {article.tags.map((tag) => (
+              <li>{tag.name}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </body>
+</html>

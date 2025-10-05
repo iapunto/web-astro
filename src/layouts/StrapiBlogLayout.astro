@@ -1,0 +1,206 @@
+---
+// src/layouts/StrapiBlogLayout.astro
+// Layout específico para artículos de Strapi
+
+import BaseLayout from './BaseLayout.astro';
+import type { StrapiArticle } from '../lib/types/strapi';
+
+const { pageTitle, description, keywords, image, author, pubDate, article } = Astro.props;
+
+// Generar tabla de contenido dinámicamente
+const headings = article.content.match(/<h[2-6].*?>(.*?)<\/h[2-6]>/g) || [];
+const toc = headings.map((heading: string) => {
+  const id =
+    heading.match(/id="([^"]*)"/)?.[1] ||
+    heading
+      .replace(/<[^>]*>/g, '')
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '-');
+  return {
+    text: heading.replace(/<[^>]*>/g, ''),
+    id: id,
+    level: parseInt(heading.match(/<h([2-6])/)?.[1] || '2'),
+  };
+});
+
+// Schema markup para SEO
+const schemaMarkup = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": pageTitle,
+  "description": description,
+  "image": image,
+  "author": {
+    "@type": "Person",
+    "name": author.name,
+    "description": author.description,
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "IA Punto",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://iapunto.com/images/logo.png"
+    }
+  },
+  "datePublished": pubDate,
+  "dateModified": article.updatedAt,
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `https://iapunto.com/blog-strapi/${article.slug}`
+  }
+};
+---
+
+<BaseLayout
+  pageTitle={pageTitle}
+  description={description}
+  keywords={keywords}
+  image={image}
+  canonicalURL={`/blog-strapi/${article.slug}`}
+  noindex={false}
+>
+  <!-- Schema Markup -->
+  <script type="application/ld+json" set:html={JSON.stringify(schemaMarkup)} />
+  
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+      <div class="grid gap-8 lg:grid-cols-4">
+        <!-- Contenido principal -->
+        <div class="lg:col-span-3">
+          <article class="mx-auto max-w-4xl">
+            <!-- Header del artículo -->
+            <header class="mb-8">
+              <div class="flex justify-between items-center mb-4 text-sm text-gray-500 dark:text-gray-400">
+                <time datetime={pubDate}>
+                  {new Date(pubDate).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </time>
+                <div class="flex items-center space-x-2">
+                  {author.image && (
+                    <img
+                      src={author.image}
+                      alt={author.name}
+                      width="32"
+                      height="32"
+                      class="w-8 h-8 rounded-full"
+                    />
+                  )}
+                  <span class="font-medium text-gray-900 dark:text-white">
+                    {author.name}
+                  </span>
+                </div>
+              </div>
+              
+              <h1 class="mb-4 text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+                {pageTitle}
+              </h1>
+              
+              {description && (
+                <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {description}
+                </p>
+              )}
+            </header>
+
+            <!-- Imagen destacada -->
+            {article.cover && (
+              <div class="mb-8">
+                <img
+                  src={`https://strapi.iapunto.com${article.cover.url}`}
+                  alt={article.coverAlt || article.cover.alternativeText || pageTitle}
+                  width="800"
+                  height="400"
+                  class="w-full h-auto object-cover rounded-lg shadow-lg"
+                />
+              </div>
+            )}
+
+            <!-- Contenido del artículo -->
+            <div class="prose prose-lg max-w-none dark:prose-invert">
+              <div set:html={article.content} />
+            </div>
+
+            <!-- Footer del artículo -->
+            <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+              <!-- Tags -->
+              {article.tags && article.tags.length > 0 && (
+                <div class="mb-6">
+                  <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                    Tags:
+                  </h3>
+                  <div class="flex flex-wrap gap-2">
+                    {article.tags.map((tag: any) => (
+                      <a
+                        href={`/blog-strapi?tag=${encodeURIComponent(tag.name)}`}
+                        class="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-100 text-gray-600 hover:bg-primary-100 hover:text-primary transition"
+                      >
+                        #{tag.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <!-- Información del autor -->
+              <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                <div class="flex items-center space-x-4">
+                  {author.image && (
+                    <img
+                      src={author.image}
+                      alt={author.name}
+                      width="64"
+                      height="64"
+                      class="w-16 h-16 rounded-full"
+                    />
+                  )}
+                  <div>
+                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
+                      {author.name}
+                    </h4>
+                    <p class="text-gray-600 dark:text-gray-300">
+                      {author.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </footer>
+          </article>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-8 space-y-6">
+            <!-- Tabla de contenido -->
+            {toc.length > 0 && (
+              <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Contenido
+                </h3>
+                <nav class="space-y-2">
+                  {toc.map((item: any) => (
+                    <a
+                      href={`#${item.id}`}
+                      class={`block text-sm hover:text-primary-600 dark:hover:text-primary-400 ${
+                        item.level === 2 ? 'font-medium' : 'ml-4'
+                      }`}
+                    >
+                      {item.text}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            )}
+
+            <!-- Slot para contenido adicional del sidebar -->
+            <slot name="sidebar" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

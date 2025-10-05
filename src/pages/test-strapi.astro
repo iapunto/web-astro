@@ -1,0 +1,53 @@
+---
+import { StrapiService } from '../lib/strapi';
+
+// Probar obtener artículos
+const articles = await StrapiService.getArticles();
+const firstArticle = articles.length > 0 ? articles[0] : null;
+---
+
+<html>
+  <head>
+    <title>Test Strapi</title>
+  </head>
+  <body>
+    <h1>Test de Strapi</h1>
+
+    <h2>Total de artículos: {articles.length}</h2>
+
+    {
+      firstArticle && (
+        <div>
+          <h3>Primer artículo:</h3>
+          <p>
+            <strong>Título:</strong> {firstArticle.title}
+          </p>
+          <p>
+            <strong>Slug:</strong> {firstArticle.slug}
+          </p>
+          <p>
+            <strong>Fecha:</strong> {firstArticle.publishedAt}
+          </p>
+          <p>
+            <strong>ID:</strong> {firstArticle.id}
+          </p>
+          <p>
+            <strong>Document ID:</strong> {firstArticle.documentId}
+          </p>
+        </div>
+      )
+    }
+
+    <h3>Todos los artículos:</h3>
+    <ul>
+      {
+        articles.map((article) => (
+          <li>
+            <a href={`/blog-strapi/${article.slug}`}>{article.title}</a> (
+            {article.slug})
+          </li>
+        ))
+      }
+    </ul>
+  </body>
+</html>
