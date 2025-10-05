@@ -83,9 +83,15 @@ const filteredPosts = blogEntries.filter(matches);
 const postsPerPage = 6;
 const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 const currentPage = Number(url.searchParams.get('page')) || 1;
-const startIndex = (currentPage - 1) * postsPerPage;
+
+// Validar que la página actual no exceda el total de páginas
+const validCurrentPage = Math.min(currentPage, Math.max(1, totalPages));
+const startIndex = (validCurrentPage - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;
 const currentPosts = filteredPosts.slice(startIndex, endIndex);
+
+// Debug info
+console.log(`📊 Blog Strapi - Total artículos: ${filteredPosts.length}, Páginas: ${totalPages}, Página actual: ${validCurrentPage}, Artículos en página: ${currentPosts.length}`);
 
 // Handlers para SidebarFilters (igual que el diseño original)
 function handleFilterChange({ query, category, tags }: any) {
@@ -222,7 +228,7 @@ const latestPosts = blogEntries.slice(0, 5);
             )
           }
           <SmartPaginator
-            currentPage={currentPage}
+            currentPage={validCurrentPage}
             totalPages={totalPages}
             searchParams={url.searchParams}
           />
