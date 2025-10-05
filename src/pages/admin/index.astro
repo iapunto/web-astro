@@ -1,0 +1,419 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { PostgresAppointmentService } from '../../lib/database/postgresAppointmentService.js';
+import { Client } from 'pg';
+import { StrapiService } from '../../lib/strapi.js';
+
+// Configurar conexión a la base de datos
+const client = new Client({
+  connectionString: process.env.DATABASE_PUBLIC_URL,
+});
+
+let appointmentStats = {
+  total: 0,
+  pending: 0,
+  confirmed: 0,
+  cancelled: 0,
+  completed: 0,
+  today: 0,
+  thisWeek: 0,
+  thisMonth: 0,
+};
+
+let blogStats = {
+  total: 0,
+  published: 0,
+  draft: 0,
+  categories: 0,
+  tags: 0,
+};
+
+let systemStats = {
+  redisConnected: false,
+  socketConnected: false,
+  databaseConnected: false,
+  strapiConnected: false,
+};
+
+try {
+  await client.connect();
+  const appointmentService = new PostgresAppointmentService(client);
+
+  // Estadísticas de citas
+  const appointmentResult = await client.query(`
+    SELECT 
+      COUNT(*) as total,
+      COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending,
+      COUNT(CASE WHEN status = 'confirmed' THEN 1 END) as confirmed,
+      COUNT(CASE WHEN status = 'cancelled' THEN 1 END) as cancelled,
+      COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed,
+      COUNT(CASE WHEN DATE(appointment_date) = CURRENT_DATE THEN 1 END) as today,
+      COUNT(CASE WHEN appointment_date >= CURRENT_DATE - INTERVAL '7 days' THEN 1 END) as this_week,
+      COUNT(CASE WHEN appointment_date >= CURRENT_DATE - INTERVAL '30 days' THEN 1 END) as this_month
+    FROM appointments
+  `);
+
+  if (appointmentResult.rows.length > 0) {
+    appointmentStats = appointmentResult.rows[0];
+  }
+
+  // Estadísticas del blog
+  try {
+    const articles = await StrapiService.getArticles();
+    const categories = await StrapiService.getCategories();
+    const tags = await StrapiService.getTags();
+    
+    blogStats = {
+      total: articles.length,
+      published: articles.filter(a => a.publishedAt).length,
+      draft: articles.filter(a => !a.publishedAt).length,
+      categories: categories.length,
+      tags: tags.length,
+    };
+  } catch (error) {
+    console.warn('Error obteniendo estadísticas del blog:', error);
+  }
+
+  systemStats.databaseConnected = true;
+  systemStats.strapiConnected = true;
+
+} catch (error) {
+  console.error('Error conectando a la base de datos:', error);
+} finally {
+  await client.end();
+}
+
+// Verificar estado de Redis y Socket.io
+try {
+  const redisResponse = await fetch(`${import.meta.env.SITE}/api/cache/status`);
+  if (redisResponse.ok) {
+    const redisData = await redisResponse.json();
+    systemStats.redisConnected = redisData.cache?.redis?.connected || false;
+  }
+} catch (error) {
+  console.warn('Error verificando Redis:', error);
+}
+
+try {
+  const socketResponse = await fetch(`${import.meta.env.SITE}/api/socket/status`);
+  if (socketResponse.ok) {
+    const socketData = await socketResponse.json();
+    systemStats.socketConnected = socketData.socket?.ready || false;
+  }
+} catch (error) {
+  console.warn('Error verificando Socket.io:', error);
+}
+---
+
+<Layout title="Admin Dashboard - IA Punto">
+  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">
+              🎛️ Admin Dashboard
+            </h1>
+            <p class="text-gray-600 mt-1">
+              Panel de control completo para IA Punto
+            </p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="text-right">
+              <div class="text-sm text-gray-500">Estado del sistema</div>
+              <div class="text-lg font-semibold text-green-600">🟢 Activo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Estado del Sistema -->
+      <div class="bg-white rounded-lg shadow mb-8">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">
+            🔧 Estado del Sistema
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="flex items-center space-x-3">
+              <div class={`w-3 h-3 rounded-full ${systemStats.databaseConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+              <span class="text-sm font-medium text-gray-700">Base de Datos</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class={`w-3 h-3 rounded-full ${systemStats.redisConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+              <span class="text-sm font-medium text-gray-700">Redis Cache</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class={`w-3 h-3 rounded-full ${systemStats.socketConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+              <span class="text-sm font-medium text-gray-700">Socket.io</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class={`w-3 h-3 rounded-full ${systemStats.strapiConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+              <span class="text-sm font-medium text-gray-700">Strapi CMS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estadísticas Principales -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Citas -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Total Citas</p>
+              <p class="text-2xl font-semibold text-gray-900">{appointmentStats.total}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artículos -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Artículos</p>
+              <p class="text-2xl font-semibold text-gray-900">{blogStats.total}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Citas Hoy -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Citas Hoy</p>
+              <p class="text-2xl font-semibold text-gray-900">{appointmentStats.today}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categorías -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Categorías</p>
+              <p class="text-2xl font-semibold text-gray-900">{blogStats.categories}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secciones Principales -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Gestión de Citas -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">
+              📅 Gestión de Citas
+            </h2>
+            <p class="text-gray-600 mt-1">
+              Administra el sistema de citas y reuniones
+            </p>
+          </div>
+          <div class="p-6">
+            <!-- Estadísticas de citas -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="text-center p-4 bg-blue-50 rounded-lg">
+                <div class="text-2xl font-bold text-blue-600">{appointmentStats.pending}</div>
+                <div class="text-sm text-blue-600">Pendientes</div>
+              </div>
+              <div class="text-center p-4 bg-green-50 rounded-lg">
+                <div class="text-2xl font-bold text-green-600">{appointmentStats.confirmed}</div>
+                <div class="text-sm text-green-600">Confirmadas</div>
+              </div>
+              <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                <div class="text-2xl font-bold text-yellow-600">{appointmentStats.thisWeek}</div>
+                <div class="text-sm text-yellow-600">Esta Semana</div>
+              </div>
+              <div class="text-center p-4 bg-purple-50 rounded-lg">
+                <div class="text-2xl font-bold text-purple-600">{appointmentStats.thisMonth}</div>
+                <div class="text-sm text-purple-600">Este Mes</div>
+              </div>
+            </div>
+
+            <!-- Acciones rápidas -->
+            <div class="space-y-3">
+              <a href="/admin/appointments" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
+                📋 Ver Todas las Citas
+              </a>
+              <a href="/admin/appointments/calendar" class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
+                📅 Vista de Calendario
+              </a>
+              <a href="/admin/appointments/analytics" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
+                📊 Analytics de Citas
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gestión de Blog -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">
+              📝 Gestión de Blog
+            </h2>
+            <p class="text-gray-600 mt-1">
+              Administra artículos, categorías y contenido
+            </p>
+          </div>
+          <div class="p-6">
+            <!-- Estadísticas del blog -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="text-center p-4 bg-green-50 rounded-lg">
+                <div class="text-2xl font-bold text-green-600">{blogStats.published}</div>
+                <div class="text-sm text-green-600">Publicados</div>
+              </div>
+              <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                <div class="text-2xl font-bold text-yellow-600">{blogStats.draft}</div>
+                <div class="text-sm text-yellow-600">Borradores</div>
+              </div>
+              <div class="text-center p-4 bg-blue-50 rounded-lg">
+                <div class="text-2xl font-bold text-blue-600">{blogStats.categories}</div>
+                <div class="text-sm text-blue-600">Categorías</div>
+              </div>
+              <div class="text-center p-4 bg-purple-50 rounded-lg">
+                <div class="text-2xl font-bold text-purple-600">{blogStats.tags}</div>
+                <div class="text-sm text-purple-600">Etiquetas</div>
+              </div>
+            </div>
+
+            <!-- Acciones rápidas -->
+            <div class="space-y-3">
+              <a href="/blog" class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
+                📖 Ver Blog
+              </a>
+              <a href="/admin/blog/articles" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
+                📝 Gestionar Artículos
+              </a>
+              <a href="/automation-dashboard" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
+                🤖 Automatización IA
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Herramientas del Sistema -->
+      <div class="mt-8 bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">
+            🛠️ Herramientas del Sistema
+          </h2>
+          <p class="text-gray-600 mt-1">
+            Utilidades y configuraciones avanzadas
+          </p>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Cache y Performance -->
+            <div class="border rounded-lg p-4">
+              <h3 class="font-semibold text-gray-900 mb-3">💾 Cache y Performance</h3>
+              <div class="space-y-2">
+                <a href="/api/cache/status" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
+                  📊 Estado del Cache
+                </a>
+                <a href="/api/socket/status" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
+                  🔌 Estado de Socket.io
+                </a>
+                <button onclick="clearCache()" class="block text-red-600 hover:text-red-800 text-sm">
+                  🗑️ Limpiar Cache
+                </button>
+              </div>
+            </div>
+
+            <!-- Monitoreo -->
+            <div class="border rounded-lg p-4">
+              <h3 class="font-semibold text-gray-900 mb-3">📈 Monitoreo</h3>
+              <div class="space-y-2">
+                <a href="/api/calendar/monthly-availability" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
+                  📅 Disponibilidad API
+                </a>
+                <a href="/socket-demo" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
+                  🧪 Demo Socket.io
+                </a>
+                <a href="/rss.xml" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
+                  📡 RSS Feed
+                </a>
+              </div>
+            </div>
+
+            <!-- Configuración -->
+            <div class="border rounded-lg p-4">
+              <h3 class="font-semibold text-gray-900 mb-3">⚙️ Configuración</h3>
+              <div class="space-y-2">
+                <a href="/admin/settings" class="block text-blue-600 hover:text-blue-800 text-sm">
+                  🔧 Configuraciones
+                </a>
+                <a href="/admin/logs" class="block text-blue-600 hover:text-blue-800 text-sm">
+                  📋 Logs del Sistema
+                </a>
+                <a href="/admin/backup" class="block text-blue-600 hover:text-blue-800 text-sm">
+                  💾 Backup y Restore
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Función para limpiar cache
+    async function clearCache() {
+      if (confirm('¿Estás seguro de que quieres limpiar todo el cache?')) {
+        try {
+          const response = await fetch('/api/cache/clear', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (response.ok) {
+            alert('Cache limpiado exitosamente');
+            location.reload();
+          } else {
+            alert('Error al limpiar el cache');
+          }
+        } catch (error) {
+          alert('Error al limpiar el cache: ' + error.message);
+        }
+      }
+    }
+
+    // Actualizar estadísticas cada 30 segundos
+    setInterval(async () => {
+      try {
+        // Aquí podrías hacer fetch a endpoints que devuelvan estadísticas actualizadas
+        console.log('Actualizando estadísticas...');
+      } catch (error) {
+        console.error('Error actualizando estadísticas:', error);
+      }
+    }, 30000);
+  </script>
+</Layout>
