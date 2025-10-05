@@ -1,0 +1,697 @@
+{
+  "successful": [
+    {
+      "title": "Conoce cómo la IA ayuda a los arroceros a combatir el cambio climático.",
+      "slug": "ia-arroceros-cambio-climatico",
+      "strapiId": 8,
+      "migratedAt": "2025-10-05T00:26:28.169Z"
+    },
+    {
+      "title": "Silicon Valley apuesta millones para que la IA influya en la política",
+      "slug": "silicon-valley-ia-politica",
+      "strapiId": 10,
+      "migratedAt": "2025-10-05T00:26:29.262Z"
+    },
+    {
+      "title": "Beneficios IA Personalizar Experiencia Cliente Local",
+      "slug": "beneficios-ia-personalizar-experiencia-cliente-local",
+      "strapiId": 12,
+      "migratedAt": "2025-10-05T00:26:30.349Z"
+    },
+    {
+      "title": "¡Duolingo y la IA: Las críticas no importaron, sus ganancias volaron!",
+      "slug": "duolingo-ia-ganancias-criticas",
+      "strapiId": 14,
+      "migratedAt": "2025-10-05T00:26:31.459Z"
+    },
+    {
+      "title": "Capital del Cliente y CLV: El Valor Real de tu Negocio",
+      "slug": "capital-cliente-clv-valor-real-negocio",
+      "strapiId": 16,
+      "migratedAt": "2025-10-05T00:26:37.910Z"
+    },
+    {
+      "title": "¡Meta AI traduce tus contenidos! Llega a más audiencia en inglés y español.",
+      "slug": "meta-ai-traduce-contenidos",
+      "strapiId": 18,
+      "migratedAt": "2025-10-05T00:26:39.068Z"
+    },
+    {
+      "title": "ChatGPT llega a India: ¡Más funciones y mensajes por menos de $5!",
+      "slug": "chatgpt-india-novedades-economicas",
+      "strapiId": 20,
+      "migratedAt": "2025-10-05T00:26:40.156Z"
+    },
+    {
+      "title": "Probando Alexa+ con IA: ¿La asistente inteligente ideal para tu familia?",
+      "slug": "alexa-ia-asistente-familia",
+      "strapiId": 22,
+      "migratedAt": "2025-10-05T00:26:41.231Z"
+    },
+    {
+      "title": "Claude: ¡Adiós a los chats dañinos, tu IA se protege!",
+      "slug": "claude-ia-se-protege",
+      "strapiId": 24,
+      "migratedAt": "2025-10-05T00:26:42.342Z"
+    },
+    {
+      "title": "Automatiza tu Marketing con IA: La Guía Definitiva",
+      "slug": "automatiza-tu-marketing-con-ia-guia-definitiva",
+      "strapiId": 26,
+      "migratedAt": "2025-10-05T00:26:44.623Z"
+    },
+    {
+      "title": "IA Revoluciona Marketing Contenidos 2025",
+      "slug": "ia-revoluciona-marketing-contenidos-2025",
+      "strapiId": 28,
+      "migratedAt": "2025-10-05T00:26:45.709Z"
+    },
+    {
+      "title": "En TechCrunch Disrupt 2025, ¿te encontrarán a ti o a la competencia?",
+      "slug": "techcrunch-disrupt-2025-visibilidad",
+      "strapiId": 30,
+      "migratedAt": "2025-10-05T00:26:46.825Z"
+    },
+    {
+      "title": "¿Tu marketing digital no funciona? El problema podría ser tu embudo",
+      "slug": "tu-marketing-digital-no-funciona-problema-embudo",
+      "strapiId": 32,
+      "migratedAt": "2025-10-05T00:26:47.914Z"
+    },
+    {
+      "title": "El CEO de Airbnb es claro: ¡Los agentes IA no son el nuevo Google!",
+      "slug": "airbnb-agentes-ia-no-google",
+      "strapiId": 34,
+      "migratedAt": "2025-10-05T00:26:48.993Z"
+    },
+    {
+      "title": "¡Alaan: la fintech con IA que revoluciona MENA con $48M!",
+      "slug": "alaan-fintech-ia-mena-48m",
+      "strapiId": 36,
+      "migratedAt": "2025-10-05T00:26:51.092Z"
+    },
+    {
+      "title": "Descubre Gemini Deep Think: La IA de Google que explora mil ideas a la vez.",
+      "slug": "google-gemini-deep-think-ia",
+      "strapiId": 38,
+      "migratedAt": "2025-10-05T00:26:52.189Z"
+    },
+    {
+      "title": "Tu asistente definitivo: Así es la IA \"todoterreno\" de OpenAI.",
+      "slug": "ia-todoterreno-openai",
+      "strapiId": 40,
+      "migratedAt": "2025-10-05T00:26:53.265Z"
+    },
+    {
+      "title": "Apple desarrolla su propia IA: ¿Se acerca un nuevo \"ChatGPT\"?",
+      "slug": "apple-ia-chatgpt",
+      "strapiId": 42,
+      "migratedAt": "2025-10-05T00:26:54.345Z"
+    },
+    {
+      "title": "Vogue y la IA: ¿Es el adiós a los modelos que conocemos?",
+      "slug": "vogue-ia-adios-modelos",
+      "strapiId": 44,
+      "migratedAt": "2025-10-05T00:26:55.418Z"
+    },
+    {
+      "title": "IA y Contenido: Cómo Automatizar tu Estrategia Digital y Multiplicar tu Impacto",
+      "slug": "automatizacion-contenido-ia-estrategia-digital",
+      "strapiId": 46,
+      "migratedAt": "2025-10-05T00:26:57.582Z"
+    },
+    {
+      "title": "Trump IA Silicon Valley",
+      "slug": "trump-ia-silicon-valley",
+      "strapiId": 48,
+      "migratedAt": "2025-10-05T00:26:58.670Z"
+    },
+    {
+      "title": "Automatización de Contenido con IA: Tu Flujo Completo",
+      "slug": "automatizacion-contenido-ia-flujo-completo",
+      "strapiId": 50,
+      "migratedAt": "2025-10-05T00:26:59.766Z"
+    },
+    {
+      "title": "7 De 10 Jovenes EEUU IA Compañeros",
+      "slug": "7-de-10-jovenes-eeuu-ia-companeros",
+      "strapiId": 52,
+      "migratedAt": "2025-10-05T00:27:00.838Z"
+    },
+    {
+      "title": "Altman Chatgpt Terapia Sin Confidencialidad",
+      "slug": "altman-chatgpt-terapia-sin-confidencialidad",
+      "strapiId": 54,
+      "migratedAt": "2025-10-05T00:27:02.029Z"
+    },
+    {
+      "title": "Amazon Alexa Anuncios",
+      "slug": "amazon-alexa-anuncios",
+      "strapiId": 56,
+      "migratedAt": "2025-10-05T00:27:04.179Z"
+    },
+    {
+      "title": "Amor IA Fin O Comienzo",
+      "slug": "amor-ia-fin-o-comienzo",
+      "strapiId": 58,
+      "migratedAt": "2025-10-05T00:27:05.253Z"
+    },
+    {
+      "title": "Ambiq Debut Bursatil",
+      "slug": "ambiq-debut-bursatil",
+      "strapiId": 60,
+      "migratedAt": "2025-10-05T00:27:06.331Z"
+    },
+    {
+      "title": "Anthropic IA Empresarial Supera Openai",
+      "slug": "anthropic-ia-empresarial-supera-openai",
+      "strapiId": 62,
+      "migratedAt": "2025-10-05T00:27:07.445Z"
+    },
+    {
+      "title": "Anthropic Valor 170b",
+      "slug": "anthropic-valor-170b",
+      "strapiId": 64,
+      "migratedAt": "2025-10-05T00:27:08.525Z"
+    },
+    {
+      "title": "Apple IA Inversion",
+      "slug": "apple-ia-inversion",
+      "strapiId": 66,
+      "migratedAt": "2025-10-05T00:27:10.705Z"
+    },
+    {
+      "title": "Chatgpt 2 5 Mil Millones Preguntas Diarias",
+      "slug": "chatgpt-2-5-mil-millones-preguntas-diarias",
+      "strapiId": 68,
+      "migratedAt": "2025-10-05T00:27:11.775Z"
+    },
+    {
+      "title": "Chatgpt Chatbot IA Guia",
+      "slug": "chatgpt-chatbot-ia-guia",
+      "strapiId": 70,
+      "migratedAt": "2025-10-05T00:27:12.862Z"
+    },
+    {
+      "title": "Chatgpt Modo Estudio Aprende Pensar",
+      "slug": "chatgpt-modo-estudio-aprende-pensar",
+      "strapiId": 72,
+      "migratedAt": "2025-10-05T00:27:13.977Z"
+    },
+    {
+      "title": "Chats Publicos Chatgpt Google",
+      "slug": "chats-publicos-chatgpt-google",
+      "strapiId": 74,
+      "migratedAt": "2025-10-05T00:27:15.065Z"
+    },
+    {
+      "title": "Chrome IA Compras",
+      "slug": "chrome-ia-compras",
+      "strapiId": 76,
+      "migratedAt": "2025-10-05T00:27:17.348Z"
+    },
+    {
+      "title": "Claude Code Anthropic Exigentes",
+      "slug": "claude-code-anthropic-exigentes",
+      "strapiId": 78,
+      "migratedAt": "2025-10-05T00:27:18.444Z"
+    },
+    {
+      "title": "Coches Autonomos Tekedra Mawakana Waymo",
+      "slug": "coches-autonomos-tekedra-mawakana-waymo",
+      "strapiId": 80,
+      "migratedAt": "2025-10-05T00:27:19.522Z"
+    },
+    {
+      "title": "Cofundador Tech Dispo Acero",
+      "slug": "cofundador-tech-dispo-acero",
+      "strapiId": 82,
+      "migratedAt": "2025-10-05T00:27:20.588Z"
+    },
+    {
+      "title": "Cognition Windsurf Equipo Google",
+      "slug": "cognition-windsurf-equipo-google",
+      "strapiId": 84,
+      "migratedAt": "2025-10-05T00:27:21.663Z"
+    },
+    {
+      "title": "Doge IA Corta Regulaciones",
+      "slug": "doge-ia-corta-regulaciones",
+      "strapiId": 86,
+      "migratedAt": "2025-10-05T00:27:23.837Z"
+    },
+    {
+      "title": "Ethan Thornton IA Defensa Disrupt 2025",
+      "slug": "ethan-thornton-ia-defensa-disrupt-2025",
+      "strapiId": 88,
+      "migratedAt": "2025-10-05T00:27:24.921Z"
+    },
+    {
+      "title": "Fotos Youtube Shorts IA",
+      "slug": "fotos-youtube-shorts-ia",
+      "strapiId": 90,
+      "migratedAt": "2025-10-05T00:27:26.004Z"
+    },
+    {
+      "title": "Frl IA Juegos Trabajo",
+      "slug": "frl-ia-juegos-trabajo",
+      "strapiId": 92,
+      "migratedAt": "2025-10-05T00:27:27.073Z"
+    },
+    {
+      "title": "Github Copilot 20 Millones Programadores",
+      "slug": "github-copilot-20-millones-programadores",
+      "strapiId": 94,
+      "migratedAt": "2025-10-05T00:27:28.183Z"
+    },
+    {
+      "title": "Google Adivina Edad IA Eeuu",
+      "slug": "google-adivina-edad-ia-eeuu",
+      "strapiId": 96,
+      "migratedAt": "2025-10-05T00:27:30.340Z"
+    },
+    {
+      "title": "Google AI Prueba Virtual",
+      "slug": "google-ai-prueba-virtual",
+      "strapiId": 98,
+      "migratedAt": "2025-10-05T00:27:31.408Z"
+    },
+    {
+      "title": "Google Discover IA Visitas",
+      "slug": "google-discover-ia-visitas",
+      "strapiId": 100,
+      "migratedAt": "2025-10-05T00:27:32.608Z"
+    },
+    {
+      "title": "Google Fotos IA Videos Estilos",
+      "slug": "google-fotos-ia-videos-estilos",
+      "strapiId": 102,
+      "migratedAt": "2025-10-05T00:27:33.704Z"
+    },
+    {
+      "title": "Google IA Canvas Actualiza",
+      "slug": "google-ia-canvas-actualiza",
+      "strapiId": 104,
+      "migratedAt": "2025-10-05T00:27:34.849Z"
+    },
+    {
+      "title": "Google IA Ordenar Busquedas",
+      "slug": "google-ia-ordenar-busquedas",
+      "strapiId": 106,
+      "migratedAt": "2025-10-05T00:27:37.002Z"
+    },
+    {
+      "title": "Google IA Responsable Ue",
+      "slug": "google-ia-responsable-ue",
+      "strapiId": 108,
+      "migratedAt": "2025-10-05T00:27:38.185Z"
+    },
+    {
+      "title": "Google Notebooklm Videos",
+      "slug": "google-notebooklm-videos",
+      "strapiId": 110,
+      "migratedAt": "2025-10-05T00:27:39.284Z"
+    },
+    {
+      "title": "Google Opal Crear Web Apps",
+      "slug": "google-opal-crear-web-apps",
+      "strapiId": 112,
+      "migratedAt": "2025-10-05T00:27:40.632Z"
+    },
+    {
+      "title": "Google Stan Gaming Social",
+      "slug": "google-stan-gaming-social",
+      "strapiId": 114,
+      "migratedAt": "2025-10-05T00:27:41.699Z"
+    },
+    {
+      "title": "Grok 4 Xai Control",
+      "slug": "grok-4-xai-control",
+      "strapiId": 116,
+      "migratedAt": "2025-10-05T00:27:43.813Z"
+    },
+    {
+      "title": "Grok IA Amor Caos",
+      "slug": "grok-ia-amor-caos",
+      "strapiId": 118,
+      "migratedAt": "2025-10-05T00:27:44.892Z"
+    },
+    {
+      "title": "Grok IA Gotica Anime",
+      "slug": "grok-ia-gotica-anime",
+      "strapiId": 120,
+      "migratedAt": "2025-10-05T00:27:45.961Z"
+    },
+    {
+      "title": "Groq 6b Chips IA Vs Nvidia",
+      "slug": "groq-6b-chips-ia-vs-nvidia",
+      "strapiId": 122,
+      "migratedAt": "2025-10-05T00:27:47.036Z"
+    },
+    {
+      "title": "Harmonic AI Robinhood Chatbot",
+      "slug": "harmonic-ai-robinhood-chatbot",
+      "strapiId": 124,
+      "migratedAt": "2025-10-05T00:27:48.120Z"
+    },
+    {
+      "title": "IA Boom Visitas Web",
+      "slug": "ia-boom-visitas-web",
+      "strapiId": 126,
+      "migratedAt": "2025-10-05T00:27:50.265Z"
+    },
+    {
+      "title": "IA Diseno Proteinas Facil",
+      "slug": "ia-diseno-proteinas-facil",
+      "strapiId": 128,
+      "migratedAt": "2025-10-05T00:27:51.336Z"
+    },
+    {
+      "title": "IA Marketing Berkeley 28m",
+      "slug": "ia-marketing-berkeley-28m",
+      "strapiId": 130,
+      "migratedAt": "2025-10-05T00:27:52.401Z"
+    },
+    {
+      "title": "IA Mates Google Openai",
+      "slug": "ia-mates-google-openai",
+      "strapiId": 132,
+      "migratedAt": "2025-10-05T00:27:53.490Z"
+    },
+    {
+      "title": "IA Reportes Falsos Bug Bounties",
+      "slug": "ia-reportes-falsos-bug-bounties",
+      "strapiId": 134,
+      "migratedAt": "2025-10-05T00:27:54.562Z"
+    },
+    {
+      "title": "IA Techcrunch Disrupt 2025",
+      "slug": "ia-techcrunch-disrupt-2025",
+      "strapiId": 136,
+      "migratedAt": "2025-10-05T00:27:56.704Z"
+    },
+    {
+      "title": "IA Trump Anti Woke Tecnologia",
+      "slug": "ia-trump-anti-woke-tecnologia",
+      "strapiId": 138,
+      "migratedAt": "2025-10-05T00:27:57.786Z"
+    },
+    {
+      "title": "Iconfactory Venta Apps IA",
+      "slug": "iconfactory-venta-apps-ia",
+      "strapiId": 140,
+      "migratedAt": "2025-10-05T00:27:58.886Z"
+    },
+    {
+      "title": "Intel Freno Fabricas Chips",
+      "slug": "intel-freno-fabricas-chips",
+      "strapiId": 142,
+      "migratedAt": "2025-10-05T00:27:59.977Z"
+    },
+    {
+      "title": "Julius AI Asegura 10m",
+      "slug": "julius-ai-asegura-10m",
+      "strapiId": 144,
+      "migratedAt": "2025-10-05T00:28:01.079Z"
+    },
+    {
+      "title": "K Prize IA Codificacion",
+      "slug": "k-prize-ia-codificacion",
+      "strapiId": 146,
+      "migratedAt": "2025-10-05T00:28:03.440Z"
+    },
+    {
+      "title": "Lauren Kolodny IA Herencias",
+      "slug": "lauren-kolodny-ia-herencias",
+      "strapiId": 148,
+      "migratedAt": "2025-10-05T00:28:04.505Z"
+    },
+    {
+      "title": "Legalon IA Tramites Legales",
+      "slug": "legalon-ia-tramites-legales",
+      "strapiId": 150,
+      "migratedAt": "2025-10-05T00:28:05.588Z"
+    },
+    {
+      "title": "Luma Runway Robotica Oro",
+      "slug": "luma-runway-robotica-oro",
+      "strapiId": 152,
+      "migratedAt": "2025-10-05T00:28:06.673Z"
+    },
+    {
+      "title": "Mago Oz Esfera IA",
+      "slug": "mago-oz-esfera-ia",
+      "strapiId": 154,
+      "migratedAt": "2025-10-05T00:28:07.750Z"
+    },
+    {
+      "title": "Malasia Chips IA Eeuu Permisos",
+      "slug": "malasia-chips-ia-eeuu-permisos",
+      "strapiId": 156,
+      "migratedAt": "2025-10-05T00:28:09.926Z"
+    },
+    {
+      "title": "Mercado Chips Eeuu 2025",
+      "slug": "mercado-chips-eeuu-2025",
+      "strapiId": 158,
+      "migratedAt": "2025-10-05T00:28:11.005Z"
+    },
+    {
+      "title": "Meta Corrige Privacidad IA",
+      "slug": "meta-corrige-privacidad-ia",
+      "strapiId": 160,
+      "migratedAt": "2025-10-05T00:28:12.085Z"
+    },
+    {
+      "title": "Meta IA Adios Apertura",
+      "slug": "meta-ia-adios-apertura",
+      "strapiId": 162,
+      "migratedAt": "2025-10-05T00:28:20.486Z"
+    },
+    {
+      "title": "Meta Facebook Contenido Copiado",
+      "slug": "meta-facebook-contenido-copiado",
+      "strapiId": 164,
+      "migratedAt": "2025-10-05T00:28:22.618Z"
+    },
+    {
+      "title": "Meta IA Infraestructura 72b 2025",
+      "slug": "meta-ia-infraestructura-72b-2025",
+      "strapiId": 166,
+      "migratedAt": "2025-10-05T00:28:23.841Z"
+    },
+    {
+      "title": "Meta IA Zuckerberg",
+      "slug": "meta-ia-zuckerberg",
+      "strapiId": 168,
+      "migratedAt": "2025-10-05T00:28:24.937Z"
+    },
+    {
+      "title": "Microsoft Edge IA Copilot",
+      "slug": "microsoft-edge-ia-copilot",
+      "strapiId": 170,
+      "migratedAt": "2025-10-05T00:28:26.009Z"
+    },
+    {
+      "title": "Microsoft Openai IA Mas Alla Agi",
+      "slug": "microsoft-openai-ia-mas-alla-agi",
+      "strapiId": 172,
+      "migratedAt": "2025-10-05T00:28:27.098Z"
+    },
+    {
+      "title": "Mira Murati IA 12 Mil Millones",
+      "slug": "mira-murati-ia-12-mil-millones",
+      "strapiId": 174,
+      "migratedAt": "2025-10-05T00:28:29.263Z"
+    },
+    {
+      "title": "Mistral Voxtral IA Abierta",
+      "slug": "mistral-voxtral-ia-abierta",
+      "strapiId": 176,
+      "migratedAt": "2025-10-05T00:28:30.326Z"
+    },
+    {
+      "title": "Nextdoor IA Alertas",
+      "slug": "nextdoor-ia-alertas",
+      "strapiId": 178,
+      "migratedAt": "2025-10-05T00:28:31.409Z"
+    },
+    {
+      "title": "Nvidia China Luz Verde IA",
+      "slug": "nvidia-china-luz-verde-ia",
+      "strapiId": 180,
+      "migratedAt": "2025-10-05T00:28:32.473Z"
+    },
+    {
+      "title": "Nvidia Chips China AI",
+      "slug": "nvidia-chips-china-ai",
+      "strapiId": 182,
+      "migratedAt": "2025-10-05T00:28:33.536Z"
+    },
+    {
+      "title": "Observabilidad Apache Iceberg",
+      "slug": "observabilidad-apache-iceberg",
+      "strapiId": 184,
+      "migratedAt": "2025-10-05T00:28:35.680Z"
+    },
+    {
+      "title": "Openai Noruega Centro IA Europa",
+      "slug": "openai-noruega-centro-ia-europa",
+      "strapiId": 186,
+      "migratedAt": "2025-10-05T00:28:36.754Z"
+    },
+    {
+      "title": "Pichai Google Cloud Openai IA",
+      "slug": "pichai-google-cloud-openai-ia",
+      "strapiId": 188,
+      "migratedAt": "2025-10-05T00:28:37.818Z"
+    },
+    {
+      "title": "Playerzero 15m IA Codigo Sin Errores",
+      "slug": "playerzero-15m-ia-codigo-sin-errores",
+      "strapiId": 190,
+      "migratedAt": "2025-10-05T00:28:38.885Z"
+    },
+    {
+      "title": "Poe Quora API IA",
+      "slug": "poe-quora-api-ia",
+      "strapiId": 192,
+      "migratedAt": "2025-10-05T00:28:39.982Z"
+    },
+    {
+      "title": "Proton Lumo IA Privacidad",
+      "slug": "proton-lumo-ia-privacidad",
+      "strapiId": 194,
+      "migratedAt": "2025-10-05T00:28:42.097Z"
+    },
+    {
+      "title": "Reddit IA Anuncios Ganancias",
+      "slug": "reddit-ia-anuncios-ganancias",
+      "strapiId": 196,
+      "migratedAt": "2025-10-05T00:28:43.166Z"
+    },
+    {
+      "title": "Samsung IA Analiza Videos",
+      "slug": "samsung-ia-analiza-videos",
+      "strapiId": 198,
+      "migratedAt": "2025-10-05T00:28:44.364Z"
+    },
+    {
+      "title": "Sixsense IA Recauda 8 5m Chips",
+      "slug": "sixsense-ia-recauda-8-5m-chips",
+      "strapiId": 200,
+      "migratedAt": "2025-10-05T00:28:45.462Z"
+    },
+    {
+      "title": "Spotify IA Conversacional",
+      "slug": "spotify-ia-conversacional",
+      "strapiId": 202,
+      "migratedAt": "2025-10-05T00:28:46.639Z"
+    },
+    {
+      "title": "Startup IA No Compran",
+      "slug": "startup-ia-no-compran",
+      "strapiId": 204,
+      "migratedAt": "2025-10-05T00:28:48.761Z"
+    },
+    {
+      "title": "Techcrunch All Stage Boston Startup",
+      "slug": "techcrunch-all-stage-boston-startup",
+      "strapiId": 206,
+      "migratedAt": "2025-10-05T00:28:49.853Z"
+    },
+    {
+      "title": "Tesla Samsung Chips IA 165b",
+      "slug": "tesla-samsung-chips-ia-165b",
+      "strapiId": 208,
+      "migratedAt": "2025-10-05T00:28:50.919Z"
+    },
+    {
+      "title": "Tesla Optimus No Cumple Meta",
+      "slug": "tesla-optimus-no-cumple-meta",
+      "strapiId": 210,
+      "migratedAt": "2025-10-05T00:28:51.996Z"
+    },
+    {
+      "title": "Trabajar Openai Ex Ingeniero",
+      "slug": "trabajar-openai-ex-ingeniero",
+      "strapiId": 212,
+      "migratedAt": "2025-10-05T00:28:53.065Z"
+    },
+    {
+      "title": "Trump Chips China IA",
+      "slug": "trump-chips-china-ia",
+      "strapiId": 214,
+      "migratedAt": "2025-10-05T00:28:55.186Z"
+    },
+    {
+      "title": "Trump IA Plan",
+      "slug": "trump-ia-plan",
+      "strapiId": 216,
+      "migratedAt": "2025-10-05T00:28:56.266Z"
+    },
+    {
+      "title": "Trump IA Reglas China",
+      "slug": "trump-ia-reglas-china",
+      "strapiId": 218,
+      "migratedAt": "2025-10-05T00:28:57.347Z"
+    },
+    {
+      "title": "Vigilar IA",
+      "slug": "vigilar-ia",
+      "strapiId": 220,
+      "migratedAt": "2025-10-05T00:28:58.415Z"
+    },
+    {
+      "title": "Zuckerberg Gafas IA Futuro",
+      "slug": "zuckerberg-gafas-ia-futuro",
+      "strapiId": 222,
+      "migratedAt": "2025-10-05T00:28:59.498Z"
+    },
+    {
+      "title": "5 Estrategias Aumentar Ventas",
+      "slug": "5-estrategias-aumentar-ventas",
+      "strapiId": 224,
+      "migratedAt": "2025-10-05T00:29:01.636Z"
+    },
+    {
+      "title": "Evafs Marco IA Punto Experiencias Digitales",
+      "slug": "evafs-marco-ia-punto-experiencias-digitales",
+      "strapiId": 226,
+      "migratedAt": "2025-10-05T00:29:02.712Z"
+    },
+    {
+      "title": "Que Es Evafs Estrategia Digital",
+      "slug": "que-es-evafs-estrategia-digital",
+      "strapiId": 228,
+      "migratedAt": "2025-10-05T00:29:03.791Z"
+    },
+    {
+      "title": "Meta y su IA: ¡Nueva organización en marcha!",
+      "slug": "meta-ia-reorganizacion",
+      "strapiId": 230,
+      "migratedAt": "2025-10-05T00:29:04.909Z"
+    }
+  ],
+  "failed": [
+    {
+      "title": "¡Google Gemini: Su IA de imágenes se vuelve 'nano-banana' con una mejora genial!",
+      "slug": "google-gemini-ia-imagenes-mejora",
+      "error": "HTTP 400: Bad Request",
+      "failedAt": "2025-10-05T00:26:27.087Z"
+    },
+    {
+      "title": "Meta Ficha Openai Superinteligente",
+      "slug": "meta-ficha-openai-superinteligente",
+      "error": "HTTP 500: Internal Server Error",
+      "failedAt": "2025-10-05T00:28:19.401Z"
+    }
+  ],
+  "summary": {
+    "total": 114,
+    "successful": 112,
+    "failed": 2,
+    "startTime": "2025-10-05T00:26:20.342Z",
+    "endTime": "2025-10-05T00:29:04.910Z"
+  }
+}
