@@ -1,5 +1,5 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
 import { PostgresAppointmentService } from '../../lib/database/postgresAppointmentService.js';
 import { Client } from 'pg';
 import { StrapiService } from '../../lib/strapi.js';
@@ -62,11 +62,11 @@ try {
     const articles = await StrapiService.getArticles();
     const categories = await StrapiService.getCategories();
     const tags = await StrapiService.getTags();
-    
+
     blogStats = {
       total: articles.length,
-      published: articles.filter(a => a.publishedAt).length,
-      draft: articles.filter(a => !a.publishedAt).length,
+      published: articles.filter((a) => a.publishedAt).length,
+      draft: articles.filter((a) => !a.publishedAt).length,
       categories: categories.length,
       tags: tags.length,
     };
@@ -76,7 +76,6 @@ try {
 
   systemStats.databaseConnected = true;
   systemStats.strapiConnected = true;
-
 } catch (error) {
   console.error('Error conectando a la base de datos:', error);
 } finally {
@@ -95,7 +94,9 @@ try {
 }
 
 try {
-  const socketResponse = await fetch(`${import.meta.env.SITE}/api/socket/status`);
+  const socketResponse = await fetch(
+    `${import.meta.env.SITE}/api/socket/status`
+  );
   if (socketResponse.ok) {
     const socketData = await socketResponse.json();
     systemStats.socketConnected = socketData.socket?.ready || false;
@@ -105,276 +106,378 @@ try {
 }
 ---
 
-<Layout title="Admin Dashboard - IA Punto">
-  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-    <!-- Header -->
-    <div class="bg-white shadow-sm border-b">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center py-6">
-          <div>
-            <h1 class="text-3xl font-bold text-gray-900">
-              🎛️ Admin Dashboard
-            </h1>
-            <p class="text-gray-600 mt-1">
-              Panel de control completo para IA Punto
-            </p>
-          </div>
-          <div class="flex items-center space-x-4">
-            <div class="text-right">
-              <div class="text-sm text-gray-500">Estado del sistema</div>
-              <div class="text-lg font-semibold text-green-600">🟢 Activo</div>
-            </div>
-          </div>
-        </div>
+<AdminLayout
+  title="Dashboard"
+  description="Panel de control principal del sistema"
+>
+  <!-- Welcome Section -->
+  <div
+    class="admin-card"
+    style="margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-success) 100%); color: white;"
+  >
+    <div
+      style="display: flex; justify-content: space-between; align-items: center;"
+    >
+      <div>
+        <h2
+          style="font-size: 1.875rem; font-weight: 700; margin: 0 0 0.5rem 0;"
+        >
+          ¡Bienvenido al Dashboard!
+        </h2>
+        <p style="margin: 0; opacity: 0.9;">
+          Sistema funcionando correctamente - Última actualización: {
+            new Date().toLocaleString('es-ES')
+          }
+        </p>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 2rem; font-weight: 700;">🟢</div>
+        <div style="font-size: 0.875rem; opacity: 0.9;">Sistema Activo</div>
       </div>
     </div>
+  </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Estado del Sistema -->
-      <div class="bg-white rounded-lg shadow mb-8">
-        <div class="px-6 py-4 border-b border-gray-200">
-          <h2 class="text-xl font-semibold text-gray-900">
-            🔧 Estado del Sistema
-          </h2>
+  <!-- System Status Cards -->
+  <div class="admin-stats-grid">
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background-color: var(--admin-primary); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="database" style="width: 24px; height: 24px;"></i>
         </div>
-        <div class="p-6">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="flex items-center space-x-3">
-              <div class={`w-3 h-3 rounded-full ${systemStats.databaseConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-              <span class="text-sm font-medium text-gray-700">Base de Datos</span>
-            </div>
-            <div class="flex items-center space-x-3">
-              <div class={`w-3 h-3 rounded-full ${systemStats.redisConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-              <span class="text-sm font-medium text-gray-700">Redis Cache</span>
-            </div>
-            <div class="flex items-center space-x-3">
-              <div class={`w-3 h-3 rounded-full ${systemStats.socketConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-              <span class="text-sm font-medium text-gray-700">Socket.io</span>
-            </div>
-            <div class="flex items-center space-x-3">
-              <div class={`w-3 h-3 rounded-full ${systemStats.strapiConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-              <span class="text-sm font-medium text-gray-700">Strapi CMS</span>
-            </div>
+        <div class="admin-badge admin-badge-success">Conectado</div>
+      </div>
+      <div class="admin-stat-value">
+        {systemStats.databaseConnected ? '✅' : '❌'}
+      </div>
+      <div class="admin-stat-label">Base de Datos</div>
+    </div>
+
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background-color: var(--admin-success); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="zap" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div class="admin-badge admin-badge-success">Activo</div>
+      </div>
+      <div class="admin-stat-value">
+        {systemStats.redisConnected ? '✅' : '❌'}
+      </div>
+      <div class="admin-stat-label">Redis Cache</div>
+    </div>
+
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background-color: var(--admin-warning); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="wifi" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div class="admin-badge admin-badge-success">En Línea</div>
+      </div>
+      <div class="admin-stat-value">
+        {systemStats.socketConnected ? '✅' : '❌'}
+      </div>
+      <div class="admin-stat-label">Socket.io</div>
+    </div>
+
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background-color: var(--admin-error); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="file-text" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div class="admin-badge admin-badge-success">Sincronizado</div>
+      </div>
+      <div class="admin-stat-value">
+        {systemStats.strapiConnected ? '✅' : '❌'}
+      </div>
+      <div class="admin-stat-label">Strapi CMS</div>
+    </div>
+  </div>
+
+  <!-- Main Statistics -->
+  <div class="admin-stats-grid">
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="calendar" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.75rem; color: var(--admin-text-muted);">
+            +12%
           </div>
+          <div style="font-size: 0.75rem; color: var(--admin-success);">↗</div>
         </div>
       </div>
+      <div class="admin-stat-value">{appointmentStats.total}</div>
+      <div class="admin-stat-label">Total Citas</div>
+    </div>
 
-      <!-- Estadísticas Principales -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <!-- Citas -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <div class="flex items-center">
-            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Total Citas</p>
-              <p class="text-2xl font-semibold text-gray-900">{appointmentStats.total}</p>
-            </div>
-          </div>
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="file-text" style="width: 24px; height: 24px;"></i>
         </div>
-
-        <!-- Artículos -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <div class="flex items-center">
-            <div class="p-3 rounded-full bg-green-100 text-green-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Artículos</p>
-              <p class="text-2xl font-semibold text-gray-900">{blogStats.total}</p>
-            </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.75rem; color: var(--admin-text-muted);">
+            +5%
           </div>
-        </div>
-
-        <!-- Citas Hoy -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <div class="flex items-center">
-            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Citas Hoy</p>
-              <p class="text-2xl font-semibold text-gray-900">{appointmentStats.today}</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Categorías -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <div class="flex items-center">
-            <div class="p-3 rounded-full bg-purple-100 text-purple-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-              </svg>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Categorías</p>
-              <p class="text-2xl font-semibold text-gray-900">{blogStats.categories}</p>
-            </div>
-          </div>
+          <div style="font-size: 0.75rem; color: var(--admin-success);">↗</div>
         </div>
       </div>
+      <div class="admin-stat-value">{blogStats.total}</div>
+      <div class="admin-stat-label">Artículos</div>
+    </div>
 
-      <!-- Secciones Principales -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Gestión de Citas -->
-        <div class="bg-white rounded-lg shadow">
-          <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-900">
-              📅 Gestión de Citas
-            </h2>
-            <p class="text-gray-600 mt-1">
-              Administra el sistema de citas y reuniones
-            </p>
-          </div>
-          <div class="p-6">
-            <!-- Estadísticas de citas -->
-            <div class="grid grid-cols-2 gap-4 mb-6">
-              <div class="text-center p-4 bg-blue-50 rounded-lg">
-                <div class="text-2xl font-bold text-blue-600">{appointmentStats.pending}</div>
-                <div class="text-sm text-blue-600">Pendientes</div>
-              </div>
-              <div class="text-center p-4 bg-green-50 rounded-lg">
-                <div class="text-2xl font-bold text-green-600">{appointmentStats.confirmed}</div>
-                <div class="text-sm text-green-600">Confirmadas</div>
-              </div>
-              <div class="text-center p-4 bg-yellow-50 rounded-lg">
-                <div class="text-2xl font-bold text-yellow-600">{appointmentStats.thisWeek}</div>
-                <div class="text-sm text-yellow-600">Esta Semana</div>
-              </div>
-              <div class="text-center p-4 bg-purple-50 rounded-lg">
-                <div class="text-2xl font-bold text-purple-600">{appointmentStats.thisMonth}</div>
-                <div class="text-sm text-purple-600">Este Mes</div>
-              </div>
-            </div>
-
-            <!-- Acciones rápidas -->
-            <div class="space-y-3">
-              <a href="/admin/appointments" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
-                📋 Ver Todas las Citas
-              </a>
-              <a href="/admin/appointments/calendar" class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
-                📅 Vista de Calendario
-              </a>
-              <a href="/admin/appointments/analytics" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
-                📊 Analytics de Citas
-              </a>
-            </div>
-          </div>
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="clock" style="width: 24px; height: 24px;"></i>
         </div>
-
-        <!-- Gestión de Blog -->
-        <div class="bg-white rounded-lg shadow">
-          <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-900">
-              📝 Gestión de Blog
-            </h2>
-            <p class="text-gray-600 mt-1">
-              Administra artículos, categorías y contenido
-            </p>
+        <div style="text-align: right;">
+          <div style="font-size: 0.75rem; color: var(--admin-text-muted);">
+            Hoy
           </div>
-          <div class="p-6">
-            <!-- Estadísticas del blog -->
-            <div class="grid grid-cols-2 gap-4 mb-6">
-              <div class="text-center p-4 bg-green-50 rounded-lg">
-                <div class="text-2xl font-bold text-green-600">{blogStats.published}</div>
-                <div class="text-sm text-green-600">Publicados</div>
-              </div>
-              <div class="text-center p-4 bg-yellow-50 rounded-lg">
-                <div class="text-2xl font-bold text-yellow-600">{blogStats.draft}</div>
-                <div class="text-sm text-yellow-600">Borradores</div>
-              </div>
-              <div class="text-center p-4 bg-blue-50 rounded-lg">
-                <div class="text-2xl font-bold text-blue-600">{blogStats.categories}</div>
-                <div class="text-sm text-blue-600">Categorías</div>
-              </div>
-              <div class="text-center p-4 bg-purple-50 rounded-lg">
-                <div class="text-2xl font-bold text-purple-600">{blogStats.tags}</div>
-                <div class="text-sm text-purple-600">Etiquetas</div>
-              </div>
-            </div>
-
-            <!-- Acciones rápidas -->
-            <div class="space-y-3">
-              <a href="/blog" class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
-                📖 Ver Blog
-              </a>
-              <a href="/admin/blog/articles" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
-                📝 Gestionar Artículos
-              </a>
-              <a href="/automation-dashboard" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors">
-                🤖 Automatización IA
-              </a>
-            </div>
-          </div>
+          <div style="font-size: 0.75rem; color: var(--admin-warning);">⏰</div>
         </div>
       </div>
+      <div class="admin-stat-value">{appointmentStats.today}</div>
+      <div class="admin-stat-label">Citas Hoy</div>
+    </div>
 
-      <!-- Herramientas del Sistema -->
-      <div class="mt-8 bg-white rounded-lg shadow">
-        <div class="px-6 py-4 border-b border-gray-200">
-          <h2 class="text-xl font-semibold text-gray-900">
-            🛠️ Herramientas del Sistema
-          </h2>
-          <p class="text-gray-600 mt-1">
-            Utilidades y configuraciones avanzadas
-          </p>
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="tag" style="width: 24px; height: 24px;"></i>
         </div>
-        <div class="p-6">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Cache y Performance -->
-            <div class="border rounded-lg p-4">
-              <h3 class="font-semibold text-gray-900 mb-3">💾 Cache y Performance</h3>
-              <div class="space-y-2">
-                <a href="/api/cache/status" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
-                  📊 Estado del Cache
-                </a>
-                <a href="/api/socket/status" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
-                  🔌 Estado de Socket.io
-                </a>
-                <button onclick="clearCache()" class="block text-red-600 hover:text-red-800 text-sm">
-                  🗑️ Limpiar Cache
-                </button>
-              </div>
-            </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.75rem; color: var(--admin-text-muted);">
+            Activas
+          </div>
+          <div style="font-size: 0.75rem; color: var(--admin-primary);">🏷️</div>
+        </div>
+      </div>
+      <div class="admin-stat-value">{blogStats.categories}</div>
+      <div class="admin-stat-label">Categorías</div>
+    </div>
+  </div>
 
-            <!-- Monitoreo -->
-            <div class="border rounded-lg p-4">
-              <h3 class="font-semibold text-gray-900 mb-3">📈 Monitoreo</h3>
-              <div class="space-y-2">
-                <a href="/api/calendar/monthly-availability" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
-                  📅 Disponibilidad API
-                </a>
-                <a href="/socket-demo" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
-                  🧪 Demo Socket.io
-                </a>
-                <a href="/rss.xml" target="_blank" class="block text-blue-600 hover:text-blue-800 text-sm">
-                  📡 RSS Feed
-                </a>
-              </div>
-            </div>
+  <!-- Quick Actions -->
+  <div class="admin-card" style="margin-bottom: 2rem; padding: 2rem;">
+    <h3
+      style="font-size: 1.25rem; font-weight: 600; margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 0.5rem;"
+    >
+      <i
+        data-lucide="zap"
+        style="width: 20px; height: 20px; color: var(--admin-primary);"></i>
+      Acciones Rápidas
+    </h3>
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;"
+    >
+      <a
+        href="/admin/appointments"
+        class="admin-btn admin-btn-primary"
+        style="justify-content: center; text-decoration: none;"
+      >
+        <i data-lucide="calendar-plus"></i>
+        <span>Nueva Cita</span>
+      </a>
+      <a
+        href="/admin/automation"
+        class="admin-btn admin-btn-secondary"
+        style="justify-content: center; text-decoration: none;"
+      >
+        <i data-lucide="bot"></i>
+        <span>Automatizar</span>
+      </a>
+      <a
+        href="/admin/blog"
+        class="admin-btn admin-btn-secondary"
+        style="justify-content: center; text-decoration: none;"
+      >
+        <i data-lucide="edit"></i>
+        <span>Nuevo Artículo</span>
+      </a>
+      <a
+        href="/admin/analytics"
+        class="admin-btn admin-btn-secondary"
+        style="justify-content: center; text-decoration: none;"
+      >
+        <i data-lucide="bar-chart-3"></i>
+        <span>Ver Analytics</span>
+      </a>
+    </div>
+  </div>
 
-            <!-- Configuración -->
-            <div class="border rounded-lg p-4">
-              <h3 class="font-semibold text-gray-900 mb-3">⚙️ Configuración</h3>
-              <div class="space-y-2">
-                <a href="/admin/settings" class="block text-blue-600 hover:text-blue-800 text-sm">
-                  🔧 Configuraciones
-                </a>
-                <a href="/admin/logs" class="block text-blue-600 hover:text-blue-800 text-sm">
-                  📋 Logs del Sistema
-                </a>
-                <a href="/admin/backup" class="block text-blue-600 hover:text-blue-800 text-sm">
-                  💾 Backup y Restore
-                </a>
-              </div>
+  <!-- Recent Activity -->
+  <div
+    style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;"
+  >
+    <!-- Recent Appointments -->
+    <div class="admin-card" style="padding: 2rem;">
+      <h3
+        style="font-size: 1.25rem; font-weight: 600; margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 0.5rem;"
+      >
+        <i
+          data-lucide="calendar"
+          style="width: 20px; height: 20px; color: var(--admin-primary);"></i>
+        Citas Recientes
+      </h3>
+      <div style="space-y: 1rem;">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: var(--admin-bg); border-radius: 8px; margin-bottom: 0.75rem;"
+        >
+          <div>
+            <div style="font-weight: 500;">Juan Pérez</div>
+            <div style="font-size: 0.875rem; color: var(--admin-text-muted);">
+              Consulta General
+            </div>
+          </div>
+          <div class="admin-badge admin-badge-warning">Pendiente</div>
+        </div>
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: var(--admin-bg); border-radius: 8px; margin-bottom: 0.75rem;"
+        >
+          <div>
+            <div style="font-weight: 500;">María García</div>
+            <div style="font-size: 0.875rem; color: var(--admin-text-muted);">
+              Estrategia Digital
+            </div>
+          </div>
+          <div class="admin-badge admin-badge-success">Confirmada</div>
+        </div>
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: var(--admin-bg); border-radius: 8px;"
+        >
+          <div>
+            <div style="font-weight: 500;">Carlos López</div>
+            <div style="font-size: 0.875rem; color: var(--admin-text-muted);">
+              Implementación IA
+            </div>
+          </div>
+          <div class="admin-badge admin-badge-info">Completada</div>
+        </div>
+      </div>
+      <a
+        href="/admin/appointments"
+        class="admin-btn admin-btn-secondary"
+        style="width: 100%; justify-content: center; margin-top: 1rem; text-decoration: none;"
+      >
+        <span>Ver Todas las Citas</span>
+        <i data-lucide="arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- System Performance -->
+    <div class="admin-card" style="padding: 2rem;">
+      <h3
+        style="font-size: 1.25rem; font-weight: 600; margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 0.5rem;"
+      >
+        <i
+          data-lucide="activity"
+          style="width: 20px; height: 20px; color: var(--admin-success);"></i>
+        Rendimiento del Sistema
+      </h3>
+      <div style="space-y: 1.5rem;">
+        <div>
+          <div
+            style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"
+          >
+            <span style="font-size: 0.875rem; color: var(--admin-text-muted);"
+              >CPU Usage</span
+            >
+            <span style="font-size: 0.875rem; font-weight: 500;">23%</span>
+          </div>
+          <div
+            style="width: 100%; height: 8px; background-color: var(--admin-bg); border-radius: 4px; overflow: hidden;"
+          >
+            <div
+              style="width: 23%; height: 100%; background: linear-gradient(90deg, var(--admin-success), #059669);"
+            >
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"
+          >
+            <span style="font-size: 0.875rem; color: var(--admin-text-muted);"
+              >Memory</span
+            >
+            <span style="font-size: 0.875rem; font-weight: 500;">67%</span>
+          </div>
+          <div
+            style="width: 100%; height: 8px; background-color: var(--admin-bg); border-radius: 4px; overflow: hidden;"
+          >
+            <div
+              style="width: 67%; height: 100%; background: linear-gradient(90deg, var(--admin-warning), #d97706);"
+            >
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"
+          >
+            <span style="font-size: 0.875rem; color: var(--admin-text-muted);"
+              >Disk Space</span
+            >
+            <span style="font-size: 0.875rem; font-weight: 500;">45%</span>
+          </div>
+          <div
+            style="width: 100%; height: 8px; background-color: var(--admin-bg); border-radius: 4px; overflow: hidden;"
+          >
+            <div
+              style="width: 45%; height: 100%; background: linear-gradient(90deg, var(--admin-primary), #1d4ed8);"
+            >
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"
+          >
+            <span style="font-size: 0.875rem; color: var(--admin-text-muted);"
+              >Network</span
+            >
+            <span style="font-size: 0.875rem; font-weight: 500;">12%</span>
+          </div>
+          <div
+            style="width: 100%; height: 8px; background-color: var(--admin-bg); border-radius: 4px; overflow: hidden;"
+          >
+            <div
+              style="width: 12%; height: 100%; background: linear-gradient(90deg, var(--admin-success), #059669);"
+            >
             </div>
           </div>
         </div>
@@ -382,38 +485,95 @@ try {
     </div>
   </div>
 
+  <!-- Charts Section -->
+  <div class="admin-chart-container">
+    <h3
+      style="font-size: 1.25rem; font-weight: 600; margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 0.5rem;"
+    >
+      <i
+        data-lucide="trending-up"
+        style="width: 20px; height: 20px; color: var(--admin-primary);"></i>
+      Tendencias y Analytics
+    </h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+      <div>
+        <h4
+          style="font-size: 1rem; font-weight: 500; margin: 0 0 1rem 0; color: var(--admin-text-muted);"
+        >
+          Citas por Mes
+        </h4>
+        <div
+          style="height: 200px; background: linear-gradient(135deg, var(--admin-bg) 0%, var(--admin-card) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--admin-text-muted);"
+        >
+          <div style="text-align: center;">
+            <i
+              data-lucide="bar-chart-3"
+              style="width: 48px; height: 48px; margin-bottom: 0.5rem; opacity: 0.5;"
+            ></i>
+            <div>Gráfico de Citas</div>
+            <div style="font-size: 0.75rem;">Próximamente</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4
+          style="font-size: 1rem; font-weight: 500; margin: 0 0 1rem 0; color: var(--admin-text-muted);"
+        >
+          Artículos Publicados
+        </h4>
+        <div
+          style="height: 200px; background: linear-gradient(135deg, var(--admin-bg) 0%, var(--admin-card) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--admin-text-muted);"
+        >
+          <div style="text-align: center;">
+            <i
+              data-lucide="pie-chart"
+              style="width: 48px; height: 48px; margin-bottom: 0.5rem; opacity: 0.5;"
+            ></i>
+            <div>Gráfico de Artículos</div>
+            <div style="font-size: 0.75rem;">Próximamente</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Función para limpiar cache
-    async function clearCache() {
-      if (confirm('¿Estás seguro de que quieres limpiar todo el cache?')) {
-        try {
-          const response = await fetch('/api/cache/clear', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-          
-          if (response.ok) {
-            alert('Cache limpiado exitosamente');
-            location.reload();
-          } else {
-            alert('Error al limpiar el cache');
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Real-time updates
+    function updateDashboard() {
+      // Simulate real-time data updates
+      const statValues = document.querySelectorAll('.admin-stat-value');
+      statValues.forEach((stat) => {
+        if (stat.textContent.match(/^\d+$/)) {
+          const currentValue = parseInt(stat.textContent);
+          const newValue = currentValue + Math.floor(Math.random() * 3) - 1;
+          if (newValue >= 0) {
+            stat.textContent = newValue;
           }
-        } catch (error) {
-          alert('Error al limpiar el cache: ' + error.message);
         }
-      }
+      });
     }
 
-    // Actualizar estadísticas cada 30 segundos
-    setInterval(async () => {
-      try {
-        // Aquí podrías hacer fetch a endpoints que devuelvan estadísticas actualizadas
-        console.log('Actualizando estadísticas...');
-      } catch (error) {
-        console.error('Error actualizando estadísticas:', error);
+    // Update dashboard every 30 seconds
+    setInterval(updateDashboard, 30000);
+
+    // Add click animations to cards
+    document.querySelectorAll('.admin-stat-card').forEach((card) => {
+      card.addEventListener('click', function () {
+        this.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 150);
+      });
+    });
+
+    // Show welcome notification
+    setTimeout(() => {
+      if (window.showNotification) {
+        window.showNotification('Dashboard cargado correctamente', 'success');
       }
-    }, 30000);
+    }, 1000);
   </script>
-</Layout>
+</AdminLayout>

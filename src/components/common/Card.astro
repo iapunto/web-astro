@@ -20,6 +20,7 @@ export interface CardProps {
   company?: string;
   position?: string;
   quote?: string;
+  epicQuote?: string;
   category?: string;
   date?: string;
   readTime?: string;
@@ -44,6 +45,7 @@ const {
   company,
   position,
   quote,
+  epicQuote,
   category,
   date,
   readTime,
@@ -166,6 +168,13 @@ if (imageHeight) height = imageHeight;
       ) : (
         <h3 class="blog-card-title">{title}</h3>
       )}
+      {epicQuote && (
+        <div class="mb-3 p-2 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-lg border-l-2 border-primary-500">
+          <blockquote class="text-xs font-medium text-primary-900 dark:text-primary-100 italic leading-relaxed">
+            "{epicQuote}"
+          </blockquote>
+        </div>
+      )}
       <p class="description mb-5 font-light text-gray-500 dark:text-gray-400">
         {description}
       </p>
@@ -228,4 +237,3 @@ if (imageHeight) height = imageHeight;
     </section>
   )
 }
-

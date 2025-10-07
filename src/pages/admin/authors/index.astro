@@ -1,0 +1,541 @@
+---
+/**
+ * Página de administración para gestionar autores en Strapi
+ *
+ * Permite:
+ * - Ver la distribución actual de autores
+ * - Simular una redistribución
+ * - Ejecutar la redistribución real
+ *
+ * @author IA Punto
+ * @version 1.0.0
+ * @since 2025-01-27
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Gestión de Autores - Strapi">
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+          Gestión de Autores en Strapi
+        </h1>
+        <p class="text-gray-600">
+          Distribuye los artículos entre los autores disponibles en Strapi
+        </p>
+      </div>
+
+      <!-- Estado de conexión -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Estado de Conexión</h2>
+        <div class="flex items-center space-x-4">
+          <div id="connection-status" class="flex items-center">
+            <div
+              class="w-3 h-3 rounded-full bg-gray-400 mr-2"
+              id="status-indicator"
+            >
+            </div>
+            <span id="status-text">Verificando conexión...</span>
+          </div>
+          <button
+            id="refresh-status"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          >
+            Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Análisis actual -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Distribución Actual</h2>
+          <button
+            id="analyze-btn"
+            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+          >
+            Analizar Distribución
+          </button>
+        </div>
+
+        <div id="analysis-results" class="hidden">
+          <!-- Los resultados se cargarán aquí -->
+        </div>
+      </div>
+
+      <!-- Simulación de redistribución -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Simulación de Redistribución</h2>
+          <button
+            id="simulate-btn"
+            class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors"
+          >
+            Simular Redistribución
+          </button>
+        </div>
+
+        <div id="simulation-results" class="hidden">
+          <!-- Los resultados de simulación se cargarán aquí -->
+        </div>
+      </div>
+
+      <!-- Redistribución real -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Redistribución Real</h2>
+          <button
+            id="redistribute-btn"
+            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Ejecutar Redistribución
+          </button>
+        </div>
+
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <svg
+                class="h-5 w-5 text-yellow-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-yellow-800">Advertencia</h3>
+              <div class="mt-2 text-sm text-yellow-700">
+                <p>
+                  Esta acción modificará permanentemente las asignaciones de
+                  autores en Strapi. Se recomienda hacer una simulación primero.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="redistribution-results" class="hidden">
+          <!-- Los resultados de redistribución se cargarán aquí -->
+        </div>
+      </div>
+
+      <!-- Log de actividades -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">Log de Actividades</h2>
+        <div
+          id="activity-log"
+          class="bg-gray-50 rounded-lg p-4 h-64 overflow-y-auto"
+        >
+          <p class="text-gray-500 text-sm">
+            Las actividades aparecerán aquí...
+          </p>
+        </div>
+        <button
+          id="clear-log"
+          class="mt-2 px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600 transition-colors"
+        >
+          Limpiar Log
+        </button>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script>
+  /**
+   * Script para gestionar la redistribución de autores en Strapi
+   */
+
+  class AuthorsManager {
+    private logContainer: HTMLElement;
+    private statusIndicator: HTMLElement;
+    private statusText: HTMLElement;
+
+    constructor() {
+      this.logContainer = document.getElementById('activity-log')!;
+      this.statusIndicator = document.getElementById('status-indicator')!;
+      this.statusText = document.getElementById('status-text')!;
+
+      this.initializeEventListeners();
+      this.checkConnectionStatus();
+    }
+
+    private initializeEventListeners() {
+      document
+        .getElementById('refresh-status')
+        ?.addEventListener('click', () => {
+          this.checkConnectionStatus();
+        });
+
+      document.getElementById('analyze-btn')?.addEventListener('click', () => {
+        this.analyzeDistribution();
+      });
+
+      document.getElementById('simulate-btn')?.addEventListener('click', () => {
+        this.simulateRedistribution();
+      });
+
+      document
+        .getElementById('redistribute-btn')
+        ?.addEventListener('click', () => {
+          this.executeRedistribution();
+        });
+
+      document.getElementById('clear-log')?.addEventListener('click', () => {
+        this.clearLog();
+      });
+    }
+
+    private log(
+      message: string,
+      type: 'info' | 'success' | 'warning' | 'error' = 'info'
+    ) {
+      const timestamp = new Date().toLocaleTimeString();
+      const logEntry = document.createElement('div');
+      logEntry.className = `mb-2 text-sm ${this.getLogColor(type)}`;
+      logEntry.innerHTML = `[${timestamp}] ${message}`;
+
+      this.logContainer.appendChild(logEntry);
+      this.logContainer.scrollTop = this.logContainer.scrollHeight;
+    }
+
+    private getLogColor(type: string): string {
+      switch (type) {
+        case 'success':
+          return 'text-green-600';
+        case 'warning':
+          return 'text-yellow-600';
+        case 'error':
+          return 'text-red-600';
+        default:
+          return 'text-gray-600';
+      }
+    }
+
+    private updateStatus(connected: boolean, message: string) {
+      this.statusIndicator.className = `w-3 h-3 rounded-full mr-2 ${connected ? 'bg-green-400' : 'bg-red-400'}`;
+      this.statusText.textContent = message;
+    }
+
+    private async checkConnectionStatus() {
+      this.log('Verificando conexión con Strapi...', 'info');
+
+      try {
+        const response = await fetch('/api/admin/redistribute-authors');
+        const data = await response.json();
+
+        if (data.success) {
+          this.updateStatus(true, 'Conectado a Strapi');
+          this.log('✅ Conexión exitosa con Strapi', 'success');
+        } else {
+          this.updateStatus(false, 'Error de conexión');
+          this.log('❌ Error de conexión con Strapi', 'error');
+        }
+      } catch (error) {
+        this.updateStatus(false, 'Sin conexión');
+        this.log('❌ No se pudo conectar con Strapi', 'error');
+      }
+    }
+
+    private async analyzeDistribution() {
+      this.log('Analizando distribución actual de autores...', 'info');
+
+      const button = document.getElementById(
+        'analyze-btn'
+      ) as HTMLButtonElement;
+      button.disabled = true;
+      button.textContent = 'Analizando...';
+
+      try {
+        const response = await fetch('/api/admin/redistribute-authors');
+        const data = await response.json();
+
+        if (data.success) {
+          this.displayAnalysisResults(data.data);
+          this.log('✅ Análisis completado exitosamente', 'success');
+        } else {
+          this.log(`❌ Error en el análisis: ${data.error}`, 'error');
+        }
+      } catch (error) {
+        this.log(`❌ Error durante el análisis: ${error}`, 'error');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Analizar Distribución';
+      }
+    }
+
+    private displayAnalysisResults(data: any) {
+      const container = document.getElementById('analysis-results')!;
+      container.className = 'block';
+
+      container.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="font-semibold text-gray-700 mb-2">Estadísticas Generales</h3>
+            <p class="text-sm text-gray-600">Total de artículos: <span class="font-semibold">${data.totalArticles}</span></p>
+            <p class="text-sm text-gray-600">Con autor: <span class="font-semibold">${data.articlesWithAuthor}</span></p>
+            <p class="text-sm text-gray-600">Sin autor: <span class="font-semibold">${data.articlesWithoutAuthor}</span></p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="font-semibold text-gray-700 mb-2">Autores Disponibles</h3>
+            ${data.authors
+              .map(
+                (author: any) => `
+              <p class="text-sm text-gray-600">• ${author.name}</p>
+            `
+              )
+              .join('')}
+          </div>
+        </div>
+        
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h3 class="font-semibold text-gray-700 mb-2">Distribución Actual</h3>
+          <div class="space-y-2">
+            ${data.distribution
+              .map(
+                (dist: any) => `
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600">${dist.authorName}</span>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm font-semibold">
+                  ${dist.articleCount} artículos
+                </span>
+              </div>
+            `
+              )
+              .join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    private async simulateRedistribution() {
+      this.log('Simulando redistribución de autores...', 'info');
+
+      const button = document.getElementById(
+        'simulate-btn'
+      ) as HTMLButtonElement;
+      button.disabled = true;
+      button.textContent = 'Simulando...';
+
+      try {
+        const response = await fetch('/api/admin/redistribute-authors', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'redistribute',
+            dryRun: true,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          this.displaySimulationResults(data.data);
+          this.log('✅ Simulación completada exitosamente', 'success');
+        } else {
+          this.log(`❌ Error en la simulación: ${data.error}`, 'error');
+        }
+      } catch (error) {
+        this.log(`❌ Error durante la simulación: ${error}`, 'error');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Simular Redistribución';
+      }
+    }
+
+    private displaySimulationResults(data: any) {
+      const container = document.getElementById('simulation-results')!;
+      container.className = 'block';
+
+      container.innerHTML = `
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <h3 class="font-semibold text-yellow-800 mb-2">Resultado de Simulación</h3>
+          <p class="text-sm text-yellow-700">Esta es una simulación. No se han realizado cambios reales.</p>
+        </div>
+        
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h3 class="font-semibold text-gray-700 mb-2">Nueva Distribución</h3>
+          <div class="space-y-2">
+            ${data.newDistribution
+              .map(
+                (dist: any) => `
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600">${dist.authorName}</span>
+                <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-sm font-semibold">
+                  ${dist.articleCount} artículos
+                </span>
+              </div>
+            `
+              )
+              .join('')}
+          </div>
+        </div>
+        
+        <div class="mt-4">
+          <h3 class="font-semibold text-gray-700 mb-2">Primeros 10 Artículos a Redistribuir</h3>
+          <div class="bg-gray-50 rounded-lg p-4 max-h-48 overflow-y-auto">
+            ${data.redistribution
+              .slice(0, 10)
+              .map(
+                (item: any) => `
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-sm text-gray-600">ID: ${item.articleId}</span>
+                <span class="text-sm text-blue-600">→ ${item.authorName}</span>
+              </div>
+            `
+              )
+              .join('')}
+            ${
+              data.redistribution.length > 10
+                ? `
+              <p class="text-xs text-gray-500 mt-2">... y ${data.redistribution.length - 10} más</p>
+            `
+                : ''
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    private async executeRedistribution() {
+      if (
+        !confirm(
+          '¿Estás seguro de que quieres ejecutar la redistribución real? Esta acción modificará permanentemente las asignaciones en Strapi.'
+        )
+      ) {
+        return;
+      }
+
+      this.log('Ejecutando redistribución real de autores...', 'warning');
+
+      const button = document.getElementById(
+        'redistribute-btn'
+      ) as HTMLButtonElement;
+      button.disabled = true;
+      button.textContent = 'Ejecutando...';
+
+      try {
+        const response = await fetch('/api/admin/redistribute-authors', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'redistribute',
+            dryRun: false,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          this.displayRedistributionResults(data.data);
+          this.log(
+            `✅ Redistribución completada: ${data.data.successCount} exitosas, ${data.data.errorCount} errores`,
+            'success'
+          );
+
+          if (data.data.errors.length > 0) {
+            this.log(
+              `⚠️ Errores encontrados: ${data.data.errors.slice(0, 3).join(', ')}`,
+              'warning'
+            );
+          }
+        } else {
+          this.log(`❌ Error en la redistribución: ${data.error}`, 'error');
+        }
+      } catch (error) {
+        this.log(`❌ Error durante la redistribución: ${error}`, 'error');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Ejecutar Redistribución';
+      }
+    }
+
+    private displayRedistributionResults(data: any) {
+      const container = document.getElementById('redistribution-results')!;
+      container.className = 'block';
+
+      container.innerHTML = `
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+          <h3 class="font-semibold text-green-800 mb-2">Redistribución Completada</h3>
+          <p class="text-sm text-green-700">
+            ${data.successCount} artículos actualizados exitosamente, ${data.errorCount} errores.
+          </p>
+        </div>
+        
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h3 class="font-semibold text-gray-700 mb-2">Distribución Final</h3>
+          <div class="space-y-2">
+            ${data.finalDistribution
+              .map(
+                (dist: any) => `
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600">${dist.authorName}</span>
+                <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-sm font-semibold">
+                  ${dist.articleCount} artículos
+                </span>
+              </div>
+            `
+              )
+              .join('')}
+          </div>
+        </div>
+        
+        ${
+          data.errors.length > 0
+            ? `
+          <div class="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+            <h3 class="font-semibold text-red-800 mb-2">Errores Encontrados</h3>
+            <div class="space-y-1 max-h-32 overflow-y-auto">
+              ${data.errors
+                .map(
+                  (error: string) => `
+                <p class="text-sm text-red-600">• ${error}</p>
+              `
+                )
+                .join('')}
+            </div>
+          </div>
+        `
+            : ''
+        }
+      `;
+    }
+
+    private clearLog() {
+      this.logContainer.innerHTML =
+        '<p class="text-gray-500 text-sm">Las actividades aparecerán aquí...</p>';
+    }
+  }
+
+  // Inicializar el gestor cuando se carga la página
+  document.addEventListener('DOMContentLoaded', () => {
+    new AuthorsManager();
+  });
+</script>
+
+<style>
+  /* Estilos adicionales si es necesario */
+  .container {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .btn {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+</style>

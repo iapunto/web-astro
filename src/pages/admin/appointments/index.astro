@@ -1,7 +1,8 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { PostgresAppointmentService } from '../../../lib/database/postgresAppointmentService.js';
 import { Client } from 'pg';
+import { AppointmentStatus } from '../../../lib/database/postgresSchema.js';
 
 // Configurar conexión a la base de datos
 const client = new Client({
@@ -21,11 +22,15 @@ try {
   await client.connect();
   const appointmentService = new PostgresAppointmentService(client);
 
-  // Obtener todas las citas
-  appointments = await appointmentService.getAllAppointments();
-  
+  // Obtener todas las citas directamente de la base de datos
+  const appointmentsResult = await client.query(`
+    SELECT * FROM appointments 
+    ORDER BY appointment_date DESC, appointment_time DESC
+  `);
+  appointments = appointmentsResult.rows;
+
   // Obtener estadísticas
-  const result = await client.query(`
+  const statsResult = await client.query(`
     SELECT 
       COUNT(*) as total,
       COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending,
@@ -35,10 +40,9 @@ try {
     FROM appointments
   `);
 
-  if (result.rows.length > 0) {
-    stats = result.rows[0];
+  if (statsResult.rows.length > 0) {
+    stats = statsResult.rows[0];
   }
-
 } catch (error) {
   console.error('Error conectando a la base de datos:', error);
 } finally {
@@ -46,40 +50,53 @@ try {
 }
 
 // Función para formatear fecha
-function formatDate(dateString) {
+function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 }
 
 // Función para obtener color del estado
-function getStatusColor(status) {
+function getStatusColor(status: string) {
   switch (status) {
-    case 'pending': return 'bg-yellow-100 text-yellow-800';
-    case 'confirmed': return 'bg-green-100 text-green-800';
-    case 'cancelled': return 'bg-red-100 text-red-800';
-    case 'completed': return 'bg-blue-100 text-blue-800';
-    default: return 'bg-gray-100 text-gray-800';
+    case 'pending':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'confirmed':
+      return 'bg-green-100 text-green-800';
+    case 'cancelled':
+      return 'bg-red-100 text-red-800';
+    case 'completed':
+      return 'bg-blue-100 text-blue-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
   }
 }
 
 // Función para obtener texto del estado
-function getStatusText(status) {
+function getStatusText(status: string) {
   switch (status) {
-    case 'pending': return 'Pendiente';
-    case 'confirmed': return 'Confirmada';
-    case 'cancelled': return 'Cancelada';
-    case 'completed': return 'Completada';
-    default: return 'Desconocido';
+    case 'pending':
+      return 'Pendiente';
+    case 'confirmed':
+      return 'Confirmada';
+    case 'cancelled':
+      return 'Cancelada';
+    case 'completed':
+      return 'Completada';
+    default:
+      return 'Desconocido';
   }
 }
 ---
 
-<Layout title="Gestión de Citas - Admin Dashboard">
+<AdminLayout
+  title="Gestión de Citas"
+  description="Administra todas las citas y reuniones"
+>
   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">
@@ -94,7 +111,10 @@ function getStatusText(status) {
             </p>
           </div>
           <div class="flex items-center space-x-4">
-            <a href="/admin" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+            <a
+              href="/admin"
+              class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            >
               ← Volver al Dashboard
             </a>
           </div>
@@ -108,8 +128,18 @@ function getStatusText(status) {
         <div class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                ></path>
               </svg>
             </div>
             <div class="ml-4">
@@ -122,13 +152,24 @@ function getStatusText(status) {
         <div class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600">Pendientes</p>
-              <p class="text-2xl font-semibold text-gray-900">{stats.pending}</p>
+              <p class="text-2xl font-semibold text-gray-900">
+                {stats.pending}
+              </p>
             </div>
           </div>
         </div>
@@ -136,13 +177,24 @@ function getStatusText(status) {
         <div class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-green-100 text-green-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600">Confirmadas</p>
-              <p class="text-2xl font-semibold text-gray-900">{stats.confirmed}</p>
+              <p class="text-2xl font-semibold text-gray-900">
+                {stats.confirmed}
+              </p>
             </div>
           </div>
         </div>
@@ -150,13 +202,24 @@ function getStatusText(status) {
         <div class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-red-100 text-red-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600">Canceladas</p>
-              <p class="text-2xl font-semibold text-gray-900">{stats.cancelled}</p>
+              <p class="text-2xl font-semibold text-gray-900">
+                {stats.cancelled}
+              </p>
             </div>
           </div>
         </div>
@@ -164,13 +227,24 @@ function getStatusText(status) {
         <div class="bg-white rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"></path>
               </svg>
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600">Completadas</p>
-              <p class="text-2xl font-semibold text-gray-900">{stats.completed}</p>
+              <p class="text-2xl font-semibold text-gray-900">
+                {stats.completed}
+              </p>
             </div>
           </div>
         </div>
@@ -186,8 +260,13 @@ function getStatusText(status) {
         <div class="p-6">
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Estado</label>
-              <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Estado</label
+              >
+              <select
+                id="statusFilter"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
                 <option value="">Todos los estados</option>
                 <option value="pending">Pendientes</option>
                 <option value="confirmed">Confirmadas</option>
@@ -196,26 +275,54 @@ function getStatusText(status) {
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Fecha Desde</label>
-              <input type="date" id="dateFrom" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Fecha Desde</label
+              >
+              <input
+                type="date"
+                id="dateFrom"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Fecha Hasta</label>
-              <input type="date" id="dateTo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Fecha Hasta</label
+              >
+              <input
+                type="date"
+                id="dateTo"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Buscar</label>
-              <input type="text" id="searchInput" placeholder="Nombre, email..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Buscar</label
+              >
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Nombre, email..."
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
           </div>
           <div class="mt-4 flex space-x-4">
-            <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors">
+            <button
+              onclick="applyFilters()"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+            >
               🔍 Aplicar Filtros
             </button>
-            <button onclick="clearFilters()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md font-medium transition-colors">
+            <button
+              onclick="clearFilters()"
+              class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+            >
               🗑️ Limpiar
             </button>
-            <button onclick="exportAppointments()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors">
+            <button
+              onclick="exportAppointments()"
+              class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+            >
               📊 Exportar
             </button>
           </div>
@@ -233,91 +340,143 @@ function getStatusText(status) {
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Cliente
                 </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Fecha y Hora
                 </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Servicio
                 </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Estado
                 </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Acciones
                 </th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              {appointments.map((appointment) => (
-                <tr class="hover:bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <div class="text-sm font-medium text-gray-900">{appointment.clientName}</div>
-                      <div class="text-sm text-gray-500">{appointment.clientEmail}</div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">{formatDate(appointment.appointmentDate)}</div>
-                    <div class="text-sm text-gray-500">{appointment.appointmentTime}</div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">{appointment.serviceType}</div>
-                    {appointment.notes && (
-                      <div class="text-sm text-gray-500 max-w-xs truncate">{appointment.notes}</div>
-                    )}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <span class={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(appointment.status)}`}>
-                      {getStatusText(appointment.status)}
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div class="flex space-x-2">
-                      <button onclick={`viewAppointment('${appointment.id}')`} class="text-blue-600 hover:text-blue-900">
-                        👁️ Ver
-                      </button>
-                      {appointment.status === 'pending' && (
-                        <>
-                          <button onclick={`confirmAppointment('${appointment.id}')`} class="text-green-600 hover:text-green-900">
-                            ✅ Confirmar
-                          </button>
-                          <button onclick={`cancelAppointment('${appointment.id}')`} class="text-red-600 hover:text-red-900">
-                            ❌ Cancelar
-                          </button>
-                        </>
+              {
+                appointments.map((appointment) => (
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div>
+                        <div class="text-sm font-medium text-gray-900">
+                          {appointment.clientName}
+                        </div>
+                        <div class="text-sm text-gray-500">
+                          {appointment.clientEmail}
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">
+                        {formatDate(appointment.appointmentDate)}
+                      </div>
+                      <div class="text-sm text-gray-500">
+                        {appointment.appointmentTime}
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">
+                        {appointment.serviceType}
+                      </div>
+                      {appointment.notes && (
+                        <div class="text-sm text-gray-500 max-w-xs truncate">
+                          {appointment.notes}
+                        </div>
                       )}
-                      {appointment.status === 'confirmed' && (
-                        <button onclick={`completeAppointment('${appointment.id}')`} class="text-blue-600 hover:text-blue-900">
-                          ✅ Completar
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(appointment.status)}`}
+                      >
+                        {getStatusText(appointment.status)}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div class="flex space-x-2">
+                        <button
+                          onclick={`viewAppointment('${appointment.id}')`}
+                          class="text-blue-600 hover:text-blue-900"
+                        >
+                          👁️ Ver
                         </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        {appointment.status === 'pending' && (
+                          <>
+                            <button
+                              onclick={`confirmAppointment('${appointment.id}')`}
+                              class="text-green-600 hover:text-green-900"
+                            >
+                              ✅ Confirmar
+                            </button>
+                            <button
+                              onclick={`cancelAppointment('${appointment.id}')`}
+                              class="text-red-600 hover:text-red-900"
+                            >
+                              ❌ Cancelar
+                            </button>
+                          </>
+                        )}
+                        {appointment.status === 'confirmed' && (
+                          <button
+                            onclick={`completeAppointment('${appointment.id}')`}
+                            class="text-blue-600 hover:text-blue-900"
+                          >
+                            ✅ Completar
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
             </tbody>
           </table>
         </div>
       </div>
 
-      {appointments.length === 0 && (
-        <div class="text-center py-12">
-          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <h3 class="mt-2 text-sm font-medium text-gray-900">No hay citas</h3>
-          <p class="mt-1 text-sm text-gray-500">No se encontraron citas con los filtros aplicados.</p>
-        </div>
-      )}
+      {
+        appointments.length === 0 && (
+          <div class="text-center py-12">
+            <svg
+              class="mx-auto h-12 w-12 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No hay citas</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              No se encontraron citas con los filtros aplicados.
+            </p>
+          </div>
+        )
+      }
     </div>
   </div>
 
-  <script>
+  <script define:vars={{ appointments }}>
     // Variables globales
-    let allAppointments = {JSON.stringify(appointments)};
+    let allAppointments = appointments;
     let filteredAppointments = [...allAppointments];
 
     // Función para aplicar filtros
@@ -325,25 +484,34 @@ function getStatusText(status) {
       const statusFilter = document.getElementById('statusFilter').value;
       const dateFrom = document.getElementById('dateFrom').value;
       const dateTo = document.getElementById('dateTo').value;
-      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const searchInput = document
+        .getElementById('searchInput')
+        .value.toLowerCase();
 
-      filteredAppointments = allAppointments.filter(appointment => {
+      filteredAppointments = allAppointments.filter((appointment) => {
         // Filtro por estado
         if (statusFilter && appointment.status !== statusFilter) {
           return false;
         }
 
         // Filtro por fecha
-        if (dateFrom && new Date(appointment.appointmentDate) < new Date(dateFrom)) {
+        if (
+          dateFrom &&
+          new Date(appointment.appointmentDate) < new Date(dateFrom)
+        ) {
           return false;
         }
-        if (dateTo && new Date(appointment.appointmentDate) > new Date(dateTo)) {
+        if (
+          dateTo &&
+          new Date(appointment.appointmentDate) > new Date(dateTo)
+        ) {
           return false;
         }
 
         // Filtro por búsqueda
         if (searchInput) {
-          const searchText = `${appointment.clientName} ${appointment.clientEmail} ${appointment.serviceType}`.toLowerCase();
+          const searchText =
+            `${appointment.clientName} ${appointment.clientEmail} ${appointment.serviceType}`.toLowerCase();
           if (!searchText.includes(searchInput)) {
             return false;
           }
@@ -381,7 +549,7 @@ function getStatusText(status) {
         return;
       }
 
-      filteredAppointments.forEach(appointment => {
+      filteredAppointments.forEach((appointment) => {
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50';
         row.innerHTML = `
@@ -409,19 +577,27 @@ function getStatusText(status) {
               <button onclick="viewAppointment('${appointment.id}')" class="text-blue-600 hover:text-blue-900">
                 👁️ Ver
               </button>
-              ${appointment.status === 'pending' ? `
+              ${
+                appointment.status === 'pending'
+                  ? `
                 <button onclick="confirmAppointment('${appointment.id}')" class="text-green-600 hover:text-green-900">
                   ✅ Confirmar
                 </button>
                 <button onclick="cancelAppointment('${appointment.id}')" class="text-red-600 hover:text-red-900">
                   ❌ Cancelar
                 </button>
-              ` : ''}
-              ${appointment.status === 'confirmed' ? `
+              `
+                  : ''
+              }
+              ${
+                appointment.status === 'confirmed'
+                  ? `
                 <button onclick="completeAppointment('${appointment.id}')" class="text-blue-600 hover:text-blue-900">
                   ✅ Completar
                 </button>
-              ` : ''}
+              `
+                  : ''
+              }
             </div>
           </td>
         `;
@@ -429,47 +605,19 @@ function getStatusText(status) {
       });
 
       // Actualizar contador
-      document.querySelector('h2').textContent = `📋 Lista de Citas (${filteredAppointments.length})`;
+      document.querySelector('h2').textContent =
+        `📋 Lista de Citas (${filteredAppointments.length})`;
     }
 
-    // Funciones de utilidad
-    function formatDate(dateString) {
-      return new Date(dateString).toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    }
-
-    function getStatusColor(status) {
-      switch (status) {
-        case 'pending': return 'bg-yellow-100 text-yellow-800';
-        case 'confirmed': return 'bg-green-100 text-green-800';
-        case 'cancelled': return 'bg-red-100 text-red-800';
-        case 'completed': return 'bg-blue-100 text-blue-800';
-        default: return 'bg-gray-100 text-gray-800';
-      }
-    }
-
-    function getStatusText(status) {
-      switch (status) {
-        case 'pending': return 'Pendiente';
-        case 'confirmed': return 'Confirmada';
-        case 'cancelled': return 'Cancelada';
-        case 'completed': return 'Completada';
-        default: return 'Desconocido';
-      }
-    }
+    // Las funciones de utilidad están definidas en la sección de Astro arriba
 
     // Funciones de acciones
-    async function viewAppointment(id) {
+    async function viewAppointment(id: string) {
       // Implementar modal de vista detallada
       alert(`Ver cita ${id} - Implementar modal`);
     }
 
-    async function confirmAppointment(id) {
+    async function confirmAppointment(id: string) {
       if (confirm('¿Confirmar esta cita?')) {
         try {
           const response = await fetch(`/api/appointments/${id}/confirm`, {
@@ -491,7 +639,7 @@ function getStatusText(status) {
       }
     }
 
-    async function cancelAppointment(id) {
+    async function cancelAppointment(id: string) {
       if (confirm('¿Cancelar esta cita?')) {
         try {
           const response = await fetch(`/api/appointments/${id}/cancel`, {
@@ -513,7 +661,7 @@ function getStatusText(status) {
       }
     }
 
-    async function completeAppointment(id) {
+    async function completeAppointment(id: string) {
       if (confirm('¿Marcar esta cita como completada?')) {
         try {
           const response = await fetch(`/api/appointments/${id}/complete`, {
@@ -560,9 +708,15 @@ function getStatusText(status) {
     }
 
     // Event listeners
-    document.getElementById('searchInput').addEventListener('input', applyFilters);
-    document.getElementById('statusFilter').addEventListener('change', applyFilters);
-    document.getElementById('dateFrom').addEventListener('change', applyFilters);
+    document
+      .getElementById('searchInput')
+      .addEventListener('input', applyFilters);
+    document
+      .getElementById('statusFilter')
+      .addEventListener('change', applyFilters);
+    document
+      .getElementById('dateFrom')
+      .addEventListener('change', applyFilters);
     document.getElementById('dateTo').addEventListener('change', applyFilters);
   </script>
-</Layout>
+</AdminLayout>

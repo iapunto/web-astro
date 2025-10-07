@@ -9,6 +9,12 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ### Agregado
 
+- Sistema completo de gestión y redistribución de autores en Strapi
+- Script de redistribución automática (`src/scripts/redistribute-strapi-authors.ts`)
+- API endpoint para gestión REST de autores (`/api/admin/redistribute-authors`)
+- Interfaz web de administración para autores (`/admin/authors`)
+- Suite de pruebas automatizadas para verificación de funcionalidad
+- Documentación completa del sistema de gestión de autores
 - Informe de análisis completo del proyecto (INFO_QODER.md)
 - Configuración de flujo de trabajo Git con GitFlow
 - Sistema de versionado semántico
@@ -16,6 +22,7 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ### Cambiado
 
+- Mejorada la gestión de autores en Strapi con distribución equilibrada
 - Estructura de branching para mejor organización del desarrollo
 
 ### Corregido

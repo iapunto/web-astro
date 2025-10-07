@@ -1,24 +1,39 @@
 ---
-import { getCollection } from 'astro:content';
-// import { CldImage } from "astro-cloudinary";
-import FormattedDate from '../../common/FormattedDate.astro'; // Importa el componente FormattedDate
+import { StrapiService } from '../../../lib/strapi';
+import FormattedDate from '../../common/FormattedDate.astro';
 import Card from '../../common/Card.astro';
 
-const allPosts = await getCollection('blog');
+// Obtener artículos desde Strapi
+const articles = await StrapiService.getArticles();
 
-// Ordenar por fecha de publicación (más reciente primero)
-const sortedPosts = allPosts.sort(
-  (a, b) =>
-    new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-);
-
-// Obtener solo los últimos N artículos (ej. los 3 últimos)
-const latestPosts = sortedPosts.slice(0, 6);
+// Convertir datos de Strapi al formato esperado por el componente
+const latestPosts = articles.slice(0, 6).map((article) => ({
+  data: {
+    slug: article.slug,
+    title: article.title,
+    description: article.description || article.excerpt || '',
+    category: article.category?.name || '',
+    pubDate: new Date(article.publishedAt),
+    cover: article.cover
+      ? `https://strapi.iapunto.com${article.cover.url}`
+      : '',
+    coverAlt: article.coverAlt || article.title,
+    epicQuote: article.epicQuote || '',
+    author: {
+      name: article.author?.name || 'IA Punto',
+      image: article.author?.avatar
+        ? `https://strapi.iapunto.com${article.author.avatar.url}`
+        : '/images/default-avatar.jpg',
+    },
+  },
+  id: article.slug, // Usar slug como ID para el enlace
+}));
 
 // Verificar si hay suficientes posts para el carousel
 const hasEnoughPosts = latestPosts.length >= 3;
 ---
-<link rel="stylesheet" href="/styles/splide.min.css">
+
+<link rel="stylesheet" href="/styles/splide.min.css" />
 
 <section class="py-20 bg-gradient-to-b from-gray-50 to-white">
   <div class="container w-4/5 py-16 mx-auto px-4">
@@ -26,7 +41,9 @@ const hasEnoughPosts = latestPosts.length >= 3;
       <div class="flex items-center gap-4">
         <h2 class="text-2xl font-bold text-gray-900">Ideas 360</h2>
         <div class="flex items-center h-8">
-          <span class="text-gray-300 text-3xl font-light leading-none mx-1">|</span>
+          <span class="text-gray-300 text-3xl font-light leading-none mx-1"
+            >|</span
+          >
         </div>
         <div class="flex items-center h-8">
           <a href="/" class="hover:text-[#D91A60]">
@@ -47,11 +64,12 @@ const hasEnoughPosts = latestPosts.length >= 3;
                   alt={entry.data.coverAlt || entry.data.title}
                   title={entry.data.title}
                   description={entry.data.description}
+                  epicQuote={entry.data.epicQuote}
                   category={entry.data.category}
                   date={entry.data.pubDate?.toLocaleDateString?.() ?? ''}
                   author={entry.data.author?.name}
                   authorImage={entry.data.author?.image}
-                  link={`/blog/${entry.id}`}
+                  link={`/blog/${entry.data.slug}`}
                 />
               </li>
             ))
@@ -78,7 +96,7 @@ const hasEnoughPosts = latestPosts.length >= 3;
           stroke-linejoin="round"
           stroke-width="2"
           d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-        />
+        ></path>
       </svg>
       Explora Nuestro Blog Completo
     </a>
@@ -106,7 +124,8 @@ const hasEnoughPosts = latestPosts.length >= 3;
       },
       classes: {
         arrows: 'splide__arrows flex justify-center gap-4 mt-4',
-        arrow: 'splide__arrow bg-primary-600 text-white rounded-full w-10 h-10 flex items-center justify-center',
+        arrow:
+          'splide__arrow bg-primary-600 text-white rounded-full w-10 h-10 flex items-center justify-center',
         pagination: 'splide__pagination flex justify-center gap-2 mt-6',
         page: 'splide__pagination__page bg-gray-300 rounded-full w-3 h-3',
       },
@@ -141,7 +160,10 @@ const hasEnoughPosts = latestPosts.length >= 3;
   .blog-card-title-link:hover .blog-card-title {
     color: #d91a60;
   }
-  .splide__arrows, .splide__arrow { display: flex !important; }
+  .splide__arrows,
+  .splide__arrow {
+    display: flex !important;
+  }
   .splide__pagination__page.is-active {
     background: #e51f52;
   }

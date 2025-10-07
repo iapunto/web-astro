@@ -28,9 +28,10 @@ const post = {
       ? `https://strapi.iapunto.com${article.cover.url}`
       : '',
     coverAlt: article.coverAlt || article.title,
+    epicQuote: article.epicQuote || '',
     author: {
       name: article.author?.name || 'IA Punto',
-      description: article.author?.bio || 'Equipo de IA Punto',
+      description: article.author?.description || 'Equipo de IA Punto',
       image: article.author?.avatar
         ? `https://strapi.iapunto.com${article.author.avatar.url}`
         : '/images/default-avatar.jpg',
@@ -48,7 +49,7 @@ const image = article.cover
   : '/images/default-image.jpg';
 const author = {
   name: article.author?.name || 'IA Punto',
-  description: article.author?.bio || 'Equipo de IA Punto',
+  description: article.author?.description || 'Equipo de IA Punto',
   image: article.author?.avatar
     ? `https://strapi.iapunto.com${article.author.avatar.url}`
     : '/images/default-avatar.jpg',
@@ -73,7 +74,7 @@ const blogEntries = allArticles.map((article) => ({
     coverAlt: article.coverAlt || article.title,
     author: {
       name: article.author?.name || 'IA Punto',
-      description: article.author?.bio || 'Equipo de IA Punto',
+      description: article.author?.description || 'Equipo de IA Punto',
       image: article.author?.avatar
         ? `https://strapi.iapunto.com${article.author.avatar.url}`
         : '/images/default-avatar.jpg',
@@ -105,11 +106,6 @@ const latestPosts = blogEntries
 const recommended = blogEntries.filter((a) => a.data.slug !== article.slug)[
   Math.floor(Math.random() * (blogEntries.length - 1))
 ];
-
-// Frase épica/reflexiva
-const quote =
-  'El marketing digital y la innovación tecnológica no son un lujo, son el motor que impulsa el crecimiento de las PYMES y startups.';
-const quoteAuthor = author.name;
 
 // Categorías y tags para el sidebar
 const allCategories = Array.from(
@@ -254,18 +250,6 @@ const query = '';
     <!-- Contenido del artículo -->
     <div class="prose prose-lg max-w-none dark:prose-invert">
       <div set:html={article.content} />
-    </div>
-
-    <!-- Frase épica/reflexiva del autor -->
-    <div
-      class="my-8 p-6 bg-gradient-to-r from-primary-50 to-blue-50 dark:from-gray-800 dark:to-gray-700 rounded-lg border-l-4 border-primary-500"
-    >
-      <blockquote class="text-lg italic text-gray-700 dark:text-gray-300 mb-2">
-        "{quote}"
-      </blockquote>
-      <cite class="text-sm font-medium text-primary-600 dark:text-primary-400">
-        — {quoteAuthor}
-      </cite>
     </div>
 
     <!-- Artículo recomendado al final -->

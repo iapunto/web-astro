@@ -25,6 +25,7 @@ const blogEntries = articles.map((article) => ({
       ? `https://strapi.iapunto.com${article.cover.url}`
       : '',
     coverAlt: article.coverAlt || article.title,
+    epicQuote: article.epicQuote || '',
     author: {
       name: article.author?.name || 'IA Punto',
       image: article.author?.avatar
@@ -91,7 +92,9 @@ const endIndex = startIndex + postsPerPage;
 const currentPosts = filteredPosts.slice(startIndex, endIndex);
 
 // Debug info
-console.log(`📊 Blog Strapi - Total artículos: ${filteredPosts.length}, Páginas: ${totalPages}, Página actual: ${validCurrentPage}, Artículos en página: ${currentPosts.length}`);
+console.log(
+  `📊 Blog Strapi - Total artículos: ${filteredPosts.length}, Páginas: ${totalPages}, Página actual: ${validCurrentPage}, Artículos en página: ${currentPosts.length}`
+);
 
 // Handlers para SidebarFilters (igual que el diseño original)
 function handleFilterChange({ query, category, tags }: any) {
@@ -187,6 +190,13 @@ const latestPosts = blogEntries.slice(0, 5);
                         {entry.data.title}
                       </a>
                     </h2>
+                    {entry.data.epicQuote && (
+                      <div class="mb-3 p-3 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-lg border-l-3 border-primary-500">
+                        <blockquote class="text-sm font-medium text-primary-900 dark:text-primary-100 italic leading-relaxed">
+                          "{entry.data.epicQuote}"
+                        </blockquote>
+                      </div>
+                    )}
                     <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
                       {entry.data.description}
                     </p>

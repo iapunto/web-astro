@@ -325,6 +325,17 @@ const latestPosts = allPosts.slice(0, 5);
           <div class="prose prose-lg dark:prose-invert max-w-none mt-8">
             <slot />
           </div>
+
+          {/* Quote épica al final del artículo */}
+          {
+            post.data.epicQuote && (
+              <div class="mt-8 p-6 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-xl border-l-4 border-primary-500">
+                <blockquote class="text-lg font-medium text-primary-900 dark:text-primary-100 italic leading-relaxed text-center">
+                  "{post.data.epicQuote}"
+                </blockquote>
+              </div>
+            )
+          }
         </article>
       </div>
 

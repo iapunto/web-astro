@@ -1,0 +1,1067 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { ArticleTrackingService } from '../../../lib/database/articleTrackingSchema.js';
+import { Client } from 'pg';
+import { AUTHORS } from '../../../lib/constants/authors.js';
+
+// Configurar conexión a la base de datos
+const client = new Client({
+  connectionString: process.env.DATABASE_PUBLIC_URL,
+});
+
+let stats = {
+  total: 0,
+  pending: 0,
+  completed: 0,
+  error: 0,
+};
+
+try {
+  await client.connect();
+  const trackingService = new ArticleTrackingService(client);
+
+  // Obtener estadísticas
+  const result = await client.query(`
+    SELECT 
+      COUNT(*) as total,
+      COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending,
+      COUNT(CASE WHEN status = 'published' THEN 1 END) as completed,
+      COUNT(CASE WHEN status = 'error' THEN 1 END) as error
+    FROM articles_tracking
+  `);
+
+  if (result.rows.length > 0) {
+    stats = result.rows[0];
+  }
+} catch (error) {
+  console.error('Error conectando a la base de datos:', error);
+} finally {
+  await client.end();
+}
+---
+
+<AdminLayout
+  title="Automatización IA"
+  description="Sistema de creación automática de artículos con IA"
+>
+  <!-- Welcome Section -->
+  <div
+    class="admin-card"
+    style="margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); color: white;"
+  >
+    <div
+      style="display: flex; justify-content: space-between; align-items: center;"
+    >
+      <div>
+        <h2
+          style="font-size: 1.875rem; font-weight: 700; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;"
+        >
+          <i data-lucide="bot" style="width: 32px; height: 32px;"></i>
+          Automatización con IA
+        </h2>
+        <p style="margin: 0; opacity: 0.9;">
+          Crea artículos de alta calidad automáticamente usando inteligencia
+          artificial
+        </p>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 2rem; font-weight: 700;">🤖</div>
+        <div style="font-size: 0.875rem; opacity: 0.9;">IA Activa</div>
+      </div>
+    </div>
+  </div>
+  <!-- Statistics -->
+  <div class="admin-stats-grid">
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="file-text" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.75rem; color: var(--admin-text-muted);">
+            Total
+          </div>
+          <div style="font-size: 0.75rem; color: var(--admin-primary);">📄</div>
+        </div>
+      </div>
+      <div class="admin-stat-value">{stats.total}</div>
+      <div class="admin-stat-label">Total Artículos</div>
+    </div>
+
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="clock" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.75rem; color: var(--admin-text-muted);">
+            En Cola
+          </div>
+          <div style="font-size: 0.75rem; color: var(--admin-warning);">⏳</div>
+        </div>
+      </div>
+      <div class="admin-stat-value">{stats.pending}</div>
+      <div class="admin-stat-label">Pendientes</div>
+    </div>
+
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="check-circle" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.75rem; color: var(--admin-text-muted);">
+            Exitosos
+          </div>
+          <div style="font-size: 0.75rem; color: var(--admin-success);">✅</div>
+        </div>
+      </div>
+      <div class="admin-stat-value">{stats.completed}</div>
+      <div class="admin-stat-label">Completados</div>
+    </div>
+
+    <div class="admin-stat-card">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
+      >
+        <div
+          style="padding: 0.75rem; background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 12px; color: white;"
+        >
+          <i data-lucide="alert-circle" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.75rem; color: var(--admin-text-muted);">
+            Fallidos
+          </div>
+          <div style="font-size: 0.75rem; color: var(--admin-error);">❌</div>
+        </div>
+      </div>
+      <div class="admin-stat-value">{stats.error}</div>
+      <div class="admin-stat-label">Errores</div>
+    </div>
+  </div>
+</AdminLayout>
+
+<!-- Creation Form -->
+<div class="admin-card" style="margin-bottom: 2rem; padding: 2rem;">
+  <h3
+    style="font-size: 1.25rem; font-weight: 600; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;"
+  >
+    <i
+      data-lucide="plus-circle"
+      style="width: 20px; height: 20px; color: var(--admin-primary);"></i>
+    Crear Nuevo Artículo
+  </h3>
+  <p style="color: var(--admin-text-muted); margin: 0 0 1.5rem 0;">
+    Introduce un tema y observa el proceso de automatización en tiempo real
+  </p>
+  <form
+    id="articleForm"
+    style="display: flex; flex-direction: column; gap: 1.5rem;"
+  >
+    <div>
+      <label
+        for="topic"
+        style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--admin-text); margin-bottom: 0.5rem;"
+      >
+        Tema del Artículo
+      </label>
+      <input
+        type="text"
+        id="topic"
+        name="topic"
+        placeholder="Ej: Estrategias de marketing digital para 2025"
+        style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--admin-border); border-radius: 8px; background-color: var(--admin-card); color: var(--admin-text); font-size: 0.875rem; transition: all 0.2s ease;"
+        onfocus="this.style.borderColor = 'var(--admin-primary)'; this.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)'"
+        onblur="this.style.borderColor = 'var(--admin-border)'; this.style.boxShadow = 'none'"
+        required
+      />
+    </div>
+    <div>
+      <label
+        for="author"
+        style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--admin-text); margin-bottom: 0.5rem;"
+      >
+        Autor del Artículo
+      </label>
+      <select
+        id="author"
+        name="author"
+        style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--admin-border); border-radius: 8px; background-color: var(--admin-card); color: var(--admin-text); font-size: 0.875rem; transition: all 0.2s ease;"
+        onfocus="this.style.borderColor = 'var(--admin-primary)'; this.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)'"
+        onblur="this.style.borderColor = 'var(--admin-border)'; this.style.boxShadow = 'none'"
+        required
+      >
+        {
+          AUTHORS.map((author) => (
+            <option value={author.id}>
+              {author.name} - {author.description}
+            </option>
+          ))
+        }
+      </select>
+    </div>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button
+        type="submit"
+        id="submitBtn"
+        class="admin-btn admin-btn-primary"
+        style="display: flex; align-items: center; gap: 0.5rem;"
+      >
+        <i data-lucide="zap"></i>
+        <span>Iniciar Automatización</span>
+      </button>
+      <div id="loadingIndicator" style="display: none;">
+        <div class="admin-loading"></div>
+        <span style="margin-left: 0.5rem; color: var(--admin-primary);"
+          >Procesando...</span
+        >
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Progress Panel -->
+<div id="progressPanel" style="display: none;">
+  <div class="admin-card" style="margin-bottom: 2rem; padding: 2rem;">
+    <h3
+      style="font-size: 1.25rem; font-weight: 600; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;"
+    >
+      <i
+        data-lucide="activity"
+        style="width: 20px; height: 20px; color: var(--admin-primary);"></i>
+      Progreso en Tiempo Real
+    </h3>
+    <p style="color: var(--admin-text-muted); margin: 0 0 1.5rem 0;">
+      Seguimiento del proceso de creación del artículo
+    </p>
+    <!-- Progress Bar -->
+    <div style="margin-bottom: 2rem;">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;"
+      >
+        <span
+          style="font-size: 0.875rem; font-weight: 500; color: var(--admin-text);"
+          >Progreso General</span
+        >
+        <span
+          id="progressPercentage"
+          style="font-size: 0.875rem; font-weight: 500; color: var(--admin-primary);"
+          >0%</span
+        >
+      </div>
+      <div
+        style="width: 100%; height: 8px; background-color: var(--admin-bg); border-radius: 4px; overflow: hidden;"
+      >
+        <div
+          id="progressBar"
+          style="height: 100%; background: linear-gradient(90deg, var(--admin-primary), var(--admin-success)); border-radius: 4px; transition: all 0.5s ease; width: 0%;"
+        >
+        </div>
+      </div>
+    </div>
+
+    <!-- GEM Status Cards -->
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;"
+    >
+      <div
+        id="gem1Status"
+        style="background-color: var(--admin-bg); border-radius: 12px; padding: 1.5rem; border: 2px solid var(--admin-border); transition: all 0.3s ease;"
+      >
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;"
+        >
+          <h3 style="font-weight: 500; color: var(--admin-text); margin: 0;">
+            Planificación
+          </h3>
+          <span style="color: var(--admin-text-muted);">⏳</span>
+        </div>
+        <p
+          style="font-size: 0.875rem; color: var(--admin-text-muted); margin: 0;"
+        >
+          Planificando estructura del artículo...
+        </p>
+      </div>
+
+      <div
+        id="gem2Status"
+        style="background-color: var(--admin-bg); border-radius: 12px; padding: 1.5rem; border: 2px solid var(--admin-border); transition: all 0.3s ease;"
+      >
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;"
+        >
+          <h3 style="font-weight: 500; color: var(--admin-text); margin: 0;">
+            Investigación
+          </h3>
+          <span style="color: var(--admin-text-muted);">⏳</span>
+        </div>
+        <p
+          style="font-size: 0.875rem; color: var(--admin-text-muted); margin: 0;"
+        >
+          Investigando secciones...
+        </p>
+      </div>
+
+      <div
+        id="gem3Status"
+        style="background-color: var(--admin-bg); border-radius: 12px; padding: 1.5rem; border: 2px solid var(--admin-border); transition: all 0.3s ease;"
+      >
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;"
+        >
+          <h3 style="font-weight: 500; color: var(--admin-text); margin: 0;">
+            Redacción
+          </h3>
+          <span style="color: var(--admin-text-muted);">⏳</span>
+        </div>
+        <p
+          style="font-size: 0.875rem; color: var(--admin-text-muted); margin: 0;"
+        >
+          Redactando artículo final...
+        </p>
+      </div>
+
+      <div
+        id="gem4Status"
+        style="background-color: var(--admin-bg); border-radius: 12px; padding: 1.5rem; border: 2px solid var(--admin-border); transition: all 0.3s ease;"
+      >
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;"
+        >
+          <h3 style="font-weight: 500; color: var(--admin-text); margin: 0;">
+            Finalización
+          </h3>
+          <span style="color: var(--admin-text-muted);">⏳</span>
+        </div>
+        <p
+          style="font-size: 0.875rem; color: var(--admin-text-muted); margin: 0;"
+        >
+          Generando frontmatter...
+        </p>
+      </div>
+    </div>
+
+    <!-- System Logs -->
+    <div
+      style="background-color: var(--admin-sidebar); border-radius: 12px; padding: 1.5rem;"
+    >
+      <div
+        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;"
+      >
+        <h3
+          style="color: white; font-weight: 500; margin: 0; display: flex; align-items: center; gap: 0.5rem;"
+        >
+          <i data-lucide="terminal" style="width: 16px; height: 16px;"></i>
+          Logs del Sistema
+        </h3>
+        <button
+          id="clearLogs"
+          style="color: #94a3b8; background: none; border: none; font-size: 0.875rem; cursor: pointer; transition: color 0.2s ease;"
+          onmouseover="this.style.color = 'white'"
+          onmouseout="this.style.color = '#94a3b8'"
+        >
+          Limpiar
+        </button>
+      </div>
+      <div
+        id="logsContainer"
+        style="color: #10b981; font-size: 0.875rem; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; height: 200px; overflow-y: auto; background-color: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 1rem;"
+      >
+        <div style="color: #64748b;">Esperando inicio del proceso...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Results Panel -->
+<div id="resultsPanel" style="display: none;">
+  <div class="admin-card" style="padding: 2rem;">
+    <h3
+      style="font-size: 1.25rem; font-weight: 600; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;"
+    >
+      <i
+        data-lucide="file-check"
+        style="width: 20px; height: 20px; color: var(--admin-success);"></i>
+      Resultado Final
+    </h3>
+    <p style="color: var(--admin-text-muted); margin: 0 0 1.5rem 0;">
+      Artículo generado automáticamente
+    </p>
+    <!-- Article Information -->
+    <div
+      style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;"
+    >
+      <div>
+        <h4
+          style="font-size: 1rem; font-weight: 600; margin: 0 0 1rem 0; color: var(--admin-text); display: flex; align-items: center; gap: 0.5rem;"
+        >
+          <i
+            data-lucide="info"
+            style="width: 16px; height: 16px; color: var(--admin-primary);"></i>
+          Información del Artículo
+        </h4>
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <label
+              style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--admin-text); margin-bottom: 0.5rem;"
+              >Título</label
+            >
+            <div
+              id="articleTitle"
+              style="padding: 0.75rem; background-color: var(--admin-bg); border-radius: 8px; border: 1px solid var(--admin-border); color: var(--admin-text); min-height: 2.5rem; display: flex; align-items: center;"
+            >
+            </div>
+          </div>
+          <div>
+            <label
+              style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--admin-text); margin-bottom: 0.5rem;"
+              >Meta Descripción</label
+            >
+            <div
+              id="articleDescription"
+              style="padding: 0.75rem; background-color: var(--admin-bg); border-radius: 8px; border: 1px solid var(--admin-border); color: var(--admin-text); min-height: 2.5rem; display: flex; align-items: center;"
+            >
+            </div>
+          </div>
+          <div>
+            <label
+              style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--admin-text); margin-bottom: 0.5rem;"
+              >Palabra Clave</label
+            >
+            <div
+              id="articleKeyword"
+              style="padding: 0.75rem; background-color: var(--admin-bg); border-radius: 8px; border: 1px solid var(--admin-border); color: var(--admin-text); min-height: 2.5rem; display: flex; align-items: center;"
+            >
+            </div>
+          </div>
+          <div>
+            <label
+              style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--admin-text); margin-bottom: 0.5rem;"
+              >Categoría</label
+            >
+            <div
+              id="articleCategory"
+              style="padding: 0.75rem; background-color: var(--admin-bg); border-radius: 8px; border: 1px solid var(--admin-border); color: var(--admin-text); min-height: 2.5rem; display: flex; align-items: center;"
+            >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4
+          style="font-size: 1rem; font-weight: 600; margin: 0 0 1rem 0; color: var(--admin-text); display: flex; align-items: center; gap: 0.5rem;"
+        >
+          <i
+            data-lucide="tag"
+            style="width: 16px; height: 16px; color: var(--admin-primary);"></i>
+          Etiquetas y Metadatos
+        </h4>
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <label
+              style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--admin-text); margin-bottom: 0.5rem;"
+              >Etiquetas</label
+            >
+            <div
+              id="articleTags"
+              style="padding: 0.75rem; background-color: var(--admin-bg); border-radius: 8px; border: 1px solid var(--admin-border); color: var(--admin-text); min-height: 2.5rem; display: flex; align-items: center;"
+            >
+            </div>
+          </div>
+          <div>
+            <label
+              style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--admin-text); margin-bottom: 0.5rem;"
+              >Cita Destacada</label
+            >
+            <div
+              id="articleQuote"
+              style="padding: 0.75rem; background-color: var(--admin-bg); border-radius: 8px; border: 1px solid var(--admin-border); color: var(--admin-text); min-height: 2.5rem; display: flex; align-items: center; font-style: italic;"
+            >
+            </div>
+          </div>
+          <div>
+            <label
+              style="display: block; font-size: 0.875rem; font-weight: 500; color: var(--admin-text); margin-bottom: 0.5rem;"
+              >URL del Artículo</label
+            >
+            <div
+              id="articleUrl"
+              style="padding: 0.75rem; background-color: var(--admin-bg); border-radius: 8px; border: 1px solid var(--admin-border); color: var(--admin-text); min-height: 2.5rem; display: flex; align-items: center;"
+            >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Preview -->
+    <div
+      style="border-top: 1px solid var(--admin-border); padding-top: 1.5rem; margin-top: 1.5rem;"
+    >
+      <h4
+        style="font-size: 1rem; font-weight: 600; margin: 0 0 1rem 0; color: var(--admin-text); display: flex; align-items: center; gap: 0.5rem;"
+      >
+        <i
+          data-lucide="image"
+          style="width: 16px; height: 16px; color: var(--admin-primary);"></i>
+        Imagen de Portada Generada
+      </h4>
+      <div
+        id="imagePreview"
+        style="background-color: var(--admin-bg); border-radius: 12px; padding: 2rem; border: 1px solid var(--admin-border);"
+      >
+        <div
+          style="color: var(--admin-text-muted); text-align: center; padding: 2rem 0;"
+        >
+          <i
+            data-lucide="image"
+            style="width: 48px; height: 48px; margin: 0 auto 1rem; opacity: 0.5; display: block;"
+          ></i>
+          <div>La imagen de portada aparecerá aquí una vez generada...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article Preview -->
+    <div
+      style="border-top: 1px solid var(--admin-border); padding-top: 1.5rem; margin-top: 1.5rem;"
+    >
+      <h4
+        style="font-size: 1rem; font-weight: 600; margin: 0 0 1rem 0; color: var(--admin-text); display: flex; align-items: center; gap: 0.5rem;"
+      >
+        <i
+          data-lucide="eye"
+          style="width: 16px; height: 16px; color: var(--admin-primary);"></i>
+        Vista Previa del Artículo
+      </h4>
+      <div
+        id="articlePreview"
+        style="background-color: var(--admin-bg); border-radius: 12px; padding: 2rem; border: 1px solid var(--admin-border); max-width: none;"
+      >
+        <div
+          style="color: var(--admin-text-muted); text-align: center; padding: 2rem 0;"
+        >
+          <i
+            data-lucide="file-text"
+            style="width: 48px; height: 48px; margin: 0 auto 1rem; opacity: 0.5; display: block;"
+          ></i>
+          <div>
+            El contenido del artículo aparecerá aquí una vez completado el
+            proceso...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 1rem;">
+      <button
+        id="previewArticle"
+        class="admin-btn admin-btn-secondary"
+        style="display: flex; align-items: center; gap: 0.5rem;"
+      >
+        <i data-lucide="eye"></i>
+        <span>Preview del Artículo</span>
+      </button>
+      <button
+        id="publishArticle"
+        class="admin-btn admin-btn-primary"
+        style="display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981, #059669);"
+      >
+        <i data-lucide="upload"></i>
+        <span>Publicar Artículo</span>
+      </button>
+      <button
+        id="viewArticle"
+        class="admin-btn admin-btn-secondary"
+        style="display: flex; align-items: center; gap: 0.5rem;"
+      >
+        <i data-lucide="external-link"></i>
+        <span>Ver Artículo Completo</span>
+      </button>
+      <button
+        id="downloadArticle"
+        class="admin-btn admin-btn-secondary"
+        style="display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #f59e0b, #d97706);"
+      >
+        <i data-lucide="download"></i>
+        <span>Descargar MDX</span>
+      </button>
+      <button
+        id="createNew"
+        class="admin-btn admin-btn-secondary"
+        style="display: flex; align-items: center; gap: 0.5rem;"
+      >
+        <i data-lucide="plus"></i>
+        <span>Crear Otro Artículo</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Variables globales
+  let currentArticleId: string | null = null;
+  let eventSource: EventSource | null = null;
+
+  // Elementos del DOM
+  const form = document.getElementById('articleForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const loadingIndicator = document.getElementById('loadingIndicator');
+  const progressPanel = document.getElementById('progressPanel');
+  const resultsPanel = document.getElementById('resultsPanel');
+  const progressBar = document.getElementById('progressBar');
+  const progressPercentage = document.getElementById('progressPercentage');
+  const logsContainer = document.getElementById('logsContainer');
+  const clearLogsBtn = document.getElementById('clearLogs');
+
+  // Estados de las GEMs
+  const gemStatuses = {
+    gem1: document.getElementById('gem1Status'),
+    gem2: document.getElementById('gem2Status'),
+    gem3: document.getElementById('gem3Status'),
+    gem4: document.getElementById('gem4Status'),
+  };
+
+  // Elementos de resultados
+  const resultElements = {
+    title: document.getElementById('articleTitle'),
+    description: document.getElementById('articleDescription'),
+    keyword: document.getElementById('articleKeyword'),
+    category: document.getElementById('articleCategory'),
+    tags: document.getElementById('articleTags'),
+    quote: document.getElementById('articleQuote'),
+    url: document.getElementById('articleUrl'),
+    preview: document.getElementById('articlePreview'),
+  };
+
+  // Funciones de utilidad
+  function addLog(message: string, type: string = 'info') {
+    if (!logsContainer) return;
+    const timestamp = new Date().toLocaleTimeString();
+    const logElement = document.createElement('div');
+    logElement.className = `text-${type === 'error' ? 'red' : type === 'success' ? 'green' : 'yellow'}-400`;
+    logElement.textContent = `[${timestamp}] ${message}`;
+    logsContainer.appendChild(logElement);
+    logsContainer.scrollTop = logsContainer.scrollHeight;
+  }
+
+  function updateProgress(percentage: number) {
+    if (progressBar) progressBar.style.width = `${percentage}%`;
+    if (progressPercentage) progressPercentage.textContent = `${percentage}%`;
+  }
+
+  function updateGemStatus(gem: string, status: string, message: string = '') {
+    const gemElement = gemStatuses[gem as keyof typeof gemStatuses];
+    if (!gemElement) return;
+    const statusIcon = gemElement.querySelector('span');
+    const statusText = gemElement.querySelector('p');
+
+    gemElement.className = `admin-card ${
+      status === 'completed'
+        ? 'border-l-4 border-l-green-500'
+        : status === 'error'
+          ? 'border-l-4 border-l-red-500'
+          : status === 'in_progress'
+            ? 'border-l-4 border-l-blue-500'
+            : 'border-l-4 border-l-gray-500'
+    }`;
+
+    if (statusIcon)
+      statusIcon.textContent =
+        status === 'completed'
+          ? '✅'
+          : status === 'error'
+            ? '❌'
+            : status === 'in_progress'
+              ? '🔄'
+              : '⏳';
+
+    if (message && statusText) {
+      statusText.textContent = message;
+    }
+  }
+
+  function resetUI() {
+    if (progressPanel) progressPanel.classList.add('hidden');
+    if (resultsPanel) resultsPanel.classList.add('hidden');
+    updateProgress(0);
+    if (logsContainer)
+      logsContainer.innerHTML =
+        '<div class="text-gray-500">Esperando inicio del proceso...</div>';
+
+    Object.values(gemStatuses).forEach((gem) => {
+      if (gem) updateGemStatus(gem.id.replace('Status', ''), 'pending');
+    });
+  }
+
+  // Event Listeners
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const topicEl = document.getElementById('topic') as HTMLInputElement;
+    const authorEl = document.getElementById('author') as HTMLSelectElement;
+    const topic = topicEl?.value.trim();
+    const authorId = authorEl?.value;
+    if (!topic) return;
+
+    // Reset UI
+    resetUI();
+
+    // Mostrar indicadores de carga
+    if (submitBtn) (submitBtn as HTMLButtonElement).disabled = true;
+    if (loadingIndicator) loadingIndicator.classList.remove('hidden');
+    if (progressPanel) progressPanel.classList.remove('hidden');
+
+    addLog('Iniciando proceso de automatización...', 'info');
+
+    try {
+      // Crear artículo
+      const response = await fetch('/api/articles/create-automatic', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          topic: topic,
+          authorId: authorId,
+          apiKey: 'demo-key', // En producción usar una clave real
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        currentArticleId = result.articleId;
+        addLog(`Artículo creado con ID: ${currentArticleId}`, 'success');
+
+        // Iniciar SSE para seguimiento en tiempo real
+        if (currentArticleId) startSSEConnection(currentArticleId);
+      } else {
+        throw new Error(result.error || 'Error desconocido');
+      }
+    } catch (error: any) {
+      addLog(`Error: ${error.message}`, 'error');
+      updateGemStatus('gem1', 'error');
+    } finally {
+      if (submitBtn) (submitBtn as HTMLButtonElement).disabled = false;
+      if (loadingIndicator) loadingIndicator.classList.add('hidden');
+    }
+  });
+
+  clearLogsBtn?.addEventListener('click', () => {
+    if (logsContainer)
+      logsContainer.innerHTML =
+        '<div class="text-gray-500">Logs limpiados...</div>';
+  });
+
+  document.getElementById('createNew')?.addEventListener('click', () => {
+    resetUI();
+    if (form) (form as HTMLFormElement).reset();
+  });
+
+  // SSE Connection
+  function startSSEConnection(articleId: string) {
+    if (eventSource) {
+      eventSource.close();
+    }
+
+    eventSource = new EventSource(`/api/articles/status/${articleId}`);
+
+    eventSource.onmessage = function (event) {
+      const data = JSON.parse(event.data);
+      handleSSEMessage(data);
+    };
+
+    eventSource.onerror = function (error) {
+      addLog('Error en conexión SSE', 'error');
+      if (eventSource) eventSource.close();
+    };
+  }
+
+  function handleSSEMessage(data: any) {
+    const { type, status, progress, message, result } = data;
+
+    switch (type) {
+      case 'status_update':
+        updateGemStatus(status.gem, status.state, status.message);
+        if (progress) {
+          updateProgress(progress);
+        }
+        if (message) {
+          addLog(message, status.state === 'error' ? 'error' : 'info');
+        }
+        break;
+
+      case 'gem1_completed':
+        updateGemStatus('gem1', 'completed', 'Planificación completada');
+        updateProgress(25);
+        if (result) {
+          addLog(`Título: ${result.titulo}`, 'success');
+          addLog(`Secciones: ${result.secciones.length}`, 'success');
+        }
+        break;
+
+      case 'gem2_completed':
+        updateGemStatus('gem2', 'completed', 'Investigación completada');
+        updateProgress(50);
+        if (result) {
+          addLog(
+            `Investigación completada para ${result.sections_researched} secciones`,
+            'success'
+          );
+        }
+        break;
+
+      case 'gem3_completed':
+        updateGemStatus('gem3', 'completed', 'Redacción completada');
+        updateProgress(75);
+        if (result) {
+          addLog(
+            `Artículo redactado: ${result.word_count} palabras`,
+            'success'
+          );
+        }
+        break;
+
+      case 'gem4_completed':
+        updateGemStatus('gem4', 'completed', 'Finalización completada');
+        updateProgress(100);
+        if (result) {
+          addLog('Artículo finalizado y publicado', 'success');
+          displayResults(result);
+        }
+        break;
+
+      case 'error':
+        addLog(`Error: ${message}`, 'error');
+        updateGemStatus(status.gem, 'error');
+        break;
+
+      case 'completed':
+        addLog('Proceso completado exitosamente', 'success');
+        if (eventSource) eventSource.close();
+        break;
+    }
+  }
+
+  function displayResults(result: any) {
+    // Llenar información del artículo
+    if (resultElements.title)
+      resultElements.title.textContent =
+        result.frontmatter?.title || 'Sin título';
+    if (resultElements.description)
+      resultElements.description.textContent =
+        result.frontmatter?.description || 'Sin descripción';
+    if (resultElements.keyword)
+      resultElements.keyword.textContent =
+        result.frontmatter?.keyword || 'Sin palabra clave';
+    if (resultElements.category)
+      resultElements.category.textContent =
+        result.frontmatter?.category || 'Sin categoría';
+    if (resultElements.tags)
+      resultElements.tags.textContent =
+        result.frontmatter?.tags?.join(', ') || 'Sin etiquetas';
+    if (resultElements.quote)
+      resultElements.quote.textContent =
+        result.frontmatter?.quote || 'Sin cita';
+    if (resultElements.url)
+      resultElements.url.textContent = result.url || 'URL no disponible';
+
+    // Mostrar vista previa
+    if (result.content && resultElements.preview) {
+      resultElements.preview.innerHTML = `
+          <div class="prose max-w-none">
+            <h1>${result.frontmatter?.title || 'Título del Artículo'}</h1>
+            <div class="text-gray-600 mb-4">
+              <p><strong>Meta descripción:</strong> ${result.frontmatter?.description || ''}</p>
+              <p><strong>Palabra clave:</strong> ${result.frontmatter?.keyword || ''}</p>
+            </div>
+            <div class="border-l-4 border-blue-500 pl-4 mb-6">
+              <blockquote class="italic text-gray-700">
+                "${result.frontmatter?.quote || 'Cita destacada del artículo'}"
+              </blockquote>
+            </div>
+            <div class="article-content">
+              ${result.content.substring(0, 1000)}${result.content.length > 1000 ? '...' : ''}
+            </div>
+          </div>
+        `;
+    }
+
+    // Mostrar panel de resultados
+    if (resultsPanel) resultsPanel.classList.remove('hidden');
+  }
+
+  // Funciones para preview y publicación
+  async function loadArticlePreview(articleId: string) {
+    try {
+      const response = await fetch(`/api/articles/preview/${articleId}`);
+      const data = await response.json();
+
+      if (data.success && data.preview) {
+        const preview = data.preview;
+
+        // Actualizar elementos de resultado
+        if (resultElements.title)
+          resultElements.title.textContent =
+            preview.frontmatter?.title || 'Sin título';
+        if (resultElements.description)
+          resultElements.description.textContent =
+            preview.frontmatter?.description || 'Sin descripción';
+        if (resultElements.keyword)
+          resultElements.keyword.textContent =
+            preview.frontmatter?.keyword || 'Sin palabra clave';
+        if (resultElements.category)
+          resultElements.category.textContent =
+            preview.frontmatter?.category || 'Sin categoría';
+        if (resultElements.tags)
+          resultElements.tags.textContent =
+            preview.frontmatter?.tags?.join(', ') || 'Sin etiquetas';
+        if (resultElements.quote)
+          resultElements.quote.textContent =
+            preview.frontmatter?.quote || 'Sin cita';
+
+        // Mostrar preview de imagen si existe
+        const imagePreview = document.getElementById('imagePreview');
+        if (imagePreview) {
+          if (preview.image) {
+            imagePreview.innerHTML = `
+                <div class="text-center">
+                  <img src="${preview.image.url}" alt="${preview.image.alt}" class="mx-auto max-w-full h-auto rounded-lg shadow-lg" style="max-height: 400px;">
+                  <p class="text-sm text-gray-600 mt-2">${preview.image.alt}</p>
+                </div>
+              `;
+          } else {
+            imagePreview.innerHTML = `
+                <div class="text-gray-500 text-center py-8">
+                  No se ha generado imagen de portada aún...
+                </div>
+              `;
+          }
+        }
+
+        // Mostrar preview del contenido
+        if (preview.mdxContent && resultElements.preview) {
+          resultElements.preview.innerHTML = `
+              <div class="prose max-w-none">
+                <h1>${preview.frontmatter?.title || 'Título del Artículo'}</h1>
+                <div class="text-gray-600 mb-4">
+                  <p><strong>Meta descripción:</strong> ${preview.frontmatter?.description || ''}</p>
+                  <p><strong>Autor:</strong> ${preview.frontmatter?.author?.name || ''}</p>
+                  <p><strong>Categoría:</strong> ${preview.frontmatter?.category || ''}</p>
+                </div>
+                <div class="border-l-4 border-blue-500 pl-4 mb-6">
+                  <blockquote class="italic text-gray-700">
+                    "${preview.frontmatter?.quote || 'Cita destacada del artículo'}"
+                  </blockquote>
+                </div>
+                <div class="article-content">
+                  ${preview.mdxContent.substring(0, 2000)}${preview.mdxContent.length > 2000 ? '...' : ''}
+                </div>
+              </div>
+            `;
+        }
+
+        // Mostrar panel de resultados
+        if (resultsPanel) resultsPanel.classList.remove('hidden');
+        addLog('Preview del artículo cargado exitosamente', 'success');
+      } else {
+        addLog('Error cargando preview del artículo', 'error');
+      }
+    } catch (error: any) {
+      addLog(`Error: ${error.message}`, 'error');
+    }
+  }
+
+  async function publishArticle(articleId: string) {
+    try {
+      addLog('Publicando artículo...', 'info');
+
+      const response = await fetch(`/api/articles/publish/${articleId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        addLog('Artículo publicado exitosamente', 'success');
+        addLog(`URL: ${data.url}`, 'success');
+
+        // Actualizar URL del artículo
+        if (resultElements.url) resultElements.url.textContent = data.url;
+
+        // Mostrar mensaje de éxito
+        alert('¡Artículo publicado exitosamente!');
+      } else {
+        addLog(`Error al publicar: ${data.error}`, 'error');
+      }
+    } catch (error: any) {
+      addLog(`Error: ${error.message}`, 'error');
+    }
+  }
+
+  // Configurar botones de acción
+  document.getElementById('previewArticle')?.addEventListener('click', () => {
+    if (currentArticleId) {
+      loadArticlePreview(currentArticleId);
+    } else {
+      addLog('No hay artículo seleccionado para preview', 'error');
+    }
+  });
+
+  document.getElementById('publishArticle')?.addEventListener('click', () => {
+    if (currentArticleId) {
+      if (confirm('¿Estás seguro de que quieres publicar este artículo?')) {
+        publishArticle(currentArticleId);
+      }
+    } else {
+      addLog('No hay artículo seleccionado para publicar', 'error');
+    }
+  });
+
+  document.getElementById('viewArticle')?.addEventListener('click', () => {
+    if (currentArticleId) {
+      window.open(`/blog/${currentArticleId}`, '_blank');
+    }
+  });
+
+  document
+    .getElementById('downloadArticle')
+    ?.addEventListener('click', async () => {
+      if (currentArticleId) {
+        try {
+          const response = await fetch(
+            `/api/articles/download/${currentArticleId}`
+          );
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `articulo-${currentArticleId}.mdx`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        } catch (error: any) {
+          addLog('Error descargando artículo', 'error');
+        }
+      }
+    });
+</script>

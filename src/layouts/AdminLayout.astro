@@ -1,0 +1,830 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = 'Panel de administración de IA Punto',
+  noindex = true,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <title>{title}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"
+    />
+
+    <style>
+      :root {
+        --admin-bg: #f8fafc;
+        --admin-sidebar: #1e293b;
+        --admin-sidebar-hover: #334155;
+        --admin-card: #ffffff;
+        --admin-border: #e2e8f0;
+        --admin-text: #1e293b;
+        --admin-text-muted: #64748b;
+        --admin-primary: #3b82f6;
+        --admin-primary-hover: #2563eb;
+        --admin-success: #10b981;
+        --admin-warning: #f59e0b;
+        --admin-error: #ef4444;
+        --admin-shadow:
+          0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --admin-shadow-lg:
+          0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      }
+
+      [data-theme='dark'] {
+        --admin-bg: #0f172a;
+        --admin-sidebar: #1e293b;
+        --admin-sidebar-hover: #334155;
+        --admin-card: #1e293b;
+        --admin-border: #334155;
+        --admin-text: #f1f5f9;
+        --admin-text-muted: #94a3b8;
+        --admin-primary: #3b82f6;
+        --admin-primary-hover: #2563eb;
+        --admin-success: #10b981;
+        --admin-warning: #f59e0b;
+        --admin-error: #ef4444;
+        --admin-shadow:
+          0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+        --admin-shadow-lg:
+          0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        background-color: var(--admin-bg);
+        color: var(--admin-text);
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .admin-container {
+        display: flex;
+        height: 100vh;
+      }
+
+      .admin-sidebar {
+        width: 280px;
+        background-color: var(--admin-sidebar);
+        color: white;
+        overflow-y: auto;
+        transition: all 0.3s ease;
+        border-right: 1px solid var(--admin-border);
+      }
+
+      .admin-sidebar.collapsed {
+        width: 80px;
+      }
+
+      .admin-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .admin-header {
+        background-color: var(--admin-card);
+        border-bottom: 1px solid var(--admin-border);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        box-shadow: var(--admin-shadow);
+      }
+
+      .admin-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 2rem;
+      }
+
+      .admin-card {
+        background-color: var(--admin-card);
+        border-radius: 12px;
+        border: 1px solid var(--admin-border);
+        box-shadow: var(--admin-shadow);
+        transition: all 0.2s ease;
+      }
+
+      .admin-card:hover {
+        box-shadow: var(--admin-shadow-lg);
+      }
+
+      .admin-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 0.875rem;
+      }
+
+      .admin-btn-primary {
+        background-color: var(--admin-primary);
+        color: white;
+      }
+
+      .admin-btn-primary:hover {
+        background-color: var(--admin-primary-hover);
+        transform: translateY(-1px);
+      }
+
+      .admin-btn-secondary {
+        background-color: var(--admin-card);
+        color: var(--admin-text);
+        border: 1px solid var(--admin-border);
+      }
+
+      .admin-btn-secondary:hover {
+        background-color: var(--admin-border);
+        transform: translateY(-1px);
+      }
+
+      .admin-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        color: #cbd5e1;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border-radius: 0;
+        position: relative;
+      }
+
+      .admin-nav-item:hover {
+        background-color: var(--admin-sidebar-hover);
+        color: white;
+      }
+
+      .admin-nav-item.active {
+        background-color: var(--admin-primary);
+        color: white;
+      }
+
+      .admin-nav-item.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background-color: white;
+      }
+
+      .admin-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .admin-stat-card {
+        background: linear-gradient(
+          135deg,
+          var(--admin-card) 0%,
+          var(--admin-bg) 100%
+        );
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid var(--admin-border);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .admin-stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--admin-primary),
+          var(--admin-success)
+        );
+      }
+
+      .admin-stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0.5rem 0;
+        background: linear-gradient(
+          135deg,
+          var(--admin-primary),
+          var(--admin-success)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .admin-stat-label {
+        color: var(--admin-text-muted);
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .admin-chart-container {
+        background-color: var(--admin-card);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid var(--admin-border);
+        margin-bottom: 2rem;
+      }
+
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--admin-card);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--admin-border);
+      }
+
+      .admin-table th {
+        background-color: var(--admin-bg);
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: var(--admin-text);
+        border-bottom: 1px solid var(--admin-border);
+      }
+
+      .admin-table td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--admin-border);
+        color: var(--admin-text);
+      }
+
+      .admin-table tr:hover {
+        background-color: var(--admin-bg);
+      }
+
+      .admin-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .admin-badge-success {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+
+      .admin-badge-warning {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+
+      .admin-badge-error {
+        background-color: #fee2e2;
+        color: #991b1b;
+      }
+
+      .admin-badge-info {
+        background-color: #dbeafe;
+        color: #1e40af;
+      }
+
+      .admin-toggle {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+
+      .admin-toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .admin-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
+
+      .admin-slider:before {
+        position: absolute;
+        content: '';
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .admin-slider {
+        background-color: var(--admin-primary);
+      }
+
+      input:checked + .admin-slider:before {
+        transform: translateX(26px);
+      }
+
+      .admin-loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--admin-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .admin-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: var(--admin-card);
+        border: 1px solid var(--admin-border);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: var(--admin-shadow-lg);
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      }
+
+      .admin-notification.show {
+        transform: translateX(0);
+      }
+
+      @media (max-width: 768px) {
+        .admin-sidebar {
+          position: fixed;
+          left: -280px;
+          z-index: 1000;
+          height: 100vh;
+        }
+
+        .admin-sidebar.open {
+          left: 0;
+        }
+
+        .admin-main {
+          width: 100%;
+        }
+
+        .admin-content {
+          padding: 1rem;
+        }
+
+        .admin-stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-container">
+      <!-- Sidebar -->
+      <nav class="admin-sidebar" id="adminSidebar">
+        <div style="padding: 1.5rem; border-bottom: 1px solid #334155;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div
+              style="width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #10b981); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.25rem;"
+            >
+              IA
+            </div>
+            <div id="sidebarTitle" style="transition: opacity 0.3s ease;">
+              <div style="font-weight: 700; font-size: 1.125rem;">IA Punto</div>
+              <div style="font-size: 0.75rem; color: #94a3b8;">Admin Panel</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding: 1rem 0;">
+          <a href="/admin" class="admin-nav-item" data-page="dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <span id="navDashboard">Dashboard</span>
+          </a>
+          <a
+            href="/admin/appointments"
+            class="admin-nav-item"
+            data-page="appointments"
+          >
+            <i data-lucide="calendar"></i>
+            <span id="navAppointments">Citas</span>
+          </a>
+          <a href="/admin/blog" class="admin-nav-item" data-page="blog">
+            <i data-lucide="file-text"></i>
+            <span id="navBlog">Blog</span>
+          </a>
+          <a
+            href="/admin/automation"
+            class="admin-nav-item"
+            data-page="automation"
+          >
+            <i data-lucide="bot"></i>
+            <span id="navAutomation">Automatización</span>
+          </a>
+          <a
+            href="/admin/analytics"
+            class="admin-nav-item"
+            data-page="analytics"
+          >
+            <i data-lucide="bar-chart-3"></i>
+            <span id="navAnalytics">Analytics</span>
+          </a>
+          <a href="/admin/settings" class="admin-nav-item" data-page="settings">
+            <i data-lucide="settings"></i>
+            <span id="navSettings">Configuración</span>
+          </a>
+        </div>
+
+        <div
+          style="padding: 1rem; border-top: 1px solid #334155; margin-top: auto;"
+        >
+          <div
+            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;"
+          >
+            <span style="font-size: 0.875rem; color: #94a3b8;">Modo Oscuro</span
+            >
+            <label class="admin-toggle">
+              <input type="checkbox" id="darkModeToggle" />
+              <span class="admin-slider"></span>
+            </label>
+          </div>
+          <button
+            onclick="toggleSidebar()"
+            class="admin-btn admin-btn-secondary"
+            style="width: 100%; justify-content: center;"
+          >
+            <i data-lucide="panel-left-close"></i>
+            <span id="toggleText">Colapsar</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="admin-main">
+        <header class="admin-header">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <button
+              onclick="toggleSidebar()"
+              class="admin-btn admin-btn-secondary"
+              style="display: none;"
+              id="mobileMenuBtn"
+            >
+              <i data-lucide="menu"></i>
+            </button>
+            <div>
+              <h1 style="font-size: 1.5rem; font-weight: 700; margin: 0;">
+                {title}
+              </h1>
+              <p
+                style="color: var(--admin-text-muted); margin: 0; font-size: 0.875rem;"
+              >
+                {description}
+              </p>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <!-- Real-time status indicator -->
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <div
+                id="connectionStatus"
+                style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--admin-success);"
+              >
+              </div>
+              <span style="font-size: 0.875rem; color: var(--admin-text-muted);"
+                >En línea</span
+              >
+            </div>
+
+            <!-- Notifications -->
+            <button
+              class="admin-btn admin-btn-secondary"
+              onclick="showNotifications()"
+            >
+              <i data-lucide="bell"></i>
+              <span
+                id="notificationCount"
+                style="background-color: var(--admin-error); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; margin-left: 0.25rem;"
+                >0</span
+              >
+            </button>
+
+            <!-- User menu -->
+            <div style="position: relative;">
+              <button
+                class="admin-btn admin-btn-secondary"
+                onclick="toggleUserMenu()"
+              >
+                <i data-lucide="user"></i>
+                <span>Admin</span>
+                <i data-lucide="chevron-down"></i>
+              </button>
+              <div
+                id="userMenu"
+                style="position: absolute; top: 100%; right: 0; background-color: var(--admin-card); border: 1px solid var(--admin-border); border-radius: 8px; box-shadow: var(--admin-shadow-lg); padding: 0.5rem; min-width: 200px; display: none; z-index: 100;"
+              >
+                <a
+                  href="/admin/profile"
+                  class="admin-nav-item"
+                  style="color: var(--admin-text);"
+                >
+                  <i data-lucide="user"></i>
+                  <span>Perfil</span>
+                </a>
+                <a
+                  href="/admin/logout"
+                  class="admin-nav-item"
+                  style="color: var(--admin-text);"
+                >
+                  <i data-lucide="log-out"></i>
+                  <span>Cerrar Sesión</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="admin-content">
+          <slot />
+        </div>
+      </main>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"
+    ></script>
+    <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Dark mode functionality
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      const body = document.body;
+
+      // Load saved theme
+      const savedTheme = localStorage.getItem('admin-theme') || 'light';
+      if (savedTheme === 'dark') {
+        body.setAttribute('data-theme', 'dark');
+        darkModeToggle.checked = true;
+      }
+
+      darkModeToggle.addEventListener('change', function () {
+        if (this.checked) {
+          body.setAttribute('data-theme', 'dark');
+          localStorage.setItem('admin-theme', 'dark');
+        } else {
+          body.removeAttribute('data-theme');
+          localStorage.setItem('admin-theme', 'light');
+        }
+      });
+
+      // Sidebar functionality
+      function toggleSidebar() {
+        const sidebar = document.getElementById('adminSidebar');
+        const isCollapsed = sidebar.classList.contains('collapsed');
+
+        if (isCollapsed) {
+          sidebar.classList.remove('collapsed');
+          document.getElementById('toggleText').textContent = 'Colapsar';
+          document
+            .querySelector('[data-lucide="panel-left-close"]')
+            .setAttribute('data-lucide', 'panel-left-close');
+        } else {
+          sidebar.classList.add('collapsed');
+          document.getElementById('toggleText').textContent = 'Expandir';
+          document
+            .querySelector('[data-lucide="panel-left-close"]')
+            .setAttribute('data-lucide', 'panel-left-open');
+        }
+
+        lucide.createIcons();
+        localStorage.setItem('admin-sidebar-collapsed', !isCollapsed);
+      }
+
+      // Load sidebar state
+      const sidebarCollapsed =
+        localStorage.getItem('admin-sidebar-collapsed') === 'true';
+      if (sidebarCollapsed) {
+        document.getElementById('adminSidebar').classList.add('collapsed');
+        document.getElementById('toggleText').textContent = 'Expandir';
+        document
+          .querySelector('[data-lucide="panel-left-close"]')
+          .setAttribute('data-lucide', 'panel-left-open');
+      }
+
+      // Mobile menu
+      function toggleMobileMenu() {
+        const sidebar = document.getElementById('adminSidebar');
+        sidebar.classList.toggle('open');
+      }
+
+      // Check if mobile
+      function checkMobile() {
+        const isMobile = window.innerWidth <= 768;
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('adminSidebar');
+
+        if (isMobile) {
+          mobileMenuBtn.style.display = 'flex';
+          sidebar.classList.add('collapsed');
+        } else {
+          mobileMenuBtn.style.display = 'none';
+          sidebar.classList.remove('open');
+        }
+      }
+
+      window.addEventListener('resize', checkMobile);
+      checkMobile();
+
+      // User menu
+      function toggleUserMenu() {
+        const userMenu = document.getElementById('userMenu');
+        userMenu.style.display =
+          userMenu.style.display === 'none' ? 'block' : 'none';
+      }
+
+      // Close user menu when clicking outside
+      document.addEventListener('click', function (event) {
+        const userMenu = document.getElementById('userMenu');
+        const userButton = event.target.closest('button');
+
+        if (
+          !userButton ||
+          !userButton.onclick ||
+          userButton.onclick.toString().indexOf('toggleUserMenu') === -1
+        ) {
+          userMenu.style.display = 'none';
+        }
+      });
+
+      // Active page highlighting
+      function setActivePage() {
+        const currentPath = window.location.pathname;
+        const navItems = document.querySelectorAll('.admin-nav-item');
+
+        navItems.forEach((item) => {
+          item.classList.remove('active');
+          const page = item.getAttribute('data-page');
+
+          if (
+            currentPath.includes(`/admin/${page}`) ||
+            (page === 'dashboard' && currentPath === '/admin')
+          ) {
+            item.classList.add('active');
+          }
+        });
+      }
+
+      setActivePage();
+
+      // Real-time connection status
+      function updateConnectionStatus() {
+        const statusElement = document.getElementById('connectionStatus');
+        const statusText = statusElement.nextElementSibling;
+
+        // Simulate connection check
+        fetch('/api/health')
+          .then((response) => {
+            if (response.ok) {
+              statusElement.style.backgroundColor = 'var(--admin-success)';
+              statusText.textContent = 'En línea';
+            } else {
+              statusElement.style.backgroundColor = 'var(--admin-warning)';
+              statusText.textContent = 'Conectando...';
+            }
+          })
+          .catch(() => {
+            statusElement.style.backgroundColor = 'var(--admin-error)';
+            statusText.textContent = 'Desconectado';
+          });
+      }
+
+      // Update connection status every 30 seconds
+      updateConnectionStatus();
+      setInterval(updateConnectionStatus, 30000);
+
+      // Notification system
+      function showNotification(message, type = 'info', duration = 5000) {
+        const container = document.getElementById('notificationContainer');
+        const notification = document.createElement('div');
+        notification.className = 'admin-notification';
+
+        const icon =
+          type === 'success'
+            ? 'check-circle'
+            : type === 'error'
+              ? 'x-circle'
+              : type === 'warning'
+                ? 'alert-triangle'
+                : 'info';
+
+        notification.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i data-lucide="${icon}" style="color: var(--admin-${type === 'info' ? 'primary' : type});"></i>
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" style="margin-left: auto; background: none; border: none; color: var(--admin-text-muted); cursor: pointer;">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+        `;
+
+        container.appendChild(notification);
+        lucide.createIcons();
+
+        setTimeout(() => notification.classList.add('show'), 100);
+
+        if (duration > 0) {
+          setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+          }, duration);
+        }
+      }
+
+      function showNotifications() {
+        showNotification('Sistema funcionando correctamente', 'success');
+      }
+
+      // Global notification function
+      window.showNotification = showNotification;
+
+      // Auto-refresh data every 5 minutes
+      setInterval(() => {
+        // Trigger custom refresh event
+        window.dispatchEvent(new CustomEvent('admin-refresh'));
+      }, 300000);
+    </script>
+  </body>
+</html>
