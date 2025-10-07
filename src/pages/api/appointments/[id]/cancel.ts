@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { PostgresAppointmentService } from '../../../lib/database/postgresAppointmentService.js';
+import { PostgresAppointmentService } from '../../../lib/database/postgresAppointmentService';
 import { Client } from 'pg';
 
 export const POST: APIRoute = async ({ params, request }) => {

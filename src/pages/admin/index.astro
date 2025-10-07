@@ -1,8 +1,8 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
-import { PostgresAppointmentService } from '../../lib/database/postgresAppointmentService.js';
+import { PostgresAppointmentService } from '../../lib/database/postgresAppointmentService';
 import { Client } from 'pg';
-import { StrapiService } from '../../lib/strapi.js';
+import { StrapiService } from '../../lib/strapi';
 
 // Configurar conexión a la base de datos
 const client = new Client({

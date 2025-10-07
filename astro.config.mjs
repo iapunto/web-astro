@@ -274,7 +274,8 @@ export default defineConfig({
       GOOGLE_PRIVATE_KEY: envField.string({
         context: 'server',
         access: 'secret',
-        default: '-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCqUxhqh6dNlAcp\n+5XwILKxXY09tB+LobtNLY27OPz8Uv6sl23lz4TZ+D4Uulmkpn8oRs9ipKLEgc/o\nft5NNsK++wiwKa4E7MU+ahjFUEH9CyRGCnvEUurLHyKaGUGIM2wMypbegT/XviBs\nd+9N/RpETrQZyaZVtEPgu3xsd2xN3IJTFeS1hC4YW6p+2zaT5Df3zXJCQQsfZZgp\n3dvYy6qv6WvUpL2meuPSPOBwZvTqMejXcPHe9LBFsbOJEBU3jjOAwOWkKb4N+d9e\nNV4hW9VMREm1BHf3AiVGgG8av9dqMX6I9G5S5ppk92KJPaWQ9D9OkbSNExt3tpJT\ncs3ucPPDI3J9m+e4fJYvcaeq3oc7cfIleZQGbK8CgYBTKlO0GeJW9aiF6K/f1rJQ\nf1LLOHdbZghnn8bO6Zj5xmHst83bVs3uxMXrnSMSlecTbTNTtyW/cwejWJ9x832u\nZW1hhfSTS62fpgYA4bJ0VWtg8UIHWk0wQ7HbWafIZHUDpJt/NANFsesblND3TrZG\nMaEvf4f8s0so9ufwgmEhOw==\n-----END PRIVATE KEY-----',
+        default:
+          '-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCqUxhqh6dNlAcp\n+5XwILKxXY09tB+LobtNLY27OPz8Uv6sl23lz4TZ+D4Uulmkpn8oRs9ipKLEgc/o\nft5NNsK++wiwKa4E7MU+ahjFUEH9CyRGCnvEUurLHyKaGUGIM2wMypbegT/XviBs\nd+9N/RpETrQZyaZVtEPgu3xsd2xN3IJTFeS1hC4YW6p+2zaT5Df3zXJCQQsfZZgp\n3dvYy6qv6WvUpL2meuPSPOBwZvTqMejXcPHe9LBFsbOJEBU3jjOAwOWkKb4N+d9e\nNV4hW9VMREm1BHf3AiVGgG8av9dqMX6I9G5S5ppk92KJPaWQ9D9OkbSNExt3tpJT\ncs3ucPPDI3J9m+e4fJYvcaeq3oc7cfIleZQGbK8CgYBTKlO0GeJW9aiF6K/f1rJQ\nf1LLOHdbZghnn8bO6Zj5xmHst83bVs3uxMXrnSMSlecTbTNTtyW/cwejWJ9x832u\nZW1hhfSTS62fpgYA4bJ0VWtg8UIHWk0wQ7HbWafIZHUDpJt/NANFsesblND3TrZG\nMaEvf4f8s0so9ufwgmEhOw==\n-----END PRIVATE KEY-----',
         optional: true,
       }),
       // Email Service

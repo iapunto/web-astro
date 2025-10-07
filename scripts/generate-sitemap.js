@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 // Lista de artículos conocidos (se puede actualizar manualmente o desde una API)
 const knownArticles = [
   'ia-marketing-berkeley-28m',
-  'google-ia-ordenar-busquedas', 
+  'google-ia-ordenar-busquedas',
   'chatgpt-2-5-mil-millones-preguntas-diarias',
   'automatiza-tu-marketing-con-ia-guia-definitiva',
   'beneficios-ia-personalizar-experiencia-cliente-local',
@@ -31,7 +31,7 @@ const knownArticles = [
   'anthropic-ia-empresarial-supera-openai',
   'anthropic-valor-170b',
   'apple-ia-chatgpt',
-  'apple-ia-inversion'
+  'apple-ia-inversion',
 ];
 
 // Páginas estáticas
@@ -48,11 +48,11 @@ const staticPages = [
 function generateSitemap() {
   const site = 'https://iapunto.com';
   const now = new Date().toISOString();
-  
+
   let urls = [];
-  
+
   // Agregar páginas estáticas
-  staticPages.forEach(page => {
+  staticPages.forEach((page) => {
     const url = `${site}${page.url === '' ? '' : page.url}/`;
     urls.push(`  <url>
     <loc>${url}</loc>
@@ -61,9 +61,9 @@ function generateSitemap() {
     <priority>${page.priority}</priority>
   </url>`);
   });
-  
+
   // Agregar artículos del blog
-  knownArticles.forEach(slug => {
+  knownArticles.forEach((slug) => {
     const url = `${site}/blog/${slug}/`;
     urls.push(`  <url>
     <loc>${url}</loc>
@@ -72,12 +72,12 @@ function generateSitemap() {
     <priority>0.7</priority>
   </url>`);
   });
-  
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.join('\n')}
 </urlset>`;
-  
+
   return sitemap;
 }
 

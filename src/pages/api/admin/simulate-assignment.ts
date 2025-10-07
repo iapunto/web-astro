@@ -8,8 +8,8 @@
  */
 
 import type { APIRoute } from 'astro';
-import { StrapiService } from '../../../lib/strapi.js';
-import { AUTHORS } from '../../../lib/constants/authors.js';
+import { StrapiService } from '../../../lib/strapi';
+import { AUTHORS } from '../../../lib/constants/authors';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
