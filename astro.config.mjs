@@ -19,6 +19,9 @@ export default defineConfig({
     mdx(),
     sitemap({
       filter: (page) => !page.startsWith('/legal/'),
+      changefreq: 'weekly',
+      priority: 0.7,
+      lastmod: new Date(),
     }),
     astroIcon({
       publicDir: './public',

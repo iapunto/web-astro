@@ -1,31 +1,17 @@
-import { StrapiService } from '../lib/strapi';
-
 export async function GET({ url }: { url: URL }) {
   try {
     const site = url.origin;
-    const startTime = Date.now();
-
-    // Obtener artículos desde Strapi con manejo de errores
+    
+    // Intentar obtener artículos desde la API local que sabemos que funciona
     let articles = [];
     try {
-      articles = await StrapiService.getArticles();
-    } catch (strapiError) {
-      console.warn('Error obteniendo artículos de Strapi, usando fallback:', strapiError);
-      // Fallback: usar una lista estática de artículos conocidos
-      articles = [
-        { slug: 'ia-marketing-berkeley-28m', publishedAt: '2024-01-15T00:00:00Z' },
-        { slug: 'google-ia-ordenar-busquedas', publishedAt: '2024-01-14T00:00:00Z' },
-        { slug: 'chatgpt-2-5-mil-millones-preguntas-diarias', publishedAt: '2024-01-13T00:00:00Z' },
-        { slug: 'automatiza-tu-marketing-con-ia-guia-definitiva', publishedAt: '2024-01-12T00:00:00Z' },
-        { slug: 'beneficios-ia-personalizar-experiencia-cliente-local', publishedAt: '2024-01-11T00:00:00Z' },
-        { slug: 'capital-cliente-clv-valor-real-negocio', publishedAt: '2024-01-10T00:00:00Z' },
-        { slug: 'que-es-evafs-estrategia-digital', publishedAt: '2024-01-09T00:00:00Z' },
-        { slug: 'tu-marketing-digital-no-funciona-problema-embudo', publishedAt: '2024-01-08T00:00:00Z' },
-        { slug: 'ia-revoluciona-marketing-contenidos-2025', publishedAt: '2024-01-07T00:00:00Z' },
-        { slug: 'automatizacion-contenido-ia-estrategia-digital', publishedAt: '2024-01-06T00:00:00Z' },
-        { slug: 'automatizacion-contenido-ia-flujo-completo', publishedAt: '2024-01-05T00:00:00Z' },
-        { slug: 'chatgpt-chatbot-ia-guia', publishedAt: '2024-01-04T00:00:00Z' }
-      ];
+      const response = await fetch(`${site}/api/articles-for-strapi.json`);
+      if (response.ok) {
+        const data = await response.json();
+        articles = data.articles || [];
+      }
+    } catch (apiError) {
+      console.warn('Error obteniendo artículos desde API local:', apiError);
     }
 
     // Páginas estáticas del sitio
@@ -37,25 +23,13 @@ export async function GET({ url }: { url: URL }) {
       '/blog',
       '/search',
       '/automation-dashboard',
-      // Páginas legales (opcional, puedes excluirlas si quieres)
-      '/legal/aviso-legal',
-      '/legal/condiciones-de-contratacion',
-      '/legal/declaracion-de-accesibilidad',
-      '/legal/politica-anti-spam',
-      '/legal/politica-de-devoluciones-y-reembolsos',
-      '/legal/politica-de-privacidad',
-      '/legal/politica-de-seguridad',
-      '/legal/terminos-y-condiciones',
-      '/legal/uso-de-cookies',
     ];
 
     // Generar URLs para páginas estáticas
     const staticUrls = staticPages.map((page) => {
       const url = `${site}${page === '' ? '' : page}/`;
-      const priority =
-        page === '' ? '1.0' : page.startsWith('/blog') ? '0.9' : '0.8';
-      const changefreq =
-        page === '' ? 'daily' : page.startsWith('/blog') ? 'daily' : 'monthly';
+      const priority = page === '' ? '1.0' : page.startsWith('/blog') ? '0.9' : '0.8';
+      const changefreq = page === '' ? 'daily' : page.startsWith('/blog') ? 'daily' : 'monthly';
 
       return `<url>
         <loc>${url}</loc>
@@ -66,9 +40,9 @@ export async function GET({ url }: { url: URL }) {
     });
 
     // Generar URLs para artículos del blog
-    const articleUrls = articles.map((article) => {
+    const articleUrls = articles.map((article: any) => {
       const articleUrl = `${site}/blog/${article.slug}/`;
-      const pubDate = new Date(article.publishedAt);
+      const pubDate = new Date(article.publishedAt || article.pubDate);
 
       return `<url>
         <loc>${articleUrl}</loc>
@@ -87,8 +61,6 @@ export async function GET({ url }: { url: URL }) {
   ${allUrls.join('\n  ')}
 </urlset>`;
 
-    const responseTime = Date.now() - startTime;
-
     return new Response(sitemap, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
@@ -99,12 +71,10 @@ export async function GET({ url }: { url: URL }) {
         'X-Total-URLs': allUrls.length.toString(),
         'X-Static-Pages': staticUrls.length.toString(),
         'X-Articles': articleUrls.length.toString(),
-        'X-Response-Time': responseTime.toString(),
-        'X-Processing-Time': `${responseTime}ms`,
       },
     });
   } catch (error) {
-    console.error('Error generando sitemap:', error);
+    console.error('Error generando sitemap alternativo:', error);
     
     // Fallback: sitemap básico con solo páginas estáticas
     const basicSitemap = `<?xml version="1.0" encoding="UTF-8"?>
