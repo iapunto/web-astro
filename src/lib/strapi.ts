@@ -79,7 +79,7 @@ export class StrapiService {
         }
       }
       
-      console.log(`📊 StrapiService: Obtenidos ${allArticles.length} artículos de ${page} páginas`);
+      console.log(`📊 StrapiService: Obtenidos ${allArticles.length} artículos de ${page} páginas - V5 CORREGIDO`);
       return allArticles;
     } catch (error) {
       console.error('Error fetching articles from Strapi:', error);
