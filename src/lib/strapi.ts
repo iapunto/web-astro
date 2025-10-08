@@ -17,9 +17,15 @@ export class StrapiService {
     console.log(`🔗 [StrapiService] URL Base: ${STRAPI_API_URL}`);
     console.log(`🔗 [StrapiService] Endpoint: ${endpoint}`);
     console.log(`🔗 [StrapiService] Full URL: ${url}`);
-    console.log(`🔑 [StrapiService] Token configured: ${STRAPI_API_TOKEN ? 'YES' : 'NO'}`);
-    console.log(`🔑 [StrapiService] Token length: ${STRAPI_API_TOKEN?.length || 0}`);
-    console.log(`🔑 [StrapiService] Token preview: ${STRAPI_API_TOKEN ? STRAPI_API_TOKEN.substring(0, 20) + '...' : 'NONE'}`);
+    console.log(
+      `🔑 [StrapiService] Token configured: ${STRAPI_API_TOKEN ? 'YES' : 'NO'}`
+    );
+    console.log(
+      `🔑 [StrapiService] Token length: ${STRAPI_API_TOKEN?.length || 0}`
+    );
+    console.log(
+      `🔑 [StrapiService] Token preview: ${STRAPI_API_TOKEN ? STRAPI_API_TOKEN.substring(0, 20) + '...' : 'NONE'}`
+    );
     console.log('═'.repeat(80));
 
     const defaultOptions: RequestInit = {
@@ -33,7 +39,10 @@ export class StrapiService {
       ...options,
     };
 
-    console.log('📤 [StrapiService] Request headers:', JSON.stringify(Object.keys(defaultOptions.headers || {})));
+    console.log(
+      '📤 [StrapiService] Request headers:',
+      JSON.stringify(Object.keys(defaultOptions.headers || {}))
+    );
 
     let response: Response;
     let usedMethod = 'native-fetch';
@@ -45,17 +54,20 @@ export class StrapiService {
     } catch (nativeFetchError) {
       console.error('❌ [StrapiService] Fetch nativo falló:', nativeFetchError);
       console.log('🔄 [StrapiService] Intentando con node-fetch...');
-      
+
       try {
         const nodeFetch = (await import('node-fetch')).default;
-        response = await nodeFetch(url, {
+        response = (await nodeFetch(url, {
           ...defaultOptions,
           timeout: 15000,
-        } as any) as any;
+        } as any)) as any;
         usedMethod = 'node-fetch';
         console.log('✅ [StrapiService] node-fetch exitoso');
       } catch (nodeFetchError) {
-        console.error('❌ [StrapiService] node-fetch también falló:', nodeFetchError);
+        console.error(
+          '❌ [StrapiService] node-fetch también falló:',
+          nodeFetchError
+        );
         throw new Error(
           `Ambos métodos de fetch fallaron. Native: ${nativeFetchError instanceof Error ? nativeFetchError.message : String(nativeFetchError)}, Node: ${nodeFetchError instanceof Error ? nodeFetchError.message : String(nodeFetchError)}`
         );
@@ -64,14 +76,19 @@ export class StrapiService {
 
     console.log('═'.repeat(80));
     console.log(`📡 [StrapiService] Response status: ${response.status}`);
-    console.log(`📡 [StrapiService] Response statusText: ${response.statusText}`);
+    console.log(
+      `📡 [StrapiService] Response statusText: ${response.statusText}`
+    );
     console.log(`📡 [StrapiService] Response ok: ${response.ok}`);
     console.log(`📡 [StrapiService] Method used: ${usedMethod}`);
     console.log('═'.repeat(80));
 
     if (!response.ok) {
       const errorBody = await response.text();
-      console.error('❌ [StrapiService] Error response body:', errorBody.substring(0, 500));
+      console.error(
+        '❌ [StrapiService] Error response body:',
+        errorBody.substring(0, 500)
+      );
       throw new Error(
         `Strapi API error: ${response.status} ${response.statusText} - ${errorBody.substring(0, 100)}`
       );
@@ -82,7 +99,9 @@ export class StrapiService {
     console.log(`📊 [StrapiService] Data received successfully`);
     console.log(`📊 [StrapiService] Items count: ${data.data?.length || 0}`);
     console.log(`📊 [StrapiService] Has meta: ${!!data.meta}`);
-    console.log(`📊 [StrapiService] Pagination: ${JSON.stringify(data.meta?.pagination || {})}`);
+    console.log(
+      `📊 [StrapiService] Pagination: ${JSON.stringify(data.meta?.pagination || {})}`
+    );
     console.log('═'.repeat(80));
 
     return data;
