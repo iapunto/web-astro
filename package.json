@@ -9,9 +9,7 @@
     "preview": "astro preview --port ${PORT:-4321}",
     "deploy": "pnpm run build",
     "astro": "astro",
-    "format": "pnpm exec prettier --write .",
-    "generate-sitemap": "node scripts/generate-sitemap.js",
-    "prebuild": "pnpm run generate-sitemap"
+    "format": "pnpm exec prettier --write ."
   },
   "dependencies": {
     "@astrojs/mdx": "^4.1.0",

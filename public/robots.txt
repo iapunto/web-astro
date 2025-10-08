@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
 Sitemap: https://iapunto.com/sitemap.xml
-Sitemap: https://iapunto.com/sitemap-index.xml
