@@ -9,6 +9,12 @@ Este proyecto utiliza **Astro 5** con el sistema de variables de entorno `astro:
 ```bash
 STRAPI_API_URL=https://strapi.iapunto.com
 STRAPI_API_TOKEN=tu_token_secreto_de_strapi
+
+# OPCIONAL pero RECOMENDADO para Coolify/Docker:
+# Si Strapi y Astro están en el mismo servidor/red interna
+STRAPI_INTERNAL_URL=http://strapi:1337
+# O el nombre del servicio en tu configuración de Coolify:
+# STRAPI_INTERNAL_URL=http://nombre-contenedor-strapi:1337
 ```
 
 ### Google Calendar API (Opcionales)
@@ -81,6 +87,62 @@ netlify env:set STRAPI_API_TOKEN "tu_token_aqui"
 4. Redeploy el sitio
 
 **Nota:** Cloudflare Pages tiene soporte completo para `astro:env/server`
+
+### Coolify (Self-Hosted) ⭐
+
+**Coolify es tu caso específico.** Sigue estos pasos:
+
+#### Configuración en Coolify Dashboard:
+
+1. Ve a tu proyecto/servicio en Coolify
+2. Navega a **Environment Variables** o **Secrets**
+3. Agrega las siguientes variables:
+
+```bash
+STRAPI_API_URL=https://strapi.iapunto.com
+STRAPI_API_TOKEN=5fac4193c9c1c74f70d42541071be45f0331b101ab66524a078aa27eb054ec80d6aa98c4650f8d03f48f9e272c64490acc60b3125f9999c3cb3f84b5e54b7e34b6dbc65c08967e0686ecf91a686516a04bc89788cf3d01580f3fc519b32ef21a47628ad4f5a10cc1e688e4af313c970a4239167a7d609b78215699987c2811fa
+```
+
+#### ⚠️ **IMPORTANTE: Solución para Timeout de Red**
+
+Si Strapi y Astro están en **contenedores Docker en el mismo servidor de Coolify**, usa la URL interna para evitar timeouts:
+
+```bash
+# Encuentra el nombre del servicio de Strapi en Coolify (ej: "strapi-cms")
+# Agrega esta variable ADICIONAL:
+STRAPI_INTERNAL_URL=http://[nombre-del-servicio-strapi]:1337
+
+# Ejemplos comunes:
+STRAPI_INTERNAL_URL=http://strapi:1337
+STRAPI_INTERNAL_URL=http://strapi-cms:1337
+STRAPI_INTERNAL_URL=http://web-iapunto-strapi:1337
+```
+
+**¿Cómo encontrar el nombre del servicio?**
+
+En Coolify:
+1. Ve al proyecto/servicio de Strapi
+2. Mira el "Service Name" o "Container Name"
+3. Usa ese nombre en la URL: `http://[nombre]:1337`
+
+O desde el servidor SSH:
+```bash
+# Ver contenedores Docker activos
+docker ps | grep strapi
+
+# O ver redes de Docker
+docker network ls
+docker network inspect [nombre-red-coolify]
+```
+
+#### **¿Por qué esto soluciona el problema?**
+
+- ❌ **Sin URL interna:** Astro → Internet → Firewall → Strapi (TIMEOUT)
+- ✅ **Con URL interna:** Astro → Red Docker → Strapi (RÁPIDO, sin firewall)
+
+4. Guarda las variables
+5. Redeploy el servicio en Coolify
+6. Verifica con: `https://iapunto.com/api/diagnostics`
 
 ### Deployment con Node.js / Docker
 

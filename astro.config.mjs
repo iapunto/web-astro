@@ -251,6 +251,11 @@ export default defineConfig({
         access: 'public',
         default: 'https://strapi.iapunto.com',
       }),
+      STRAPI_INTERNAL_URL: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+      }),
       STRAPI_API_TOKEN: envField.string({
         context: 'server',
         access: 'secret',

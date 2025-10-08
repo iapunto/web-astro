@@ -48,18 +48,37 @@ export class StrapiService {
     let usedMethod = 'native-fetch';
 
     try {
-      console.log('🧪 [StrapiService] Intentando con fetch nativo...');
-      response = await fetch(url, defaultOptions);
+      console.log(
+        '🧪 [StrapiService] Intentando con fetch nativo (timeout: 30s)...'
+      );
+      response = await fetch(url, {
+        ...defaultOptions,
+        signal: AbortSignal.timeout(30000), // 30 segundos para Coolify
+      });
       console.log('✅ [StrapiService] Fetch nativo exitoso');
     } catch (nativeFetchError) {
       console.error('❌ [StrapiService] Fetch nativo falló:', nativeFetchError);
-      console.log('🔄 [StrapiService] Intentando con node-fetch...');
+      console.log(
+        '🔄 [StrapiService] Intentando con node-fetch (timeout: 30s, keepalive)...'
+      );
 
       try {
         const nodeFetch = (await import('node-fetch')).default;
+        const https = await import('https');
+
+        // Configurar agente con keepalive para conexiones lentas
+        const agent = new https.Agent({
+          keepAlive: true,
+          keepAliveMsecs: 1000,
+          maxSockets: 50,
+          maxFreeSockets: 10,
+          timeout: 30000,
+        });
+
         response = (await nodeFetch(url, {
           ...defaultOptions,
-          timeout: 15000,
+          timeout: 30000,
+          agent,
         } as any)) as any;
         usedMethod = 'node-fetch';
         console.log('✅ [StrapiService] node-fetch exitoso');
