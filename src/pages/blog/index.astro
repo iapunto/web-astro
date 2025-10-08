@@ -17,10 +17,42 @@ try {
   console.log('🔄 Intentando obtener artículos desde Strapi...');
   articles = await StrapiService.getArticles();
   console.log(`✅ Artículos obtenidos exitosamente: ${articles.length}`);
+  
+  // Si no hay artículos, intentar endpoint proxy
+  if (articles.length === 0) {
+    console.log('🔄 No hay artículos, intentando endpoint proxy...');
+    try {
+      const proxyResponse = await fetch('/api/blog-articles');
+      if (proxyResponse.ok) {
+        const proxyData = await proxyResponse.json();
+        if (proxyData.articles && proxyData.articles.length > 0) {
+          articles = proxyData.articles;
+          console.log(`✅ Artículos obtenidos via proxy: ${articles.length}`);
+        }
+      }
+    } catch (proxyError) {
+      console.error('❌ Error en endpoint proxy:', proxyError);
+    }
+  }
 } catch (error) {
   strapiError = error;
   console.error('❌ Error obteniendo artículos de Strapi:', error);
-  articles = []; // Asegurar que articles sea un array vacío
+  
+  // Fallback: intentar endpoint proxy
+  try {
+    console.log('🔄 Intentando fallback via endpoint proxy...');
+    const proxyResponse = await fetch('/api/blog-articles');
+    if (proxyResponse.ok) {
+      const proxyData = await proxyResponse.json();
+      if (proxyData.articles && proxyData.articles.length > 0) {
+        articles = proxyData.articles;
+        console.log(`✅ Artículos obtenidos via proxy fallback: ${articles.length}`);
+      }
+    }
+  } catch (proxyError) {
+    console.error('❌ Error en proxy fallback:', proxyError);
+    articles = []; // Asegurar que articles sea un array vacío
+  }
 }
 
 // Si no hay artículos, mostrar mensaje de diagnóstico
