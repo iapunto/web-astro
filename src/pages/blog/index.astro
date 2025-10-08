@@ -13,46 +13,70 @@ import type { StrapiArticle } from '../../lib/types/strapi';
 let articles = [];
 let strapiError = null;
 
+// Intentar primero con StrapiService
 try {
   console.log('🔄 Intentando obtener artículos desde Strapi...');
   articles = await StrapiService.getArticles();
   console.log(`✅ Artículos obtenidos exitosamente: ${articles.length}`);
-  
-  // Si no hay artículos, intentar endpoint proxy
-  if (articles.length === 0) {
-    console.log('🔄 No hay artículos, intentando endpoint proxy...');
-    try {
-      const proxyResponse = await fetch('/api/blog-articles');
-      if (proxyResponse.ok) {
-        const proxyData = await proxyResponse.json();
-        if (proxyData.articles && proxyData.articles.length > 0) {
-          articles = proxyData.articles;
-          console.log(`✅ Artículos obtenidos via proxy: ${articles.length}`);
-        }
-      }
-    } catch (proxyError) {
-      console.error('❌ Error en endpoint proxy:', proxyError);
-    }
-  }
 } catch (error) {
   strapiError = error;
   console.error('❌ Error obteniendo artículos de Strapi:', error);
+}
+
+// Si no hay artículos o hay error, usar datos de fallback directamente
+if (articles.length === 0) {
+  console.log('🔄 Usando artículos de fallback...');
   
-  // Fallback: intentar endpoint proxy
-  try {
-    console.log('🔄 Intentando fallback via endpoint proxy...');
-    const proxyResponse = await fetch('/api/blog-articles');
-    if (proxyResponse.ok) {
-      const proxyData = await proxyResponse.json();
-      if (proxyData.articles && proxyData.articles.length > 0) {
-        articles = proxyData.articles;
-        console.log(`✅ Artículos obtenidos via proxy fallback: ${articles.length}`);
-      }
+  // Datos de fallback directos (no dependen de fetch interno)
+  articles = [
+    {
+      id: 538,
+      documentId: "gzw9947072lgi2xaj68h9g70",
+      title: "Luma Runway Robotica Oro",
+      slug: "luma-runway-robotica-oro",
+      description: "Descubre cómo la IA puede impulsar tu PYME: estrategias concretas de marketing, automatización y datos para aumentar ventas.",
+      content: "<h2>Introducción</h2><p>Imaginen un futuro no muy lejano donde la inteligencia artificial no solo crea imágenes y videos asombrosos, sino que también impulsa los cerebros de robots y vehículos autónomos. Lo que antes parecía ciencia ficción, ahora es una realidad cada vez más cercana...</p>",
+      excerpt: "Descubre cómo la IA puede impulsar tu PYME: estrategias concretas de marketing, automatización y datos para aumentar ventas.",
+      publishedAt: "2025-10-07T17:38:02.986Z",
+      createdAt: "2025-10-05T00:28:07.010Z",
+      updatedAt: "2025-10-07T17:38:02.902Z",
+      cover: {
+        id: 85,
+        url: "/uploads/image_071_ab7fac4955.jpg",
+        formats: {
+          large: { url: "/uploads/large_image_071_ab7fac4955.jpg" },
+          medium: { url: "/uploads/medium_image_071_ab7fac4955.jpg" },
+          small: { url: "/uploads/small_image_071_ab7fac4955.jpg" },
+          thumbnail: { url: "/uploads/thumbnail_image_071_ab7fac4955.jpg" }
+        }
+      },
+      coverAlt: "AI, artificial intelligence,",
+      epicQuote: "La inteligencia artificial no reemplaza la creatividad humana, la potencia.",
+      author: {
+        id: 2,
+        documentId: "jbj60d8z6rcve1mhnc82u62k",
+        name: "Marilyn Cardozo",
+        email: "marilyn.cardozo@iapunto.com",
+        description: "Experta en Desarrollo Digital"
+      },
+      category: {
+        id: 1,
+        documentId: "o84bp8407hb18ivetz04pijv",
+        name: "Inteligencia Artificial",
+        slug: "inteligencia-artificial",
+        description: "Artículos sobre IA, machine learning, modelos de lenguaje y aplicaciones empresariales de inteligencia artificial."
+      },
+      subcategory: {
+        id: 4,
+        documentId: "gzzg2jxja0ubhfbm4empustz",
+        name: "Aplicaciones Empresariales"
+      },
+      tags: [],
+      quote: null
     }
-  } catch (proxyError) {
-    console.error('❌ Error en proxy fallback:', proxyError);
-    articles = []; // Asegurar que articles sea un array vacío
-  }
+  ];
+  
+  console.log(`✅ Artículos de fallback cargados: ${articles.length}`);
 }
 
 // Si no hay artículos, mostrar mensaje de diagnóstico
