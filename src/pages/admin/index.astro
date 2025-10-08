@@ -1,8 +1,8 @@
 ---
 import AdminLayout from '../../../layouts/AdminLayout.astro';
-import { ArticleTrackingService } from '../../../lib/database/articleTrackingSchema';
+import { ArticleTrackingService } from '../../../lib/database/articleTrackingSchema.js';
 import { Client } from 'pg';
-import { AUTHORS } from '../../../lib/constants/authors';
+import { AUTHORS } from '../../../lib/constants/authors.js';
 
 // Configurar conexión a la base de datos
 const client = new Client({
