@@ -5,10 +5,9 @@ export async function GET() {
   try {
     console.log('🔄 [BLOG-API] Obteniendo artículos vía proxy...');
 
-    // Usar variables de entorno del servidor
-    const STRAPI_API_URL =
-      process.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
-    const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+    // Usar variables de entorno del servidor con import.meta.env
+    const STRAPI_API_URL = import.meta.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
+    const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
 
     if (!STRAPI_API_TOKEN) {
       throw new Error('STRAPI_API_TOKEN no configurado en el servidor');
@@ -19,27 +18,9 @@ export async function GET() {
       `🔑 [BLOG-API] Token: ${STRAPI_API_TOKEN ? 'CONFIGURADO' : 'NO CONFIGURADO'}`
     );
 
-    // Strapi v5: especificar explícitamente las relaciones a popular
-    const populateQuery = [
-      'populate[cover][fields][0]=url',
-      'populate[cover][fields][1]=formats',
-      'populate[cover][fields][2]=alternativeText',
-      'populate[cover][fields][3]=name',
-      'populate[author][fields][0]=name',
-      'populate[author][fields][1]=email',
-      'populate[author][populate][avatar][fields][0]=url',
-      'populate[category][fields][0]=name',
-      'populate[category][fields][1]=slug',
-      'populate[category][fields][2]=description',
-      'populate[subcategory][fields][0]=name',
-      'populate[subcategory][fields][1]=slug',
-      'populate[tags][fields][0]=name',
-      'populate[tags][fields][1]=slug',
-    ].join('&');
-
     // Usar fetch con configuración específica para producción
     const response = await fetch(
-      `${STRAPI_API_URL}/api/articles?${populateQuery}&sort[0]=publishedAt:desc&pagination[pageSize]=100`,
+      `${STRAPI_API_URL}/api/articles?populate=*&sort[0]=publishedAt:desc&pagination[pageSize]=100`,
       {
         method: 'GET',
         headers: {

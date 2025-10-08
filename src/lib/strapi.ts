@@ -1,28 +1,12 @@
 import type { StrapiResponse, StrapiArticle } from './types/strapi';
 
-// Usar process.env para variables de entorno del servidor
-const STRAPI_API_URL =
-  process.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
-const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+// Usar import.meta.env para variables de entorno en Astro 5
+const STRAPI_API_URL = import.meta.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
+const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
 
 export class StrapiService {
-  // Strapi v5: query para popular las relaciones de artículos explícitamente
-  private static readonly ARTICLE_POPULATE_QUERY = [
-    'populate[cover][fields][0]=url',
-    'populate[cover][fields][1]=formats',
-    'populate[cover][fields][2]=alternativeText',
-    'populate[cover][fields][3]=name',
-    'populate[author][fields][0]=name',
-    'populate[author][fields][1]=email',
-    'populate[author][populate][avatar][fields][0]=url',
-    'populate[category][fields][0]=name',
-    'populate[category][fields][1]=slug',
-    'populate[category][fields][2]=description',
-    'populate[subcategory][fields][0]=name',
-    'populate[subcategory][fields][1]=slug',
-    'populate[tags][fields][0]=name',
-    'populate[tags][fields][1]=slug',
-  ].join('&');
+  // Strapi v5: usar populate=* que sí funciona (el problema era el token)
+  private static readonly ARTICLE_POPULATE_QUERY = 'populate=*';
 
   private static async fetchAPI<T>(
     endpoint: string,
