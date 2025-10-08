@@ -1,5 +1,5 @@
 import type { StrapiResponse, StrapiArticle } from './types/strapi';
-import { STRAPI_API_URL, STRAPI_API_TOKEN } from 'astro:env/server';
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from './env';
 
 export class StrapiService {
   // Strapi v5: usar populate=* que sí funciona (el problema era el token)
@@ -11,10 +11,16 @@ export class StrapiService {
   ): Promise<T> {
     const url = `${STRAPI_API_URL}/api${endpoint}`;
 
-    console.log(`🔗 [StrapiService] Fetching: ${url}`);
-    console.log(
-      `🔑 [StrapiService] Token configured: ${STRAPI_API_TOKEN ? 'YES' : 'NO'}`
-    );
+    // Logging detallado para depuración
+    console.log('═'.repeat(80));
+    console.log('🔗 [StrapiService] === FETCH API DEBUG ===');
+    console.log(`🔗 [StrapiService] URL Base: ${STRAPI_API_URL}`);
+    console.log(`🔗 [StrapiService] Endpoint: ${endpoint}`);
+    console.log(`🔗 [StrapiService] Full URL: ${url}`);
+    console.log(`🔑 [StrapiService] Token configured: ${STRAPI_API_TOKEN ? 'YES' : 'NO'}`);
+    console.log(`🔑 [StrapiService] Token length: ${STRAPI_API_TOKEN?.length || 0}`);
+    console.log(`🔑 [StrapiService] Token preview: ${STRAPI_API_TOKEN ? STRAPI_API_TOKEN.substring(0, 20) + '...' : 'NONE'}`);
+    console.log('═'.repeat(80));
 
     const defaultOptions: RequestInit = {
       headers: {
@@ -27,27 +33,41 @@ export class StrapiService {
       ...options,
     };
 
+    console.log('📤 [StrapiService] Request headers:', JSON.stringify(Object.keys(defaultOptions.headers || {})));
+
     try {
       const response = await fetch(url, defaultOptions);
 
-      console.log(
-        `📡 [StrapiService] Response: ${response.status} ${response.statusText}`
-      );
+      console.log('═'.repeat(80));
+      console.log(`📡 [StrapiService] Response status: ${response.status}`);
+      console.log(`📡 [StrapiService] Response statusText: ${response.statusText}`);
+      console.log(`📡 [StrapiService] Response ok: ${response.ok}`);
+      console.log('═'.repeat(80));
 
       if (!response.ok) {
+        const errorBody = await response.text();
+        console.error('❌ [StrapiService] Error response body:', errorBody.substring(0, 500));
         throw new Error(
-          `Strapi API error: ${response.status} ${response.statusText}`
+          `Strapi API error: ${response.status} ${response.statusText} - ${errorBody.substring(0, 100)}`
         );
       }
 
       const data = await response.json();
-      console.log(
-        `📊 [StrapiService] Data received: ${data.data?.length || 0} items`
-      );
+      console.log('═'.repeat(80));
+      console.log(`📊 [StrapiService] Data received successfully`);
+      console.log(`📊 [StrapiService] Items count: ${data.data?.length || 0}`);
+      console.log(`📊 [StrapiService] Has meta: ${!!data.meta}`);
+      console.log(`📊 [StrapiService] Pagination: ${JSON.stringify(data.meta?.pagination || {})}`);
+      console.log('═'.repeat(80));
 
       return data;
     } catch (error) {
-      console.error('❌ [StrapiService] Error fetching from Strapi:', error);
+      console.error('═'.repeat(80));
+      console.error('❌ [StrapiService] FETCH ERROR:');
+      console.error('❌ Error type:', error?.constructor?.name);
+      console.error('❌ Error message:', error instanceof Error ? error.message : String(error));
+      console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack');
+      console.error('═'.repeat(80));
       throw error;
     }
   }

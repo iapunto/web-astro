@@ -1,0 +1,91 @@
+---
+interface Props {
+  articles: any[];
+  error?: any;
+  strapiUrl?: string;
+  hasToken?: boolean;
+}
+
+const { articles, error, strapiUrl, hasToken } = Astro.props;
+const isDev = import.meta.env.DEV;
+
+// Solo mostrar en desarrollo o si hay un parámetro especial en la URL
+const url = new URL(Astro.request.url);
+const showDebug = isDev || url.searchParams.has('debug');
+
+if (!showDebug) {
+  return null;
+}
+---
+
+<div class="fixed bottom-4 right-4 max-w-md bg-gray-900 text-white p-4 rounded-lg shadow-2xl z-50 text-xs font-mono overflow-auto max-h-96 border-2 border-yellow-400">
+  <div class="flex justify-between items-center mb-2">
+    <h3 class="font-bold text-yellow-400">🔍 DIAGNÓSTICO STRAPI</h3>
+    <button 
+      onclick="this.parentElement.parentElement.remove()" 
+      class="text-red-400 hover:text-red-300"
+    >
+      ✕
+    </button>
+  </div>
+  
+  <div class="space-y-2">
+    <!-- Estado de Variables -->
+    <div class="border-t border-gray-700 pt-2">
+      <p class="text-blue-400 font-semibold">📋 Variables de Entorno:</p>
+      <p class="ml-2">URL: <span class="text-green-400">{strapiUrl || 'NOT_SET'}</span></p>
+      <p class="ml-2">Token: <span class={hasToken ? 'text-green-400' : 'text-red-400'}>
+        {hasToken ? '✓ CONFIGURADO' : '✗ FALTA'}
+      </span></p>
+      <p class="ml-2">Entorno: <span class="text-blue-300">{isDev ? 'DESARROLLO' : 'PRODUCCIÓN'}</span></p>
+    </div>
+
+    <!-- Estado de Artículos -->
+    <div class="border-t border-gray-700 pt-2">
+      <p class="text-blue-400 font-semibold">📰 Artículos:</p>
+      <p class="ml-2">Total: <span class="text-yellow-400 font-bold">{articles.length}</span></p>
+      <p class="ml-2">Estado: <span class={articles.length > 1 ? 'text-green-400' : 'text-red-400'}>
+        {articles.length > 1 ? '✓ OK' : articles.length === 1 ? '⚠ SOLO MOCK' : '✗ SIN DATOS'}
+      </span></p>
+    </div>
+
+    <!-- Error si existe -->
+    {error && (
+      <div class="border-t border-gray-700 pt-2">
+        <p class="text-red-400 font-semibold">❌ Error:</p>
+        <p class="ml-2 text-red-300 text-xs break-words">
+          {error.message || String(error)}
+        </p>
+      </div>
+    )}
+
+    <!-- Acciones -->
+    <div class="border-t border-gray-700 pt-2">
+      <p class="text-blue-400 font-semibold mb-1">🔧 Acciones:</p>
+      <button 
+        onclick="window.open('/api/diagnostics', '_blank')"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs mb-1"
+      >
+        Ver Diagnóstico Completo
+      </button>
+      <button 
+        onclick="console.log('STRAPI_DEBUG:', {articles: window.strapiArticles || [], url: '{strapiUrl}', hasToken: {hasToken}})"
+        class="w-full bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
+      >
+        Mostrar en Consola
+      </button>
+    </div>
+
+    <!-- Nota -->
+    <div class="border-t border-gray-700 pt-2 text-gray-400 text-xs">
+      <p>💡 Este panel solo es visible en desarrollo o con ?debug en la URL</p>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ articles }}>
+  // Exponer artículos en consola para depuración
+  window.strapiArticles = articles;
+  console.log('🔍 [DEBUG] Artículos disponibles:', articles.length);
+  console.log('🔍 [DEBUG] window.strapiArticles contiene todos los datos');
+</script>

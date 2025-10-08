@@ -86,6 +86,8 @@ export interface StrapiArticle {
   excerpt?: string;
   description?: string; // Campo que agregamos durante la migración
   coverAlt?: string; // Campo que agregamos durante la migración
+  epicQuote?: string; // Cita destacada del artículo
+  quote?: string | null; // Otra cita opcional
   featured?: boolean;
   article_status: string;
   createdAt: string;
@@ -94,6 +96,7 @@ export interface StrapiArticle {
   cover?: StrapiImage;
   author?: StrapiAuthor;
   category?: StrapiCategory;
+  subcategory?: any; // Subcategoría opcional
   tags?: StrapiTag[];
   seo?: {
     metaTitle?: string;

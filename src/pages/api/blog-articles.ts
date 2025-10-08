@@ -1,6 +1,6 @@
 // Endpoint proxy para obtener artículos del blog
 // Bypasea problemas de conectividad directa a Strapi
-import { STRAPI_API_URL, STRAPI_API_TOKEN } from 'astro:env/server';
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from '../../lib/env';
 
 export async function GET() {
   try {

@@ -8,26 +8,54 @@ import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro'
 import SmartPaginator from '../../components/common/SmartPaginator.astro';
 import { StrapiService } from '../../lib/strapi';
 import type { StrapiArticle } from '../../lib/types/strapi';
+import DiagnosticsPanel from '../../components/debug/DiagnosticsPanel.astro';
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from '../../lib/env';
+
+console.log('═'.repeat(100));
+console.log('🚀 [BLOG INDEX] === INICIANDO CARGA DE BLOG ===');
+console.log(`🚀 [BLOG INDEX] Timestamp: ${new Date().toISOString()}`);
+console.log(`🚀 [BLOG INDEX] URL: ${Astro.url}`);
+console.log(`🚀 [BLOG INDEX] Environment: ${import.meta.env.MODE}`);
+console.log('═'.repeat(100));
 
 // Obtener artículos desde Strapi con manejo de errores robusto
-let articles = [];
-let strapiError = null;
+let articles: StrapiArticle[] = [];
+let strapiError: Error | null = null;
 
 // Intentar primero con StrapiService
 try {
-  console.log('🔄 Intentando obtener artículos desde Strapi...');
+  console.log('🔄 [BLOG INDEX] Intentando obtener artículos desde Strapi...');
+  console.log('🔄 [BLOG INDEX] STRAPI_API_URL:', STRAPI_API_URL);
+  console.log('🔄 [BLOG INDEX] STRAPI_API_TOKEN presente:', !!STRAPI_API_TOKEN);
+  console.log(
+    '🔄 [BLOG INDEX] STRAPI_API_TOKEN length:',
+    STRAPI_API_TOKEN?.length || 0
+  );
+
   articles = await StrapiService.getArticles();
-  console.log(`✅ Artículos obtenidos exitosamente: ${articles.length}`);
+
+  console.log('═'.repeat(100));
+  console.log(
+    `✅ [BLOG INDEX] Artículos obtenidos exitosamente: ${articles.length}`
+  );
+  console.log('═'.repeat(100));
 } catch (error) {
-  strapiError = error;
-  console.error('❌ Error obteniendo artículos de Strapi:', error);
+  strapiError = error instanceof Error ? error : new Error(String(error));
+  console.error('═'.repeat(100));
+  console.error('❌ [BLOG INDEX] Error obteniendo artículos de Strapi:');
+  console.error('❌ [BLOG INDEX] Error type:', error?.constructor?.name);
+  console.error(
+    '❌ [BLOG INDEX] Error message:',
+    error instanceof Error ? error.message : String(error)
+  );
+  console.error('═'.repeat(100));
 }
 
 // Si no hay artículos, usar datos conocidos directamente
 if (articles.length === 0) {
   console.log('🔄 Usando datos conocidos de Strapi...');
 
-  // Datos reales de Strapi obtenidos previamente
+  // Datos reales de Strapi obtenidos previamente (mock data de fallback)
   articles = [
     {
       id: 538,
@@ -43,43 +71,89 @@ if (articles.length === 0) {
       publishedAt: '2025-10-07T17:38:02.986Z',
       createdAt: '2025-10-05T00:28:07.010Z',
       updatedAt: '2025-10-07T17:38:02.902Z',
+      featured: false,
+      article_status: 'published',
       cover: {
         id: 85,
-        url: '/uploads/image_071_ab7fac4955.jpg',
+        name: 'image_071',
+        alternativeText: 'AI, artificial intelligence,',
+        caption: '',
+        width: 1920,
+        height: 1080,
         formats: {
-          large: { url: '/uploads/large_image_071_ab7fac4955.jpg' },
-          medium: { url: '/uploads/medium_image_071_ab7fac4955.jpg' },
-          small: { url: '/uploads/small_image_071_ab7fac4955.jpg' },
-          thumbnail: { url: '/uploads/thumbnail_image_071_ab7fac4955.jpg' },
+          large: {
+            name: 'large',
+            hash: 'large_image_071',
+            ext: '.jpg',
+            mime: 'image/jpeg',
+            width: 1000,
+            height: 667,
+            size: 100,
+            url: '/uploads/large_image_071_ab7fac4955.jpg',
+          },
+          medium: {
+            name: 'medium',
+            hash: 'medium_image_071',
+            ext: '.jpg',
+            mime: 'image/jpeg',
+            width: 750,
+            height: 500,
+            size: 75,
+            url: '/uploads/medium_image_071_ab7fac4955.jpg',
+          },
+          small: {
+            name: 'small',
+            hash: 'small_image_071',
+            ext: '.jpg',
+            mime: 'image/jpeg',
+            width: 500,
+            height: 333,
+            size: 50,
+            url: '/uploads/small_image_071_ab7fac4955.jpg',
+          },
+          thumbnail: {
+            name: 'thumbnail',
+            hash: 'thumbnail_image_071',
+            ext: '.jpg',
+            mime: 'image/jpeg',
+            width: 245,
+            height: 156,
+            size: 10,
+            url: '/uploads/thumbnail_image_071_ab7fac4955.jpg',
+          },
         },
+        hash: 'image_071',
+        ext: '.jpg',
+        mime: 'image/jpeg',
+        size: 200,
+        url: '/uploads/image_071_ab7fac4955.jpg',
+        provider: 'local',
+        createdAt: '2025-10-05T00:28:07.010Z',
+        updatedAt: '2025-10-05T00:28:07.010Z',
       },
       coverAlt: 'AI, artificial intelligence,',
-      epicQuote:
-        'La inteligencia artificial no reemplaza la creatividad humana, la potencia.',
       author: {
         id: 2,
-        documentId: 'jbj60d8z6rcve1mhnc82u62k',
         name: 'Marilyn Cardozo',
         email: 'marilyn.cardozo@iapunto.com',
-        description: 'Experta en Desarrollo Digital',
+        bio: 'Experta en Desarrollo Digital',
+        createdAt: '2025-10-05T00:28:07.010Z',
+        updatedAt: '2025-10-05T00:28:07.010Z',
+        publishedAt: '2025-10-05T00:28:07.010Z',
       },
       category: {
         id: 1,
-        documentId: 'o84bp8407hb18ivetz04pijv',
         name: 'Inteligencia Artificial',
         slug: 'inteligencia-artificial',
         description:
           'Artículos sobre IA, machine learning, modelos de lenguaje y aplicaciones empresariales de inteligencia artificial.',
-      },
-      subcategory: {
-        id: 4,
-        documentId: 'gzzg2jxja0ubhfbm4empustz',
-        name: 'Aplicaciones Empresariales',
+        createdAt: '2025-10-05T00:28:07.010Z',
+        updatedAt: '2025-10-05T00:28:07.010Z',
+        publishedAt: '2025-10-05T00:28:07.010Z',
       },
       tags: [],
-      quote: null,
     },
-  ];
+  ] as StrapiArticle[];
 
   console.log(`✅ Datos conocidos cargados: ${articles.length} artículos`);
 }
@@ -386,4 +460,12 @@ const latestPosts = blogEntries.slice(0, 5);
       </div>
     </div>
   </section>
+
+  <!-- Panel de diagnóstico (solo visible en dev o con ?debug) -->
+  <DiagnosticsPanel
+    articles={articles}
+    error={strapiError}
+    strapiUrl={STRAPI_API_URL}
+    hasToken={!!STRAPI_API_TOKEN}
+  />
 </DefaultLayout>
