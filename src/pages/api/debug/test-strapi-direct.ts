@@ -1,8 +1,8 @@
 export async function GET() {
   try {
-    // Usar las mismas variables que usa StrapiService
-    const STRAPI_API_URL = import.meta.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
-    const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
+    // Usar process.env como lo hace StrapiService
+    const STRAPI_API_URL = process.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
+    const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
     
     console.log(`🔍 [DEBUG] STRAPI_API_URL: ${STRAPI_API_URL}`);
     console.log(`🔍 [DEBUG] STRAPI_API_TOKEN: ${STRAPI_API_TOKEN ? 'CONFIGURADO' : 'NO CONFIGURADO'}`);

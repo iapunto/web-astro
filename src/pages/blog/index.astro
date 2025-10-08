@@ -178,26 +178,40 @@ const latestPosts = blogEntries.slice(0, 5);
                 {articles.length === 0 ? (
                   <div>
                     <div class="mb-4">
-                      <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <svg
+                        class="mx-auto h-16 w-16 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
                       </svg>
                     </div>
                     <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
                       Blog temporalmente no disponible
                     </h3>
                     <p class="mb-4">
-                      No se pudieron cargar los artículos desde nuestro sistema de gestión de contenido.
+                      No se pudieron cargar los artículos desde nuestro sistema
+                      de gestión de contenido.
                     </p>
                     <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
                       <p class="text-sm text-yellow-800 dark:text-yellow-200">
-                        <strong>Posibles causas:</strong><br/>
-                        • Problemas de conectividad con Strapi<br/>
-                        • Variables de entorno no configuradas<br/>
-                        • Token de API inválido o expirado
+                        <strong>Posibles causas:</strong>
+                        <br />
+                        • Problemas de conectividad con Strapi
+                        <br />
+                        • Variables de entorno no configuradas
+                        <br />• Token de API inválido o expirado
                       </p>
                     </div>
                     <p class="text-sm">
-                      Por favor, intenta nuevamente en unos minutos o contacta al administrador.
+                      Por favor, intenta nuevamente en unos minutos o contacta
+                      al administrador.
                     </p>
                   </div>
                 ) : (
