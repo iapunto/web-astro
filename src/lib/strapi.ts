@@ -82,7 +82,29 @@ export class StrapiService {
       console.log(`📊 StrapiService: Obtenidos ${allArticles.length} artículos de ${page} páginas - V5 CORREGIDO`);
       return allArticles;
     } catch (error) {
-      console.error('Error fetching articles from Strapi:', error);
+      console.error('Error fetching articles from Strapi, intentando fallback:', error);
+      
+      // Fallback: usar endpoint proxy interno
+      try {
+        console.log('🔄 Intentando fallback via endpoint interno...');
+        const fallbackResponse = await fetch('/api/blog-articles', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (fallbackResponse.ok) {
+          const fallbackData = await fallbackResponse.json();
+          if (fallbackData.articles && fallbackData.articles.length > 0) {
+            console.log(`📊 Fallback exitoso: ${fallbackData.articles.length} artículos obtenidos`);
+            return fallbackData.articles;
+          }
+        }
+      } catch (fallbackError) {
+        console.error('Error en fallback:', fallbackError);
+      }
+      
       return [];
     }
   }
