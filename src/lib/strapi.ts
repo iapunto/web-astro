@@ -43,7 +43,29 @@ export class StrapiService {
         );
         
         if (response.data && response.data.length > 0) {
-          allArticles = allArticles.concat(response.data);
+          // Strapi v5: los datos están directamente en el array, no en attributes
+          const articles = response.data.map((article: any) => ({
+            id: article.id,
+            documentId: article.documentId,
+            title: article.title,
+            slug: article.slug,
+            description: article.description,
+            content: article.content,
+            excerpt: article.excerpt,
+            publishedAt: article.publishedAt,
+            createdAt: article.createdAt,
+            updatedAt: article.updatedAt,
+            cover: article.cover,
+            coverAlt: article.coverAlt,
+            epicQuote: article.epicQuote,
+            author: article.author,
+            category: article.category,
+            subcategory: article.subcategory,
+            tags: article.tags || [],
+            quote: article.quote,
+          }));
+          
+          allArticles = allArticles.concat(articles);
           
           // Verificar si hay más páginas
           const pagination = response.meta?.pagination;
@@ -68,7 +90,33 @@ export class StrapiService {
   static async getArticle(slug: string): Promise<StrapiArticle | null> {
     try {
       const response = await this.fetchAPI<StrapiResponse<StrapiArticle[]>>(`/articles?filters[slug][$eq]=${slug}&populate=*`);
-      return response.data?.[0] || null;
+      const article = response.data?.[0];
+      
+      if (article) {
+        // Strapi v5: mapear la estructura correcta
+        return {
+          id: article.id,
+          documentId: article.documentId,
+          title: article.title,
+          slug: article.slug,
+          description: article.description,
+          content: article.content,
+          excerpt: article.excerpt,
+          publishedAt: article.publishedAt,
+          createdAt: article.createdAt,
+          updatedAt: article.updatedAt,
+          cover: article.cover,
+          coverAlt: article.coverAlt,
+          epicQuote: article.epicQuote,
+          author: article.author,
+          category: article.category,
+          subcategory: article.subcategory,
+          tags: article.tags || [],
+          quote: article.quote,
+        };
+      }
+      
+      return null;
     } catch (error) {
       console.error('Error fetching article from Strapi:', error);
       return null;
@@ -78,7 +126,17 @@ export class StrapiService {
   static async getCategories(): Promise<any[]> {
     try {
       const response = await this.fetchAPI<StrapiResponse<any[]>>('/categories?populate=*');
-      return response.data || [];
+      // Strapi v5: mapear estructura correcta
+      return response.data?.map((category: any) => ({
+        id: category.id,
+        documentId: category.documentId,
+        name: category.name,
+        slug: category.slug,
+        description: category.description,
+        createdAt: category.createdAt,
+        updatedAt: category.updatedAt,
+        publishedAt: category.publishedAt,
+      })) || [];
     } catch (error) {
       console.error('Error fetching categories from Strapi:', error);
       return [];
@@ -88,7 +146,17 @@ export class StrapiService {
   static async getTags(): Promise<any[]> {
     try {
       const response = await this.fetchAPI<StrapiResponse<any[]>>('/tags?populate=*');
-      return response.data || [];
+      // Strapi v5: mapear estructura correcta
+      return response.data?.map((tag: any) => ({
+        id: tag.id,
+        documentId: tag.documentId,
+        name: tag.name,
+        slug: tag.slug,
+        description: tag.description,
+        createdAt: tag.createdAt,
+        updatedAt: tag.updatedAt,
+        publishedAt: tag.publishedAt,
+      })) || [];
     } catch (error) {
       console.error('Error fetching tags from Strapi:', error);
       return [];
@@ -100,7 +168,27 @@ export class StrapiService {
       const response = await this.fetchAPI<StrapiResponse<StrapiArticle[]>>(
         `/articles?filters[$or][0][title][$containsi]=${query}&filters[$or][1][content][$containsi]=${query}&populate=*&sort=publishedAt:desc`
       );
-      return response.data || [];
+      // Strapi v5: mapear estructura correcta
+      return response.data?.map((article: any) => ({
+        id: article.id,
+        documentId: article.documentId,
+        title: article.title,
+        slug: article.slug,
+        description: article.description,
+        content: article.content,
+        excerpt: article.excerpt,
+        publishedAt: article.publishedAt,
+        createdAt: article.createdAt,
+        updatedAt: article.updatedAt,
+        cover: article.cover,
+        coverAlt: article.coverAlt,
+        epicQuote: article.epicQuote,
+        author: article.author,
+        category: article.category,
+        subcategory: article.subcategory,
+        tags: article.tags || [],
+        quote: article.quote,
+      })) || [];
     } catch (error) {
       console.error('Error searching articles in Strapi:', error);
       return [];
@@ -112,7 +200,27 @@ export class StrapiService {
       const response = await this.fetchAPI<StrapiResponse<StrapiArticle[]>>(
         `/articles?filters[category][slug][$eq]=${categorySlug}&populate=*&sort=publishedAt:desc`
       );
-      return response.data || [];
+      // Strapi v5: mapear estructura correcta
+      return response.data?.map((article: any) => ({
+        id: article.id,
+        documentId: article.documentId,
+        title: article.title,
+        slug: article.slug,
+        description: article.description,
+        content: article.content,
+        excerpt: article.excerpt,
+        publishedAt: article.publishedAt,
+        createdAt: article.createdAt,
+        updatedAt: article.updatedAt,
+        cover: article.cover,
+        coverAlt: article.coverAlt,
+        epicQuote: article.epicQuote,
+        author: article.author,
+        category: article.category,
+        subcategory: article.subcategory,
+        tags: article.tags || [],
+        quote: article.quote,
+      })) || [];
     } catch (error) {
       console.error('Error fetching articles by category from Strapi:', error);
       return [];
@@ -124,7 +232,27 @@ export class StrapiService {
       const response = await this.fetchAPI<StrapiResponse<StrapiArticle[]>>(
         `/articles?filters[tags][slug][$eq]=${tagSlug}&populate=*&sort=publishedAt:desc`
       );
-      return response.data || [];
+      // Strapi v5: mapear estructura correcta
+      return response.data?.map((article: any) => ({
+        id: article.id,
+        documentId: article.documentId,
+        title: article.title,
+        slug: article.slug,
+        description: article.description,
+        content: article.content,
+        excerpt: article.excerpt,
+        publishedAt: article.publishedAt,
+        createdAt: article.createdAt,
+        updatedAt: article.updatedAt,
+        cover: article.cover,
+        coverAlt: article.coverAlt,
+        epicQuote: article.epicQuote,
+        author: article.author,
+        category: article.category,
+        subcategory: article.subcategory,
+        tags: article.tags || [],
+        quote: article.quote,
+      })) || [];
     } catch (error) {
       console.error('Error fetching articles by tag from Strapi:', error);
       return [];
