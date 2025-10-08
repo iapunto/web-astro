@@ -1,0 +1,229 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { StrapiService } from '../../../lib/strapi.js';
+
+// Intentar obtener datos de diagnóstico
+let diagnostics = {
+  articles: { count: 0, error: null },
+  categories: { count: 0, error: null },
+  tags: { count: 0, error: null },
+  overallStatus: 'unknown',
+};
+
+try {
+  const [articles, categories, tags] = await Promise.allSettled([
+    StrapiService.getArticles(),
+    StrapiService.getCategories(),
+    StrapiService.getTags(),
+  ]);
+
+  diagnostics.articles = articles.status === 'fulfilled' 
+    ? { count: articles.value.length, error: null }
+    : { count: 0, error: articles.reason?.message || 'Error desconocido' };
+
+  diagnostics.categories = categories.status === 'fulfilled'
+    ? { count: categories.value.length, error: null }
+    : { count: 0, error: categories.reason?.message || 'Error desconocido' };
+
+  diagnostics.tags = tags.status === 'fulfilled'
+    ? { count: tags.value.length, error: null }
+    : { count: 0, error: tags.reason?.message || 'Error desconocido' };
+
+  // Determinar estado general
+  const hasErrors = [diagnostics.articles, diagnostics.categories, diagnostics.tags]
+    .some(item => item.error !== null);
+  
+  diagnostics.overallStatus = hasErrors ? 'error' : 'ok';
+} catch (error) {
+  diagnostics.overallStatus = 'error';
+  console.error('Error en diagnóstico:', error);
+}
+
+// Variables de entorno
+const envVars = {
+  STRAPI_API_URL: import.meta.env.STRAPI_API_URL || 'No configurado',
+  STRAPI_API_TOKEN: import.meta.env.STRAPI_API_TOKEN ? 
+    `${import.meta.env.STRAPI_API_TOKEN.substring(0, 10)}...` : 'No configurado',
+  NODE_ENV: import.meta.env.NODE_ENV || 'development',
+};
+---
+
+<AdminLayout title="Estado del Blog - Diagnóstico">
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          Diagnóstico del Blog
+        </h1>
+        <p class="text-gray-600 dark:text-gray-400">
+          Verificación del estado de conexión con Strapi y disponibilidad de contenido.
+        </p>
+      </div>
+
+      <!-- Estado General -->
+      <div class="mb-8">
+        <div class={`p-6 rounded-lg border-2 ${
+          diagnostics.overallStatus === 'ok' 
+            ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' 
+            : 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800'
+        }`}>
+          <div class="flex items-center">
+            <div class={`w-4 h-4 rounded-full mr-3 ${
+              diagnostics.overallStatus === 'ok' ? 'bg-green-500' : 'bg-red-500'
+            }`}></div>
+            <h2 class="text-xl font-semibold">
+              Estado General: 
+              <span class={diagnostics.overallStatus === 'ok' ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'}>
+                {diagnostics.overallStatus === 'ok' ? '✅ Funcionando' : '❌ Con Problemas'}
+              </span>
+            </h2>
+          </div>
+          <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            {diagnostics.overallStatus === 'ok' 
+              ? 'Todos los servicios de Strapi están funcionando correctamente.'
+              : 'Hay problemas de conectividad con uno o más servicios de Strapi.'
+            }
+          </p>
+        </div>
+      </div>
+
+      <!-- Variables de Entorno -->
+      <div class="mb-8">
+        <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+          Variables de Entorno
+        </h3>
+        <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+          <div class="grid gap-3">
+            <div class="flex justify-between">
+              <span class="font-medium">STRAPI_API_URL:</span>
+              <code class="bg-white dark:bg-gray-700 px-2 py-1 rounded text-sm">
+                {envVars.STRAPI_API_URL}
+              </code>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-medium">STRAPI_API_TOKEN:</span>
+              <code class="bg-white dark:bg-gray-700 px-2 py-1 rounded text-sm">
+                {envVars.STRAPI_API_TOKEN}
+              </code>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-medium">NODE_ENV:</span>
+              <code class="bg-white dark:bg-gray-700 px-2 py-1 rounded text-sm">
+                {envVars.NODE_ENV}
+              </code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado de Servicios -->
+      <div class="mb-8">
+        <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+          Estado de Servicios Strapi
+        </h3>
+        <div class="grid gap-4 md:grid-cols-3">
+          <!-- Artículos -->
+          <div class={`p-4 rounded-lg border ${
+            diagnostics.articles.error 
+              ? 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800' 
+              : 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800'
+          }`}>
+            <div class="flex items-center mb-2">
+              <div class={`w-3 h-3 rounded-full mr-2 ${
+                diagnostics.articles.error ? 'bg-red-500' : 'bg-green-500'
+              }`}></div>
+              <h4 class="font-semibold">Artículos</h4>
+            </div>
+            <p class="text-2xl font-bold mb-1">
+              {diagnostics.articles.count}
+            </p>
+            {diagnostics.articles.error ? (
+              <p class="text-sm text-red-600 dark:text-red-400">
+                Error: {diagnostics.articles.error}
+              </p>
+            ) : (
+              <p class="text-sm text-green-600 dark:text-green-400">
+                ✅ Disponible
+              </p>
+            )}
+          </div>
+
+          <!-- Categorías -->
+          <div class={`p-4 rounded-lg border ${
+            diagnostics.categories.error 
+              ? 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800' 
+              : 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800'
+          }`}>
+            <div class="flex items-center mb-2">
+              <div class={`w-3 h-3 rounded-full mr-2 ${
+                diagnostics.categories.error ? 'bg-red-500' : 'bg-green-500'
+              }`}></div>
+              <h4 class="font-semibold">Categorías</h4>
+            </div>
+            <p class="text-2xl font-bold mb-1">
+              {diagnostics.categories.count}
+            </p>
+            {diagnostics.categories.error ? (
+              <p class="text-sm text-red-600 dark:text-red-400">
+                Error: {diagnostics.categories.error}
+              </p>
+            ) : (
+              <p class="text-sm text-green-600 dark:text-green-400">
+                ✅ Disponible
+              </p>
+            )}
+          </div>
+
+          <!-- Tags -->
+          <div class={`p-4 rounded-lg border ${
+            diagnostics.tags.error 
+              ? 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800' 
+              : 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800'
+          }`}>
+            <div class="flex items-center mb-2">
+              <div class={`w-3 h-3 rounded-full mr-2 ${
+                diagnostics.tags.error ? 'bg-red-500' : 'bg-green-500'
+              }`}></div>
+              <h4 class="font-semibold">Tags</h4>
+            </div>
+            <p class="text-2xl font-bold mb-1">
+              {diagnostics.tags.count}
+            </p>
+            {diagnostics.tags.error ? (
+              <p class="text-sm text-red-600 dark:text-red-400">
+                Error: {diagnostics.tags.error}
+              </p>
+            ) : (
+              <p class="text-sm text-green-600 dark:text-green-400">
+                ✅ Disponible
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="flex gap-4">
+        <a 
+          href="/api/debug/strapi-connection" 
+          target="_blank"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          Ver Diagnóstico API (JSON)
+        </a>
+        <a 
+          href="/blog" 
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          Ir al Blog
+        </a>
+        <button 
+          onclick="window.location.reload()"
+          class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          Actualizar Diagnóstico
+        </button>
+      </div>
+    </div>
+  </div>
+</AdminLayout>

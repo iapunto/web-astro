@@ -9,8 +9,31 @@ import SmartPaginator from '../../components/common/SmartPaginator.astro';
 import { StrapiService } from '../../lib/strapi';
 import type { StrapiArticle } from '../../lib/types/strapi';
 
-// Obtener artículos desde Strapi
-const articles = await StrapiService.getArticles();
+// Obtener artículos desde Strapi con manejo de errores robusto
+let articles = [];
+let strapiError = null;
+
+try {
+  console.log('🔄 Intentando obtener artículos desde Strapi...');
+  articles = await StrapiService.getArticles();
+  console.log(`✅ Artículos obtenidos exitosamente: ${articles.length}`);
+} catch (error) {
+  strapiError = error;
+  console.error('❌ Error obteniendo artículos de Strapi:', error);
+  articles = []; // Asegurar que articles sea un array vacío
+}
+
+// Si no hay artículos, mostrar mensaje de diagnóstico
+if (articles.length === 0) {
+  console.warn('⚠️ No se encontraron artículos. Posibles causas:');
+  console.warn('1. Strapi no está disponible');
+  console.warn('2. Variables de entorno no configuradas');
+  console.warn('3. Token de API inválido');
+  console.warn('4. Error de red');
+  if (strapiError) {
+    console.warn('Error específico:', strapiError.message);
+  }
+}
 
 // Convertir datos de Strapi al formato esperado por el diseño original
 const blogEntries = articles.map((article) => ({
@@ -147,10 +170,39 @@ const latestPosts = blogEntries.slice(0, 5);
           {
             currentPosts.length === 0 ? (
               <div class="text-center text-gray-500 dark:text-gray-400 py-16">
-                <p class="text-lg font-semibold mb-2">
-                  No se encontraron resultados.
-                </p>
-                <p>Prueba con otros filtros o términos de búsqueda.</p>
+                {articles.length === 0 ? (
+                  <div>
+                    <div class="mb-4">
+                      <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+                      Blog temporalmente no disponible
+                    </h3>
+                    <p class="mb-4">
+                      No se pudieron cargar los artículos desde nuestro sistema de gestión de contenido.
+                    </p>
+                    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
+                      <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                        <strong>Posibles causas:</strong><br/>
+                        • Problemas de conectividad con Strapi<br/>
+                        • Variables de entorno no configuradas<br/>
+                        • Token de API inválido o expirado
+                      </p>
+                    </div>
+                    <p class="text-sm">
+                      Por favor, intenta nuevamente en unos minutos o contacta al administrador.
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <p class="text-lg font-semibold mb-2">
+                      No se encontraron resultados.
+                    </p>
+                    <p>Prueba con otros filtros o términos de búsqueda.</p>
+                  </div>
+                )}
               </div>
             ) : (
               <div class="grid gap-8 md:grid-cols-2">
