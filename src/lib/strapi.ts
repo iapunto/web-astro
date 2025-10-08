@@ -1,8 +1,5 @@
 import type { StrapiResponse, StrapiArticle } from './types/strapi';
-
-// Usar import.meta.env para variables de entorno en Astro 5
-const STRAPI_API_URL = import.meta.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
-const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from 'astro:env/server';
 
 export class StrapiService {
   // Strapi v5: usar populate=* que sí funciona (el problema era el token)

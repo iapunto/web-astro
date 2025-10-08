@@ -1,10 +1,9 @@
 // Endpoint para obtener artículos de Strapi con múltiples estrategias de conexión
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from 'astro:env/server';
+
 export async function GET() {
   try {
     console.log('🔄 [STRAPI-ARTICLES] Iniciando obtención de artículos...');
-
-    const STRAPI_API_URL = import.meta.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
-    const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
 
     if (!STRAPI_API_TOKEN) {
       throw new Error('STRAPI_API_TOKEN no configurado');

@@ -247,16 +247,13 @@ export default defineConfig({
   env: {
     schema: {
       STRAPI_API_URL: envField.string({
-        context: 'client',
+        context: 'server',
         access: 'public',
-        default: process.env.STRAPI_API_URL || 'https://strapi.iapunto.com',
-        optional: false,
+        default: 'https://strapi.iapunto.com',
       }),
       STRAPI_API_TOKEN: envField.string({
         context: 'server',
         access: 'secret',
-        default: process.env.STRAPI_API_TOKEN,
-        optional: false,
       }),
       // Google Calendar API
       GOOGLE_CALENDAR_ID: envField.string({

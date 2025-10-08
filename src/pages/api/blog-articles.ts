@@ -1,13 +1,10 @@
 // Endpoint proxy para obtener artículos del blog
 // Bypasea problemas de conectividad directa a Strapi
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from 'astro:env/server';
 
 export async function GET() {
   try {
     console.log('🔄 [BLOG-API] Obteniendo artículos vía proxy...');
-
-    // Usar variables de entorno del servidor con import.meta.env
-    const STRAPI_API_URL = import.meta.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
-    const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
 
     if (!STRAPI_API_TOKEN) {
       throw new Error('STRAPI_API_TOKEN no configurado en el servidor');
