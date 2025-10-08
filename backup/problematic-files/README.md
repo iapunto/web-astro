@@ -6,11 +6,14 @@ Estos archivos han sido removidos temporalmente para permitir que el build de pr
 - `src/pages/api/appointments/[id]/cancel.ts` - Cancelar citas
 - `src/pages/api/appointments/[id]/complete.ts` - Completar citas  
 - `src/pages/api/appointments/[id]/confirm.ts` - Confirmar citas
+- `src/pages/api/appointments/create.ts` - Crear citas
 - `src/pages/admin/index.astro` - Panel de administración principal
 - `src/pages/admin/appointments/index.astro` - Administración de citas
 - `src/pages/admin/automation/index.astro` - Panel de automatización
 - `src/pages/api/debug/test-postgres-system.ts` - Debug de PostgreSQL
 - `src/pages/api/calendar/sync-events.ts` - Sincronización de calendario
+- `src/pages/api/calendar/monthly-availability.ts` - Disponibilidad mensual
+- `src/pages/api/calendar/availability.ts` - Disponibilidad de calendario
 - `src/lib/appointment/postgresAppointmentManager.ts` - Gestor de citas
 - `src/lib/email/resendEmailService.ts` - Servicio de email
 
