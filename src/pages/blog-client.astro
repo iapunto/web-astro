@@ -41,16 +41,23 @@ const initialArticles = [];
           del marketing digital.
         </p>
       </div>
-      
+
       <!-- Loading state -->
       <div id="loading-state" class="text-center py-16">
-        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-        <p class="mt-4 text-gray-600 dark:text-gray-400">Cargando artículos...</p>
+        <div
+          class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"
+        >
+        </div>
+        <p class="mt-4 text-gray-600 dark:text-gray-400">
+          Cargando artículos...
+        </p>
       </div>
 
       <!-- Error state (hidden by default) -->
       <div id="error-state" class="hidden text-center py-16">
-        <div class="text-red-500 text-lg mb-4">⚠️ Error al cargar artículos</div>
+        <div class="text-red-500 text-lg mb-4">
+          ⚠️ Error al cargar artículos
+        </div>
         <p class="text-gray-600 dark:text-gray-400" id="error-message"></p>
       </div>
 
@@ -71,27 +78,33 @@ const initialArticles = [];
 <script>
   // Script de carga desde el cliente
   const STRAPI_URL = 'https://strapi.iapunto.com';
-  const STRAPI_TOKEN = '5fac4193c9c1c74f70d42541071be45f0331b101ab66524a078aa27eb054ec80d6aa98c4650f8d03f48f9e272c64490acc60b3125f9999c3cb3f84b5e54b7e34b6dbc65c08967e0686ecf91a686516a04bc89788cf3d01580f3fc519b32ef21a47628ad4f5a10cc1e688e4af313c970a4239167a7d609b78215699987c2811fa';
+  const STRAPI_TOKEN =
+    '5fac4193c9c1c74f70d42541071be45f0331b101ab66524a078aa27eb054ec80d6aa98c4650f8d03f48f9e272c64490acc60b3125f9999c3cb3f84b5e54b7e34b6dbc65c08967e0686ecf91a686516a04bc89788cf3d01580f3fc519b32ef21a47628ad4f5a10cc1e688e4af313c970a4239167a7d609b78215699987c2811fa';
 
   async function loadArticles() {
     console.log('🔄 [CLIENT-BLOG] Iniciando carga de artículos...');
-    
+
     try {
-      const response = await fetch(`${STRAPI_URL}/api/articles?populate=*&sort[0]=publishedAt:desc&pagination[pageSize]=100`, {
-        headers: {
-          'Authorization': `Bearer ${STRAPI_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `${STRAPI_URL}/api/articles?populate=*&sort[0]=publishedAt:desc&pagination[pageSize]=100`,
+        {
+          headers: {
+            Authorization: `Bearer ${STRAPI_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
-      
-      console.log(`✅ [CLIENT-BLOG] Artículos cargados: ${data.data?.length || 0}`);
-      
+
+      console.log(
+        `✅ [CLIENT-BLOG] Artículos cargados: ${data.data?.length || 0}`
+      );
+
       if (data.data && data.data.length > 0) {
         renderArticles(data.data);
         hideLoading();
@@ -108,9 +121,14 @@ const initialArticles = [];
     const grid = document.getElementById('articles-grid');
     if (!grid) return;
 
-    const html = articles.slice(0, 6).map(article => `
+    const html = articles
+      .slice(0, 6)
+      .map(
+        (article) => `
       <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-        ${article.cover ? `
+        ${
+          article.cover
+            ? `
           <div class="w-full mb-5">
             <img 
               src="${STRAPI_URL}${article.cover.url}"
@@ -118,7 +136,9 @@ const initialArticles = [];
               class="w-full h-auto object-cover rounded-lg"
             />
           </div>
-        ` : ''}
+        `
+            : ''
+        }
         
         <div class="flex justify-between items-center mb-5 text-gray-500">
           <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
@@ -133,13 +153,17 @@ const initialArticles = [];
           <a href="/blog/${article.slug}">${article.title}</a>
         </h2>
         
-        ${article.epicQuote ? `
+        ${
+          article.epicQuote
+            ? `
           <div class="mb-3 p-3 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-lg border-l-3 border-primary-500">
             <blockquote class="text-sm font-medium text-primary-900 dark:text-primary-100 italic leading-relaxed">
               "${article.epicQuote}"
             </blockquote>
           </div>
-        ` : ''}
+        `
+            : ''
+        }
         
         <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
           ${article.description || article.excerpt || ''}
@@ -169,7 +193,9 @@ const initialArticles = [];
           </a>
         </div>
       </article>
-    `).join('');
+    `
+      )
+      .join('');
 
     grid.innerHTML = `<div class="grid gap-8 md:grid-cols-2">${html}</div>`;
   }
@@ -185,7 +211,7 @@ const initialArticles = [];
     const loading = document.getElementById('loading-state');
     const errorDiv = document.getElementById('error-state');
     const errorMsg = document.getElementById('error-message');
-    
+
     if (loading) loading.classList.add('hidden');
     if (errorDiv) errorDiv.classList.remove('hidden');
     if (errorMsg) errorMsg.textContent = message;

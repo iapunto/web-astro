@@ -94,7 +94,8 @@ export async function GET() {
     info.fetchTest.toLocalhost.status = res.status;
     info.fetchTest.toLocalhost.time = Date.now() - start;
   } catch (e) {
-    info.fetchTest.toLocalhost.error = e instanceof Error ? e.message : String(e);
+    info.fetchTest.toLocalhost.error =
+      e instanceof Error ? e.message : String(e);
   }
 
   return new Response(JSON.stringify(info, null, 2), {
