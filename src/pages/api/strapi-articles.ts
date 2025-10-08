@@ -1,5 +1,5 @@
 // Endpoint para obtener artículos de Strapi con múltiples estrategias de conexión
-import { STRAPI_API_URL, STRAPI_API_TOKEN } from '../../lib/env';
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from '../../lib/env.js';
 
 export async function GET() {
   try {

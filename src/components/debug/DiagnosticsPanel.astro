@@ -69,7 +69,7 @@ if (!showDebug) {
         Ver Diagnóstico Completo
       </button>
       <button 
-        onclick="console.log('STRAPI_DEBUG:', {articles: window.strapiArticles || [], url: '{strapiUrl}', hasToken: {hasToken}})"
+        onclick={`console.log('STRAPI_DEBUG:', {articles: window.strapiArticles || [], url: '${strapiUrl}', hasToken: ${hasToken}})`}
         class="w-full bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
       >
         Mostrar en Consola

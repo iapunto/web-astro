@@ -6,10 +6,10 @@ import OptimizedImage from '../../components/common/OptimizedImage.astro';
 import { Image } from 'astro:assets';
 import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
 import SmartPaginator from '../../components/common/SmartPaginator.astro';
-import { StrapiService } from '../../lib/strapi';
-import type { StrapiArticle } from '../../lib/types/strapi';
+import { StrapiService } from '../../lib/strapi.js';
+import type { StrapiArticle } from '../../lib/types/strapi.js';
 import DiagnosticsPanel from '../../components/debug/DiagnosticsPanel.astro';
-import { STRAPI_API_URL, STRAPI_API_TOKEN } from '../../lib/env';
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from '../../lib/env.js';
 
 console.log('═'.repeat(100));
 console.log('🚀 [BLOG INDEX] === INICIANDO CARGA DE BLOG ===');

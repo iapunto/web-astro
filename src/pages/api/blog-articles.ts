@@ -1,6 +1,6 @@
 // Endpoint proxy para obtener artículos del blog
 // Bypasea problemas de conectividad directa a Strapi
-import { STRAPI_API_URL, STRAPI_API_TOKEN } from '../../lib/env';
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from '../../lib/env.js';
 
 export async function GET() {
   try {

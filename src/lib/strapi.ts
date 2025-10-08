@@ -1,5 +1,5 @@
-import type { StrapiResponse, StrapiArticle } from './types/strapi';
-import { STRAPI_API_URL, STRAPI_API_TOKEN } from './env';
+import type { StrapiResponse, StrapiArticle } from './types/strapi.js';
+import { STRAPI_API_URL, STRAPI_API_TOKEN } from './env.js';
 
 export class StrapiService {
   // Strapi v5: usar populate=* que sí funciona (el problema era el token)
@@ -35,41 +35,57 @@ export class StrapiService {
 
     console.log('📤 [StrapiService] Request headers:', JSON.stringify(Object.keys(defaultOptions.headers || {})));
 
+    let response: Response;
+    let usedMethod = 'native-fetch';
+
     try {
-      const response = await fetch(url, defaultOptions);
-
-      console.log('═'.repeat(80));
-      console.log(`📡 [StrapiService] Response status: ${response.status}`);
-      console.log(`📡 [StrapiService] Response statusText: ${response.statusText}`);
-      console.log(`📡 [StrapiService] Response ok: ${response.ok}`);
-      console.log('═'.repeat(80));
-
-      if (!response.ok) {
-        const errorBody = await response.text();
-        console.error('❌ [StrapiService] Error response body:', errorBody.substring(0, 500));
+      console.log('🧪 [StrapiService] Intentando con fetch nativo...');
+      response = await fetch(url, defaultOptions);
+      console.log('✅ [StrapiService] Fetch nativo exitoso');
+    } catch (nativeFetchError) {
+      console.error('❌ [StrapiService] Fetch nativo falló:', nativeFetchError);
+      console.log('🔄 [StrapiService] Intentando con node-fetch...');
+      
+      try {
+        const nodeFetch = (await import('node-fetch')).default;
+        response = await nodeFetch(url, {
+          ...defaultOptions,
+          timeout: 15000,
+        } as any) as any;
+        usedMethod = 'node-fetch';
+        console.log('✅ [StrapiService] node-fetch exitoso');
+      } catch (nodeFetchError) {
+        console.error('❌ [StrapiService] node-fetch también falló:', nodeFetchError);
         throw new Error(
-          `Strapi API error: ${response.status} ${response.statusText} - ${errorBody.substring(0, 100)}`
+          `Ambos métodos de fetch fallaron. Native: ${nativeFetchError instanceof Error ? nativeFetchError.message : String(nativeFetchError)}, Node: ${nodeFetchError instanceof Error ? nodeFetchError.message : String(nodeFetchError)}`
         );
       }
-
-      const data = await response.json();
-      console.log('═'.repeat(80));
-      console.log(`📊 [StrapiService] Data received successfully`);
-      console.log(`📊 [StrapiService] Items count: ${data.data?.length || 0}`);
-      console.log(`📊 [StrapiService] Has meta: ${!!data.meta}`);
-      console.log(`📊 [StrapiService] Pagination: ${JSON.stringify(data.meta?.pagination || {})}`);
-      console.log('═'.repeat(80));
-
-      return data;
-    } catch (error) {
-      console.error('═'.repeat(80));
-      console.error('❌ [StrapiService] FETCH ERROR:');
-      console.error('❌ Error type:', error?.constructor?.name);
-      console.error('❌ Error message:', error instanceof Error ? error.message : String(error));
-      console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack');
-      console.error('═'.repeat(80));
-      throw error;
     }
+
+    console.log('═'.repeat(80));
+    console.log(`📡 [StrapiService] Response status: ${response.status}`);
+    console.log(`📡 [StrapiService] Response statusText: ${response.statusText}`);
+    console.log(`📡 [StrapiService] Response ok: ${response.ok}`);
+    console.log(`📡 [StrapiService] Method used: ${usedMethod}`);
+    console.log('═'.repeat(80));
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error('❌ [StrapiService] Error response body:', errorBody.substring(0, 500));
+      throw new Error(
+        `Strapi API error: ${response.status} ${response.statusText} - ${errorBody.substring(0, 100)}`
+      );
+    }
+
+    const data = await response.json();
+    console.log('═'.repeat(80));
+    console.log(`📊 [StrapiService] Data received successfully`);
+    console.log(`📊 [StrapiService] Items count: ${data.data?.length || 0}`);
+    console.log(`📊 [StrapiService] Has meta: ${!!data.meta}`);
+    console.log(`📊 [StrapiService] Pagination: ${JSON.stringify(data.meta?.pagination || {})}`);
+    console.log('═'.repeat(80));
+
+    return data;
   }
 
   static async getArticles(): Promise<StrapiArticle[]> {
