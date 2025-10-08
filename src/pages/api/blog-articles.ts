@@ -5,12 +5,23 @@ export async function GET() {
   try {
     console.log('🔄 [BLOG-API] Obteniendo artículos vía proxy...');
     
+    // Usar variables de entorno del servidor
+    const STRAPI_API_URL = process.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
+    const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+    
+    if (!STRAPI_API_TOKEN) {
+      throw new Error('STRAPI_API_TOKEN no configurado en el servidor');
+    }
+    
+    console.log(`🔗 [BLOG-API] URL: ${STRAPI_API_URL}`);
+    console.log(`🔑 [BLOG-API] Token: ${STRAPI_API_TOKEN ? 'CONFIGURADO' : 'NO CONFIGURADO'}`);
+    
     // Usar fetch con configuración específica para producción
-    const response = await fetch('https://strapi.iapunto.com/api/articles?populate=*&sort=publishedAt:desc&pagination[pageSize]=100', {
+    const response = await fetch(`${STRAPI_API_URL}/api/articles?populate=*&sort=publishedAt:desc&pagination[pageSize]=100`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 5fac4193c9c1c74f70d42541071be45f0331b101ab66524a078aa27eb054ec80d6aa98c4650f8d03f48f9e272c64490acc60b3125f9999c3cb3f84b5e54b7e34b6dbc65c08967e0686ecf91a686516a04bc89788cf3d01580f3fc519b32ef21a47628ad4f5a10cc1e688e4af313c970a4239167a7d609b78215699987c2811fa',
+        'Authorization': `Bearer ${STRAPI_API_TOKEN}`,
         'User-Agent': 'IA-Punto-Blog-Proxy/1.0',
         'Accept': 'application/json',
         'Cache-Control': 'no-cache',

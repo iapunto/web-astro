@@ -95,7 +95,7 @@ export class StrapiService {
       
       // Fallback: usar endpoint proxy interno
       try {
-        console.log('🔄 Intentando fallback via endpoint interno...');
+        console.log('🔄 Intentando fallback via endpoint proxy interno...');
         const fallbackResponse = await fetch('/api/blog-articles', {
           method: 'GET',
           headers: {
@@ -106,12 +106,14 @@ export class StrapiService {
         if (fallbackResponse.ok) {
           const fallbackData = await fallbackResponse.json();
           if (fallbackData.articles && fallbackData.articles.length > 0) {
-            console.log(`📊 Fallback exitoso: ${fallbackData.articles.length} artículos obtenidos`);
+            console.log(`📊 Fallback exitoso: ${fallbackData.articles.length} artículos obtenidos via proxy`);
             return fallbackData.articles;
           }
+        } else {
+          console.error(`❌ Fallback failed: ${fallbackResponse.status} ${fallbackResponse.statusText}`);
         }
       } catch (fallbackError) {
-        console.error('Error en fallback:', fallbackError);
+        console.error('❌ Error en fallback:', fallbackError);
       }
       
       return [];
