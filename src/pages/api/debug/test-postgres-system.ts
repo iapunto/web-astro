@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import { PostgresAppointmentManager } from '../../../lib/appointment/postgresAppointmentManager.js';
-import { PostgresAppointmentService } from '../../../lib/database/postgresAppointmentService.js';
-import { ResendEmailService } from '../../../lib/email/resendEmailService.js';
-import { initializeDatabase } from '../../../lib/database/postgresSchema.js';
+import { PostgresAppointmentManager } from '@lib/appointment/postgresAppointmentManager.js';
+import { PostgresAppointmentService } from '@lib/database/postgresAppointmentService.js';
+import { ResendEmailService } from '@lib/email/resendEmailService.js';
+import { initializeDatabase } from '@lib/database/postgresSchema.js';
 import * as dotenv from 'dotenv';
 
 dotenv.config();

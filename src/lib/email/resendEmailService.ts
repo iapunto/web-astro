@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
-import { PostgresAppointmentService } from '../database/postgresAppointmentService.js';
-import { Appointment, EmailTemplate } from '../database/postgresSchema.js';
+import { PostgresAppointmentService } from '@lib/database/postgresAppointmentService.js';
+import { Appointment, EmailTemplate } from '@lib/database/postgresSchema.js';
 
 export class ResendEmailService {
   private resend: Resend;

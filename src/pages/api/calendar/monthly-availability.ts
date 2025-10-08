@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { PostgresAppointmentManager } from '../../../lib/appointment/postgresAppointmentManager.js';
+import { PostgresAppointmentManager } from '@lib/appointment/postgresAppointmentManager.js';
 import * as dotenv from 'dotenv';
 
 // Cargar variables de entorno

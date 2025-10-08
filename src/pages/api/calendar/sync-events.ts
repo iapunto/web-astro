@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { PostgresAppointmentService } from '../../../lib/database/postgresAppointmentService.js';
+import { PostgresAppointmentService } from '@lib/database/postgresAppointmentService.js';
 import { google } from 'googleapis';
 import * as dotenv from 'dotenv';
 

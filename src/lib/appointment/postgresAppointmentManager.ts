@@ -1,9 +1,9 @@
 import { google } from 'googleapis';
-import { PostgresAppointmentService } from '../database/postgresAppointmentService.js';
-import { ResendEmailService } from '../email/resendEmailService.js';
-import { Appointment } from '../database/postgresSchema.js';
-import { hybridCacheService } from '../cache/hybridCacheService.js';
-import { socketService } from '../socket/socketServer.js';
+import { PostgresAppointmentService } from '@lib/database/postgresAppointmentService.js';
+import { ResendEmailService } from '@lib/email/resendEmailService.js';
+import { Appointment } from '@lib/database/postgresSchema.js';
+import { hybridCacheService } from '@lib/cache/hybridCacheService.js';
+import { socketService } from '@lib/socket/socketServer.js';
 
 export interface CreateAppointmentRequest {
   clientName: string;
