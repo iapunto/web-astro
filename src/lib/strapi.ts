@@ -1,11 +1,15 @@
 import type { StrapiResponse, StrapiArticle } from './types/strapi';
 
-const STRAPI_API_URL = import.meta.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
-const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
+// Usar process.env para variables de entorno del servidor
+const STRAPI_API_URL = process.env.STRAPI_API_URL || 'https://strapi.iapunto.com';
+const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 export class StrapiService {
   private static async fetchAPI<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${STRAPI_API_URL}/api${endpoint}`;
+    
+    console.log(`🔗 [StrapiService] Fetching: ${url}`);
+    console.log(`🔑 [StrapiService] Token configured: ${STRAPI_API_TOKEN ? 'YES' : 'NO'}`);
     
     const defaultOptions: RequestInit = {
       headers: {
@@ -19,13 +23,18 @@ export class StrapiService {
     try {
       const response = await fetch(url, defaultOptions);
       
+      console.log(`📡 [StrapiService] Response: ${response.status} ${response.statusText}`);
+      
       if (!response.ok) {
         throw new Error(`Strapi API error: ${response.status} ${response.statusText}`);
       }
 
-      return await response.json();
+      const data = await response.json();
+      console.log(`📊 [StrapiService] Data received: ${data.data?.length || 0} items`);
+      
+      return data;
     } catch (error) {
-      console.error('Error fetching from Strapi:', error);
+      console.error('❌ [StrapiService] Error fetching from Strapi:', error);
       throw error;
     }
   }
