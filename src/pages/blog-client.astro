@@ -1,0 +1,200 @@
+---
+import DefaultLayout from '../layouts/DefaultLayout.astro';
+import FormattedDate from '../components/common/FormattedDate.astro';
+import ReadingTime from '../components/common/ReadingTime.astro';
+import OptimizedImage from '../components/common/OptimizedImage.astro';
+import SidebarFilters from '../components/sections/blog/SidebarFilters.astro';
+import SmartPaginator from '../components/common/SmartPaginator.astro';
+
+// En lugar de cargar desde el servidor, lo haremos desde el cliente
+const initialArticles = [];
+---
+
+<DefaultLayout
+  pageTitle="Blog de Marketing Digital, IA y Negocios"
+  description="Consejos, tendencias y casos de éxito en marketing digital, inteligencia artificial y negocios. Aprende a crecer con IA Punto."
+  keywords={[
+    'Marketing',
+    'SEO',
+    'SEO local',
+    'Búsqueda local',
+    'IA',
+    'Inteligencia artificial',
+    'Negocios',
+    'Tendencias',
+    'Casos de éxito',
+  ]}
+  image="/images/default-image.jpg"
+  canonicalURL="/blog"
+  noindex={false}
+>
+  <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+      <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
+        <h1
+          class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
+        >
+          Ideas 360
+        </h1>
+        <p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">
+          Este es un blog lleno de ideas y noticias que te ayudaran en el mundo
+          del marketing digital.
+        </p>
+      </div>
+      
+      <!-- Loading state -->
+      <div id="loading-state" class="text-center py-16">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <p class="mt-4 text-gray-600 dark:text-gray-400">Cargando artículos...</p>
+      </div>
+
+      <!-- Error state (hidden by default) -->
+      <div id="error-state" class="hidden text-center py-16">
+        <div class="text-red-500 text-lg mb-4">⚠️ Error al cargar artículos</div>
+        <p class="text-gray-600 dark:text-gray-400" id="error-message"></p>
+      </div>
+
+      <!-- Content container -->
+      <div id="blog-content" class="hidden grid gap-8 lg:grid-cols-4">
+        <div class="lg:col-span-3" id="articles-grid">
+          <!-- Los artículos se cargarán aquí dinámicamente -->
+        </div>
+
+        <div class="lg:col-span-1" id="sidebar">
+          <!-- Sidebar se cargará aquí -->
+        </div>
+      </div>
+    </div>
+  </section>
+</DefaultLayout>
+
+<script>
+  // Script de carga desde el cliente
+  const STRAPI_URL = 'https://strapi.iapunto.com';
+  const STRAPI_TOKEN = '5fac4193c9c1c74f70d42541071be45f0331b101ab66524a078aa27eb054ec80d6aa98c4650f8d03f48f9e272c64490acc60b3125f9999c3cb3f84b5e54b7e34b6dbc65c08967e0686ecf91a686516a04bc89788cf3d01580f3fc519b32ef21a47628ad4f5a10cc1e688e4af313c970a4239167a7d609b78215699987c2811fa';
+
+  async function loadArticles() {
+    console.log('🔄 [CLIENT-BLOG] Iniciando carga de artículos...');
+    
+    try {
+      const response = await fetch(`${STRAPI_URL}/api/articles?populate=*&sort[0]=publishedAt:desc&pagination[pageSize]=100`, {
+        headers: {
+          'Authorization': `Bearer ${STRAPI_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      console.log(`✅ [CLIENT-BLOG] Artículos cargados: ${data.data?.length || 0}`);
+      
+      if (data.data && data.data.length > 0) {
+        renderArticles(data.data);
+        hideLoading();
+      } else {
+        showError('No se encontraron artículos');
+      }
+    } catch (error) {
+      console.error('❌ [CLIENT-BLOG] Error:', error);
+      showError(error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  function renderArticles(articles: any[]) {
+    const grid = document.getElementById('articles-grid');
+    if (!grid) return;
+
+    const html = articles.slice(0, 6).map(article => `
+      <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+        ${article.cover ? `
+          <div class="w-full mb-5">
+            <img 
+              src="${STRAPI_URL}${article.cover.url}"
+              alt="${article.coverAlt || article.title}"
+              class="w-full h-auto object-cover rounded-lg"
+            />
+          </div>
+        ` : ''}
+        
+        <div class="flex justify-between items-center mb-5 text-gray-500">
+          <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
+            ${article.category?.name || 'General'}
+          </span>
+          <div class="flex items-center gap-4 text-sm">
+            <time>${new Date(article.publishedAt).toLocaleDateString('es-ES')}</time>
+          </div>
+        </div>
+        
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <a href="/blog/${article.slug}">${article.title}</a>
+        </h2>
+        
+        ${article.epicQuote ? `
+          <div class="mb-3 p-3 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-lg border-l-3 border-primary-500">
+            <blockquote class="text-sm font-medium text-primary-900 dark:text-primary-100 italic leading-relaxed">
+              "${article.epicQuote}"
+            </blockquote>
+          </div>
+        ` : ''}
+        
+        <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
+          ${article.description || article.excerpt || ''}
+        </p>
+        
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <img
+              src="${article.author?.avatar ? STRAPI_URL + article.author.avatar.url : '/images/default-avatar.jpg'}"
+              alt="avatar"
+              width="36"
+              height="36"
+              class="w-7 h-7 rounded-full"
+            />
+            <span class="font-medium dark:text-white">
+              ${article.author?.name || 'IA Punto'}
+            </span>
+          </div>
+          <a
+            href="/blog/${article.slug}"
+            class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
+          >
+            Leer más...
+            <svg class="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </article>
+    `).join('');
+
+    grid.innerHTML = `<div class="grid gap-8 md:grid-cols-2">${html}</div>`;
+  }
+
+  function hideLoading() {
+    const loading = document.getElementById('loading-state');
+    const content = document.getElementById('blog-content');
+    if (loading) loading.classList.add('hidden');
+    if (content) content.classList.remove('hidden');
+  }
+
+  function showError(message: string) {
+    const loading = document.getElementById('loading-state');
+    const errorDiv = document.getElementById('error-state');
+    const errorMsg = document.getElementById('error-message');
+    
+    if (loading) loading.classList.add('hidden');
+    if (errorDiv) errorDiv.classList.remove('hidden');
+    if (errorMsg) errorMsg.textContent = message;
+  }
+
+  // Cargar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadArticles);
+  } else {
+    loadArticles();
+  }
+</script>
