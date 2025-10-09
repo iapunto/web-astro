@@ -1,0 +1,193 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import TableOfContents from '../../components/sections/blog/TableOfContents.astro';
+import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
+import AuthorQuote from '../../components/common/AuthorQuote.astro';
+import Card from '../../components/common/Card.astro';
+import { services } from '../../lib/constants/services';
+
+export const prerender = true;
+
+const blogEntries = await getCollection('blog');
+console.log('Slugs detectados:', blogEntries.map(e => e.data.slug));
+
+export async function getStaticPaths() {
+  const currentPost = await getCollection('blog');
+  return currentPost.map((entry: any) => ({
+    params: { slug: entry.data.slug },
+    props: {
+      post: entry,
+      pageTitle: entry.data.title,
+      description: entry.data.description,
+      keywords: entry.data.keywords,
+      image: entry.data.cover,
+      author: {
+        name: entry.data.author.name,
+        description: entry.data.author.description,
+        image: entry.data.author.image,
+      },
+      pubDate: entry.data.pubDate,
+    },
+  }));
+}
+
+const { post, pageTitle, description, keywords, image, author, pubDate } =
+  Astro.props;
+console.log('Post actual:', post?.data?.slug);
+const { Content, content } = await render(post);
+
+// Ordena los posts por fecha (el mismo orden que en el índice del blog)
+const sortedPosts = [...blogEntries].sort(
+  (a, b) =>
+    new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+
+// Encuentra el índice del post actual en el array ordenado
+const currentIndex = sortedPosts.findIndex((entry) => entry.data.slug === post.data.slug);
+
+// Obtiene los slugs de los posts anterior y siguiente (maneja los casos de límites)
+const prevPostSlug = sortedPosts[currentIndex - 1]?.data.slug || null;
+const nextPostSlug = sortedPosts[currentIndex + 1]?.data.slug || null;
+
+// Para el sidebar derecho (últimos posts)
+const latestPosts = blogEntries.slice(0, 5);
+
+// Selección de artículo recomendado (aleatorio distinto al actual)
+const recommended = blogEntries.filter(e => e.data.slug !== post.data.slug)[Math.floor(Math.random() * (blogEntries.length - 1))]?.data;
+
+// Frase épica/reflexiva (del frontmatter o generada)
+const quote = post.data.quote || 'El marketing digital y la innovación tecnológica no son un lujo, son el motor que impulsa el crecimiento de las PYMES y startups.';
+const quoteAuthor = post.data.author?.name || 'Equipo IA Punto';
+
+// Enlaces internos a servicios cornerstone
+const cornerstoneLinks = [
+  services.find(s => s.link.endsWith('diseno-desarrollo-web')),
+  services.find(s => s.link.endsWith('posicionamiento-seo')),
+  services.find(s => s.link.endsWith('publicidad-online-ia')),
+].filter(Boolean);
+
+// Obtén la lista de categorías y tags oficiales de todos los artículos
+const allCategories = Array.from(new Set(blogEntries.map(e => e.data.category).filter(Boolean)));
+const allTags = Array.from(new Set(blogEntries.flatMap(e => Array.isArray(e.data.tags) ? e.data.tags : []).filter(Boolean)));
+const selectedCategory = post.data.category || '';
+const selectedTags = Array.isArray(post.data.tags) ? post.data.tags : [];
+const query = '';
+---
+
+<BlogLayout
+  pageTitle={pageTitle}
+  description={description}
+  keywords={keywords}
+  image={image}
+  author={author}
+  pubDate={pubDate}
+  post={post}
+>
+  <TableOfContents html={post.body} slot="toc" />
+  <SidebarFilters
+    categories={allCategories}
+    selectedCategory={selectedCategory}
+    tags={allTags}
+    selectedTags={selectedTags}
+    query={query}
+    latestPosts={latestPosts}
+    slot="sidebar"
+  />
+  <div>
+    {/* Enlaces internos a servicios cornerstone */}
+    <section class="my-8 flex flex-wrap gap-4">
+      {cornerstoneLinks.map((service) => (
+        <a href={service.link} class="inline-block px-4 py-2 bg-primary-50 text-primary-700 rounded-lg font-semibold shadow hover:bg-primary-100 transition">
+          {service.title}
+        </a>
+      ))}
+    </section>
+    <Content />
+    {/* Frase épica/reflexiva del autor */}
+    <AuthorQuote quote={quote} author={quoteAuthor} />
+    {/* Artículo recomendado al final */}
+    {recommended && (
+      <Card
+        variant="recommended"
+        title={recommended.title}
+        slug={recommended.slug}
+        description={recommended.description}
+        image={recommended.cover}
+      />
+    )}
+    
+    {/* Tags al final del artículo */}
+    {
+      post.data.tags && post.data.tags.length > 0 && (
+        <div class="mt-8">
+          {/* Línea divisoria */}
+          <div class="w-4/5 h-px bg-gray-200 mx-auto mb-4"></div>
+          
+                     {/* Tags */}
+           <div class="flex flex-wrap gap-2">
+            {post.data.tags.map((tag: string) => (
+              <a
+                href={`/blog?tag=${encodeURIComponent(tag)}`}
+                class="text-xs px-2 py-1 rounded border border-gray-200 bg-gray-100 text-gray-600 hover:bg-primary-100 hover:text-primary transition"
+                style="text-decoration: none;"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+    
+    <div class="flex justify-between mt-8">
+      {prevPostSlug && (
+        <a
+          href={`/blog/${prevPostSlug}`}
+          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-1 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <svg
+            class="w-5 h-5 inline-block mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          Anterior
+        </a>
+      )}
+      <div></div>
+      {nextPostSlug && (
+        <a
+          href={`/blog/${nextPostSlug}`}
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          Siguiente
+          <svg
+            class="w-5 h-5 inline-block ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </a>
+      )}
+    </div>
+  </div>
+</BlogLayout>

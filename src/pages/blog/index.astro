@@ -1,170 +1,19 @@
 ---
 import DefaultLayout from '../../layouts/DefaultLayout.astro';
+import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/common/FormattedDate.astro';
 import ReadingTime from '../../components/common/ReadingTime.astro';
 import OptimizedImage from '../../components/common/OptimizedImage.astro';
 import { Image } from 'astro:assets';
 import SidebarFilters from '../../components/sections/blog/SidebarFilters.astro';
 import SmartPaginator from '../../components/common/SmartPaginator.astro';
-import { StrapiService } from '../../lib/strapi.js';
-import type { StrapiArticle } from '../../lib/types/strapi.js';
-import DiagnosticsPanel from '../../components/debug/DiagnosticsPanel.astro';
-import { STRAPI_API_URL, STRAPI_API_TOKEN } from '../../lib/env.js';
 
-console.log('═'.repeat(100));
-console.log('🚀 [BLOG INDEX] === INICIANDO CARGA DE BLOG ===');
-console.log(`🚀 [BLOG INDEX] Timestamp: ${new Date().toISOString()}`);
-console.log(`🚀 [BLOG INDEX] URL: ${Astro.url}`);
-console.log(`🚀 [BLOG INDEX] Environment: ${import.meta.env.MODE}`);
-console.log('═'.repeat(100));
+const blogEntries = (await getCollection('blog')).sort(
+  (a, b) =>
+    new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
 
-// NOTA: Debido a restricciones de firewall en Coolify, cargamos desde el cliente
-// El servidor no puede conectar a Strapi pero el navegador del usuario sí puede
-let articles: StrapiArticle[] = [];
-let strapiError: Error | null = null;
-const useClientSideFetch = true; // Activar carga desde cliente
-
-console.log('🔄 [BLOG INDEX] Modo client-side activado por restricciones de firewall');
-console.log('🔄 [BLOG INDEX] Los artículos se cargarán desde el navegador del usuario');
-
-// Si no hay artículos, usar datos conocidos directamente
-if (articles.length === 0) {
-  console.log('🔄 Usando datos conocidos de Strapi...');
-
-  // Datos reales de Strapi obtenidos previamente (mock data de fallback)
-  articles = [
-    {
-      id: 538,
-      documentId: 'gzw9947072lgi2xaj68h9g70',
-      title: 'Luma Runway Robotica Oro',
-      slug: 'luma-runway-robotica-oro',
-      description:
-        'Descubre cómo la IA puede impulsar tu PYME: estrategias concretas de marketing, automatización y datos para aumentar ventas.',
-      content:
-        '<h2>Introducción</h2><p>Imaginen un futuro no muy lejano donde la inteligencia artificial no solo crea imágenes y videos asombrosos, sino que también impulsa los cerebros de robots y vehículos autónomos. Lo que antes parecía ciencia ficción, ahora es una realidad cada vez más cercana...</p>',
-      excerpt:
-        'Descubre cómo la IA puede impulsar tu PYME: estrategias concretas de marketing, automatización y datos para aumentar ventas.',
-      publishedAt: '2025-10-07T17:38:02.986Z',
-      createdAt: '2025-10-05T00:28:07.010Z',
-      updatedAt: '2025-10-07T17:38:02.902Z',
-      featured: false,
-      article_status: 'published',
-      cover: {
-        id: 85,
-        name: 'image_071',
-        alternativeText: 'AI, artificial intelligence,',
-        caption: '',
-        width: 1920,
-        height: 1080,
-        formats: {
-          large: {
-            name: 'large',
-            hash: 'large_image_071',
-            ext: '.jpg',
-            mime: 'image/jpeg',
-            width: 1000,
-            height: 667,
-            size: 100,
-            url: '/uploads/large_image_071_ab7fac4955.jpg',
-          },
-          medium: {
-            name: 'medium',
-            hash: 'medium_image_071',
-            ext: '.jpg',
-            mime: 'image/jpeg',
-            width: 750,
-            height: 500,
-            size: 75,
-            url: '/uploads/medium_image_071_ab7fac4955.jpg',
-          },
-          small: {
-            name: 'small',
-            hash: 'small_image_071',
-            ext: '.jpg',
-            mime: 'image/jpeg',
-            width: 500,
-            height: 333,
-            size: 50,
-            url: '/uploads/small_image_071_ab7fac4955.jpg',
-          },
-          thumbnail: {
-            name: 'thumbnail',
-            hash: 'thumbnail_image_071',
-            ext: '.jpg',
-            mime: 'image/jpeg',
-            width: 245,
-            height: 156,
-            size: 10,
-            url: '/uploads/thumbnail_image_071_ab7fac4955.jpg',
-          },
-        },
-        hash: 'image_071',
-        ext: '.jpg',
-        mime: 'image/jpeg',
-        size: 200,
-        url: '/uploads/image_071_ab7fac4955.jpg',
-        provider: 'local',
-        createdAt: '2025-10-05T00:28:07.010Z',
-        updatedAt: '2025-10-05T00:28:07.010Z',
-      },
-      coverAlt: 'AI, artificial intelligence,',
-      author: {
-        id: 2,
-        name: 'Marilyn Cardozo',
-        email: 'marilyn.cardozo@iapunto.com',
-        bio: 'Experta en Desarrollo Digital',
-        createdAt: '2025-10-05T00:28:07.010Z',
-        updatedAt: '2025-10-05T00:28:07.010Z',
-        publishedAt: '2025-10-05T00:28:07.010Z',
-      },
-      category: {
-        id: 1,
-        name: 'Inteligencia Artificial',
-        slug: 'inteligencia-artificial',
-        description:
-          'Artículos sobre IA, machine learning, modelos de lenguaje y aplicaciones empresariales de inteligencia artificial.',
-        createdAt: '2025-10-05T00:28:07.010Z',
-        updatedAt: '2025-10-05T00:28:07.010Z',
-        publishedAt: '2025-10-05T00:28:07.010Z',
-      },
-      tags: [],
-    },
-  ] as StrapiArticle[];
-
-  console.log(`✅ Datos conocidos cargados: ${articles.length} artículos`);
-}
-
-// Si no hay artículos, mostrar mensaje de diagnóstico (solo para SSR, no aplica en client-side)
-if (articles.length === 0) {
-  console.warn('⚠️ Artículos vacíos en servidor (normal en modo client-side)');
-  console.warn('Los artículos se cargarán desde el navegador del usuario');
-}
-
-// Convertir datos de Strapi al formato esperado por el diseño original
-const blogEntries = articles.map((article) => ({
-  data: {
-    slug: article.slug,
-    title: article.title,
-    description: article.description || article.excerpt || '',
-    category: article.category?.name || '',
-    tags: article.tags?.map((tag: any) => tag.name) || [],
-    pubDate: new Date(article.publishedAt),
-    cover: article.cover
-      ? `https://strapi.iapunto.com${article.cover.url}`
-      : '',
-    coverAlt: article.coverAlt || article.title,
-    epicQuote: article.epicQuote || '',
-    author: {
-      name: article.author?.name || 'IA Punto',
-      image: article.author?.avatar
-        ? `https://strapi.iapunto.com${article.author.avatar.url}`
-        : '/images/default-avatar.jpg',
-    },
-  },
-  body: article.content,
-}));
-
-// Extraer categorías y tags únicas (igual que el diseño original)
+// Extraer categorías y tags únicas
 type Entry = (typeof blogEntries)[0];
 const categories = Array.from(
   new Set(blogEntries.map((p: Entry) => p.data.category))
@@ -181,13 +30,13 @@ const tags = Array.from(
   )
 );
 
-// Estado de filtros (igual que el diseño original)
+// Estado de filtros (Astro no es reactivo, se usa query params)
 const url = new URL(Astro.request.url);
 const query = url.searchParams.get('q') || '';
 const selectedCategory = url.searchParams.get('category') || '';
 const selectedTags = url.searchParams.getAll('tag');
 
-// Filtrado profesional (igual que el diseño original)
+// Filtrado profesional
 function matches(post: Entry) {
   const q = query.trim().toLowerCase();
   const inTitle = post.data.title.toLowerCase().includes(q);
@@ -208,28 +57,20 @@ function matches(post: Entry) {
 }
 const filteredPosts = blogEntries.filter(matches);
 
-// Paginación sobre filtrados (igual que el diseño original)
+// Paginación sobre filtrados
 const postsPerPage = 6;
 const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 const currentPage = Number(url.searchParams.get('page')) || 1;
-
-// Validar que la página actual no exceda el total de páginas
-const validCurrentPage = Math.min(currentPage, Math.max(1, totalPages));
-const startIndex = (validCurrentPage - 1) * postsPerPage;
+const startIndex = (currentPage - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;
 const currentPosts = filteredPosts.slice(startIndex, endIndex);
 
-// Debug info
-console.log(
-  `📊 Blog Strapi - Total artículos: ${filteredPosts.length}, Páginas: ${totalPages}, Página actual: ${validCurrentPage}, Artículos en página: ${currentPosts.length}`
-);
-
-// Handlers para SidebarFilters (igual que el diseño original)
-function handleFilterChange({ query, category, tags }: any) {
+// Handlers para SidebarFilters (redirige con query params)
+function handleFilterChange({ query, category, tags }) {
   const params = new URLSearchParams();
   if (query) params.set('q', query);
   if (category) params.set('category', category);
-  tags.forEach((tag: any) => params.append('tag', tag));
+  tags.forEach((tag) => params.append('tag', tag));
   window.location.search = params.toString();
 }
 function handleClear() {
@@ -275,53 +116,10 @@ const latestPosts = blogEntries.slice(0, 5);
           {
             currentPosts.length === 0 ? (
               <div class="text-center text-gray-500 dark:text-gray-400 py-16">
-                {articles.length === 0 ? (
-                  <div>
-                    <div class="mb-4">
-                      <svg
-                        class="mx-auto h-16 w-16 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-                      Blog temporalmente no disponible
-                    </h3>
-                    <p class="mb-4">
-                      No se pudieron cargar los artículos desde nuestro sistema
-                      de gestión de contenido.
-                    </p>
-                    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
-                      <p class="text-sm text-yellow-800 dark:text-yellow-200">
-                        <strong>Posibles causas:</strong>
-                        <br />
-                        • Problemas de conectividad con Strapi
-                        <br />
-                        • Variables de entorno no configuradas
-                        <br />• Token de API inválido o expirado
-                      </p>
-                    </div>
-                    <p class="text-sm">
-                      Por favor, intenta nuevamente en unos minutos o contacta
-                      al administrador.
-                    </p>
-                  </div>
-                ) : (
-                  <div>
-                    <p class="text-lg font-semibold mb-2">
-                      No se encontraron resultados.
-                    </p>
-                    <p>Prueba con otros filtros o términos de búsqueda.</p>
-                  </div>
-                )}
+                <p class="text-lg font-semibold mb-2">
+                  No se encontraron resultados.
+                </p>
+                <p>Prueba con otros filtros o términos de búsqueda.</p>
               </div>
             ) : (
               <div class="grid gap-8 md:grid-cols-2">
@@ -330,7 +128,7 @@ const latestPosts = blogEntries.slice(0, 5);
                     <div class="w-full mb-5">
                       {entry.data.cover && (
                         <OptimizedImage
-                          src={entry.data.cover}
+                          src={entry.data.cover.src || entry.data.cover}
                           alt={entry.data.coverAlt || entry.data.title || ''}
                           width={600}
                           height={400}
@@ -361,20 +159,16 @@ const latestPosts = blogEntries.slice(0, 5);
                         {entry.data.title}
                       </a>
                     </h2>
-                    {entry.data.epicQuote && (
-                      <div class="mb-3 p-3 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-lg border-l-3 border-primary-500">
-                        <blockquote class="text-sm font-medium text-primary-900 dark:text-primary-100 italic leading-relaxed">
-                          "{entry.data.epicQuote}"
-                        </blockquote>
-                      </div>
-                    )}
                     <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
                       {entry.data.description}
                     </p>
                     <div class="flex justify-between items-center">
                       <div class="flex items-center space-x-4">
                         <img
-                          src={entry.data.author.image}
+                          src={
+                            entry.data.author.image.src ||
+                            entry.data.author.image
+                          }
                           alt="avatar"
                           width="36"
                           height="36"
@@ -409,12 +203,11 @@ const latestPosts = blogEntries.slice(0, 5);
             )
           }
           <SmartPaginator
-            currentPage={validCurrentPage}
+            currentPage={currentPage}
             totalPages={totalPages}
             searchParams={url.searchParams}
           />
         </div>
-
         <div class="lg:col-span-1">
           <SidebarFilters
             query={query}
@@ -430,276 +223,4 @@ const latestPosts = blogEntries.slice(0, 5);
       </div>
     </div>
   </section>
-
-  <!-- Panel de diagnóstico (solo visible en dev o con ?debug) -->
-  <DiagnosticsPanel
-    articles={articles}
-    error={strapiError}
-    strapiUrl={STRAPI_API_URL}
-    hasToken={!!STRAPI_API_TOKEN}
-  />
 </DefaultLayout>
-
-<script>
-  // CLIENT-SIDE LOADING: Solución para restricciones de firewall en Coolify
-  const STRAPI_URL = 'https://strapi.iapunto.com';
-  const STRAPI_TOKEN = '5fac4193c9c1c74f70d42541071be45f0331b101ab66524a078aa27eb054ec80d6aa98c4650f8d03f48f9e272c64490acc60b3125f9999c3cb3f84b5e54b7e34b6dbc65c08967e0686ecf91a686516a04bc89788cf3d01580f3fc519b32ef21a47628ad4f5a10cc1e688e4af313c970a4239167a7d609b78215699987c2811fa';
-
-  let allArticlesData: any[] = [];
-
-  async function loadArticlesFromClient() {
-    console.log('🔄 [CLIENT] Cargando artículos desde navegador...');
-    
-    try {
-      // Cargar todas las páginas de artículos
-      let page = 1;
-      let hasMore = true;
-      
-      while (hasMore && page <= 2) {
-        const response = await fetch(
-          `${STRAPI_URL}/api/articles?populate=*&sort[0]=publishedAt:desc&pagination[page]=${page}&pagination[pageSize]=100`,
-          {
-            headers: {
-              'Authorization': `Bearer ${STRAPI_TOKEN}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        if (data.data && data.data.length > 0) {
-          allArticlesData = allArticlesData.concat(data.data);
-          
-          if (data.meta?.pagination && page < data.meta.pagination.pageCount) {
-            page++;
-          } else {
-            hasMore = false;
-          }
-        } else {
-          hasMore = false;
-        }
-      }
-      
-      console.log(`✅ [CLIENT] Artículos cargados: ${allArticlesData.length}`);
-      
-      if (allArticlesData.length > 0) {
-        renderBlogFromClientData();
-      }
-    } catch (error) {
-      console.error('❌ [CLIENT] Error cargando artículos:', error);
-    }
-  }
-
-  function renderBlogFromClientData() {
-    // Obtener el grid de artículos actual
-    const articlesGrid = document.querySelector('.lg\\:col-span-3 > .grid');
-    if (!articlesGrid) {
-      console.warn('⚠️ [CLIENT] No se encontró el grid de artículos');
-      return;
-    }
-
-    // Aplicar filtros actuales
-    const url = new URL(window.location.href);
-    const query = url.searchParams.get('q') || '';
-    const category = url.searchParams.get('category') || '';
-    const tags = url.searchParams.getAll('tag');
-    const currentPage = Number(url.searchParams.get('page')) || 1;
-
-    // Filtrar artículos
-    let filtered = allArticlesData.filter(article => {
-      const matchQuery = !query || 
-        article.title?.toLowerCase().includes(query.toLowerCase()) ||
-        article.description?.toLowerCase().includes(query.toLowerCase()) ||
-        article.content?.toLowerCase().includes(query.toLowerCase());
-      
-      const matchCategory = !category || article.category?.name === category;
-      
-      const articleTags = article.tags?.map((t: any) => t.name) || [];
-      const matchTags = tags.length === 0 || tags.every(t => articleTags.includes(t));
-      
-      return matchQuery && matchCategory && matchTags;
-    });
-
-    // Paginación
-    const postsPerPage = 6;
-    const totalPages = Math.ceil(filtered.length / postsPerPage);
-    const validPage = Math.min(currentPage, Math.max(1, totalPages));
-    const startIndex = (validPage - 1) * postsPerPage;
-    const paginatedArticles = filtered.slice(startIndex, startIndex + postsPerPage);
-
-    console.log(`📊 [CLIENT] Página ${validPage}/${totalPages}, mostrando ${paginatedArticles.length} de ${filtered.length} artículos`);
-
-    // Renderizar artículos
-    const html = paginatedArticles.map(article => `
-      <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-        ${article.cover ? `
-          <div class="w-full mb-5">
-            <img 
-              src="${STRAPI_URL}${article.cover.url}"
-              alt="${article.coverAlt || article.title}"
-              class="w-full h-auto object-cover rounded-lg"
-            />
-          </div>
-        ` : ''}
-        
-        <div class="flex justify-between items-center mb-5 text-gray-500">
-          <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
-            <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
-            </svg>
-            ${article.category?.name || 'General'}
-          </span>
-          <div class="flex items-center gap-4 text-sm">
-            <time>${new Date(article.publishedAt).toLocaleDateString('es-ES')}</time>
-          </div>
-        </div>
-        
-        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          <a href="/blog/${article.slug}">${article.title}</a>
-        </h2>
-        
-        ${article.epicQuote ? `
-          <div class="mb-3 p-3 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-lg border-l-3 border-primary-500">
-            <blockquote class="text-sm font-medium text-primary-900 dark:text-primary-100 italic leading-relaxed">
-              "${article.epicQuote}"
-            </blockquote>
-          </div>
-        ` : ''}
-        
-        <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
-          ${article.description || article.excerpt || ''}
-        </p>
-        
-        <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-4">
-            <img
-              src="${article.author?.avatar ? STRAPI_URL + article.author.avatar.url : '/images/default-avatar.jpg'}"
-              alt="avatar"
-              width="36"
-              height="36"
-              class="w-7 h-7 rounded-full"
-            />
-            <span class="font-medium dark:text-white">
-              ${article.author?.name || 'IA Punto'}
-            </span>
-          </div>
-          <a
-            href="/blog/${article.slug}"
-            class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
-          >
-            Leer más...
-            <svg class="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-            </svg>
-          </a>
-        </div>
-      </article>
-    `).join('');
-
-    articlesGrid.innerHTML = html;
-    
-    // Actualizar paginador
-    updatePaginator(validPage, totalPages);
-    
-    // Actualizar sidebar
-    updateSidebar();
-    
-    console.log(`✅ [CLIENT] Renderizados ${paginatedArticles.length} artículos de ${filtered.length} totales`);
-  }
-
-  function updatePaginator(currentPage: number, totalPages: number) {
-    const paginatorContainer = document.querySelector('.lg\\:col-span-3')?.lastElementChild;
-    if (!paginatorContainer) return;
-
-    const url = new URL(window.location.href);
-    
-    // Generar HTML del paginador
-    let paginatorHTML = '<nav class="flex items-center justify-center gap-2 mt-8">';
-    
-    // Botón anterior
-    if (currentPage > 1) {
-      paginatorHTML += `
-        <button data-page="${currentPage - 1}"
-           class="pagination-btn flex items-center justify-center px-4 h-10 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
-          Anterior
-        </button>`;
-    }
-    
-    // Páginas
-    for (let i = 1; i <= Math.min(totalPages, 10); i++) {
-      const isActive = i === currentPage;
-      
-      paginatorHTML += `
-        <button data-page="${i}"
-           class="pagination-btn flex items-center justify-center px-4 h-10 ${isActive ? 'text-primary-600 bg-primary-50 border-primary-300 font-bold' : 'text-gray-500 bg-white'} border border-gray-300 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
-          ${i}
-        </button>`;
-    }
-    
-    if (totalPages > 10) {
-      paginatorHTML += `<span class="px-2 text-gray-500">...</span>`;
-    }
-    
-    // Botón siguiente
-    if (currentPage < totalPages) {
-      paginatorHTML += `
-        <button data-page="${currentPage + 1}"
-           class="pagination-btn flex items-center justify-center px-4 h-10 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
-          Siguiente
-        </button>`;
-    }
-    
-    paginatorHTML += '</nav>';
-    
-    // Buscar y reemplazar el paginador existente
-    const existingPaginator = paginatorContainer.querySelector('nav');
-    if (existingPaginator) {
-      existingPaginator.outerHTML = paginatorHTML;
-      
-      // Agregar event listeners a los botones de paginación
-      const paginationButtons = document.querySelectorAll('.pagination-btn');
-      paginationButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const page = parseInt((e.target as HTMLElement).closest('button')?.dataset.page || '1');
-          navigateToPage(page);
-        });
-      });
-    }
-  }
-
-  function navigateToPage(page: number) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('page', String(page));
-    window.history.pushState({}, '', url);
-    
-    // Scroll al inicio del contenido
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    // Re-renderizar con la nueva página
-    renderBlogFromClientData();
-  }
-
-  function updateSidebar() {
-    // Extraer categorías y tags únicos
-    const categories = [...new Set(allArticlesData.map(a => a.category?.name).filter(Boolean))];
-    const allTags = [...new Set(allArticlesData.flatMap(a => a.tags?.map((t: any) => t.name) || []))];
-    
-    // Últimos artículos para el sidebar
-    const latest = allArticlesData.slice(0, 5);
-    
-    console.log(`📊 [CLIENT] Sidebar actualizado: ${categories.length} categorías, ${allTags.length} tags, ${latest.length} últimos`);
-  }
-
-  // Cargar cuando el DOM esté listo
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadArticlesFromClient);
-  } else {
-    loadArticlesFromClient();
-  }
-</script>
