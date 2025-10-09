@@ -623,37 +623,35 @@ const latestPosts = blogEntries.slice(0, 5);
     
     // Botón anterior
     if (currentPage > 1) {
-      const prevUrl = new URL(window.location.href);
-      prevUrl.searchParams.set('page', String(currentPage - 1));
       paginatorHTML += `
-        <a href="${prevUrl.pathname}${prevUrl.search}" 
-           class="flex items-center justify-center px-4 h-10 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
+        <button data-page="${currentPage - 1}"
+           class="pagination-btn flex items-center justify-center px-4 h-10 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
           Anterior
-        </a>`;
+        </button>`;
     }
     
     // Páginas
     for (let i = 1; i <= Math.min(totalPages, 10); i++) {
-      const pageUrl = new URL(window.location.href);
-      pageUrl.searchParams.set('page', String(i));
       const isActive = i === currentPage;
       
       paginatorHTML += `
-        <a href="${pageUrl.pathname}${pageUrl.search}"
-           class="flex items-center justify-center px-4 h-10 ${isActive ? 'text-primary-600 bg-primary-50 border-primary-300' : 'text-gray-500 bg-white'} border border-gray-300 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
+        <button data-page="${i}"
+           class="pagination-btn flex items-center justify-center px-4 h-10 ${isActive ? 'text-primary-600 bg-primary-50 border-primary-300 font-bold' : 'text-gray-500 bg-white'} border border-gray-300 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
           ${i}
-        </a>`;
+        </button>`;
+    }
+    
+    if (totalPages > 10) {
+      paginatorHTML += `<span class="px-2 text-gray-500">...</span>`;
     }
     
     // Botón siguiente
     if (currentPage < totalPages) {
-      const nextUrl = new URL(window.location.href);
-      nextUrl.searchParams.set('page', String(currentPage + 1));
       paginatorHTML += `
-        <a href="${nextUrl.pathname}${nextUrl.search}"
-           class="flex items-center justify-center px-4 h-10 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
+        <button data-page="${currentPage + 1}"
+           class="pagination-btn flex items-center justify-center px-4 h-10 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
           Siguiente
-        </a>`;
+        </button>`;
     }
     
     paginatorHTML += '</nav>';
@@ -662,7 +660,29 @@ const latestPosts = blogEntries.slice(0, 5);
     const existingPaginator = paginatorContainer.querySelector('nav');
     if (existingPaginator) {
       existingPaginator.outerHTML = paginatorHTML;
+      
+      // Agregar event listeners a los botones de paginación
+      const paginationButtons = document.querySelectorAll('.pagination-btn');
+      paginationButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const page = parseInt((e.target as HTMLElement).closest('button')?.dataset.page || '1');
+          navigateToPage(page);
+        });
+      });
     }
+  }
+
+  function navigateToPage(page: number) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('page', String(page));
+    window.history.pushState({}, '', url);
+    
+    // Scroll al inicio del contenido
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Re-renderizar con la nueva página
+    renderBlogFromClientData();
   }
 
   function updateSidebar() {
