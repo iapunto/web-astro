@@ -1,39 +1,36 @@
 ---
-import { StrapiService } from '../../../lib/strapi';
+import { getCollection } from 'astro:content';
 import FormattedDate from '../../common/FormattedDate.astro';
 import Card from '../../common/Card.astro';
 
-// Obtener artículos desde Strapi
-const articles = await StrapiService.getArticles();
+// Obtener artículos desde MDX (sistema local)
+const blogEntries = await getCollection('blog');
 
-// Convertir datos de Strapi al formato esperado por el componente
-const latestPosts = articles.slice(0, 6).map((article) => ({
-  data: {
-    slug: article.slug,
-    title: article.title,
-    description: article.description || article.excerpt || '',
-    category: article.category?.name || '',
-    pubDate: new Date(article.publishedAt),
-    cover: article.cover
-      ? `https://strapi.iapunto.com${article.cover.url}`
-      : '',
-    coverAlt: article.coverAlt || article.title,
-    epicQuote: article.epicQuote || '',
-    author: {
-      name: article.author?.name || 'IA Punto',
-      image: article.author?.avatar
-        ? `https://strapi.iapunto.com${article.author.avatar.url}`
-        : '/images/default-avatar.jpg',
+// Ordenar por fecha y tomar los últimos 6
+const latestPosts = blogEntries
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+  .slice(0, 6)
+  .map((entry) => ({
+    data: {
+      slug: entry.data.slug,
+      title: entry.data.title,
+      description: entry.data.description,
+      category: entry.data.category,
+      pubDate: entry.data.pubDate,
+      cover: entry.data.cover,
+      coverAlt: entry.data.coverAlt || entry.data.title,
+      author: entry.data.author,
     },
-  },
-  id: article.slug, // Usar slug como ID para el enlace
-}));
+    id: entry.data.slug,
+  }));
 
 // Verificar si hay suficientes posts para el carousel
 const hasEnoughPosts = latestPosts.length >= 3;
 ---
 
-<link rel="stylesheet" href="/styles/splide.min.css" />
+<link rel="preload" href="/styles/splide.min.css" as="style">
+<link rel="stylesheet" href="/styles/splide.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/styles/splide.min.css"></noscript>
 
 <section class="py-20 bg-gradient-to-b from-gray-50 to-white">
   <div class="container w-4/5 py-16 mx-auto px-4">
@@ -64,7 +61,6 @@ const hasEnoughPosts = latestPosts.length >= 3;
                   alt={entry.data.coverAlt || entry.data.title}
                   title={entry.data.title}
                   description={entry.data.description}
-                  epicQuote={entry.data.epicQuote}
                   category={entry.data.category}
                   date={entry.data.pubDate?.toLocaleDateString?.() ?? ''}
                   author={entry.data.author?.name}
@@ -103,34 +99,56 @@ const hasEnoughPosts = latestPosts.length >= 3;
   </div>
 </section>
 
-<script src="/scripts/splide.min.js" is:inline></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    new Splide('#blog-splide', {
-      type: 'loop',
-      perPage: 3,
-      perMove: 1,
-      gap: 30,
-      arrows: true,
-      pagination: true,
-      autoplay: true,
-      interval: 3500,
-      pauseOnHover: true,
-      pauseOnFocus: true,
-      speed: 600,
-      breakpoints: {
-        1024: { perPage: 2, perMove: 1, gap: 20 },
-        640: { perPage: 1, perMove: 1, gap: 10 },
-      },
-      classes: {
-        arrows: 'splide__arrows flex justify-center gap-4 mt-4',
-        arrow:
-          'splide__arrow bg-primary-600 text-white rounded-full w-10 h-10 flex items-center justify-center',
-        pagination: 'splide__pagination flex justify-center gap-2 mt-6',
-        page: 'splide__pagination__page bg-gray-300 rounded-full w-3 h-3',
-      },
-    }).mount();
-  });
+  // @ts-nocheck - Splide se carga dinámicamente
+  function initBlogSlider() {
+    if (typeof window.Splide !== 'undefined') {
+      new window.Splide('#blog-splide', {
+        type: 'loop',
+        perPage: 3,
+        perMove: 1,
+        gap: 30,
+        arrows: true,
+        pagination: true,
+        autoplay: true,
+        interval: 3500,
+        pauseOnHover: true,
+        pauseOnFocus: true,
+        speed: 600,
+        lazyLoad: 'nearby',
+        preloadPages: 2,
+        breakpoints: {
+          1024: { perPage: 2, perMove: 1, gap: 20 },
+          640: { perPage: 1, perMove: 1, gap: 10 },
+        },
+        classes: {
+          arrows: 'splide__arrows flex justify-center gap-4 mt-4',
+          arrow:
+            'splide__arrow bg-primary-600 text-white rounded-full w-10 h-10 flex items-center justify-center',
+          pagination: 'splide__pagination flex justify-center gap-2 mt-6',
+          page: 'splide__pagination__page bg-gray-300 rounded-full w-3 h-3',
+        },
+      }).mount();
+      console.log('✅ Blog Splide inicializado');
+    } else {
+      const script = document.createElement('script');
+      script.src = '/scripts/splide.min.js';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        console.log('✅ Splide cargado para blog');
+        initBlogSlider();
+      };
+      document.head.appendChild(script);
+    }
+  }
+
+  // Cargar de forma diferida
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => initBlogSlider(), { timeout: 2000 });
+  } else {
+    setTimeout(initBlogSlider, 150);
+  }
 </script>
 
 <style>
