@@ -4,7 +4,9 @@ import Card from '../common/Card.astro';
 // import CompanyLogo from '../common/CompanyLogo.astro';
 ---
 
-<link rel="stylesheet" href="/styles/splide.min.css">
+<link rel="preload" href="/styles/splide.min.css" as="style">
+<link rel="stylesheet" href="/styles/splide.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/styles/splide.min.css"></noscript>
 
 <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
 <section class="py-20 bg-gradient-to-b from-gray to-gray-50">
@@ -49,28 +51,54 @@ import Card from '../common/Card.astro';
 </section>
 <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
 
-<!-- Splide JS local -->
-<script src="/scripts/splide.min.js" is:inline></script>
+<!-- Splide JS local - carga diferida -->
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    new Splide('#testimonials-splide', {
-      type: 'loop',
-      perPage: 1,
-      autoplay: true,
-      interval: 5000,
-      arrows: false,
-      pagination: true,
-      pauseOnHover: true,
-      pauseOnFocus: true,
-      speed: 600,
-      classes: {
-        arrows: 'splide__arrows flex justify-center gap-4 mt-4',
-        arrow: 'splide__arrow bg-primary-600 text-white rounded-full w-10 h-10 flex items-center justify-center',
-        pagination: 'splide__pagination flex justify-center gap-2 mt-6',
-        page: 'splide__pagination__page bg-gray-300 rounded-full w-3 h-3',
-      },
-    }).mount();
-  });
+  // @ts-nocheck - Splide se carga dinámicamente
+  // Cargar Splide de forma asíncrona para no bloquear el renderizado
+  function initTestimonials() {
+    // Verificar si Splide ya está cargado
+    if (typeof window.Splide !== 'undefined') {
+      new window.Splide('#testimonials-splide', {
+        type: 'loop',
+        perPage: 1,
+        autoplay: true,
+        interval: 5000,
+        arrows: false,
+        pagination: true,
+        pauseOnHover: true,
+        pauseOnFocus: true,
+        speed: 600,
+        lazyLoad: 'nearby',
+        preloadPages: 1,
+        classes: {
+          arrows: 'splide__arrows flex justify-center gap-4 mt-4',
+          arrow: 'splide__arrow bg-primary-600 text-white rounded-full w-10 h-10 flex items-center justify-center',
+          pagination: 'splide__pagination flex justify-center gap-2 mt-6',
+          page: 'splide__pagination__page bg-gray-300 rounded-full w-3 h-3',
+        },
+      }).mount();
+      console.log('✅ Testimonials Splide inicializado');
+    } else {
+      // Si Splide no está disponible, cargar el script
+      const script = document.createElement('script');
+      script.src = '/scripts/splide.min.js';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        console.log('✅ Splide cargado');
+        initTestimonials();
+      };
+      document.head.appendChild(script);
+    }
+  }
+
+  // Usar requestIdleCallback para cargar cuando el navegador esté libre
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => initTestimonials(), { timeout: 2000 });
+  } else {
+    // Fallback para navegadores sin requestIdleCallback
+    setTimeout(initTestimonials, 100);
+  }
 </script>
 
 <style>
