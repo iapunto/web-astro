@@ -18,38 +18,14 @@ console.log(`🚀 [BLOG INDEX] URL: ${Astro.url}`);
 console.log(`🚀 [BLOG INDEX] Environment: ${import.meta.env.MODE}`);
 console.log('═'.repeat(100));
 
-// Obtener artículos desde Strapi con manejo de errores robusto
+// NOTA: Debido a restricciones de firewall en Coolify, cargamos desde el cliente
+// El servidor no puede conectar a Strapi pero el navegador del usuario sí puede
 let articles: StrapiArticle[] = [];
 let strapiError: Error | null = null;
+const useClientSideFetch = true; // Activar carga desde cliente
 
-// Intentar primero con StrapiService
-try {
-  console.log('🔄 [BLOG INDEX] Intentando obtener artículos desde Strapi...');
-  console.log('🔄 [BLOG INDEX] STRAPI_API_URL:', STRAPI_API_URL);
-  console.log('🔄 [BLOG INDEX] STRAPI_API_TOKEN presente:', !!STRAPI_API_TOKEN);
-  console.log(
-    '🔄 [BLOG INDEX] STRAPI_API_TOKEN length:',
-    STRAPI_API_TOKEN?.length || 0
-  );
-
-  articles = await StrapiService.getArticles();
-
-  console.log('═'.repeat(100));
-  console.log(
-    `✅ [BLOG INDEX] Artículos obtenidos exitosamente: ${articles.length}`
-  );
-  console.log('═'.repeat(100));
-} catch (error) {
-  strapiError = error instanceof Error ? error : new Error(String(error));
-  console.error('═'.repeat(100));
-  console.error('❌ [BLOG INDEX] Error obteniendo artículos de Strapi:');
-  console.error('❌ [BLOG INDEX] Error type:', error?.constructor?.name);
-  console.error(
-    '❌ [BLOG INDEX] Error message:',
-    error instanceof Error ? error.message : String(error)
-  );
-  console.error('═'.repeat(100));
-}
+console.log('🔄 [BLOG INDEX] Modo client-side activado por restricciones de firewall');
+console.log('🔄 [BLOG INDEX] Los artículos se cargarán desde el navegador del usuario');
 
 // Si no hay artículos, usar datos conocidos directamente
 if (articles.length === 0) {
@@ -158,16 +134,10 @@ if (articles.length === 0) {
   console.log(`✅ Datos conocidos cargados: ${articles.length} artículos`);
 }
 
-// Si no hay artículos, mostrar mensaje de diagnóstico
+// Si no hay artículos, mostrar mensaje de diagnóstico (solo para SSR, no aplica en client-side)
 if (articles.length === 0) {
-  console.warn('⚠️ No se encontraron artículos. Posibles causas:');
-  console.warn('1. Strapi no está disponible');
-  console.warn('2. Variables de entorno no configuradas');
-  console.warn('3. Token de API inválido');
-  console.warn('4. Error de red');
-  if (strapiError) {
-    console.warn('Error específico:', strapiError.message);
-  }
+  console.warn('⚠️ Artículos vacíos en servidor (normal en modo client-side)');
+  console.warn('Los artículos se cargarán desde el navegador del usuario');
 }
 
 // Convertir datos de Strapi al formato esperado por el diseño original
@@ -469,3 +439,173 @@ const latestPosts = blogEntries.slice(0, 5);
     hasToken={!!STRAPI_API_TOKEN}
   />
 </DefaultLayout>
+
+<script>
+  // CLIENT-SIDE LOADING: Solución para restricciones de firewall en Coolify
+  const STRAPI_URL = 'https://strapi.iapunto.com';
+  const STRAPI_TOKEN = '5fac4193c9c1c74f70d42541071be45f0331b101ab66524a078aa27eb054ec80d6aa98c4650f8d03f48f9e272c64490acc60b3125f9999c3cb3f84b5e54b7e34b6dbc65c08967e0686ecf91a686516a04bc89788cf3d01580f3fc519b32ef21a47628ad4f5a10cc1e688e4af313c970a4239167a7d609b78215699987c2811fa';
+
+  let allArticlesData: any[] = [];
+
+  async function loadArticlesFromClient() {
+    console.log('🔄 [CLIENT] Cargando artículos desde navegador...');
+    
+    try {
+      // Cargar todas las páginas de artículos
+      let page = 1;
+      let hasMore = true;
+      
+      while (hasMore && page <= 2) {
+        const response = await fetch(
+          `${STRAPI_URL}/api/articles?populate=*&sort[0]=publishedAt:desc&pagination[page]=${page}&pagination[pageSize]=100`,
+          {
+            headers: {
+              'Authorization': `Bearer ${STRAPI_TOKEN}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.data && data.data.length > 0) {
+          allArticlesData = allArticlesData.concat(data.data);
+          
+          if (data.meta?.pagination && page < data.meta.pagination.pageCount) {
+            page++;
+          } else {
+            hasMore = false;
+          }
+        } else {
+          hasMore = false;
+        }
+      }
+      
+      console.log(`✅ [CLIENT] Artículos cargados: ${allArticlesData.length}`);
+      
+      if (allArticlesData.length > 0) {
+        renderBlogFromClientData();
+      }
+    } catch (error) {
+      console.error('❌ [CLIENT] Error cargando artículos:', error);
+    }
+  }
+
+  function renderBlogFromClientData() {
+    // Obtener el grid de artículos actual
+    const articlesGrid = document.querySelector('.lg\\:col-span-3 > .grid');
+    if (!articlesGrid) {
+      console.warn('⚠️ [CLIENT] No se encontró el grid de artículos');
+      return;
+    }
+
+    // Aplicar filtros actuales
+    const url = new URL(window.location.href);
+    const query = url.searchParams.get('q') || '';
+    const category = url.searchParams.get('category') || '';
+    const tags = url.searchParams.getAll('tag');
+    const currentPage = Number(url.searchParams.get('page')) || 1;
+
+    // Filtrar artículos
+    let filtered = allArticlesData.filter(article => {
+      const matchQuery = !query || 
+        article.title?.toLowerCase().includes(query.toLowerCase()) ||
+        article.description?.toLowerCase().includes(query.toLowerCase()) ||
+        article.content?.toLowerCase().includes(query.toLowerCase());
+      
+      const matchCategory = !category || article.category?.name === category;
+      
+      const articleTags = article.tags?.map((t: any) => t.name) || [];
+      const matchTags = tags.length === 0 || tags.every(t => articleTags.includes(t));
+      
+      return matchQuery && matchCategory && matchTags;
+    });
+
+    // Paginación
+    const postsPerPage = 6;
+    const startIndex = (currentPage - 1) * postsPerPage;
+    const paginatedArticles = filtered.slice(startIndex, startIndex + postsPerPage);
+
+    // Renderizar artículos
+    const html = paginatedArticles.map(article => `
+      <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+        ${article.cover ? `
+          <div class="w-full mb-5">
+            <img 
+              src="${STRAPI_URL}${article.cover.url}"
+              alt="${article.coverAlt || article.title}"
+              class="w-full h-auto object-cover rounded-lg"
+            />
+          </div>
+        ` : ''}
+        
+        <div class="flex justify-between items-center mb-5 text-gray-500">
+          <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
+            <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+            </svg>
+            ${article.category?.name || 'General'}
+          </span>
+          <div class="flex items-center gap-4 text-sm">
+            <time>${new Date(article.publishedAt).toLocaleDateString('es-ES')}</time>
+          </div>
+        </div>
+        
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <a href="/blog/${article.slug}">${article.title}</a>
+        </h2>
+        
+        ${article.epicQuote ? `
+          <div class="mb-3 p-3 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-lg border-l-3 border-primary-500">
+            <blockquote class="text-sm font-medium text-primary-900 dark:text-primary-100 italic leading-relaxed">
+              "${article.epicQuote}"
+            </blockquote>
+          </div>
+        ` : ''}
+        
+        <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
+          ${article.description || article.excerpt || ''}
+        </p>
+        
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <img
+              src="${article.author?.avatar ? STRAPI_URL + article.author.avatar.url : '/images/default-avatar.jpg'}"
+              alt="avatar"
+              width="36"
+              height="36"
+              class="w-7 h-7 rounded-full"
+            />
+            <span class="font-medium dark:text-white">
+              ${article.author?.name || 'IA Punto'}
+            </span>
+          </div>
+          <a
+            href="/blog/${article.slug}"
+            class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline"
+          >
+            Leer más...
+            <svg class="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+          </a>
+        </div>
+      </article>
+    `).join('');
+
+    articlesGrid.innerHTML = html;
+    
+    console.log(`✅ [CLIENT] Renderizados ${paginatedArticles.length} artículos de ${filtered.length} totales`);
+  }
+
+  // Cargar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadArticlesFromClient);
+  } else {
+    loadArticlesFromClient();
+  }
+</script>

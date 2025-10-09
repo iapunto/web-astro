@@ -1,6 +1,7 @@
 # 🔧 Troubleshooting - Conexión Strapi en Coolify
 
 ## Estado Actual
+
 - ✅ Cloudflare proxy DESACTIVADO para strapi.iapunto.com
 - ✅ Runtime puede hacer fetch (Google funciona)
 - ❌ Aún no conecta a Strapi
@@ -10,15 +11,19 @@
 Por favor visita estos endpoints y copia los resultados:
 
 ### 1. Test de DNS
+
 ```
 https://iapunto.com/api/test-dns
 ```
+
 Copia el JSON completo
 
 ### 2. Test de IP directa
+
 ```
 https://iapunto.com/api/test-direct-ip
 ```
+
 Copia el JSON completo
 
 ### 3. Test desde el servidor (SSH)
@@ -60,6 +65,7 @@ Copia todos los resultados aquí.
 ## POSIBLES CAUSAS RESTANTES
 
 ### 1. Firewall del servidor bloqueando salida
+
 ```bash
 # Ver reglas de iptables
 sudo iptables -L OUTPUT -v -n
@@ -69,12 +75,15 @@ sudo iptables -L | grep 190.146.4.75
 ```
 
 ### 2. Strapi configurado para rechazar ciertas IPs
+
 Verifica en Strapi:
+
 - Settings → API Tokens → Permisos
 - Plugins → Security
 - Config de CORS
 
 ### 3. DNS aún no propagado
+
 ```bash
 # Desde tu servidor
 dig strapi.iapunto.com
@@ -84,6 +93,7 @@ nslookup strapi.iapunto.com
 ```
 
 ### 4. Certificado SSL inválido
+
 ```bash
 # Verificar certificado
 openssl s_client -connect strapi.iapunto.com:443 -servername strapi.iapunto.com
@@ -91,7 +101,6 @@ openssl s_client -connect strapi.iapunto.com:443 -servername strapi.iapunto.com
 
 ## SOLUCIÓN TEMPORAL (mientras diagnosticamos)
 
-Si necesitas que el blog funcione YA, puedo implementar carga desde el cliente (JavaScript en el navegador). 
+Si necesitas que el blog funcione YA, puedo implementar carga desde el cliente (JavaScript en el navegador).
 
 ¿Quieres que active esa solución temporal mientras arreglamos el problema servidor-servidor?
-

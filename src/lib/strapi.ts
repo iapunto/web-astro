@@ -31,8 +31,9 @@ export class StrapiService {
     const defaultOptions: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (compatible; IAPuntoBot/1.0; +https://iapunto.com)',
-        'Accept': 'application/json',
+        'User-Agent':
+          'Mozilla/5.0 (compatible; IAPuntoBot/1.0; +https://iapunto.com)',
+        Accept: 'application/json',
         'Accept-Language': 'es-ES,es;q=0.9',
         ...(STRAPI_API_TOKEN && {
           Authorization: `Bearer ${STRAPI_API_TOKEN}`,
