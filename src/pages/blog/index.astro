@@ -527,8 +527,12 @@ const latestPosts = blogEntries.slice(0, 5);
 
     // Paginación
     const postsPerPage = 6;
-    const startIndex = (currentPage - 1) * postsPerPage;
+    const totalPages = Math.ceil(filtered.length / postsPerPage);
+    const validPage = Math.min(currentPage, Math.max(1, totalPages));
+    const startIndex = (validPage - 1) * postsPerPage;
     const paginatedArticles = filtered.slice(startIndex, startIndex + postsPerPage);
+
+    console.log(`📊 [CLIENT] Página ${validPage}/${totalPages}, mostrando ${paginatedArticles.length} de ${filtered.length} artículos`);
 
     // Renderizar artículos
     const html = paginatedArticles.map(article => `
@@ -599,7 +603,77 @@ const latestPosts = blogEntries.slice(0, 5);
 
     articlesGrid.innerHTML = html;
     
+    // Actualizar paginador
+    updatePaginator(validPage, totalPages);
+    
+    // Actualizar sidebar
+    updateSidebar();
+    
     console.log(`✅ [CLIENT] Renderizados ${paginatedArticles.length} artículos de ${filtered.length} totales`);
+  }
+
+  function updatePaginator(currentPage: number, totalPages: number) {
+    const paginatorContainer = document.querySelector('.lg\\:col-span-3')?.lastElementChild;
+    if (!paginatorContainer) return;
+
+    const url = new URL(window.location.href);
+    
+    // Generar HTML del paginador
+    let paginatorHTML = '<nav class="flex items-center justify-center gap-2 mt-8">';
+    
+    // Botón anterior
+    if (currentPage > 1) {
+      const prevUrl = new URL(window.location.href);
+      prevUrl.searchParams.set('page', String(currentPage - 1));
+      paginatorHTML += `
+        <a href="${prevUrl.pathname}${prevUrl.search}" 
+           class="flex items-center justify-center px-4 h-10 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
+          Anterior
+        </a>`;
+    }
+    
+    // Páginas
+    for (let i = 1; i <= Math.min(totalPages, 10); i++) {
+      const pageUrl = new URL(window.location.href);
+      pageUrl.searchParams.set('page', String(i));
+      const isActive = i === currentPage;
+      
+      paginatorHTML += `
+        <a href="${pageUrl.pathname}${pageUrl.search}"
+           class="flex items-center justify-center px-4 h-10 ${isActive ? 'text-primary-600 bg-primary-50 border-primary-300' : 'text-gray-500 bg-white'} border border-gray-300 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
+          ${i}
+        </a>`;
+    }
+    
+    // Botón siguiente
+    if (currentPage < totalPages) {
+      const nextUrl = new URL(window.location.href);
+      nextUrl.searchParams.set('page', String(currentPage + 1));
+      paginatorHTML += `
+        <a href="${nextUrl.pathname}${nextUrl.search}"
+           class="flex items-center justify-center px-4 h-10 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
+          Siguiente
+        </a>`;
+    }
+    
+    paginatorHTML += '</nav>';
+    
+    // Buscar y reemplazar el paginador existente
+    const existingPaginator = paginatorContainer.querySelector('nav');
+    if (existingPaginator) {
+      existingPaginator.outerHTML = paginatorHTML;
+    }
+  }
+
+  function updateSidebar() {
+    // Extraer categorías y tags únicos
+    const categories = [...new Set(allArticlesData.map(a => a.category?.name).filter(Boolean))];
+    const allTags = [...new Set(allArticlesData.flatMap(a => a.tags?.map((t: any) => t.name) || []))];
+    
+    // Últimos artículos para el sidebar
+    const latest = allArticlesData.slice(0, 5);
+    
+    console.log(`📊 [CLIENT] Sidebar actualizado: ${categories.length} categorías, ${allTags.length} tags, ${latest.length} últimos`);
   }
 
   // Cargar cuando el DOM esté listo
