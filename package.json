@@ -29,7 +29,7 @@
     "@types/pg": "^8.15.5",
     "@types/redis": "^4.0.11",
     "@types/uuid": "^10.0.0",
-    "astro": "^5.14.1",
+    "astro": "^5.14.3",
     "cloudinary": "^2.7.0",
     "dotenv": "^16.6.1",
     "flagpack": "^1.0.5",
